@@ -1,0 +1,27 @@
+//@ means these are token names.
+
+IMPORT -> "import" IDENTIFIER ("." IDENTIFIER)* ';' ;
+USING -> "using" IDENTIFIER ("." IDENTIFIER)* ';' ;
+
+PROGRAM -> (IMPORT | USING)* FUNC_DECL*;
+
+NUMBER -> @REAL_NUMBER | @INTEGER
+
+ATOMIC_EXPRESSION -> @IDENTIFIER | NUMBER | STRING | "(" EXPRESSION ")" | CALL_SIGNATURE;
+
+MUL_DIV_OPS -> ATOMIC_EXPRESSION ('*' | '/' ATOMIC_EXPRESSION)*;
+ADD_SUB_OPS -> MUL_DIV_OPS ('+' | '-' MUL_DIV_OPS)*;
+GTE_LTE_GTHN_LTHN_OPS -> ADD_SUB_OPS (('>' | '<' | '>=' | '<=') ADD_SUB_OPS)?;
+
+EXPRESSION -> GTE_LTE_GTHN_LTHN_OPS;
+
+LOOP -> 'loop' IDENTIFIER? '{' STATEMENT* '}';
+CONDITION -> 'if' '(' EXPRESSION ')' '{' STATEMENT* '}' ('elif' '(' EXPRESSION ')' '{' STATEMENT* '}')* ('else' '{' STATEMENT* '}')? ;
+
+RETURN -> "return" EXPRESSION? ";";
+BREAK -> "break" IDENTIFIER? ";";
+
+STATEMENT -> RETURN | LOOP | BREAK | CONDITION | (CALL_SIGNATURE ';');
+
+FUNC_DECL -> "fx" @IDENTIFIER "(" ")" "{" STATEMENT* "}";
+CALL_SIGNATURE -> @IDENTIFIER "(" (EXPRESSION (",", EXPRESSION)*)? ")";

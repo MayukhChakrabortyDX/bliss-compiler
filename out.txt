@@ -1,0 +1,1276 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "functionArray": [
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "name": "main",
+      "body": [
+        {
+          "type": 14,
+          "typeName": "CallStatement",
+          "callExpr": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "name": "println"
+            },
+            "args": [
+              {
+                "type": 8,
+                "typeName": "String",
+                "span": {
+                  "startIndex": 157,
+                  "endIndex": 172,
+                  "str": {
+                    "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": 10,
+          "typeName": "Loop",
+          "body": [
+            {
+              "type": 14,
+              "typeName": "CallStatement",
+              "callExpr": {
+                "type": 13,
+                "typeName": "CallSignature",
+                "callee": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "name": "println"
+                },
+                "args": [
+                  {
+                    "type": 8,
+                    "typeName": "String",
+                    "span": {
+                      "startIndex": 217,
+                      "endIndex": 234,
+                      "str": {
+                        "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": 12,
+              "typeName": "Condition",
+              "if_branch": {
+                "type": 11,
+                "typeName": "ConditionUnit",
+                "conditionBody": [
+                  {
+                    "type": 14,
+                    "typeName": "CallStatement",
+                    "callExpr": {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "println"
+                      },
+                      "args": [
+                        {
+                          "type": 8,
+                          "typeName": "String",
+                          "span": {
+                            "startIndex": 550,
+                            "endIndex": 560,
+                            "str": {
+                              "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": 10,
+                    "typeName": "Loop",
+                    "body": [
+                      {
+                        "type": 14,
+                        "typeName": "CallStatement",
+                        "callExpr": {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "println"
+                          },
+                          "args": [
+                            {
+                              "type": 8,
+                              "typeName": "String",
+                              "span": {
+                                "startIndex": 643,
+                                "endIndex": 653,
+                                "str": {
+                                  "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                }
+                              }
+                            },
+                            {
+                              "type": 5,
+                              "typeName": "BinaryOperationExpression",
+                              "left": {
+                                "type": 13,
+                                "typeName": "CallSignature",
+                                "callee": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "input"
+                                },
+                                "args": [
+                                  {
+                                    "type": 8,
+                                    "typeName": "String",
+                                    "span": {
+                                      "startIndex": 685,
+                                      "endIndex": 685,
+                                      "str": {
+                                        "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "right": {
+                                "type": 13,
+                                "typeName": "CallSignature",
+                                "callee": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "input"
+                                },
+                                "args": [
+                                  {
+                                    "type": 8,
+                                    "typeName": "String",
+                                    "span": {
+                                      "startIndex": 740,
+                                      "endIndex": 740,
+                                      "str": {
+                                        "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "operator": 2
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": 12,
+                        "typeName": "Condition",
+                        "if_branch": {
+                          "type": 11,
+                          "typeName": "ConditionUnit",
+                          "conditionBody": [
+                            {
+                              "type": 9,
+                              "typeName": "Break",
+                              "identifier": "inner"
+                            }
+                          ],
+                          "condition": {
+                            "type": 5,
+                            "typeName": "BinaryOperationExpression",
+                            "left": {
+                              "type": 5,
+                              "typeName": "BinaryOperationExpression",
+                              "left": {
+                                "type": 3,
+                                "typeName": "Identifier",
+                                "name": "a"
+                              },
+                              "right": {
+                                "type": 3,
+                                "typeName": "Identifier",
+                                "name": "b"
+                              },
+                              "operator": 2
+                            },
+                            "right": {
+                              "type": 5,
+                              "typeName": "BinaryOperationExpression",
+                              "left": {
+                                "type": 5,
+                                "typeName": "BinaryOperationExpression",
+                                "left": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "c"
+                                },
+                                "right": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "d"
+                                },
+                                "operator": 0
+                              },
+                              "right": {
+                                "type": 13,
+                                "typeName": "CallSignature",
+                                "callee": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "someFunction"
+                                },
+                                "args": [
+                                  {
+                                    "type": 3,
+                                    "typeName": "Identifier",
+                                    "name": "x"
+                                  }
+                                ]
+                              },
+                              "operator": 2
+                            },
+                            "operator": 4
+                          }
+                        },
+                        "elif_branch": [
+                          {
+                            "type": 11,
+                            "typeName": "ConditionUnit",
+                            "conditionBody": [
+                              {
+                                "type": 14,
+                                "typeName": "CallStatement",
+                                "callExpr": {
+                                  "type": 13,
+                                  "typeName": "CallSignature",
+                                  "callee": {
+                                    "type": 3,
+                                    "typeName": "Identifier",
+                                    "name": "println"
+                                  },
+                                  "args": [
+                                    {
+                                      "type": 8,
+                                      "typeName": "String",
+                                      "span": {
+                                        "startIndex": 1146,
+                                        "endIndex": 1158,
+                                        "str": {
+                                          "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": 13,
+                                      "typeName": "CallSignature",
+                                      "callee": {
+                                        "type": 3,
+                                        "typeName": "Identifier",
+                                        "name": "anotherFunction"
+                                      },
+                                      "args": [
+                                        {
+                                          "type": 13,
+                                          "typeName": "CallSignature",
+                                          "callee": {
+                                            "type": 3,
+                                            "typeName": "Identifier",
+                                            "name": "input"
+                                          },
+                                          "args": [
+                                            {
+                                              "type": 8,
+                                              "typeName": "String",
+                                              "span": {
+                                                "startIndex": 1240,
+                                                "endIndex": 1240,
+                                                "str": {
+                                                  "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            ],
+                            "condition": {
+                              "type": 5,
+                              "typeName": "BinaryOperationExpression",
+                              "left": {
+                                "type": 5,
+                                "typeName": "BinaryOperationExpression",
+                                "left": {
+                                  "type": 5,
+                                  "typeName": "BinaryOperationExpression",
+                                  "left": {
+                                    "type": 3,
+                                    "typeName": "Identifier",
+                                    "name": "a"
+                                  },
+                                  "right": {
+                                    "type": 3,
+                                    "typeName": "Identifier",
+                                    "name": "b"
+                                  },
+                                  "operator": 0
+                                },
+                                "right": {
+                                  "type": 5,
+                                  "typeName": "BinaryOperationExpression",
+                                  "left": {
+                                    "type": 3,
+                                    "typeName": "Identifier",
+                                    "name": "c"
+                                  },
+                                  "right": {
+                                    "type": 3,
+                                    "typeName": "Identifier",
+                                    "name": "d"
+                                  },
+                                  "operator": 1
+                                },
+                                "operator": 2
+                              },
+                              "right": {
+                                "type": 5,
+                                "typeName": "BinaryOperationExpression",
+                                "left": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "x"
+                                },
+                                "right": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "y"
+                                },
+                                "operator": 2
+                              },
+                              "operator": 5
+                            }
+                          }
+                        ],
+                        "else_branch": {
+                          "type": 11,
+                          "typeName": "ConditionUnit",
+                          "conditionBody": [
+                            {
+                              "type": 10,
+                              "typeName": "Loop",
+                              "body": [
+                                {
+                                  "type": 14,
+                                  "typeName": "CallStatement",
+                                  "callExpr": {
+                                    "type": 13,
+                                    "typeName": "CallSignature",
+                                    "callee": {
+                                      "type": 3,
+                                      "typeName": "Identifier",
+                                      "name": "println"
+                                    },
+                                    "args": [
+                                      {
+                                        "type": 8,
+                                        "typeName": "String",
+                                        "span": {
+                                          "startIndex": 1419,
+                                          "endIndex": 1427,
+                                          "str": {
+                                            "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": 13,
+                                        "typeName": "CallSignature",
+                                        "callee": {
+                                          "type": 3,
+                                          "typeName": "Identifier",
+                                          "name": "add"
+                                        },
+                                        "args": [
+                                          {
+                                            "type": 13,
+                                            "typeName": "CallSignature",
+                                            "callee": {
+                                              "type": 3,
+                                              "typeName": "Identifier",
+                                              "name": "input"
+                                            },
+                                            "args": [
+                                              {
+                                                "type": 8,
+                                                "typeName": "String",
+                                                "span": {
+                                                  "startIndex": 1505,
+                                                  "endIndex": 1505,
+                                                  "str": {
+                                                    "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "type": 13,
+                                            "typeName": "CallSignature",
+                                            "callee": {
+                                              "type": 3,
+                                              "typeName": "Identifier",
+                                              "name": "input"
+                                            },
+                                            "args": [
+                                              {
+                                                "type": 8,
+                                                "typeName": "String",
+                                                "span": {
+                                                  "startIndex": 1550,
+                                                  "endIndex": 1550,
+                                                  "str": {
+                                                    "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "type": 9,
+                                  "typeName": "Break"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "identifier": "inner"
+                  }
+                ],
+                "condition": {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "left": {
+                    "type": 13,
+                    "typeName": "CallSignature",
+                    "callee": {
+                      "type": 3,
+                      "typeName": "Identifier",
+                      "name": "input"
+                    },
+                    "args": [
+                      {
+                        "type": 8,
+                        "typeName": "String",
+                        "span": {
+                          "startIndex": 275,
+                          "endIndex": 287,
+                          "str": {
+                            "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "right": {
+                    "type": 5,
+                    "typeName": "BinaryOperationExpression",
+                    "left": {
+                      "type": 4,
+                      "typeName": "Number",
+                      "value": "20",
+                      "subtypes": 1
+                    },
+                    "right": {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "add"
+                      },
+                      "args": [
+                        {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "someFunction"
+                          },
+                          "args": [
+                            {
+                              "type": 5,
+                              "typeName": "BinaryOperationExpression",
+                              "left": {
+                                "type": 3,
+                                "typeName": "Identifier",
+                                "name": "x"
+                              },
+                              "right": {
+                                "type": 5,
+                                "typeName": "BinaryOperationExpression",
+                                "left": {
+                                  "type": 4,
+                                  "typeName": "Number",
+                                  "value": "8",
+                                  "subtypes": 1
+                                },
+                                "right": {
+                                  "type": 4,
+                                  "typeName": "Number",
+                                  "value": "88",
+                                  "subtypes": 1
+                                },
+                                "operator": 1
+                              },
+                              "operator": 2
+                            }
+                          ]
+                        },
+                        {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "anotherFunction"
+                          },
+                          "args": [
+                            {
+                              "type": 5,
+                              "typeName": "BinaryOperationExpression",
+                              "left": {
+                                "type": 3,
+                                "typeName": "Identifier",
+                                "name": "y"
+                              },
+                              "right": {
+                                "type": 5,
+                                "typeName": "BinaryOperationExpression",
+                                "left": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "z"
+                                },
+                                "right": {
+                                  "type": 4,
+                                  "typeName": "Number",
+                                  "value": "4",
+                                  "subtypes": 1
+                                },
+                                "operator": 2
+                              },
+                              "operator": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "operator": 2
+                  },
+                  "operator": 4
+                }
+              },
+              "elif_branch": [
+                {
+                  "type": 11,
+                  "typeName": "ConditionUnit",
+                  "conditionBody": [
+                    {
+                      "type": 14,
+                      "typeName": "CallStatement",
+                      "callExpr": {
+                        "type": 13,
+                        "typeName": "CallSignature",
+                        "callee": {
+                          "type": 3,
+                          "typeName": "Identifier",
+                          "name": "println"
+                        },
+                        "args": [
+                          {
+                            "type": 8,
+                            "typeName": "String",
+                            "span": {
+                              "startIndex": 1964,
+                              "endIndex": 1976,
+                              "str": {
+                                "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                              }
+                            }
+                          },
+                          {
+                            "type": 13,
+                            "typeName": "CallSignature",
+                            "callee": {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "someFunction"
+                            },
+                            "args": [
+                              {
+                                "type": 13,
+                                "typeName": "CallSignature",
+                                "callee": {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "anotherFunction"
+                                },
+                                "args": [
+                                  {
+                                    "type": 13,
+                                    "typeName": "CallSignature",
+                                    "callee": {
+                                      "type": 3,
+                                      "typeName": "Identifier",
+                                      "name": "input"
+                                    },
+                                    "args": [
+                                      {
+                                        "type": 8,
+                                        "typeName": "String",
+                                        "span": {
+                                          "startIndex": 2081,
+                                          "endIndex": 2081,
+                                          "str": {
+                                            "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "condition": {
+                    "type": 5,
+                    "typeName": "BinaryOperationExpression",
+                    "left": {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "add"
+                      },
+                      "args": [
+                        {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "input"
+                          },
+                          "args": [
+                            {
+                              "type": 8,
+                              "typeName": "String",
+                              "span": {
+                                "startIndex": 1774,
+                                "endIndex": 1774,
+                                "str": {
+                                  "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "input"
+                          },
+                          "args": [
+                            {
+                              "type": 8,
+                              "typeName": "String",
+                              "span": {
+                                "startIndex": 1803,
+                                "endIndex": 1803,
+                                "str": {
+                                  "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "right": {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "someFunction"
+                      },
+                      "args": [
+                        {
+                          "type": 5,
+                          "typeName": "BinaryOperationExpression",
+                          "left": {
+                            "type": 5,
+                            "typeName": "BinaryOperationExpression",
+                            "left": {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "x"
+                            },
+                            "right": {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "y"
+                            },
+                            "operator": 2
+                          },
+                          "right": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "z"
+                          },
+                          "operator": 2
+                        }
+                      ]
+                    },
+                    "operator": 7
+                  }
+                }
+              ],
+              "else_branch": {
+                "type": 11,
+                "typeName": "ConditionUnit",
+                "conditionBody": [
+                  {
+                    "type": 14,
+                    "typeName": "CallStatement",
+                    "callExpr": {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "println"
+                      },
+                      "args": [
+                        {
+                          "type": 8,
+                          "typeName": "String",
+                          "span": {
+                            "startIndex": 2187,
+                            "endIndex": 2197,
+                            "str": {
+                              "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": 12,
+                    "typeName": "Condition",
+                    "if_branch": {
+                      "type": 11,
+                      "typeName": "ConditionUnit",
+                      "conditionBody": [
+                        {
+                          "type": 14,
+                          "typeName": "CallStatement",
+                          "callExpr": {
+                            "type": 13,
+                            "typeName": "CallSignature",
+                            "callee": {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "println"
+                            },
+                            "args": [
+                              {
+                                "type": 8,
+                                "typeName": "String",
+                                "span": {
+                                  "startIndex": 2601,
+                                  "endIndex": 2613,
+                                  "str": {
+                                    "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "condition": {
+                        "type": 5,
+                        "typeName": "BinaryOperationExpression",
+                        "left": {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "someFunction"
+                          },
+                          "args": [
+                            {
+                              "type": 13,
+                              "typeName": "CallSignature",
+                              "callee": {
+                                "type": 3,
+                                "typeName": "Identifier",
+                                "name": "add"
+                              },
+                              "args": [
+                                {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "a"
+                                },
+                                {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "right": {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "anotherFunction"
+                          },
+                          "args": [
+                            {
+                              "type": 13,
+                              "typeName": "CallSignature",
+                              "callee": {
+                                "type": 3,
+                                "typeName": "Identifier",
+                                "name": "add"
+                              },
+                              "args": [
+                                {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "c"
+                                },
+                                {
+                                  "type": 3,
+                                  "typeName": "Identifier",
+                                  "name": "d"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "operator": 4
+                      }
+                    },
+                    "elif_branch": [],
+                    "else_branch": {
+                      "type": 11,
+                      "typeName": "ConditionUnit",
+                      "conditionBody": [
+                        {
+                          "type": 14,
+                          "typeName": "CallStatement",
+                          "callExpr": {
+                            "type": 13,
+                            "typeName": "CallSignature",
+                            "callee": {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "println"
+                            },
+                            "args": [
+                              {
+                                "type": 8,
+                                "typeName": "String",
+                                "span": {
+                                  "startIndex": 2670,
+                                  "endIndex": 2679,
+                                  "str": {
+                                    "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": 9,
+              "typeName": "Break",
+              "identifier": "outer"
+            }
+          ],
+          "identifier": "outer"
+        },
+        {
+          "type": 14,
+          "typeName": "CallStatement",
+          "callExpr": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "name": "println"
+            },
+            "args": [
+              {
+                "type": 8,
+                "typeName": "String",
+                "span": {
+                  "startIndex": 2773,
+                  "endIndex": 2784,
+                  "str": {
+                    "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                  }
+                }
+              },
+              {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
+                "left": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "add"
+                  },
+                  "args": [
+                    {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "input"
+                      },
+                      "args": [
+                        {
+                          "type": 8,
+                          "typeName": "String",
+                          "span": {
+                            "startIndex": 2841,
+                            "endIndex": 2841,
+                            "str": {
+                              "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "input"
+                      },
+                      "args": [
+                        {
+                          "type": 8,
+                          "typeName": "String",
+                          "span": {
+                            "startIndex": 2870,
+                            "endIndex": 2870,
+                            "str": {
+                              "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "right": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "someFunction"
+                  },
+                  "args": [
+                    {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "callee": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "anotherFunction"
+                      },
+                      "args": [
+                        {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "callee": {
+                            "type": 3,
+                            "typeName": "Identifier",
+                            "name": "add"
+                          },
+                          "args": [
+                            {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "a"
+                            },
+                            {
+                              "type": 3,
+                              "typeName": "Identifier",
+                              "name": "b"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "operator": 2
+              }
+            ]
+          }
+        },
+        {
+          "type": 12,
+          "typeName": "Condition",
+          "if_branch": {
+            "type": 11,
+            "typeName": "ConditionUnit",
+            "conditionBody": [
+              {
+                "type": 14,
+                "typeName": "CallStatement",
+                "callExpr": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "println"
+                  },
+                  "args": [
+                    {
+                      "type": 8,
+                      "typeName": "String",
+                      "span": {
+                        "startIndex": 3490,
+                        "endIndex": 3511,
+                        "str": {
+                          "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "condition": {
+              "type": 5,
+              "typeName": "BinaryOperationExpression",
+              "left": {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
+                "left": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "add"
+                  },
+                  "args": [
+                    {
+                      "type": 3,
+                      "typeName": "Identifier",
+                      "name": "a"
+                    },
+                    {
+                      "type": 3,
+                      "typeName": "Identifier",
+                      "name": "b"
+                    }
+                  ]
+                },
+                "right": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "someFunction"
+                  },
+                  "args": [
+                    {
+                      "type": 5,
+                      "typeName": "BinaryOperationExpression",
+                      "left": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "x"
+                      },
+                      "right": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "y"
+                      },
+                      "operator": 2
+                    }
+                  ]
+                },
+                "operator": 2
+              },
+              "right": {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
+                "left": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "anotherFunction"
+                  },
+                  "args": [
+                    {
+                      "type": 5,
+                      "typeName": "BinaryOperationExpression",
+                      "left": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "z"
+                      },
+                      "right": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "name": "w"
+                      },
+                      "operator": 2
+                    }
+                  ]
+                },
+                "right": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "callee": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "name": "input"
+                  },
+                  "args": [
+                    {
+                      "type": 8,
+                      "typeName": "String",
+                      "span": {
+                        "startIndex": 3436,
+                        "endIndex": 3444,
+                        "str": {
+                          "str": "import std.io.println;\r\nimport std.io.input;\r\nimport std.math.add;\r\nusing src.application.main;\r\nusing src.application.utils;\r\n\r\nfx main() {\r\n\r\n    println(\"Starting Program\");\r\n\r\n    loop outer {\r\n\r\n        println(\"Entered Outer Loop\");\r\n\r\n        if (\r\n            input(\"Enter Value A\")\r\n            >\r\n            20 + add(\r\n                someFunction(\r\n                    x + 8 / 88\r\n                ),\r\n                anotherFunction(\r\n                    y * (z + 4)\r\n                )\r\n            )\r\n        ) {\r\n\r\n            println(\"Condition 1\");\r\n\r\n            loop inner {\r\n\r\n                println(\r\n                    \"Result = {}\",\r\n                    input(\"A\")\r\n                    +\r\n                    input(\"B\")\r\n                );\r\n\r\n                if (\r\n                    (a + b)\r\n                    >\r\n                    ((c * d) + someFunction(x))\r\n                ) {\r\n\r\n                    break inner;\r\n\r\n                } elif (\r\n                    ((a * b) + (c / d))\r\n                    <\r\n                    (x + y)\r\n                ) {\r\n\r\n                    println(\r\n                        \"Nested Branch\",\r\n                        anotherFunction(\r\n                            input(\"C\")\r\n                        )\r\n                    );\r\n\r\n                } else {\r\n\r\n                    loop {\r\n\r\n                        println(\r\n                            \"Deep Loop\",\r\n                            add(\r\n                                input(\"D\"),\r\n                                input(\"E\")\r\n                            )\r\n                        );\r\n\r\n                        break;\r\n\r\n                    }\r\n\r\n                }\r\n\r\n            }\r\n\r\n        } elif (\r\n\r\n            add(\r\n                input(\"Q\"),\r\n                input(\"W\")\r\n            )\r\n            <=\r\n            someFunction(\r\n                x + y + z\r\n            )\r\n\r\n        ) {\r\n\r\n            println(\r\n                \"Second Branch\",\r\n                someFunction(\r\n                    anotherFunction(\r\n                        input(\"Z\")\r\n                    )\r\n                )\r\n            );\r\n\r\n        } else {\r\n\r\n            println(\"Else Branch\");\r\n\r\n            if (\r\n\r\n                someFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n                >\r\n                anotherFunction(\r\n                    add(\r\n                        c,\r\n                        d\r\n                    )\r\n                )\r\n\r\n            ) {\r\n\r\n                println(\"Inner Else If\");\r\n\r\n            } else {\r\n\r\n                println(\"Inner Else\");\r\n\r\n            }\r\n\r\n        }\r\n\r\n        break outer;\r\n\r\n    }\r\n\r\n    println(\r\n        \"Final Result\",\r\n        (\r\n            add(\r\n                input(\"X\"),\r\n                input(\"Y\")\r\n            )\r\n            +\r\n            someFunction(\r\n                anotherFunction(\r\n                    add(\r\n                        a,\r\n                        b\r\n                    )\r\n                )\r\n            )\r\n        )\r\n    );\r\n\r\n    if (\r\n\r\n        (\r\n            add(\r\n                a,\r\n                b\r\n            )\r\n            +\r\n            someFunction(\r\n                x + y\r\n            )\r\n        )\r\n        >=\r\n        (\r\n            anotherFunction(\r\n                z + w\r\n            )\r\n            -\r\n            input(\"Threshold\")\r\n        )\r\n\r\n    ) {\r\n\r\n        println(\"Final Condition Passed\");\r\n\r\n    }\r\n\r\n}"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "operator": 3
+              },
+              "operator": 6
+            }
+          },
+          "elif_branch": []
+        }
+      ]
+    }
+  ],
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "moduleSequence": [
+        "std",
+        "io",
+        "println"
+      ]
+    },
+    {
+      "type": 6,
+      "typeName": "Import",
+      "moduleSequence": [
+        "std",
+        "io",
+        "input"
+      ]
+    },
+    {
+      "type": 6,
+      "typeName": "Import",
+      "moduleSequence": [
+        "std",
+        "math",
+        "add"
+      ]
+    },
+    {
+      "type": 7,
+      "typeName": "Using",
+      "moduleSequence": [
+        "src",
+        "application",
+        "main"
+      ]
+    },
+    {
+      "type": 7,
+      "typeName": "Using",
+      "moduleSequence": [
+        "src",
+        "application",
+        "utils"
+      ]
+    }
+  ]
+}

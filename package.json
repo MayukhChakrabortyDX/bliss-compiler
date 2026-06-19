@@ -1,0 +1,16 @@
+{
+  "name": "bliss-compiler",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "^1.3.14"
+  },
+  "scripts": {
+    "test": "bun tests/all.test.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/node": "^25.9.3"
+  }
+}
