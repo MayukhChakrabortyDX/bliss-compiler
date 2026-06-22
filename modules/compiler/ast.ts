@@ -9,7 +9,10 @@ export enum NodeType {
     String, Break, 
     Loop, ConditionUnit, 
     Condition, CallSignature,
-    CallStatement
+    CallStatement, ScalarType, CompositeType,
+    VariableDeclNode, AssignmentNode,
+    DataNode, ActionNode, BindingNode,
+    ScalarArgument
 }
 
 export class Node {
@@ -22,7 +25,7 @@ export class Node {
 }
 
 export class FunctionDefinitionNode extends Node {
-    constructor(public name: string, public body: StatementNode[]) {
+    constructor(public name: string, public returnType: TypeNode, public argumentList: ArgumentList[], public body?: StatementNode[]) {
         super(NodeType.FunctionDefinition)
     }
 }
@@ -36,7 +39,7 @@ export class LoopNode extends Node {
 //based purely off production rules
 export class ProgramNode extends Node {
 
-    constructor(public functionArray: FunctionDefinitionNode[], public importList: ImportNode[]) {
+    constructor(public body: (FunctionDefinitionNode | DataNode | ActionNode | BindingNode)[], public importList: ImportNode[]) {
         super(NodeType.Program)
     }
 
@@ -129,6 +132,81 @@ export class CallStatement extends Node {
         super(NodeType.CallStatement)
     }
 }
+
+export class ScalarTypeNode extends Node {
+    constructor( public type_name: string ) {
+        super( NodeType.ScalarType )
+    }
+}
+
+export class CompositeTypeNode extends Node {
+    constructor(public dataName: string, public attachedBindings: string[]) {
+        super( NodeType.CompositeType )
+    }
+}
+
+export type TypeNode = ScalarTypeNode | CompositeTypeNode
+
+export class VariableDeclNode extends Node {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
+        super( NodeType.VariableDeclNode )
+    }
+}
+
+export class AssignmentNode extends Node {
+    constructor(public name: string, public expression: Expression) {
+        super( NodeType.AssignmentNode )
+    }
+}
+
+export class DataStructNode extends Node {
+    constructor(public name: string, public fields: DataStructField[]) {
+        super( NodeType.DataNode )
+    }
+}
+
+export class DataStructField {
+    constructor( public name: string, public type: TypeNode ) {}
+}
+
+export class DataSoloNode extends Node {
+    constructor( public name: string ) {
+        super( NodeType.DataNode )
+    }
+}
+
+export class DataScalarNode extends Node {
+    constructor( public name: string, public dataType: TypeNode ) {
+        super(NodeType.DataNode);
+    }
+}
+
+export class DataArrayNode extends Node {
+    constructor( public name: string, public dataType: TypeNode, public size: NumberNode ) {
+        super(NodeType.DataNode);
+    }
+}
+
+export class ActionNode extends Node {
+    constructor( public name: string, public functions: FunctionDefinitionNode[] ) {
+        super(NodeType.ActionNode)
+    }
+}
+
+export class BindingNode extends Node {
+    constructor(public dataName: string, public bindingName: string, public actionNames: string[], public functionDefinitions: FunctionDefinitionNode[]) {
+        super(NodeType.BindingNode)
+    }
+}
+
+export class ScalarArgument extends Node {
+    constructor(public typeInfo: TypeNode, public argumentName: string) {
+        super(NodeType.ScalarArgument)
+    }
+}
+
+export type ArgumentList = ScalarArgument;
+export type DataNode = DataSoloNode | DataStructNode | DataScalarNode | DataArrayNode;
 
 export type Expression = IdentifierNode | NumberNode | StringNode | BinaryOperatorNode;
 export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement;

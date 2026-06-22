@@ -1,6 +1,272 @@
 {
   "type": 0,
   "typeName": "Program",
-  "functionArray": [],
-  "importList": []
+  "body": [
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "name": "User"
+    },
+    {
+      "type": 20,
+      "typeName": "ActionNode",
+      "name": "Updateable",
+      "functions": [
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "name": "update",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "i32"
+          },
+          "argumentList": []
+        },
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "name": "something",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "i64"
+          },
+          "argumentList": []
+        }
+      ]
+    },
+    {
+      "type": 21,
+      "typeName": "BindingNode",
+      "dataName": "User",
+      "bindingName": "Userable",
+      "actionNames": [
+        "Updateable"
+      ],
+      "functionDefinitions": [
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "name": "update",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "i32"
+          },
+          "argumentList": [
+            {
+              "type": 22,
+              "typeName": "ScalarArgument",
+              "typeInfo": {
+                "type": 16,
+                "typeName": "CompositeType",
+                "dataName": "User",
+                "attachedBindings": [
+                  "item"
+                ]
+              },
+              "argumentName": "x"
+            }
+          ],
+          "body": [
+            {
+              "type": 2,
+              "typeName": "ReturnStatement",
+              "expression": {
+                "type": 4,
+                "typeName": "Number",
+                "value": "0",
+                "subtypes": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "name": "char",
+      "dataType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "type_name": "u8"
+      }
+    },
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "name": "items",
+      "dataType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "type_name": "char"
+      },
+      "size": {
+        "type": 4,
+        "typeName": "Number",
+        "value": "64",
+        "subtypes": 1
+      }
+    },
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "name": "Dashboard",
+      "fields": [
+        {
+          "name": "xl",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "i32"
+          }
+        },
+        {
+          "name": "user",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "User"
+          }
+        },
+        {
+          "name": "app",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "items"
+          }
+        },
+        {
+          "name": "itd",
+          "type": {
+            "type": 16,
+            "typeName": "CompositeType",
+            "dataName": "User",
+            "attachedBindings": [
+              "Userable"
+            ]
+          }
+        },
+        {
+          "name": "kk",
+          "type": {
+            "type": 16,
+            "typeName": "CompositeType",
+            "dataName": "User",
+            "attachedBindings": [
+              "A",
+              "B",
+              "C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "name": "main",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "type_name": "i32"
+      },
+      "argumentList": [
+        {
+          "type": 22,
+          "typeName": "ScalarArgument",
+          "typeInfo": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "string"
+          },
+          "argumentName": "x"
+        },
+        {
+          "type": 22,
+          "typeName": "ScalarArgument",
+          "typeInfo": {
+            "type": 16,
+            "typeName": "CompositeType",
+            "dataName": "User",
+            "attachedBindings": [
+              "Dashboard"
+            ]
+          },
+          "argumentName": "item"
+        }
+      ],
+      "body": [
+        {
+          "type": 17,
+          "typeName": "VariableDeclNode",
+          "name": "x",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "type_name": "u64"
+          },
+          "expression": {
+            "type": 4,
+            "typeName": "Number",
+            "value": "20",
+            "subtypes": 1
+          }
+        },
+        {
+          "type": 17,
+          "typeName": "VariableDeclNode",
+          "name": "y",
+          "type_of_variable": {
+            "type": 16,
+            "typeName": "CompositeType",
+            "dataName": "User",
+            "attachedBindings": [
+              "Dashboard"
+            ]
+          },
+          "expression": {
+            "type": 4,
+            "typeName": "Number",
+            "value": "50",
+            "subtypes": 1
+          }
+        },
+        {
+          "type": 18,
+          "typeName": "AssignmentNode",
+          "name": "x",
+          "expression": {
+            "type": 4,
+            "typeName": "Number",
+            "value": "30",
+            "subtypes": 1
+          }
+        },
+        {
+          "type": 2,
+          "typeName": "ReturnStatement",
+          "expression": {
+            "type": 3,
+            "typeName": "Identifier",
+            "name": "x"
+          }
+        }
+      ]
+    }
+  ],
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "moduleSequence": [
+        "std",
+        "io",
+        "println"
+      ]
+    }
+  ]
 }

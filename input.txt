@@ -1,0 +1,36 @@
+import std.io.println;
+
+data User;
+
+action Updateable {
+    fx update(): i32 ;
+    fx something(): i64;
+}
+
+bind User with Updateable as Userable {
+    fx update(User::item x): i32 {
+        return 0;
+    }
+}
+
+data char(u8);
+data items [char, 64];
+
+
+data Dashboard {
+    i32 xl;
+    User user;
+    items app;
+    User::Userable itd;
+    User::(A, B, C) kk;
+}
+
+fx main(string x, User::Dashboard item): i32 {
+
+    let x: u64 = 20;
+    let y: User::Dashboard = 50;
+    x = 30;
+
+    return x;
+
+}

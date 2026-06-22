@@ -6,33 +6,13 @@ import 'bun'
 
 export class Tokenizer {
 
-    keywords: Map<string, TokenType> = new Map([
+    keywords: Map<string, TokenType> = new Map(
 
-        ["data", TokenType.K_Data],
-        ["if", TokenType.K_If],
-        ["action", TokenType.K_Action],
-        ["bind", TokenType.K_Bind],
-        ["fx", TokenType.K_Fx],
-        ["import", TokenType.K_Import],
-        ["using", TokenType.K_Using],
-        ["view", TokenType.K_View],
-        ["let", TokenType.K_Let],
-        ["as", TokenType.K_As],
-        ["return", TokenType.K_Return],
-        ["ptr", TokenType.K_Ptr],
-        ["set", TokenType.K_Set],
-        ["get", TokenType.K_Get],
-        ["cset", TokenType.K_CSet],
-        ["cget", TokenType.K_CGet],
-        ["else", TokenType.K_Else],
-        ["elif", TokenType.K_Elif],
-        ["loop", TokenType.K_Loop],
-        ["break", TokenType.K_Break],
-        ["continue", TokenType.K_Continue],
-        ["with", TokenType.K_With],
-        ["alias", TokenType.K_Alias]
-        
-    ])
+        Object.keys(TokenType)
+            .filter((k) => k.startsWith("K_") && Number.isNaN(Number(k)))
+            .map((k) => [k.slice(2).toLowerCase(), TokenType[k as keyof typeof TokenType]])
+
+    )
 
     sourceContainer: StringContainer
     constructor(public source: string) {
@@ -151,10 +131,10 @@ export class Tokenizer {
                 } else {
                     tokens.push(new Token(presentState, new StringSpan(span_start, endIndex, this.sourceContainer), row, col))
                 }
-            } else if ( presentState == TokenType.String ) {
+            } else if (presentState == TokenType.String) {
                 tokens.push(new Token(presentState, new StringSpan(span_start + 1, endIndex - 1, this.sourceContainer), row, col))
             }
-            
+
             else {
                 tokens.push(new Token(presentState, new StringSpan(span_start, endIndex, this.sourceContainer), row, col))
             }
@@ -171,12 +151,12 @@ export class Tokenizer {
                 } else {
                     tokens.push(new Token(presentState, new StringSpan(span_start, span_end, this.sourceContainer), row, col))
                 }
-            } 
-            
-            else if ( presentState == TokenType.String ) {
+            }
+
+            else if (presentState == TokenType.String) {
                 tokens.push(new Token(presentState, new StringSpan(span_start + 1, span_end - 1, this.sourceContainer), row, col))
-            } 
-            
+            }
+
             else {
                 tokens.push(new Token(presentState, new StringSpan(span_start, span_end, this.sourceContainer), row, col))
             }
@@ -391,19 +371,14 @@ export class Tokenizer {
                         continue;
                     }
 
-                    if ( char == "*" ) {
+                    if (char == "*") {
                         soloCharacter(TokenType.Multiply)
                         continue;
                     }
 
                     //we will add nuances when adding comments
-                    if ( char == "/" ) {
+                    if (char == "/") {
                         soloCharacter(TokenType.Divide)
-                        continue;
-                    }
-
-                    if (char == ':') {
-                        soloCharacter(TokenType.Colon)
                         continue;
                     }
 
@@ -446,12 +421,17 @@ export class Tokenizer {
                         continue;
                     }
 
-                    if ( char == "!" ) {
+                    if (char == ':') {
+                        doubleCharacter(TokenType.Colon, TokenType.DoubleColon, ':')
+                        continue;
+                    }
+
+                    if (char == "!") {
                         doubleCharacter(TokenType.Negation, TokenType.NotEqual, "=")
                         continue
                     }
 
-                    if ( char == "<" ) {
+                    if (char == "<") {
                         doubleCharacter(TokenType.LessThan, TokenType.LessThanEqual, "=")
                         continue
                     }

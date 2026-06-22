@@ -31,6 +31,10 @@ export enum TokenType {
     K_With,
     K_Alias,
 
+    K_u8, K_u16, K_u32, K_u64,
+    K_i8, K_i16, K_i32, K_i64,
+    K_f32, K_f64, //that's it for now
+
     ScanningState, //this means when we are starting to scan basically
     Identifier,
     Integer,
@@ -50,10 +54,15 @@ export enum TokenType {
     Increment,
     String,
     Colon,
+    DoubleColon,
     Minus,
 
     Multiply,
     Divide,
+
+    //types (built-in starts here)
+
+    //types ends here
 
     Decrement,
     ArrowRight,
