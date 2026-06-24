@@ -16,7 +16,6 @@ bind User with Updateable as Userable {
 data char(u8);
 data items [char, 64];
 
-
 data Dashboard {
     i32 xl;
     User user;
@@ -25,7 +24,7 @@ data Dashboard {
     User::(A, B, C) kk;
 }
 
-fx main(string x, User::Dashboard item): i32 {
+fx main(string x, User::Dashboard item, y with User, z with (Item, Letter), User me with (Item, Doaable)): i32 {
 
     let x: u64 = 20;
     let y: User::Dashboard = 50;

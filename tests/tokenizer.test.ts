@@ -1,4 +1,4 @@
-import { Parser } from "../modules/compiler/parser";
+import { Parser } from "../modules/compiler/parser/parser";
 import { Tokenizer } from "../modules/compiler/tokenizer";
 import { readFileSync } from "fs";
 

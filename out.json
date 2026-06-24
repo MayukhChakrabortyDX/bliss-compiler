@@ -57,7 +57,7 @@
           "argumentList": [
             {
               "type": 22,
-              "typeName": "ScalarArgument",
+              "typeName": "TypeBasedArgument",
               "typeInfo": {
                 "type": 16,
                 "typeName": "CompositeType",
@@ -177,7 +177,7 @@
       "argumentList": [
         {
           "type": 22,
-          "typeName": "ScalarArgument",
+          "typeName": "TypeBasedArgument",
           "typeInfo": {
             "type": 15,
             "typeName": "ScalarType",
@@ -187,7 +187,7 @@
         },
         {
           "type": 22,
-          "typeName": "ScalarArgument",
+          "typeName": "TypeBasedArgument",
           "typeInfo": {
             "type": 16,
             "typeName": "CompositeType",
@@ -197,6 +197,33 @@
             ]
           },
           "argumentName": "item"
+        },
+        {
+          "type": 23,
+          "typeName": "ActionBasedArgument",
+          "argumentName": "y",
+          "actionList": [
+            "User"
+          ]
+        },
+        {
+          "type": 23,
+          "typeName": "ActionBasedArgument",
+          "argumentName": "z",
+          "actionList": [
+            "Item",
+            "Letter"
+          ]
+        },
+        {
+          "type": 24,
+          "typeName": "DataAndActionBasedArgument",
+          "argumentName": "me",
+          "actionList": [
+            "Item",
+            "Doaable"
+          ],
+          "dataName": "User"
         }
       ],
       "body": [

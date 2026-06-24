@@ -1,6 +1,0 @@
-import std.io.println;
-
-fx main(): i32 {
-    println("Hello World");
-    return 0;
-}

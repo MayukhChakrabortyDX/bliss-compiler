@@ -1,0 +1,253 @@
+import { Log, log } from "../../../logger";
+import { TokenType, type Token } from "../../tokens";
+import { 
+    AssignmentNode, BreakStatementNode, 
+    CallSignatureNode, CallStatement, 
+    ConditionalNode, ConditionNode, 
+    LoopNode, ReturnStatementNode, 
+    VariableDeclNode, type Expression, 
+    type StatementNode 
+} from "../ast";
+import { ParseTypes } from "./types";
+
+export class ParseStatement extends ParseTypes {
+
+    parseAssignment() {
+
+        let variableName: string = ""
+        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
+
+            const token = this.peek(0) as Token
+            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
+            this.advance()
+
+        })
+
+        this.shouldBe(TokenType.Assignment);
+
+        let expression = this.parseExpression()
+
+        if (expression == null) {
+            throw Error("Expression Expected")
+        }
+
+        this.advance()
+        this.shouldBe(TokenType.Semicolon)
+
+        return new AssignmentNode(variableName, expression)
+
+    }
+
+    parseVariableDecl() {
+
+        let variableName: string = ""
+        this.shouldBe(TokenType.K_Let)
+        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
+
+            const token = this.peek(0) as Token
+            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
+            this.advance()
+
+        })
+
+        this.shouldBe(TokenType.Colon)
+
+        let returnType = this.parseType()
+        this.shouldBe(TokenType.Assignment)
+        let expression = this.parseExpression()
+
+        if (expression == null) {
+            throw Error("Expression Expected")
+        }
+
+        this.advance()
+
+        this.shouldBe(TokenType.Semicolon)
+
+        return new VariableDeclNode(variableName, returnType, expression)
+
+    }
+
+    parseBreak() {
+
+        let identifier: string | null = null
+        this.expect(this.peek(0) as Token, TokenType.K_Break, () => this.advance());
+
+        this.maybeExpect(this.peek(0) as Token, TokenType.Identifier, () => {
+
+            const _thisToken = this.peek(0) as Token
+            identifier = this.source.str.substring(_thisToken.span.startIndex, _thisToken.span.endIndex + 1);
+            this.advance()
+
+        }, () => {
+
+
+        })
+
+        this.expect(this.peek(0) as Token, TokenType.Semicolon, () => this.advance())
+        return identifier == null ? new BreakStatementNode() : new BreakStatementNode(identifier)
+
+    }
+
+    parseReturn() {
+
+        const firstToken = this.peek(0)
+        let expression = null
+        //@ts-ignore
+        this.expect(firstToken, TokenType.K_Return, () => this.advance());
+
+        expression = this.parseExpression()
+
+        if (expression != null) {
+            this.advance()
+        }
+
+        const lastToken = this.peek(0)
+        //@ts-ignore
+        this.expect(lastToken, TokenType.Semicolon, () => this.advance())
+
+        return expression == null ? new ReturnStatementNode() : new ReturnStatementNode(expression);
+
+    }
+
+    parseLoop() {
+
+        let identifier: string | null = null;
+        let body: StatementNode[] = []
+
+        this.expect(this.peek(0) as Token, TokenType.K_Loop, () => this.advance())
+
+        this.maybeExpect(this.peek(0) as Token, TokenType.Identifier, () => {
+            const _thisToken = this.peek(0) as Token
+            identifier = this.source.str.substring(_thisToken.span.startIndex, _thisToken.span.endIndex + 1);
+            this.advance()
+        }, () => { })
+
+        this.expect(this.peek(0) as Token, TokenType.LBracket, () => this.advance())
+
+        while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
+            //@ts-ignore
+            body.push(this.parseStatement())
+        }
+
+        this.expect(this.peek(0) as Token, TokenType.RBracket, () => this.advance())
+
+        return identifier == null ? new LoopNode(body) : new LoopNode(body, identifier)
+
+    }
+
+    parseCondition() {
+
+        let if_branch: ConditionalNode = new ConditionalNode([])
+        let elif_branch: ConditionalNode[] = []
+        let elseBranch: ConditionalNode | undefined = undefined;
+
+        this.expect(this.peek(0) as Token, TokenType.K_If, () => this.advance())
+        this.expect(this.peek(0) as Token, TokenType.LBrace, () => this.advance())
+
+
+        if_branch.condition = this.parseExpression();
+        this.advance()
+
+        if (if_branch.condition == null) {
+
+            throw new Error("Expression Expected")
+
+        }
+
+        this.expect(this.peek(0) as Token, TokenType.RBrace, () => this.advance())
+        this.expect(this.peek(0) as Token, TokenType.LBracket, () => this.advance())
+
+        while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
+            if_branch.conditionBody.push(this.parseStatement())
+        }
+
+        this.expect(this.peek(0) as Token, TokenType.RBracket, () => this.advance())
+
+        //now process the elifs
+        while ((this.peek(0) as Token).tokenType == TokenType.K_Elif) {
+
+            const statements: StatementNode[] = []
+
+            this.expect(this.peek(0) as Token, TokenType.K_Elif, () => this.advance())
+            this.expect(this.peek(0) as Token, TokenType.LBrace, () => this.advance())
+
+            let exp: Expression = null;
+
+            exp = this.parseExpression();
+            this.advance()
+
+            if (exp == null) {
+
+                throw new Error("Expression Expected")
+
+            }
+
+            this.expect(this.peek(0) as Token, TokenType.RBrace, () => this.advance())
+            this.expect(this.peek(0) as Token, TokenType.LBracket, () => this.advance())
+
+            while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
+                statements.push(this.parseStatement())
+            }
+
+            this.expect(this.peek(0) as Token, TokenType.RBracket, () => this.advance())
+
+            elif_branch.push(new ConditionalNode(statements, exp))
+
+        }
+
+        this.maybeExpect(this.peek(0) as Token, TokenType.K_Else, () => {
+
+            elseBranch = new ConditionalNode([], undefined)
+
+            this.expect(this.peek(0) as Token, TokenType.K_Else, () => this.advance())
+            this.expect(this.peek(0) as Token, TokenType.LBracket, () => this.advance())
+
+            while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
+                elseBranch.conditionBody.push(this.parseStatement())
+            }
+
+            this.expect(this.peek(0) as Token, TokenType.RBracket, () => this.advance())
+
+        }, () => { })
+
+        return new ConditionNode(if_branch, elif_branch, elseBranch)
+
+    }
+
+    statementSet = new Set([TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
+    parseStatement(): ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode {
+
+        const initial = this.peek(0)
+        //we do branching here
+        switch (initial?.tokenType) {
+
+            case TokenType.K_Return:
+                return this.parseReturn()
+            case TokenType.K_Break:
+                return this.parseBreak()
+            case TokenType.K_Loop:
+                return this.parseLoop()
+            case TokenType.K_If:
+                return this.parseCondition()
+            case TokenType.Identifier:
+                if ((this.peek(1) as Token).tokenType == TokenType.Assignment) {
+                    return this.parseAssignment()
+                }
+                const call_expr = this.parseCallSignature()
+                this.advance()
+                this.expect(this.peek(0) as Token, TokenType.Semicolon, () => this.advance())
+                return new CallStatement(call_expr as CallSignatureNode)
+            case TokenType.K_Let:
+                return this.parseVariableDecl()
+
+            default:
+                //no other matches can be done
+                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${initial?.tokenType}`)
+                process.exit(1)
+
+        }
+
+    }
+
+}

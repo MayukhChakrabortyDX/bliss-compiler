@@ -1,4 +1,4 @@
-import type { StringContainer, StringSpan } from "./tokens"
+import type { StringContainer, StringSpan } from "../tokens"
 
 //declare nodes based on rules
 export enum NodeType {
@@ -12,7 +12,8 @@ export enum NodeType {
     CallStatement, ScalarType, CompositeType,
     VariableDeclNode, AssignmentNode,
     DataNode, ActionNode, BindingNode,
-    ScalarArgument
+    TypeBasedArgument, ActionBasedArgument,
+    DataAndActionBasedArgument
 }
 
 export class Node {
@@ -199,14 +200,28 @@ export class BindingNode extends Node {
     }
 }
 
-export class ScalarArgument extends Node {
+export class TypeBasedArgument extends Node {
     constructor(public typeInfo: TypeNode, public argumentName: string) {
-        super(NodeType.ScalarArgument)
+        super(NodeType.TypeBasedArgument)
     }
 }
 
-export type ArgumentList = ScalarArgument;
+export class ActionBasedArgument extends Node {
+    //names of action with the argument present.
+    constructor(public argumentName: string, public actionList: string[]) {
+        super(NodeType.ActionBasedArgument)
+    }
+}
+
+export class DataAndActionBasedArgument extends Node {
+    //note - this is strictly data
+    constructor(public argumentName: string, public actionList: string[], public dataName: string) {
+        super(NodeType.DataAndActionBasedArgument)
+    }
+}
+
+export type ArgumentList = TypeBasedArgument | ActionBasedArgument | DataAndActionBasedArgument;
 export type DataNode = DataSoloNode | DataStructNode | DataScalarNode | DataArrayNode;
 
-export type Expression = IdentifierNode | NumberNode | StringNode | BinaryOperatorNode;
+export type Expression = IdentifierNode | NumberNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
 export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement;

@@ -1,4 +1,4 @@
-import type { ProgramNode } from "../compiler/ast";
+import type { ProgramNode } from "../compiler/parser/ast";
 
 export class SemanticAnalyzer {
 
