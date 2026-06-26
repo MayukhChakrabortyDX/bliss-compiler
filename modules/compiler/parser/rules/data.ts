@@ -1,4 +1,4 @@
-import { Token, TokenType } from "../../tokens";
+import { Token, TokenType } from "../../tokenizer/tokens";
 import {
     DataArrayNode, DataScalarNode,
     DataSoloNode, DataStructField,
@@ -11,14 +11,8 @@ export class ParseData extends ParseStatement {
     parseDataStructField() {
 
         const typeNode = this.parseType();
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
+        let variableName: string = this.digest(TokenType.Identifier)
 
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
         this.shouldBe(TokenType.Semicolon)
 
         return new DataStructField(variableName, typeNode)
@@ -29,14 +23,7 @@ export class ParseData extends ParseStatement {
 
         const fields: DataStructField[] = []
         this.shouldBe(TokenType.K_Data)
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
+        let variableName: string = this.digest(TokenType.Identifier)
 
         this.shouldBe(TokenType.LBracket)
 
@@ -57,14 +44,7 @@ export class ParseData extends ParseStatement {
 
     parseDataScalarNodeDecl() {
         this.shouldBe(TokenType.K_Data)
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
+        let variableName: string = this.digest(TokenType.Identifier)
 
         this.shouldBe(TokenType.LBrace)
         let typeNode = this.parseType()
@@ -77,14 +57,7 @@ export class ParseData extends ParseStatement {
     parseDataSoloDecl() {
 
         this.shouldBe(TokenType.K_Data)
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
+        let variableName: string = this.digest(TokenType.Identifier)
 
         this.shouldBe(TokenType.Semicolon)
 
@@ -94,28 +67,14 @@ export class ParseData extends ParseStatement {
 
     parseDataArrayDecl() {
         this.shouldBe(TokenType.K_Data)
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
+        let variableName: string = this.digest(TokenType.Identifier)
 
         this.shouldBe(TokenType.LSquareBrace)
 
         let typeNode = this.parseType()
         this.shouldBe(TokenType.Comma)
 
-        let number: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Integer, () => {
-
-            const token = this.peek(0) as Token
-            number = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
+        let number: string = this.digest(TokenType.Integer)
 
         this.shouldBe(TokenType.RSquareBrace)
         this.shouldBe(TokenType.Semicolon)

@@ -6,7 +6,7 @@ import {
     BindingNode,
 } from "./ast";
 
-import { Token, TokenType } from "../tokens";
+import { Token, TokenType } from "../tokenizer/tokens";
 import { log, Log } from "../../logger";
 import { ParseImports } from "./rules/imports";
 

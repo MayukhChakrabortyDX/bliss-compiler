@@ -1,5 +1,5 @@
 import { Log, log } from "../../../logger";
-import { TokenType, type Token } from "../../tokens";
+import { Token, TokenType } from "../../tokenizer/tokens";
 import { 
     AssignmentNode, BreakStatementNode, 
     CallSignatureNode, CallStatement, 
@@ -11,6 +11,8 @@ import {
 import { ParseTypes } from "./types";
 
 export class ParseStatement extends ParseTypes {
+
+    statementSet = new Set([TokenType.K_Unsafe, TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
 
     parseAssignment() {
 
@@ -40,15 +42,17 @@ export class ParseStatement extends ParseTypes {
 
     parseVariableDecl() {
 
+        let unsafe: boolean = false;
         let variableName: string = ""
-        this.shouldBe(TokenType.K_Let)
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
 
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
+        this.maybeExpect(this.peek(0) as Token, TokenType.K_Unsafe, () => {
+            unsafe = true
             this.advance()
+        }, () => {})
 
-        })
+        this.shouldBe(TokenType.K_Let)
+
+        variableName = this.digest(TokenType.Identifier)
 
         this.shouldBe(TokenType.Colon)
 
@@ -64,7 +68,7 @@ export class ParseStatement extends ParseTypes {
 
         this.shouldBe(TokenType.Semicolon)
 
-        return new VariableDeclNode(variableName, returnType, expression)
+        return new VariableDeclNode(variableName, returnType, expression, unsafe)
 
     }
 
@@ -215,7 +219,6 @@ export class ParseStatement extends ParseTypes {
 
     }
 
-    statementSet = new Set([TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
     parseStatement(): ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode {
 
         const initial = this.peek(0)
@@ -238,7 +241,9 @@ export class ParseStatement extends ParseTypes {
                 this.advance()
                 this.expect(this.peek(0) as Token, TokenType.Semicolon, () => this.advance())
                 return new CallStatement(call_expr as CallSignatureNode)
+                
             case TokenType.K_Let:
+            case TokenType.K_Unsafe:
                 return this.parseVariableDecl()
 
             default:

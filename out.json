@@ -241,7 +241,8 @@
             "typeName": "Number",
             "value": "20",
             "subtypes": 1
-          }
+          },
+          "isUnsafe": false
         },
         {
           "type": 17,
@@ -260,7 +261,8 @@
             "typeName": "Number",
             "value": "50",
             "subtypes": 1
-          }
+          },
+          "isUnsafe": true
         },
         {
           "type": 18,

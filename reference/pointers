@@ -1,0 +1,406 @@
+# Bliss v1 Memory Model & Pointer Hierarchy
+
+## 1. Design Philosophy — Segregation of Interactions
+
+Bliss is founded on a simple principle:
+
+> **The visual complexity of an operation must scale with its inherent danger.**
+
+Rather than exposing every memory interaction through a single abstraction, Bliss divides memory access into three distinct tiers.
+
+Each tier possesses:
+
+* a dedicated syntax,
+* explicit semantic rules,
+* clear purpose,
+* and a narrowly defined scope.
+
+The objective is not merely memory safety, but **visual honesty**. Safe interactions should remain lightweight, while increasingly dangerous operations should become progressively more explicit.
+
+---
+
+## 2. Memory Interaction Hierarchy
+
+Bliss separates memory into three levels.
+
+| Tier       | Syntax             | Purpose                   |
+| ---------- | ------------------ | ------------------------- |
+| **Tier 1** | `` ` ``            | Safe temporary references |
+| **Tier 2** | `ptr` + `[]`       | Raw pointers              |
+| **Tier 3** | `hdl` + `#[]`      | Physical hardware handles |
+
+The overwhelming majority of user code is expected to use Tier 1.
+
+Tier 2 exists for data structures, allocation, and FFI.
+
+Tier 3 exists solely for bare-metal programming.
+
+---
+
+## 3. Tier 1 — Safe References (90%)
+
+### Purpose
+
+Safe references provide zero-copy access without exposing the address space.
+
+They are designed for:
+
+* parameter passing
+* temporary borrowing
+* output parameters
+* local mutation
+
+They cannot escape the current function.
+
+---
+
+### Syntax
+
+```bliss
+fx add(i32 `a, i32 `b, i32 `c) {
+
+    `c = `a + `b;
+
+}
+```
+
+Passing references:
+
+```bliss
+let a = 10;
+let b = 20;
+let c = 0;
+
+add(`a, `b, `c);
+```
+
+---
+
+### Constraints
+
+References obey the following rules.
+
+* No pointer arithmetic.
+* Cannot be returned.
+* Cannot be stored inside structures.
+* Cannot exist inside arrays.
+* Cannot be assigned to raw pointers.
+* Cannot outlive the function invocation.
+
+References are therefore guaranteed to remain valid for their entire lifetime.
+
+---
+
+## 4. Tier 2 — Raw Pointers (9%)
+
+### Purpose
+
+Raw pointers expose the address space directly.
+
+They are intended only for:
+
+* linked data structures
+* arrays
+* allocators
+* FFI
+* operating systems
+* runtime implementation
+
+Unlike references, pointers may be stored permanently.
+
+---
+
+### Syntax
+
+Pointer declarations use the `ptr` keyword before the type.
+
+```bliss
+ptr i32 x;
+```
+
+Addresses are obtained explicitly. A variable must be declared `unsafe` to be addressable.
+
+```bliss
+unsafe let value = 42;
+
+x = &value;
+```
+
+`unsafe` on a `let` declaration means the variable is addressable and may be mutated externally. Without it, the variable cannot have its address taken.
+
+---
+
+## 5. Pointer Dereferencing — The `[]` Operator
+
+Unlike C, dereferencing in Bliss is not performed using a unary operator.
+
+Instead, each pointer dereference is written as a bracketed expression at its site.
+
+---
+
+### Read
+
+```bliss
+[a]
+```
+
+Conceptually:
+
+```c
+*a
+```
+
+---
+
+### Write
+
+```bliss
+[c] = [a] + [b];
+```
+
+Conceptually:
+
+```c
+*c = *a + *b;
+```
+
+Every dereference is marked individually. There is no implicit context. Each `[]` is self-contained and independent.
+
+---
+
+### Offsets
+
+Offsets are written using a `|` separator inside the brackets.
+
+```bliss
+[c | 5] = [a | 3] + [b | 7];
+```
+
+Conceptually:
+
+```c
+*(c + 5) = *(a + 3) + *(b + 7);
+```
+
+Offsets are type-bound. If `ptr i32 x` is offset by `n`, the effective address is `x + n * sizeof(i32)`.
+
+When omitted, `| 0` is assumed. Therefore:
+
+```bliss
+[ptr]
+```
+
+and
+
+```bliss
+[ptr | 0]
+```
+
+are equivalent.
+
+---
+
+## 6. Addressability
+
+Ordinary stack values are not addressable by default.
+
+To expose an address, a variable must be explicitly declared `unsafe`.
+
+```bliss
+unsafe let value = 42;
+
+foo(&value);
+```
+
+This makes address-taking an explicit programmer decision rather than an implicit property of all variables.
+
+There are no lifetime guarantees on pointers. Pointer safety is the programmer's responsibility.
+
+---
+
+## 7. Structures
+
+Pointers may be stored inside structures using the `ptr` keyword.
+
+```bliss
+data Node {
+
+    i32 value;
+
+    ptr Node next;
+
+}
+```
+
+For a field to be addressable, it must be explicitly marked `unsafe`.
+
+```bliss
+data Node {
+
+    unsafe i32 value;
+
+    ptr Node next;
+
+}
+```
+
+Only `unsafe`-marked fields may have their address taken. Attempting `&$(node.value)` on a non-`unsafe` field is a compile error.
+
+Traversal uses the `[]` operator.
+
+```bliss
+[current].value
+
+[current].next
+```
+
+With offsets:
+
+```bliss
+[current | 2].value
+```
+
+---
+
+## 8. Tier 3 — Handles (1%)
+
+Handles represent absolute physical memory addresses.
+
+Unlike pointers, handles are never derived from variables. They always represent fixed addresses.
+
+```bliss
+hdl GPIO: u32 = 0x40020000;
+```
+
+Hardware reads and writes use the `#[]` operator. The `#` prefix serves as an explicit visual warning that physical hardware is being accessed.
+
+### Read
+
+```bliss
+#[GPIO]
+```
+
+### Write
+
+```bliss
+#[GPIO] = 1;
+```
+
+### With Offsets
+
+```bliss
+#[GPIO | 3] = 1;
+```
+
+---
+
+## 9. The View System
+
+Pointers fundamentally represent untyped storage.
+
+The `view` system separates **memory allocation** from **type interpretation**.
+
+Rather than casting pointers, Bliss creates typed views over raw bytes.
+
+A view and a pointer are disjoint abstractions in Bliss. They do not implicitly interoperate.
+
+---
+
+### Allocation
+
+```bliss
+ptr byte bytes = malloc(sizeof(Node));
+```
+
+At this stage the memory is simply raw storage with no type interpretation.
+
+---
+
+### Viewing
+
+```bliss
+view bytes as node: Node;
+```
+
+No memory changes occur. Only the compiler's interpretation changes. The underlying bytes remain identical.
+
+---
+
+### Access — The `$()` Operator
+
+All reads and writes through a view must use the `$()` operator.
+
+Read:
+
+```bliss
+$(node.value)
+```
+
+Write:
+
+```bliss
+$(node.value) = 10;
+```
+
+`$()` is the sole interface for view access. There is no way to read or write through a view without it.
+
+---
+
+### Escaping a View into a Pointer
+
+A view field may be escaped into a pointer using `&`, but only if the field is declared `unsafe`.
+
+```bliss
+ptr i32 x = nullptr;
+
+x = &$(node.value);
+```
+
+This is valid only because `value` was declared `unsafe i32` in the `Node` data declaration. If the field is not `unsafe`, this is a compile error.
+
+---
+
+## 10. Declaration Modifier Summary
+
+Two orthogonal modifiers exist for declarations.
+
+| Modifier | Meaning |
+|---|---|
+| `unsafe` | This variable or field is addressable and may be mutated externally |
+| `ptr` | This variable or field holds a pointer to a value of the given type |
+
+They compose naturally, with `unsafe` preceding `ptr`.
+
+```bliss
+i32 x;             // plain value, not addressable
+unsafe i32 x;      // addressable value
+ptr i32 x;         // pointer, not itself addressable
+unsafe ptr i32 x;  // addressable pointer
+```
+
+---
+
+## 11. Summary
+
+| Interaction | Syntax          | Address Arithmetic | Addressable by default | Storage |
+| ----------- | --------------- | ------------------ | ---------------------- | ------- |
+| Value       | `x`             | No                 | No                     | Yes     |
+| Reference   | `` `x ``        | No                 | No                     | No      |
+| Pointer     | `ptr` + `[]`    | Yes                | No (requires `unsafe`) | Yes     |
+| Handle      | `hdl` + `#[]`   | Yes (absolute)     | —                      | Yes     |
+| View field  | `$(node.field)` | No                 | No (requires `unsafe`) | —       |
+
+---
+
+## Core Principle
+
+Bliss intentionally makes the common case effortless:
+
+* **References** should handle almost all application code.
+* **Pointers** exist for implementing data structures, allocators, and interoperability.
+* **Handles** exist only for hardware and operating system development.
+* **Views** exist for typed interpretation of raw allocated memory.
+
+As interactions become more dangerous, the syntax becomes progressively more explicit. This progression reflects the central philosophy of Bliss:
+
+> **The syntax should honestly communicate the level of responsibility expected from the programmer.**

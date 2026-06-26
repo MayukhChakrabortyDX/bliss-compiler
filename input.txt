@@ -27,7 +27,7 @@ data Dashboard {
 fx main(string x, User::Dashboard item, y with User, z with (Item, Letter), User me with (Item, Doaable)): i32 {
 
     let x: u64 = 20;
-    let y: User::Dashboard = 50;
+    unsafe let y: User::Dashboard = 50;
     x = 30;
 
     return x;

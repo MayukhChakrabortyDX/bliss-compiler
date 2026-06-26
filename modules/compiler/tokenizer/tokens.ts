@@ -6,6 +6,7 @@ export class StringSpan {
     constructor( public startIndex: number, public endIndex: number, public str: StringContainer ) {}
 }
 
+
 export enum TokenType {
     K_Data,
     K_If,
@@ -16,6 +17,7 @@ export enum TokenType {
     K_Using,
     K_View,
     K_Let,
+    K_Unsafe,
     K_As,
     K_Return,
     K_Ptr,

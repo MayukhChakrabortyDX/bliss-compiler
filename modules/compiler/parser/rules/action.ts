@@ -1,4 +1,4 @@
-import { Token, TokenType } from "../../tokens";
+import { Token, TokenType } from "../../tokenizer/tokens";
 import { ActionNode, type FunctionDefinitionNode } from "../ast";
 import { ParseFunction } from "./function";
 
@@ -7,14 +7,7 @@ export class ParseAction extends ParseFunction {
     parseAction() {
 
         this.shouldBe(TokenType.K_Action)
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
+        let variableName: string = this.digest(TokenType.Identifier)
 
         this.shouldBe(TokenType.LBracket)
 

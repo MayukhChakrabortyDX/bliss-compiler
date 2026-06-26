@@ -65,7 +65,7 @@ FUNC_DECL -> "fx" @IDENTIFIER "(" ARGUMENT_LIST*[separated_by ','] ")" ':' TYPE 
 REDUCED_FUNC_DECL -> "fx" @IDENTIFIER "(" ARGUMENT_LIST*[separated_by ','] ")" ':' TYPE;
 
 //variable declaration
-VARIABLE_DECL -> "let" @IDENTIFIER ":" TYPE "=" EXPRESSION ';';
+VARIABLE_DECL -> "unsafe"? "let" @IDENTIFIER ":" TYPE "=" EXPRESSION ';';
 ASSIGNMENT -> @IDENTIFIER "=" EXPRESSION ';';
 
 CALL_SIGNATURE -> @IDENTIFIER "(" (EXPRESSION (",", EXPRESSION)*)? ")";

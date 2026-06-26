@@ -1,11 +1,11 @@
 import { Log, log } from "../../../logger";
-import { Token, TokenType } from "../../tokens";
+import { Token, TokenType } from "../../tokenizer/tokens";
 
-import { 
-    BinaryOperation, BinaryOperatorNode, 
-    CallSignatureNode, IdentifierNode, 
-    Number, NumberNode, 
-    StringNode, type Expression 
+import {
+    BinaryOperation, BinaryOperatorNode,
+    CallSignatureNode, IdentifierNode,
+    Number, NumberNode,
+    StringNode, type Expression
 } from "../ast";
 
 import { ParserBase } from "../helper";
@@ -116,7 +116,7 @@ export class ParseExpressions extends ParserBase {
     parseAdditionSubtraction(): Expression {
         //@ts-ignore
         const left = this.parseMultiplicationDivision();
-        
+
         if (left == null) return null;
 
         //if not, let's see where we can go.

@@ -1,5 +1,5 @@
 import { Log, log } from "../../logger";
-import { TokenType, type StringContainer, type Token } from "../tokens";
+import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
 
 //this consists of the base helpers and the fundamental values
 export class ParserBase {

@@ -1,4 +1,4 @@
-import type { StringContainer, StringSpan } from "../tokens"
+import type { StringContainer, StringSpan } from "../tokenizer/tokens"
 
 //declare nodes based on rules
 export enum NodeType {
@@ -149,7 +149,7 @@ export class CompositeTypeNode extends Node {
 export type TypeNode = ScalarTypeNode | CompositeTypeNode
 
 export class VariableDeclNode extends Node {
-    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression, public isUnsafe: boolean = false) {
         super( NodeType.VariableDeclNode )
     }
 }

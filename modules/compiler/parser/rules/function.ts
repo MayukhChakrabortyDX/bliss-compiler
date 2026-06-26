@@ -1,4 +1,4 @@
-import { Token, TokenType } from "../../tokens";
+import { Token, TokenType } from "../../tokenizer/tokens";
 import {
     ActionBasedArgument, DataAndActionBasedArgument,
     FunctionDefinitionNode, TypeBasedArgument,
@@ -6,8 +6,7 @@ import {
 } from "../ast";
 import { ParseData } from "./data";
 
-export class ParseFunction extends ParseData {
-
+class ParseArguments extends ParseData {
     parseTypeBasedArgument() {
 
         const typeNode = this.parseType()
@@ -101,85 +100,16 @@ export class ParseFunction extends ParseData {
         return this.parseTypeBasedArgument()
 
     }
+}
 
-    parseFunctionDefinition() {
+export class ParseFunction extends ParseArguments {
 
-        let name: string = "";
-        let body: StatementNode[] = []
+    //parses the function head and can be used with definitions as well.
+    parseFunctionHead() {
 
-        this.advance() // from the fx token ofc
+        this.shouldBe(TokenType.K_Fx);
 
-        const firstToken = this.peek(0)
-        //@ts-ignore
-        this.expect(firstToken, TokenType.Identifier, () => {
-            //@ts-ignore
-            name = this.source.str.substring(firstToken?.span.startIndex, firstToken?.span.endIndex + 1);
-        })
-
-        this.advance();
-
-        const secondToken = this.peek(0)
-        //@ts-ignore
-        this.expect(secondToken, TokenType.LBrace, () => this.advance())
-
-        //we now assume the list of arguments
-        const argumentList: ArgumentList[] = []
-
-        if ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
-            //if the end has not reached yet
-            argumentList.push(this.parseArgument())
-        }
-
-        while ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
-
-            this.shouldBe(TokenType.Comma)
-            //unless we hit the boundary
-            argumentList.push(this.parseArgument())
-
-        }
-
-        const thirdToken = this.peek(0)
-        //@ts-ignore
-        this.expect(thirdToken, TokenType.RBrace, () => this.advance())
-
-        this.expect(this.peek(0) as Token, TokenType.Colon, () => this.advance())
-
-        //expect a type
-        let returnType = this.parseType()
-
-        const forthToken = this.peek(0)
-        //@ts-ignore
-        this.expect(forthToken, TokenType.LBracket, () => this.advance())
-
-        //we consume the statements
-        while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
-            //@ts-ignore
-            body.push(this.parseStatement())
-        }
-
-        const fifthToken = this.peek(0)
-        //@ts-ignore
-        this.expect(fifthToken, TokenType.RBracket, () => this.advance())
-
-        return new FunctionDefinitionNode(name, returnType, argumentList, body)
-
-    }
-
-    parseReducedFunction() {
-
-        let name: string = "";
-
-        this.advance() // from the fx token ofc
-
-        const firstToken = this.peek(0)
-        //@ts-ignore
-        this.expect(firstToken, TokenType.Identifier, () => {
-            //@ts-ignore
-            name = this.source.str.substring(firstToken?.span.startIndex, firstToken?.span.endIndex + 1);
-        })
-
-        this.advance();
-
+        let name: string = this.digest(TokenType.Identifier);
 
         this.shouldBe(TokenType.LBrace)
 
@@ -204,9 +134,32 @@ export class ParseFunction extends ParseData {
         //expect a type
         let returnType = this.parseType()
 
+        //body to be worked out.
+        return new FunctionDefinitionNode(name, returnType, argumentList)
+    }
+
+    parseFunctionDefinition() {
+
+        const head = this.parseFunctionHead(); head.body = []
+        this.shouldBe(TokenType.LBracket)
+
+        //we consume the statements
+        while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
+            head.body.push(this.parseStatement())
+        }
+
+        this.shouldBe(TokenType.RBracket)
+
+        return head
+
+    }
+
+    parseReducedFunction() {
+
+        const parseHead = this.parseFunctionHead()
         this.shouldBe(TokenType.Semicolon)
 
-        return new FunctionDefinitionNode(name, returnType, argumentList)
+        return parseHead
     }
 
 }

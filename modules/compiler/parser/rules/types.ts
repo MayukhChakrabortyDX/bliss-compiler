@@ -1,4 +1,4 @@
-import { Token, TokenType } from "../../tokens";
+import { Token, TokenType } from "../../tokenizer/tokens";
 import { CompositeTypeNode, ScalarTypeNode } from "../ast";
 import { ParseExpressions } from "./expressions";
 
