@@ -1,8 +1,9 @@
 //class to process string
 import { TokenizeBase } from "./helper";
 import { Log, log } from "../../logger";
+import { ErrorHandling } from "./error";
 
-export class ProcessStringToken extends TokenizeBase {
+export class ProcessStringToken extends ErrorHandling {
     processString(start: number) {
 
         let endSpan = start;

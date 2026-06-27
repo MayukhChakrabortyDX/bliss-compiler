@@ -1,4 +1,4 @@
-import type { StringContainer, StringSpan } from "../tokenizer/tokens"
+import type { StringSpan } from "../tokenizer/tokens"
 
 //declare nodes based on rules
 export enum NodeType {
@@ -13,7 +13,8 @@ export enum NodeType {
     VariableDeclNode, AssignmentNode,
     DataNode, ActionNode, BindingNode,
     TypeBasedArgument, ActionBasedArgument,
-    DataAndActionBasedArgument
+    DataAndActionBasedArgument, ArgumentIdentifierNode, Annotation,
+    ViewStatement
 }
 
 export class Node {
@@ -31,6 +32,12 @@ export class FunctionDefinitionNode extends Node {
     }
 }
 
+export class AnnotationNode extends Node {
+    constructor(public name: string) {
+        super(NodeType.Annotation)
+    }
+}
+
 export class LoopNode extends Node {
     constructor(public body: StatementNode[], public identifier?: string) {
         super(NodeType.Loop)
@@ -40,7 +47,7 @@ export class LoopNode extends Node {
 //based purely off production rules
 export class ProgramNode extends Node {
 
-    constructor(public body: (FunctionDefinitionNode | DataNode | ActionNode | BindingNode)[], public importList: ImportNode[]) {
+    constructor(public body: (FunctionDefinitionNode | DataNode | ActionNode | BindingNode | AnnotationNode)[], public importList: ImportNode[]) {
         super(NodeType.Program)
     }
 
@@ -201,22 +208,41 @@ export class BindingNode extends Node {
 }
 
 export class TypeBasedArgument extends Node {
-    constructor(public typeInfo: TypeNode, public argumentName: string) {
+    constructor(public typeInfo: TypeNode, public argumentName: ArgumentIdentifierNode) {
         super(NodeType.TypeBasedArgument)
     }
 }
 
 export class ActionBasedArgument extends Node {
     //names of action with the argument present.
-    constructor(public argumentName: string, public actionList: string[]) {
+    constructor(public argumentName: ArgumentIdentifierNode, public actionList: string[]) {
         super(NodeType.ActionBasedArgument)
     }
 }
 
 export class DataAndActionBasedArgument extends Node {
     //note - this is strictly data
-    constructor(public argumentName: string, public actionList: string[], public dataName: string) {
+    constructor(public argumentName: ArgumentIdentifierNode, public actionList: string[], public dataType: TypeNode) {
         super(NodeType.DataAndActionBasedArgument)
+    }
+}
+
+export class ViewStatementNode extends Node {
+    constructor(public expression: Expression, public identifier: string, public viewType: TypeNode) {
+        super(NodeType.ViewStatement)
+    }
+}
+
+export enum ArgumentTypes {
+    PASS_BY_COPY,
+    PASS_BY_REFERENCE,
+    PASS_BY_UNSAFE_POINTER,
+    PASS_BY_HANDLE_POINTER
+}
+
+export class ArgumentIdentifierNode extends Node {
+    constructor( public identifier: string, public argType: ArgumentTypes ) {
+        super(NodeType.ArgumentIdentifierNode)
     }
 }
 
@@ -224,4 +250,4 @@ export type ArgumentList = TypeBasedArgument | ActionBasedArgument | DataAndActi
 export type DataNode = DataSoloNode | DataStructNode | DataScalarNode | DataArrayNode;
 
 export type Expression = IdentifierNode | NumberNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
-export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement;
+export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement | ViewStatementNode;

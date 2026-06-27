@@ -12,6 +12,25 @@ export class ParserBase {
         return TokenType[tokenType]
     }
 
+    expectTill(maximum: number, expected: TokenType) {
+
+        let isFound = false;
+        let ctr = 0;
+
+        while(ctr <= maximum) {
+
+            if ( (this.peek(ctr) as Token).tokenType == expected ) {
+                return true
+            }
+
+            ctr++;
+
+        }
+
+        return isFound
+
+    }
+
     peek(amount: number) {
         //tells us what is at that
         if (this.tokenStream.length > amount + this.tokenIndex) {

@@ -1,0 +1,25 @@
+{
+  "name": "blisslang",
+  "displayName": "bliss",
+  "description": "The official vscode extension for bliss",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "bliss",
+      "aliases": ["Bliss", "bliss"],
+      "extensions": [".bx"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "bliss",
+      "scopeName": "source.bliss",
+      "path": "./syntaxes/bliss.tmLanguage.json"
+    }]
+  }
+}

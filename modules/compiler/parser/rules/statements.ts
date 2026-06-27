@@ -5,14 +5,14 @@ import {
     CallSignatureNode, CallStatement, 
     ConditionalNode, ConditionNode, 
     LoopNode, ReturnStatementNode, 
-    VariableDeclNode, type Expression, 
+    VariableDeclNode, ViewStatementNode, type Expression, 
     type StatementNode 
 } from "../ast";
 import { ParseTypes } from "./types";
 
 export class ParseStatement extends ParseTypes {
 
-    statementSet = new Set([TokenType.K_Unsafe, TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
+    statementSet = new Set([TokenType.K_View, TokenType.K_Unsafe, TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
 
     parseAssignment() {
 
@@ -37,6 +37,26 @@ export class ParseStatement extends ParseTypes {
         this.shouldBe(TokenType.Semicolon)
 
         return new AssignmentNode(variableName, expression)
+
+    }
+
+    parseViewDecl() {
+
+        this.shouldBe(TokenType.K_View)
+        let expression = this.parseExpression()
+        this.advance()
+
+        if ( expression == null ) {
+            throw Error("View expression cannot be null")
+        }
+
+        this.shouldBe(TokenType.K_As)
+        let identifier = this.digest(TokenType.Identifier)
+        this.shouldBe(TokenType.Colon)
+        let type = this.parseType()
+        this.shouldBe(TokenType.Semicolon)
+
+        return new ViewStatementNode(expression, identifier, type)
 
     }
 
@@ -225,6 +245,8 @@ export class ParseStatement extends ParseTypes {
         //we do branching here
         switch (initial?.tokenType) {
 
+            case TokenType.K_View:
+                return this.parseViewDecl()
             case TokenType.K_Return:
                 return this.parseReturn()
             case TokenType.K_Break:

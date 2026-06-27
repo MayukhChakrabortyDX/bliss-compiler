@@ -1,0 +1,231 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "BlissLang",
+  "scopeName": "source.bliss",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#annotations" },
+    { "include": "#keywords" },
+    { "include": "#builtinTypes" },
+    { "include": "#numbers" },
+    { "include": "#strings" },
+    { "include": "#operators" },
+    { "include": "#punctuation" },
+    { "include": "#callSignature" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.bliss",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.bliss",
+          "begin": "/\\*",
+          "end": "\\*/",
+          "captures": {
+            "0": { "name": "punctuation.definition.comment.bliss" }
+          }
+        }
+      ]
+    },
+
+    "annotations": {
+      "name": "meta.annotation.bliss",
+      "match": "(@)([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "punctuation.definition.annotation.bliss" },
+        "2": { "name": "entity.name.tag.annotation.bliss" }
+      }
+    },
+
+    "keywords": {
+      "patterns": [
+        {
+          "comment": "Declaration keywords",
+          "name": "keyword.declaration.bliss",
+          "match": "\\b(fx|data|action|bind|import|using)\\b"
+        },
+        {
+          "comment": "Control flow keywords",
+          "name": "keyword.control.bliss",
+          "match": "\\b(if|elif|else|loop|return|break)\\b"
+        },
+        {
+          "comment": "Other keywords",
+          "name": "keyword.other.bliss",
+          "match": "\\b(let|unsafe|with|as|view)\\b"
+        }
+      ]
+    },
+
+    "builtinTypes": {
+      "name": "support.type.primitive.bliss",
+      "match": "\\b(u8|u16|u32|u64|i8|i16|i32|i64|f32|f64)\\b"
+    },
+
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.bliss",
+          "match": "\\b[0-9]+\\.[0-9]+([eE][+-]?[0-9]+)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.bliss",
+          "match": "\\b[0-9]+\\b"
+        }
+      ]
+    },
+
+    "strings": {
+      "name": "string.quoted.double.bliss",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.bliss",
+          "match": "\\\\."
+        }
+      ]
+    },
+
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.bliss",
+          "match": "[+\\-*/]"
+        },
+        {
+          "name": "keyword.operator.comparison.bliss",
+          "match": "(>=|<=|>|<)"
+        },
+        {
+          "name": "keyword.operator.assignment.bliss",
+          "match": "(?<![=<>!])=(?!=)"
+        },
+        {
+          "name": "keyword.operator.namespace.bliss",
+          "match": "::"
+        },
+        {
+          "name": "keyword.operator.type.bliss",
+          "match": ":"
+        }
+      ]
+    },
+
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.terminator.statement.bliss",
+          "match": ";"
+        },
+        {
+          "name": "punctuation.separator.comma.bliss",
+          "match": ","
+        },
+        {
+          "name": "punctuation.definition.block.begin.bliss",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.definition.block.end.bliss",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.definition.parameters.begin.bliss",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.definition.parameters.end.bliss",
+          "match": "\\)"
+        },
+        {
+          "name": "punctuation.definition.array.begin.bliss",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.definition.array.end.bliss",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.separator.dot.bliss",
+          "match": "\\."
+        },
+        {
+          "name": "punctuation.definition.backtick.bliss",
+          "match": "`"
+        },
+        {
+          "name": "punctuation.definition.hash.bliss",
+          "match": "#"
+        }
+      ]
+    },
+
+    "callSignature": {
+      "comment": "Function call — must come before plain identifiers",
+      "name": "meta.function-call.bliss",
+      "match": "([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()",
+      "captures": {
+        "1": { "name": "entity.name.function.bliss" }
+      }
+    },
+
+    "identifiers": {
+      "patterns": [
+        {
+          "comment": "fx declarations — name after 'fx'",
+          "match": "\\b(fx)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.function.bliss" }
+          }
+        },
+        {
+          "comment": "data declarations — name after 'data'",
+          "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "action declarations — name after 'action'",
+          "match": "\\b(action)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "bind declarations — name after 'bind'",
+          "match": "\\b(bind)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "composite type paths (Foo::Bar)",
+          "name": "meta.composite-type.bliss",
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)(::)([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "entity.name.type.bliss" },
+            "2": { "name": "keyword.operator.namespace.bliss" },
+            "3": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "General identifier fallback",
+          "name": "variable.other.bliss",
+          "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+        }
+      ]
+    }
+
+  }
+}

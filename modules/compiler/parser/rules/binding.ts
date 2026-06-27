@@ -27,17 +27,16 @@ export class ParseBinds extends ParseAction {
                 break
 
             case TokenType.LBrace:
-                while ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
-                    const __token = this.peek(0) as Token
-                    actionNames.push(
-                        this.source.str.substring(
-                            __token.span.startIndex,
-                            __token.span.endIndex + 1
-                        )
-                    )
-                    this.consume(2)
-                }
+                this.advance()
+                actionNames.push(this.digest(TokenType.Identifier))
 
+                while ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
+
+                    this.shouldBe(TokenType.Comma)
+                    actionNames.push(this.digest(TokenType.Identifier))
+
+                }
+                
                 this.shouldBe(TokenType.RBrace)
                 break
 

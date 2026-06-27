@@ -1,5 +1,6 @@
 # dependencies (bun install)
 node_modules
+bliss-cli/target
 
 # output
 out

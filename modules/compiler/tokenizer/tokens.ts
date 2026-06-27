@@ -1,9 +1,17 @@
 export class StringContainer {
     constructor(public str: string) {}
+
+    toJSON() {
+        return "<ref ProgramString>"
+    }
 }
 
 export class StringSpan {
     constructor( public startIndex: number, public endIndex: number, public str: StringContainer ) {}
+    
+    resolve() {
+        return this.str.str.substring(this.startIndex, this.endIndex + 1)
+    }
 }
 
 
@@ -58,6 +66,9 @@ export enum TokenType {
     Colon,
     DoubleColon,
     Minus,
+    AtSymbol,
+    HashSymbol,
+    Backtick,
 
     Multiply,
     Divide,

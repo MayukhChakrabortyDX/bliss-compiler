@@ -1,16 +1,64 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import {
-    ActionBasedArgument, DataAndActionBasedArgument,
+    ActionBasedArgument, ArgumentIdentifierNode, ArgumentTypes, DataAndActionBasedArgument,
     FunctionDefinitionNode, TypeBasedArgument,
     type ArgumentList, type StatementNode
 } from "../ast";
 import { ParseData } from "./data";
 
 class ParseArguments extends ParseData {
+
+    argumentNameStartSet = new Set([TokenType.HashSymbol, TokenType.LSquareBrace, TokenType.Backtick])
+
+    //argument name is basically what kind of pointer we are accessing that's all.
+    parseArgumentNameNode() {
+
+        let identifierName: string = ""
+        let argumentMode: ArgumentTypes = ArgumentTypes.PASS_BY_COPY;
+        //Format - identifier, [identifier], #[identifier], `identifier
+        if ((this.peek(0) as Token).tokenType == TokenType.Identifier) {
+
+            identifierName = this.digest(TokenType.Identifier)
+
+        } else {
+
+            switch ((this.peek(0) as Token).tokenType) {
+
+                case TokenType.LSquareBrace:
+                    this.advance()
+                    identifierName = this.digest(TokenType.Identifier)
+                    this.shouldBe(TokenType.RSquareBrace)
+                    argumentMode = ArgumentTypes.PASS_BY_UNSAFE_POINTER
+                    break;
+
+                case TokenType.HashSymbol:
+                    this.advance()
+                    this.shouldBe(TokenType.LSquareBrace)
+                    identifierName = this.digest(TokenType.Identifier)
+                    argumentMode = ArgumentTypes.PASS_BY_HANDLE_POINTER
+                    this.shouldBe(TokenType.RSquareBrace)
+                    break
+
+                case TokenType.Backtick:
+                    this.advance()
+                    identifierName = this.digest(TokenType.Identifier)
+                    argumentMode = ArgumentTypes.PASS_BY_REFERENCE
+                    break;
+
+                default:
+                    throw Error(`Invalid Argument Modifier, ${this.getTokenTypeName((this.peek(0) as Token).tokenType)}`)
+            }
+
+        }
+
+        return new ArgumentIdentifierNode(identifierName, argumentMode)
+
+    }
+
     parseTypeBasedArgument() {
 
         const typeNode = this.parseType()
-        const scalarIdentifier = this.digest(TokenType.Identifier)
+        const scalarIdentifier = this.parseArgumentNameNode()
 
         return new TypeBasedArgument(typeNode, scalarIdentifier)
 
@@ -19,7 +67,7 @@ class ParseArguments extends ParseData {
     //this is where we come up with the 'with' keyword
     parseActionBasedArgument() {
 
-        const argumentName = this.digest(TokenType.Identifier)
+        const argumentName = this.parseArgumentNameNode()
         this.shouldBe(TokenType.K_With)
 
         const actionList: string[] = []
@@ -52,8 +100,9 @@ class ParseArguments extends ParseData {
     }
 
     parseDataAndActionArgument() {
-        const dataName = this.digest(TokenType.Identifier)
-        const argumentName = this.digest(TokenType.Identifier)
+
+        const dataName = this.parseType()
+        const argumentName = this.parseArgumentNameNode()
         this.shouldBe(TokenType.K_With)
 
         const actionList: string[] = []
@@ -87,7 +136,20 @@ class ParseArguments extends ParseData {
 
     parseArgument() {
 
-        //connecting function
+        if (this.argumentNameStartSet.has((this.peek(0) as Token).tokenType)) {
+
+            if (this.expectTill(4, TokenType.K_With))
+                return this.parseActionBasedArgument()
+
+        }
+
+        if (this.argumentNameStartSet.has((this.peek(1) as Token).tokenType)) {
+
+            if (this.expectTill(5, TokenType.K_With))
+                //it's guaranteed to be simple action
+                return this.parseDataAndActionArgument()
+
+        }
 
         if ((this.peek(2) as Token).tokenType == TokenType.K_With) {
             return this.parseDataAndActionArgument()

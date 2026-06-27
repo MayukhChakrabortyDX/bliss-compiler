@@ -7,8 +7,9 @@ import 'bun'
 export class Tokenizer extends ProcessStringToken {
 
     constructor(source: string) {
-        //this is because strings are copied, we need to store a live reference instead.
         super(new StringContainer(source), source)
+        this.source = this.source.replace(/\r/g, "")
+        this.sourceContainer.str = this.source  // keep them in sync
     }
 
     soloCharacter(token: TokenType) {
@@ -223,6 +224,16 @@ export class Tokenizer extends ProcessStringToken {
                         continue;
                     }
 
+                    if ( char == "#" ) {
+                        this.soloCharacter(TokenType.HashSymbol);
+                        continue;
+                    }
+
+                    if ( char == "`" ) {
+                        this.soloCharacter(TokenType.Backtick);
+                        continue;
+                    }
+
                     if (char == "*") {
                         this.soloCharacter(TokenType.Multiply)
                         continue;
@@ -231,6 +242,11 @@ export class Tokenizer extends ProcessStringToken {
                     //we will add nuances when adding comments
                     if (char == "/") {
                         this.soloCharacter(TokenType.Divide)
+                        continue;
+                    }
+
+                    if ( char == '@' ) {
+                        this.soloCharacter(TokenType.AtSymbol)
                         continue;
                     }
 
@@ -327,7 +343,9 @@ export class Tokenizer extends ProcessStringToken {
 
                     }
 
-                    throw Error(`Error: Unrecognized Character "${char.codePointAt(0)}"`)
+                    //console.log(`DEBUG: span_end=${this.span_end} char='${this.source[this.span_end]}' source[span_end-1]='${this.source[this.span_end-1]}'`)
+                    //throw Error(`Error: Unrecognized Character "${char.codePointAt(0)}"`)
+                    this.logCharError(char, "Unrecognized Character")
 
             }
 

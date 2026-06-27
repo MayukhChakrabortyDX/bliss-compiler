@@ -1,35 +1,146 @@
 import std.io.println;
+import std.math.sin;
+using embedded.io;
 
+@ffi
 data User;
 
-action Updateable {
-    fx update(): i32 ;
-    fx something(): i64;
-}
-
-bind User with Updateable as Userable {
-    fx update(User::item x): i32 {
-        return 0;
-    }
-}
-
-data char(u8);
-data items [char, 64];
+data Byte(u8);
+data Buffer [Byte, 128];
 
 data Dashboard {
-    i32 xl;
-    User user;
-    items app;
-    User::Userable itd;
-    User::(A, B, C) kk;
+
+    i32 counter;
+    User owner;
+    Buffer dataM;
+
+    User::Printable printer;
+    User::(Printable, Cookable) worker;
+
 }
 
-fx main(string x, User::Dashboard item, y with User, z with (Item, Letter), User me with (Item, Doaable)): i32 {
+action Printable {
 
-    let x: u64 = 20;
-    unsafe let y: User::Dashboard = 50;
-    x = 30;
+    fx print(): i32;
+    fx size(): i32;
 
-    return x;
+}
+
+action Runnable {
+
+    fx run(): i32;
+
+}
+
+bind User with (Printable, Runnable) as PrintableUser {
+
+    fx print(User::item `self): i32 {
+
+        return 0;
+
+    }
+
+    fx run(User::item `self): i32 {
+
+        loop {
+
+            if (1 + 2 * 3 > 5) {
+
+                break;
+
+            } elif (2 < 5) {
+
+                return 10;
+
+            } else {
+
+                break;
+
+            }
+
+        }
+
+        return 0;
+
+    }
+
+}
+
+fx compute(
+
+    i32 value,
+    i32 `reference,
+    i32 #[pointer],
+
+    [printer] with Printable,
+    [worker] with (Printable, Runnable),
+
+    User user with Printable,
+    User thing with (Printable, Runnable)
+
+): i32 {
+
+    let x: i32 = 10;
+    unsafe let y: i32 = 20;
+
+    x = x + 1 * 4 / 2;
+
+    item();
+
+    item(
+        x,
+        10,
+        5 + 2,
+        item2(),
+        (3 + 4) * 8
+    );
+
+    loop outer {
+
+        if (
+            item() > 5 + 1 / 8
+        ) {
+
+            view item() > 5 + 1 / 8
+                as Item:
+                User::Printable;
+
+            break outer;
+
+        }
+        elif (10 <= 20) {
+
+            loop inner {
+
+                break inner;
+
+            }
+
+        }
+        else {
+
+            return x;
+
+        }
+
+    }
+
+    return item();
+
+}
+
+fx main(): i32 {
+
+    compute(
+        1,
+        2,
+        3,
+        printer,
+        worker,
+        user,
+        thing
+    );
+
+    return 0;
 
 }
