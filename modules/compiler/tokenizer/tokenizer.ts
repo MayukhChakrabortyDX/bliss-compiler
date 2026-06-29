@@ -209,6 +209,16 @@ export class Tokenizer extends ProcessStringToken {
                         continue;
                     }
 
+                    if (char == '$') {
+                        this.soloCharacter(TokenType.DollarSign)
+                        continue;
+                    }
+
+                    if (char == '|') {
+                        this.soloCharacter(TokenType.StraightBar)
+                        continue;
+                    }
+
                     if (char == '}') {
                         this.soloCharacter(TokenType.RBracket)
                         continue;
@@ -224,12 +234,12 @@ export class Tokenizer extends ProcessStringToken {
                         continue;
                     }
 
-                    if ( char == "#" ) {
+                    if (char == "#") {
                         this.soloCharacter(TokenType.HashSymbol);
                         continue;
                     }
 
-                    if ( char == "`" ) {
+                    if (char == "`") {
                         this.soloCharacter(TokenType.Backtick);
                         continue;
                     }
@@ -245,7 +255,7 @@ export class Tokenizer extends ProcessStringToken {
                         continue;
                     }
 
-                    if ( char == '@' ) {
+                    if (char == '@') {
                         this.soloCharacter(TokenType.AtSymbol)
                         continue;
                     }

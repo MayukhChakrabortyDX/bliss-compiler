@@ -5,8 +5,16 @@
   "patterns": [
     { "include": "#comments" },
     { "include": "#annotations" },
+    { "include": "#importUsing" },
+    { "include": "#bindDecl" },
+    { "include": "#dataDecl" },
+    { "include": "#actionDecl" },
+    { "include": "#funcDecl" },
+    { "include": "#viewStatement" },
+    { "include": "#variableDecl" },
+    { "include": "#controlFlow" },
     { "include": "#keywords" },
-    { "include": "#builtinTypes" },
+    { "include": "#typeExpression" },
     { "include": "#numbers" },
     { "include": "#strings" },
     { "include": "#operators" },
@@ -34,6 +42,7 @@
     },
 
     "annotations": {
+      "comment": "ANNOTATION -> '@' IDENTIFIER — decorates fx/data/action/bind decls",
       "name": "meta.annotation.bliss",
       "match": "(@)([a-zA-Z_][a-zA-Z0-9_]*)",
       "captures": {
@@ -42,29 +51,226 @@
       }
     },
 
-    "keywords": {
+    "importUsing": {
+      "comment": "IMPORT / USING -> ('import'|'using') IDENTIFIER ('.' IDENTIFIER)* ';'",
       "patterns": [
         {
-          "comment": "Declaration keywords",
-          "name": "keyword.declaration.bliss",
-          "match": "\\b(fx|data|action|bind|import|using)\\b"
-        },
-        {
-          "comment": "Control flow keywords",
-          "name": "keyword.control.bliss",
-          "match": "\\b(if|elif|else|loop|return|break)\\b"
-        },
-        {
-          "comment": "Other keywords",
-          "name": "keyword.other.bliss",
-          "match": "\\b(let|unsafe|with|as|view)\\b"
+          "name": "meta.import.bliss",
+          "match": "\\b(import|using)\\b((?:\\s+[a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)*)?)\\s*(?=;)",
+          "captures": {
+            "1": { "name": "keyword.control.import.bliss" },
+            "2": { "name": "entity.name.namespace.bliss" }
+          }
         }
       ]
     },
 
-    "builtinTypes": {
-      "name": "support.type.primitive.bliss",
-      "match": "\\b(u8|u16|u32|u64|i8|i16|i32|i64|f32|f64)\\b"
+    "bindDecl": {
+      "comment": "BIND_DECL -> 'bind' NAME 'with' (NAME | '(' NAME,+ ')') 'as' NAME '{ ... }'",
+      "patterns": [
+        {
+          "name": "meta.bind-declaration.bliss",
+          "match": "\\b(bind)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s+(with)\\b",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" },
+            "3": { "name": "keyword.other.with.bliss" }
+          }
+        },
+        {
+          "comment": "'as' keyword used in bind...as and view...as",
+          "name": "keyword.other.as.bliss",
+          "match": "\\b(as)\\b"
+        }
+      ]
+    },
+
+    "dataDecl": {
+      "comment": "DATA_DECL variants: solo, struct, scalar (parens), array (brackets)",
+      "patterns": [
+        {
+          "comment": "DATA_STRUCT_DECL -> 'data' NAME '{' ... '}' — name before brace",
+          "name": "meta.data-struct-declaration.bliss",
+          "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\{)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "DATA_SCALAR_DECL -> 'data' NAME '(' TYPE ')' ';' — name before paren",
+          "name": "meta.data-scalar-declaration.bliss",
+          "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "DATA_ARRAY_DECL -> 'data' NAME '[' TYPE ',' INTEGER ']' ';' — name before bracket",
+          "name": "meta.data-array-declaration.bliss",
+          "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\[)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "DATA_SOLO -> 'data' NAME ';' — name before semicolon",
+          "name": "meta.data-solo-declaration.bliss",
+          "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*;)",
+          "captures": {
+            "1": { "name": "keyword.declaration.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
+        }
+      ]
+    },
+
+    "actionDecl": {
+      "comment": "ACTION_DECL -> 'action' NAME '{' REDUCED_FUNC_DECL+ '}'",
+      "name": "meta.action-declaration.bliss",
+      "match": "\\b(action)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.bliss" },
+        "2": { "name": "entity.name.type.bliss" }
+      }
+    },
+
+    "funcDecl": {
+      "comment": "FUNC_DECL -> 'fx' NAME '(' ... ')' ':' TYPE '{' ... '}'",
+      "name": "meta.function-declaration.bliss",
+      "match": "\\b(fx)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.bliss" },
+        "2": { "name": "entity.name.function.bliss" }
+      }
+    },
+
+    "viewStatement": {
+      "comment": "VIEW_STATEMENT -> 'view' EXPRESSION 'as' IDENTIFIER ':' TYPE ';'",
+      "name": "keyword.other.view.bliss",
+      "match": "\\bview\\b"
+    },
+
+    "variableDecl": {
+      "comment": "VARIABLE_DECL -> 'unsafe'? 'let' NAME ':' TYPE '=' EXPRESSION ';'",
+      "patterns": [
+        {
+          "name": "meta.variable-declaration.bliss",
+          "match": "\\b(unsafe)\\s+(let)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.modifier.unsafe.bliss" },
+            "2": { "name": "keyword.other.let.bliss" },
+            "3": { "name": "variable.other.bliss" }
+          }
+        },
+        {
+          "name": "meta.variable-declaration.bliss",
+          "match": "\\b(let)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.other.let.bliss" },
+            "2": { "name": "variable.other.bliss" }
+          }
+        }
+      ]
+    },
+
+    "controlFlow": {
+      "comment": "Control flow: loop (with optional label), if/elif/else, return, break",
+      "patterns": [
+        {
+          "comment": "LOOP -> 'loop' IDENTIFIER? '{' ... '}' — label is optional",
+          "name": "meta.loop.bliss",
+          "match": "\\b(loop)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\{)",
+          "captures": {
+            "1": { "name": "keyword.control.loop.bliss" },
+            "2": { "name": "entity.name.label.bliss" }
+          }
+        },
+        {
+          "comment": "BREAK -> 'break' IDENTIFIER? ';' — label is optional",
+          "name": "meta.break.bliss",
+          "match": "\\b(break)\\s+([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*;)",
+          "captures": {
+            "1": { "name": "keyword.control.break.bliss" },
+            "2": { "name": "entity.name.label.bliss" }
+          }
+        },
+        {
+          "comment": "bare loop (no label), bare break (no label) — already covered by keywords",
+          "name": "keyword.control.bliss",
+          "match": "\\b(loop|break|if|elif|else|return)\\b"
+        }
+      ]
+    },
+
+    "keywords": {
+      "patterns": [
+        {
+          "comment": "Declaration keywords (not handled by specialized patterns above)",
+          "name": "keyword.declaration.bliss",
+          "match": "\\b(fx|data|action|bind|import|using)\\b"
+        },
+        {
+          "comment": "Modifier keywords",
+          "name": "storage.modifier.bliss",
+          "match": "\\b(unsafe)\\b"
+        },
+        {
+          "comment": "Other / structural keywords",
+          "name": "keyword.other.bliss",
+          "match": "\\b(let|with|as|view)\\b"
+        }
+      ]
+    },
+
+    "typeExpression": {
+      "comment": "TYPE sigil prefixes and composite forms. These annotate type-position tokens.",
+      "patterns": [
+        {
+          "comment": "COMPOSITE_TYPE -> IDENTIFIER '::' '(' IDENTIFIER (',' IDENTIFIER)* ')' — tuple variant",
+          "name": "meta.composite-type.tuple.bliss",
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)(::)(\\()([a-zA-Z_][a-zA-Z0-9_,\\s]*)?(\\))",
+          "captures": {
+            "1": { "name": "entity.name.type.bliss" },
+            "2": { "name": "keyword.operator.namespace.bliss" },
+            "3": { "name": "punctuation.definition.parameters.begin.bliss" },
+            "4": { "name": "entity.name.type.bliss" },
+            "5": { "name": "punctuation.definition.parameters.end.bliss" }
+          }
+        },
+        {
+          "comment": "COMPOSITE_TYPE -> IDENTIFIER '::' IDENTIFIER — simple variant",
+          "name": "meta.composite-type.bliss",
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)(::)([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "entity.name.type.bliss" },
+            "2": { "name": "keyword.operator.namespace.bliss" },
+            "3": { "name": "entity.name.type.bliss" }
+          }
+        },
+        {
+          "comment": "TYPE '#' prefix — pointer/reference type sigil",
+          "name": "keyword.operator.type.ptr.bliss",
+          "match": "#(?=[a-zA-Z_\\[`$#])"
+        },
+        {
+          "comment": "TYPE '`' prefix — view/borrow type sigil",
+          "name": "keyword.operator.type.view.bliss",
+          "match": "`(?=[a-zA-Z_\\[`$#])"
+        },
+        {
+          "comment": "TYPE '$' prefix — view-space type sigil (distinct from $() operator)",
+          "name": "keyword.operator.type.viewspace.bliss",
+          "match": "\\$(?=[a-zA-Z_\\[`$#])"
+        },
+        {
+          "comment": "BUILTIN_TYPES — u8/u16/u32/u64/i8/i16/i32/i64/f32/f64",
+          "name": "support.type.primitive.bliss",
+          "match": "\\b(u8|u16|u32|u64|i8|i16|i32|i64|f32|f64)\\b"
+        }
+      ]
     },
 
     "numbers": {
@@ -95,22 +301,27 @@
     "operators": {
       "patterns": [
         {
-          "name": "keyword.operator.arithmetic.bliss",
-          "match": "[+\\-*/]"
-        },
-        {
+          "comment": "Equality / inequality — must come before assignment '='",
           "name": "keyword.operator.comparison.bliss",
-          "match": "(>=|<=|>|<)"
+          "match": "(==|!=|>=|<=|>|<)"
         },
         {
+          "comment": "Assignment '=' — not preceded or followed by = or < or >",
           "name": "keyword.operator.assignment.bliss",
           "match": "(?<![=<>!])=(?!=)"
         },
         {
+          "comment": "Arithmetic operators",
+          "name": "keyword.operator.arithmetic.bliss",
+          "match": "[+\\-*/]"
+        },
+        {
+          "comment": "'::' namespace separator",
           "name": "keyword.operator.namespace.bliss",
           "match": "::"
         },
         {
+          "comment": "':' type annotation separator",
           "name": "keyword.operator.type.bliss",
           "match": ":"
         }
@@ -144,6 +355,7 @@
           "match": "\\)"
         },
         {
+          "comment": "'[' used in TYPE (array wrapper '[' TYPE ']', sized array TYPE '[' INT ']') and DATA_ARRAY_DECL",
           "name": "punctuation.definition.array.begin.bliss",
           "match": "\\["
         },
@@ -152,22 +364,30 @@
           "match": "\\]"
         },
         {
+          "comment": "'.' used in import/using path separators",
           "name": "punctuation.separator.dot.bliss",
           "match": "\\."
         },
         {
+          "comment": "'#' used as TYPE prefix sigil for pointer types",
+          "name": "punctuation.definition.hash.bliss",
+          "match": "#"
+        },
+        {
+          "comment": "'`' used as TYPE prefix sigil for view/borrow types",
           "name": "punctuation.definition.backtick.bliss",
           "match": "`"
         },
         {
-          "name": "punctuation.definition.hash.bliss",
-          "match": "#"
+          "comment": "'$' used as TYPE prefix sigil for view-space types",
+          "name": "punctuation.definition.dollar.bliss",
+          "match": "\\$"
         }
       ]
     },
 
     "callSignature": {
-      "comment": "Function call — must come before plain identifiers",
+      "comment": "CALL_SIGNATURE -> IDENTIFIER '(' (EXPRESSION (',' EXPRESSION)*)? ')' — must precede plain identifiers",
       "name": "meta.function-call.bliss",
       "match": "([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()",
       "captures": {
@@ -178,49 +398,7 @@
     "identifiers": {
       "patterns": [
         {
-          "comment": "fx declarations — name after 'fx'",
-          "match": "\\b(fx)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
-          "captures": {
-            "1": { "name": "keyword.declaration.bliss" },
-            "2": { "name": "entity.name.function.bliss" }
-          }
-        },
-        {
-          "comment": "data declarations — name after 'data'",
-          "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
-          "captures": {
-            "1": { "name": "keyword.declaration.bliss" },
-            "2": { "name": "entity.name.type.bliss" }
-          }
-        },
-        {
-          "comment": "action declarations — name after 'action'",
-          "match": "\\b(action)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
-          "captures": {
-            "1": { "name": "keyword.declaration.bliss" },
-            "2": { "name": "entity.name.type.bliss" }
-          }
-        },
-        {
-          "comment": "bind declarations — name after 'bind'",
-          "match": "\\b(bind)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
-          "captures": {
-            "1": { "name": "keyword.declaration.bliss" },
-            "2": { "name": "entity.name.type.bliss" }
-          }
-        },
-        {
-          "comment": "composite type paths (Foo::Bar)",
-          "name": "meta.composite-type.bliss",
-          "match": "([a-zA-Z_][a-zA-Z0-9_]*)(::)([a-zA-Z_][a-zA-Z0-9_]*)",
-          "captures": {
-            "1": { "name": "entity.name.type.bliss" },
-            "2": { "name": "keyword.operator.namespace.bliss" },
-            "3": { "name": "entity.name.type.bliss" }
-          }
-        },
-        {
-          "comment": "General identifier fallback",
+          "comment": "General identifier fallback — variables, parameters, labels, etc.",
           "name": "variable.other.bliss",
           "match": "[a-zA-Z_][a-zA-Z0-9_]*"
         }

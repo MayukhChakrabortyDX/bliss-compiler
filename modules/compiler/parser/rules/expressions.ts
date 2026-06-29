@@ -2,9 +2,14 @@ import { Log, log } from "../../../logger";
 import { Token, TokenType } from "../../tokenizer/tokens";
 
 import {
+    AddressOfOperator,
     BinaryOperation, BinaryOperatorNode,
-    CallSignatureNode, IdentifierNode,
+    CallSignatureNode, HandlExpressionNode, IdentifierNode,
+    MemberAccess,
     Number, NumberNode,
+    PointerExpressionNode,
+    ReferenceExpressionNode,
+    SizeOfOperator,
     StringNode, type Expression
 } from "../ast";
 
@@ -112,6 +117,65 @@ export class ParseExpressions extends ParserBase {
 
     }
 
+    parseMemberAccess(): Expression {
+        //@ts-ignore
+        const left = this.parseAtomicExpression();
+
+        if (left == null) return null;
+
+        //if not, let's see where we can go.
+        let finalExpr = left;
+
+        const operatorExist = this.peek(1);
+        if (operatorExist?.tokenType == TokenType.Dot) {
+            this.consume(2)
+            //@ts-ignore
+            let right = this.parseAtomicExpression();
+
+            if (right != null) {
+
+                finalExpr = new MemberAccess(left, right);
+
+                while (this.peek(1)?.tokenType == TokenType.Dot) {
+
+                    this.consume(2)
+                    //while this is true
+                    right = this.parseAtomicExpression();
+
+                    if (right != null) {
+
+                        //@ts-ignore
+                        finalExpr = new MemberAccess(finalExpr, right);
+
+                    } else {
+
+                        log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
+                        process.exit(1)
+
+                    }
+
+                }
+
+            } else {
+
+                //invalid grammar.
+
+                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
+                process.exit(1)
+
+            }
+
+        } else {
+
+            //this just means we only have 'left' left
+            return left;
+
+        }
+
+        return finalExpr;
+
+    }
+
     //@ts-ignore
     parseAdditionSubtraction(): Expression {
         //@ts-ignore
@@ -177,7 +241,7 @@ export class ParseExpressions extends ParserBase {
     parseMultiplicationDivision(): Expression {
         //order 0 means most priority, which happens to be multiplication for now
         //@ts-ignore
-        const left = this.parseAtomicExpression();
+        const left = this.parseMemberAccess();
 
         if (left == null) return null;
 
@@ -188,7 +252,7 @@ export class ParseExpressions extends ParserBase {
         if (operatorExist?.tokenType == TokenType.Multiply || operatorExist?.tokenType == TokenType.Divide) {
             this.consume(2)
             //@ts-ignore
-            let right = this.parseAtomicExpression();
+            let right = this.parseMemberAccess();
 
             if (right != null) {
 
@@ -199,7 +263,7 @@ export class ParseExpressions extends ParserBase {
                     const _thisToken = this.peek(1)
                     this.consume(2)
                     //while this is true
-                    right = this.parseAtomicExpression();
+                    right = this.parseMemberAccess();
 
                     if (right != null) {
 
@@ -268,6 +332,60 @@ export class ParseExpressions extends ParserBase {
                 //@ts-ignore
                 this.expect(this.peek(1), TokenType.RBrace, () => this.advance())
                 return expr
+            case TokenType.LSquareBrace:
+                this.advance()
+                let offset = "0"
+                const _expr = this.parseExpression();
+                this.advance()
+
+                this.maybeExpect(this.peek(0) as Token, TokenType.StraightBar, () => {
+
+                    this.advance()
+                    offset = this.digest(TokenType.Integer)
+
+                }, () => {
+
+                })
+
+                this.expect(this.peek(0) as Token, TokenType.RSquareBrace, () => { })
+                return new PointerExpressionNode(_expr, offset)
+
+            case TokenType.HashSymbol:
+                this.advance()
+                this.shouldBe(TokenType.LSquareBrace)
+                let _offset = "0"
+                const __expr = this.parseExpression();
+                this.advance()
+
+                this.maybeExpect(this.peek(0) as Token, TokenType.StraightBar, () => {
+
+                    this.advance()
+                    _offset = this.digest(TokenType.Integer)
+
+                }, () => {
+
+                })
+
+                this.expect(this.peek(0) as Token, TokenType.RSquareBrace, () => { })
+                return new HandlExpressionNode(__expr, _offset)
+
+            case TokenType.K_Adrs:
+                this.advance()
+                const $__expr = this.parseAtomicExpression()
+                return new AddressOfOperator($__expr)
+
+            case TokenType.K_Sizeof:
+                this.advance()
+                const $$_expr = this.parseAtomicExpression()
+                return new SizeOfOperator($$_expr)
+
+            case TokenType.Backtick:
+                //console.log('This one')
+                this.advance()
+                const ___expr = this.parseAtomicExpression()
+                //console.log(this.getTokenTypeName(this.peek(0)?.tokenType))
+                return new ReferenceExpressionNode(___expr);
+
             default:
                 return null;
         }

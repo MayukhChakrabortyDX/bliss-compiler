@@ -13,13 +13,18 @@ export enum NodeType {
     VariableDeclNode, AssignmentNode,
     DataNode, ActionNode, BindingNode,
     TypeBasedArgument, ActionBasedArgument,
-    DataAndActionBasedArgument, ArgumentIdentifierNode, Annotation,
-    ViewStatement
+    DataAndActionBasedArgument, Annotation,
+    ViewStatement, HandlePointer, Pointer, Reference, ViewPointer,
+    PointerExpressionNode, HandleExpressionNode, ReferenceExpressionNode,
+    AddressOfOperator, ViewDeclNode, SizeOfOperator, MemberAccess, MemberAccessNode,
+    ExpressionAsStatement
 }
 
 export class Node {
 
     typeName: string;
+    start: number = 0;
+    end: number = 0
     
     constructor(public type: NodeType) {
         this.typeName = NodeType[type]
@@ -153,11 +158,17 @@ export class CompositeTypeNode extends Node {
     }
 }
 
-export type TypeNode = ScalarTypeNode | CompositeTypeNode
+export type TypeNode = ScalarTypeNode | CompositeTypeNode | HandlePointerValue | PointerValue | ReferenceValue | ViewPointerValue
 
 export class VariableDeclNode extends Node {
     constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression, public isUnsafe: boolean = false) {
         super( NodeType.VariableDeclNode )
+    }
+}
+
+export class ViewDeclNode extends Node {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
+        super( NodeType.ViewDeclNode )
     }
 }
 
@@ -208,21 +219,21 @@ export class BindingNode extends Node {
 }
 
 export class TypeBasedArgument extends Node {
-    constructor(public typeInfo: TypeNode, public argumentName: ArgumentIdentifierNode) {
+    constructor(public typeInfo: TypeNode, public argumentName: string) {
         super(NodeType.TypeBasedArgument)
     }
 }
 
 export class ActionBasedArgument extends Node {
     //names of action with the argument present.
-    constructor(public argumentName: ArgumentIdentifierNode, public actionList: string[]) {
+    constructor(public argumentName: string, public actionList: string[]) {
         super(NodeType.ActionBasedArgument)
     }
 }
 
 export class DataAndActionBasedArgument extends Node {
     //note - this is strictly data
-    constructor(public argumentName: ArgumentIdentifierNode, public actionList: string[], public dataType: TypeNode) {
+    constructor(public argumentName: string, public actionList: string[], public dataType: TypeNode) {
         super(NodeType.DataAndActionBasedArgument)
     }
 }
@@ -233,21 +244,94 @@ export class ViewStatementNode extends Node {
     }
 }
 
-export enum ArgumentTypes {
-    PASS_BY_COPY,
-    PASS_BY_REFERENCE,
-    PASS_BY_UNSAFE_POINTER,
-    PASS_BY_HANDLE_POINTER
+export class HandlePointerValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.HandlePointer)
+    }
+
 }
 
-export class ArgumentIdentifierNode extends Node {
-    constructor( public identifier: string, public argType: ArgumentTypes ) {
-        super(NodeType.ArgumentIdentifierNode)
+export class PointerValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.Pointer)
+    }
+
+}
+
+export class ReferenceValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.Reference)
+    }
+
+}
+
+export class ViewPointerValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.ViewPointer)
+    }
+
+}
+
+export class PointerExpressionNode extends Node {
+
+    constructor(public expression: Expression, public offset: string = "0") {
+        super(NodeType.PointerExpressionNode)
+    }
+
+}
+
+export class HandlExpressionNode extends Node {
+
+    constructor(public expression: Expression, public offset: string = "0") {
+        super(NodeType.HandleExpressionNode)
+    }
+
+}
+
+export class ReferenceExpressionNode extends Node {
+
+    constructor( public expression: Expression ) {
+        super(NodeType.ReferenceExpressionNode)
+    }
+
+}
+
+export class AddressOfOperator extends Node {
+
+    constructor( public expression: Expression ) {
+        super(NodeType.AddressOfOperator)
+    }
+
+}
+
+export class SizeOfOperator extends Node {
+
+    constructor(public expression: Expression) {
+        super(NodeType.SizeOfOperator)
+    }
+
+}
+
+export class MemberAccess extends Node {
+
+    constructor(public root: Expression, public accessing: Expression) {
+        super(NodeType.MemberAccess)
+    }
+
+}
+
+export class ExpressionAsStatement extends Node {
+    constructor(public expression: Expression) {
+        super(NodeType.ExpressionAsStatement)
     }
 }
 
 export type ArgumentList = TypeBasedArgument | ActionBasedArgument | DataAndActionBasedArgument;
 export type DataNode = DataSoloNode | DataStructNode | DataScalarNode | DataArrayNode;
 
-export type Expression = IdentifierNode | NumberNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
+export type Expression = MemberAccess | ExpressionAsStatement | AddressOfOperator | SizeOfOperator | IdentifierNode | NumberNode| PointerExpressionNode | HandlExpressionNode | ReferenceExpressionNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
 export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement | ViewStatementNode;

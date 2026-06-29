@@ -1,8 +1,9 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
-import { CompositeTypeNode, ScalarTypeNode } from "../ast";
+import { CompositeTypeNode, HandlePointerValue, PointerValue, ReferenceValue, ScalarTypeNode, ViewPointerValue, type TypeNode } from "../ast";
 import { ParseExpressions } from "./expressions";
 
 export class ParseTypes extends ParseExpressions {
+
     parseCompositeType() {
 
         let dataName = this.digest(TokenType.Identifier)
@@ -60,9 +61,8 @@ export class ParseTypes extends ParseExpressions {
 
     }
 
-    parseType() {
+    parseType(): TypeNode {
 
-        let type_name: string = ""
         const token = this.peek(0) as Token;
 
         switch (token.tokenType) {
@@ -77,19 +77,36 @@ export class ParseTypes extends ParseExpressions {
             case TokenType.K_i64:
             case TokenType.K_f32:
             case TokenType.K_f64:
+            case TokenType.K_Ptr:
             case TokenType.Identifier:
                 if (this.peek(1)?.tokenType == TokenType.DoubleColon) {
                     //then this is a composite type instead
                     return this.parseCompositeType()
                 }
-                type_name = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-                this.advance()
-                break;
+
+                return new ScalarTypeNode(this.digest(token.tokenType))
+
+            case TokenType.HashSymbol:
+                this.shouldBe(TokenType.HashSymbol)
+                return new HandlePointerValue(this.parseType())
+
+            case TokenType.Backtick:
+                this.shouldBe(TokenType.Backtick)
+                return new ReferenceValue(this.parseType())
+
+            case TokenType.DollarSign:
+                this.shouldBe(TokenType.DollarSign)
+                return new ViewPointerValue(this.parseType())
+
+            case TokenType.LSquareBrace:
+                this.shouldBe(TokenType.LSquareBrace)
+                let type_ = this.parseType()
+                this.shouldBe(TokenType.RSquareBrace)
+                return new PointerValue(type_)
+
             default:
                 throw new Error(`Unrecognized Type ${this.getTokenTypeName(token.tokenType)}`)
         }
-
-        return new ScalarTypeNode(type_name)
 
     }
 }

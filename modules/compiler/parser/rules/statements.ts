@@ -1,12 +1,14 @@
 import { Log, log } from "../../../logger";
 import { Token, TokenType } from "../../tokenizer/tokens";
-import { 
-    AssignmentNode, BreakStatementNode, 
-    CallSignatureNode, CallStatement, 
-    ConditionalNode, ConditionNode, 
-    LoopNode, ReturnStatementNode, 
-    VariableDeclNode, ViewStatementNode, type Expression, 
-    type StatementNode 
+import {
+    AssignmentNode, BreakStatementNode,
+    CallSignatureNode, CallStatement,
+    ConditionalNode, ConditionNode,
+    ExpressionAsStatement,
+    IdentifierNode,
+    LoopNode, NodeType, ReturnStatementNode,
+    VariableDeclNode, ViewDeclNode, ViewStatementNode, type Expression,
+    type StatementNode
 } from "../ast";
 import { ParseTypes } from "./types";
 
@@ -42,22 +44,63 @@ export class ParseStatement extends ParseTypes {
 
     parseViewDecl() {
 
+        let thisViewCanBeInPlaceDefinition = false
+        let branchToDefinition2 = false;
         this.shouldBe(TokenType.K_View)
         let expression = this.parseExpression()
         this.advance()
 
-        if ( expression == null ) {
+        if (expression == null) {
             throw Error("View expression cannot be null")
+        } else if (expression.type == NodeType.Identifier) {
+            thisViewCanBeInPlaceDefinition = true;
         }
 
-        this.shouldBe(TokenType.K_As)
-        let identifier = this.digest(TokenType.Identifier)
-        this.shouldBe(TokenType.Colon)
-        let type = this.parseType()
+        this.maybeExpect(this.peek(0) as Token, TokenType.K_As, () => {
+
+            //then things are going as usual
+            this.advance()
+
+        }, () => {
+
+            this.shouldBe(TokenType.Colon)
+            branchToDefinition2 = true;
+
+
+        })
+
+        if (branchToDefinition2 == false) {
+            
+            let identifier = this.digest(TokenType.Identifier)
+            this.shouldBe(TokenType.Colon)
+            let type = this.parseType()
+            this.shouldBe(TokenType.Semicolon)
+
+            return new ViewStatementNode(expression, identifier, type)
+
+        } else {
+
+            return this.parseViewVariableDecl((expression as IdentifierNode).name)
+
+        }
+
+    }
+
+    parseViewVariableDecl(variableName: string) {
+
+        let returnType = this.parseType()
+        this.shouldBe(TokenType.Assignment)
+        let expression = this.parseExpression()
+
+        if (expression == null) {
+            throw Error("Expression Expected")
+        }
+
+        this.advance()
+
         this.shouldBe(TokenType.Semicolon)
 
-        return new ViewStatementNode(expression, identifier, type)
-
+        return new ViewDeclNode(variableName, returnType, expression)
     }
 
     parseVariableDecl() {
@@ -68,7 +111,7 @@ export class ParseStatement extends ParseTypes {
         this.maybeExpect(this.peek(0) as Token, TokenType.K_Unsafe, () => {
             unsafe = true
             this.advance()
-        }, () => {})
+        }, () => { })
 
         this.shouldBe(TokenType.K_Let)
 
@@ -255,20 +298,26 @@ export class ParseStatement extends ParseTypes {
                 return this.parseLoop()
             case TokenType.K_If:
                 return this.parseCondition()
-            case TokenType.Identifier:
-                if ((this.peek(1) as Token).tokenType == TokenType.Assignment) {
-                    return this.parseAssignment()
-                }
-                const call_expr = this.parseCallSignature()
-                this.advance()
-                this.expect(this.peek(0) as Token, TokenType.Semicolon, () => this.advance())
-                return new CallStatement(call_expr as CallSignatureNode)
-                
+            // case TokenType.Identifier:
+            //     if ((this.peek(1) as Token).tokenType == TokenType.Assignment) {
+            //         return this.parseAssignment()
+            //     }
+            //     const call_expr = this.parseCallSignature()
+            //     this.advance()
+            //     this.expect(this.peek(0) as Token, TokenType.Semicolon, () => this.advance())
+            //     return new CallStatement(call_expr as CallSignatureNode)
+
             case TokenType.K_Let:
             case TokenType.K_Unsafe:
                 return this.parseVariableDecl()
 
             default:
+                const __expr = this.parseMemberAccess()
+                if ( __expr != null ) {
+                    this.advance()
+                    this.shouldBe(TokenType.Semicolon)
+                    return new ExpressionAsStatement(__expr)
+                }
                 //no other matches can be done
                 log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${initial?.tokenType}`)
                 process.exit(1)

@@ -2,7 +2,7 @@ import { Parser } from "../modules/compiler/parser/parser";
 import { Tokenizer } from "../modules/compiler/tokenizer/tokenizer";
 import { readFileSync } from "fs";
 
-const rawSource = readFileSync("input.txt", "utf8")
+const rawSource = readFileSync("input.bx", "utf8")
 
 //console.log(rawSource.substring(1400, 1506))
 

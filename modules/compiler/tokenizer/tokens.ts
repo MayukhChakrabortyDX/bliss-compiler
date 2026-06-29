@@ -40,6 +40,8 @@ export enum TokenType {
     K_Continue,
     K_With,
     K_Alias,
+    K_Adrs,
+    K_Sizeof,
 
     K_u8, K_u16, K_u32, K_u64,
     K_i8, K_i16, K_i32, K_i64,
@@ -72,10 +74,8 @@ export enum TokenType {
 
     Multiply,
     Divide,
-
-    //types (built-in starts here)
-
-    //types ends here
+    DollarSign,
+    StraightBar,
 
     Decrement,
     ArrowRight,
