@@ -319,7 +319,7 @@ export class ParseStatement extends ParseTypes {
                     return new ExpressionAsStatement(__expr)
                 }
                 //no other matches can be done
-                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${initial?.tokenType}`)
+                this.logTokenError(initial, `Unexpected token ${initial.tokenType}`)
                 process.exit(1)
 
         }

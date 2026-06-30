@@ -1,8 +1,86 @@
-[2m[00:37:44][0m [41m[37m ERROR [0m [31m[1m[TOKENIZER][0m [1mUnrecognized Character[0m
-[2m  └─ [34m[1m [0mline 1, col 12[0m
-
-[34m[1m   |[0m
-[34m[1m1  |[0m fx main(): _b {
-[34m[1m   |[0m [31m[1m           ^[0m
-[34m[1m   |[0m [2mstate: ScanningState, char: "_" (U+005F)[0m
-
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "body": [
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 0,
+      "end": 0,
+      "name": "main",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "b"
+      },
+      "argumentList": [],
+      "body": [
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 37,
+            "typeName": "MemberAccess",
+            "start": 0,
+            "end": 0,
+            "root": {
+              "type": 37,
+              "typeName": "MemberAccess",
+              "start": 0,
+              "end": 0,
+              "root": {
+                "type": 13,
+                "typeName": "CallSignature",
+                "start": 0,
+                "end": 0,
+                "callee": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "hello"
+                },
+                "args": []
+              },
+              "accessing": {
+                "type": 32,
+                "typeName": "HandleExpressionNode",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "ptrval"
+                },
+                "offset": null
+              }
+            },
+            "accessing": {
+              "type": 31,
+              "typeName": "PointerExpressionNode",
+              "start": 0,
+              "end": 0,
+              "expression": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "viewva"
+              },
+              "offset": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "importList": []
+}

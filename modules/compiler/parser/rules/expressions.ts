@@ -1,10 +1,10 @@
-import { Log, log } from "../../../logger";
 import { Token, TokenType } from "../../tokenizer/tokens";
 
 import {
     AddressOfOperator,
     BinaryOperation, BinaryOperatorNode,
     CallSignatureNode, HandlExpressionNode, IdentifierNode,
+    MagneticCallChain,
     MemberAccess,
     Number, NumberNode,
     PointerExpressionNode,
@@ -49,7 +49,8 @@ export class ParseExpressions extends ParserBase {
 
                     } else {
 
-                        log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${this.getTokenTypeName((this.peek(0) as Token).tokenType)}. Expected an expression instead`)
+                        let _v = this.peek()
+                        this.logTokenError(_v, `Unexpected token ${this.getTokenTypeName(_v.tokenType)}. Expected an expression instead`)
                         process.exit(1)
 
                     }
@@ -99,8 +100,7 @@ export class ParseExpressions extends ParserBase {
             } else {
 
                 //invalid grammar.
-
-                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${this.getTokenTypeName(operatorExist.tokenType)}. Expected an Expression instead`)
+                this.logTokenError(operatorExist, `Unexpected token ${this.getTokenTypeName(operatorExist.tokenType)}. Expected an Expression instead`)
                 process.exit(1)
 
             }
@@ -114,190 +114,119 @@ export class ParseExpressions extends ParserBase {
         }
 
         return finalExpr;
+
+    }
+
+    parseLeftAssociativeOperator(support: () => Expression, operators: Map<TokenType, (left: Expression, right: Expression) => Expression>): Expression {
+
+        const left = support();
+
+        if (left == null) return null;
+
+        //if not, let's see where we can go.
+        let finalExpr: Expression = left;
+
+        const operatorExist = () => this.peek(1) as Token;
+        if (operators.has(operatorExist().tokenType)) {
+
+            let generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
+
+            this.consume(2)
+            //@ts-ignore
+            let right = support();
+
+            if (right != null) {
+
+                finalExpr = generator(left, right);
+
+                while (operators.has(operatorExist().tokenType)) {
+                    generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
+                    this.consume(2)
+                    //while this is true
+                    right = support();
+
+                    if (right != null) {
+
+                        finalExpr = generator(finalExpr, right);
+
+                    } else {
+
+                        this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
+                        process.exit(1)
+
+                    }
+
+                }
+
+            } else {
+
+                //invalid grammar.
+
+                this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
+                process.exit(1)
+
+            }
+
+        } else {
+
+            //this just means we only have 'left' left
+            return left;
+
+        }
+
+        return finalExpr;
+
+    }
+
+    parseMagneticAccess(): Expression {
+
+        return this.parseLeftAssociativeOperator(
+            () => this.parseAtomicExpression(),
+            new Map(
+                [[
+                    TokenType.ArrowRight,
+                    (left, right) => new MagneticCallChain(left, right)
+                ]]
+            ),
+        );
 
     }
 
     parseMemberAccess(): Expression {
-        //@ts-ignore
-        const left = this.parseAtomicExpression();
 
-        if (left == null) return null;
+        return this.parseLeftAssociativeOperator(
+            () => this.parseMagneticAccess(),
+            new Map([[TokenType.Dot,
+            (left, right) => new MemberAccess(left, right)]]),
+        );
 
-        //if not, let's see where we can go.
-        let finalExpr = left;
+    }
 
-        const operatorExist = this.peek(1);
-        if (operatorExist?.tokenType == TokenType.Dot) {
-            this.consume(2)
-            //@ts-ignore
-            let right = this.parseAtomicExpression();
-
-            if (right != null) {
-
-                finalExpr = new MemberAccess(left, right);
-
-                while (this.peek(1)?.tokenType == TokenType.Dot) {
-
-                    this.consume(2)
-                    //while this is true
-                    right = this.parseAtomicExpression();
-
-                    if (right != null) {
-
-                        //@ts-ignore
-                        finalExpr = new MemberAccess(finalExpr, right);
-
-                    } else {
-
-                        log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
-                        process.exit(1)
-
-                    }
-
-                }
-
-            } else {
-
-                //invalid grammar.
-
-                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
-                process.exit(1)
-
-            }
-
-        } else {
-
-            //this just means we only have 'left' left
-            return left;
-
-        }
-
-        return finalExpr;
-
+    parseMultiplicationDivision(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseMemberAccess(),
+            new Map(
+                [
+                    [TokenType.Divide, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Divide)],
+                    [TokenType.Multiply, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Multiply)]
+                ]
+            ),
+        )
     }
 
     //@ts-ignore
     parseAdditionSubtraction(): Expression {
-        //@ts-ignore
-        const left = this.parseMultiplicationDivision();
-
-        if (left == null) return null;
-
-        //if not, let's see where we can go.
-        let finalExpr = left;
-
-        const operatorExist = this.peek(1);
-        if (operatorExist?.tokenType == TokenType.Add || operatorExist?.tokenType == TokenType.Minus) {
-            this.consume(2)
-            //@ts-ignore
-            let right = this.parseMultiplicationDivision();
-
-            if (right != null) {
-
-                finalExpr = new BinaryOperatorNode(left, right, operatorExist.tokenType == TokenType.Add ? BinaryOperation.Add : BinaryOperation.Subtract);
-
-                while (this.peek(1)?.tokenType == TokenType.Add || this.peek(1)?.tokenType == TokenType.Minus) {
-
-                    const _thisToken = this.peek(1)
-                    this.consume(2)
-                    //while this is true
-                    right = this.parseMultiplicationDivision();
-
-                    if (right != null) {
-
-                        //@ts-ignore
-                        finalExpr = new BinaryOperatorNode(finalExpr, right, _thisToken.tokenType == TokenType.Add ? BinaryOperation.Add : BinaryOperation.Subtract);
-
-                    } else {
-
-                        log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
-                        process.exit(1)
-
-                    }
-
-                }
-
-            } else {
-
-                //invalid grammar.
-
-                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
-                process.exit(1)
-
-            }
-
-        } else {
-
-            //this just means we only have 'left' left
-            return left;
-
-        }
-
-        return finalExpr;
-
+        return this.parseLeftAssociativeOperator(
+            () => this.parseMultiplicationDivision(),
+            new Map(
+                [
+                    [TokenType.Add, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Add)],
+                    [TokenType.Minus, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Subtract)]
+                ]
+            )
+        )
     }
 
-    //@ts-ignore
-    parseMultiplicationDivision(): Expression {
-        //order 0 means most priority, which happens to be multiplication for now
-        //@ts-ignore
-        const left = this.parseMemberAccess();
-
-        if (left == null) return null;
-
-        //if not, let's see where we can go.
-        let finalExpr = left;
-
-        const operatorExist = this.peek(1);
-        if (operatorExist?.tokenType == TokenType.Multiply || operatorExist?.tokenType == TokenType.Divide) {
-            this.consume(2)
-            //@ts-ignore
-            let right = this.parseMemberAccess();
-
-            if (right != null) {
-
-                finalExpr = new BinaryOperatorNode(left, right, operatorExist.tokenType == TokenType.Multiply ? BinaryOperation.Multiply : BinaryOperation.Divide);
-
-                while (this.peek(1)?.tokenType == TokenType.Multiply || this.peek(1)?.tokenType == TokenType.Divide) {
-
-                    const _thisToken = this.peek(1)
-                    this.consume(2)
-                    //while this is true
-                    right = this.parseMemberAccess();
-
-                    if (right != null) {
-
-                        //@ts-ignore
-                        finalExpr = new BinaryOperatorNode(finalExpr, right, _thisToken.tokenType == TokenType.Multiply ? BinaryOperation.Multiply : BinaryOperation.Divide);
-
-                    } else {
-
-                        log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
-                        process.exit(1)
-
-                    }
-
-                }
-
-            } else {
-
-                //invalid grammar.
-
-                log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${operatorExist}. Expected an Expression instead`)
-                process.exit(1)
-
-            }
-
-        } else {
-
-            //this just means we only have 'left' left
-            return left;
-
-        }
-
-        return finalExpr;
-
-    }
 
     //@ts-ignore
     parseAtomicExpression(): Expression {
@@ -334,14 +263,15 @@ export class ParseExpressions extends ParserBase {
                 return expr
             case TokenType.LSquareBrace:
                 this.advance()
-                let offset = "0"
+                let offset = null
                 const _expr = this.parseExpression();
                 this.advance()
 
                 this.maybeExpect(this.peek(0) as Token, TokenType.StraightBar, () => {
 
                     this.advance()
-                    offset = this.digest(TokenType.Integer)
+                    offset = this.parseExpression()
+                    this.advance()
 
                 }, () => {
 
@@ -353,14 +283,15 @@ export class ParseExpressions extends ParserBase {
             case TokenType.HashSymbol:
                 this.advance()
                 this.shouldBe(TokenType.LSquareBrace)
-                let _offset = "0"
+                let _offset = null
                 const __expr = this.parseExpression();
                 this.advance()
 
                 this.maybeExpect(this.peek(0) as Token, TokenType.StraightBar, () => {
 
                     this.advance()
-                    _offset = this.digest(TokenType.Integer)
+                    _offset = this.parseExpression()
+                    this.advance()
 
                 }, () => {
 

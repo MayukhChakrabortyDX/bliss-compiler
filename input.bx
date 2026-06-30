@@ -1,6 +1,5 @@
-fx main(): _b {
+fx main(): b {
 
-    let a: b = c().d + e();
-    c().[itemized].software.#[p | 3];
+    hello().#[ptrval].view;
 
 }

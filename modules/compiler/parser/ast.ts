@@ -17,7 +17,7 @@ export enum NodeType {
     ViewStatement, HandlePointer, Pointer, Reference, ViewPointer,
     PointerExpressionNode, HandleExpressionNode, ReferenceExpressionNode,
     AddressOfOperator, ViewDeclNode, SizeOfOperator, MemberAccess, MemberAccessNode,
-    ExpressionAsStatement
+    ExpressionAsStatement, MagneticCallChain
 }
 
 export class Node {
@@ -278,7 +278,7 @@ export class ViewPointerValue extends Node {
 
 export class PointerExpressionNode extends Node {
 
-    constructor(public expression: Expression, public offset: string = "0") {
+    constructor(public expression: Expression, public offset?: Expression) {
         super(NodeType.PointerExpressionNode)
     }
 
@@ -286,7 +286,7 @@ export class PointerExpressionNode extends Node {
 
 export class HandlExpressionNode extends Node {
 
-    constructor(public expression: Expression, public offset: string = "0") {
+    constructor(public expression: Expression, public offset?: Expression) {
         super(NodeType.HandleExpressionNode)
     }
 
@@ -330,8 +330,14 @@ export class ExpressionAsStatement extends Node {
     }
 }
 
+export class MagneticCallChain extends Node {
+    constructor(public argument: Expression, public callee: Expression) {
+        super(NodeType.MagneticCallChain)
+    }
+}
+
 export type ArgumentList = TypeBasedArgument | ActionBasedArgument | DataAndActionBasedArgument;
 export type DataNode = DataSoloNode | DataStructNode | DataScalarNode | DataArrayNode;
 
-export type Expression = MemberAccess | ExpressionAsStatement | AddressOfOperator | SizeOfOperator | IdentifierNode | NumberNode| PointerExpressionNode | HandlExpressionNode | ReferenceExpressionNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
+export type Expression = MagneticCallChain | MemberAccess | ExpressionAsStatement | AddressOfOperator | SizeOfOperator | IdentifierNode | NumberNode| PointerExpressionNode | HandlExpressionNode | ReferenceExpressionNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
 export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement | ViewStatementNode;

@@ -47,7 +47,7 @@ export class Parser extends ParseAnnotation {
         }
 
         if (this.peek(0)?.tokenType != TokenType.EOF) {
-            log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${this.peek(0)?.tokenType}. Expected token type ${TokenType.EOF} instead`)
+            this.logTokenError(this.peek(), `Unexpected token ${this.peek().tokenType}. Expected token type ${TokenType.EOF} instead`)
             process.exit(1)
 
         }

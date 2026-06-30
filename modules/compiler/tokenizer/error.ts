@@ -14,31 +14,6 @@ export class ErrorHandling extends TokenizeBase {
         return { line, lineNum, caretPad };
     }
 
-    //useful in parser it seems.
-    logTokenError(token: Token, message: string): void {
-        const RESET = "\x1b[0m";
-        const BOLD = "\x1b[1m";
-        const DIM = "\x1b[2m";
-        const TEXT_ERROR = "\x1b[31m";
-        const TEXT_BLUE = "\x1b[34m";
-
-        const stateName = TokenType[this.presentState] ?? "Unknown";
-        const tokenName = TokenType[token.tokenType] ?? "Unknown";
-        const tokenText = token.span.resolve();
-        const { line, lineNum, caretPad } = this.resolveSpan(token.span.startIndex);
-        const caretLen = Math.max(token.span.endIndex - token.span.startIndex + 1, 1);
-        const lineLabel = String(lineNum + 1);
-        const pad = " ".repeat(lineLabel.length);
-
-        console.log(`${TEXT_ERROR}${BOLD}error${RESET}${BOLD}[TOKENIZER]${RESET}: ${message}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad} --> ${RESET}line ${lineNum + 1}, col ${caretPad.length + 1}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET}`);
-        console.log(`${TEXT_BLUE}${BOLD}${lineLabel}  |${RESET} ${line}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${TEXT_ERROR}${BOLD}${caretPad}${"^".repeat(caretLen)}${RESET}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${DIM}state: ${stateName}, token: ${tokenName} (${JSON.stringify(tokenText)})${RESET}`);
-        console.log();
-    }
-
     logCharError(char: string, message: string): void {
         const RESET = "\x1b[0m";
         const BOLD = "\x1b[1m";

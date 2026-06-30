@@ -7,36 +7,70 @@ export class ParserBase {
     tokenIndex: number = 0;
     constructor(public tokenStream: Token[], public source: StringContainer) { }
 
+    private resolveSpan(start: number): { line: string; lineNum: number; caretPad: string } {
+        const upToStart = this.source.str.substring(0, start);
+        const lineNum = upToStart.split("\n").length - 1;
+        const lastNL = upToStart.lastIndexOf("\n");
+        const col = start - (lastNL + 1);
+        const line = this.source.str.split("\n")[lineNum] ?? "";
+        const caretPad = " ".repeat(line.substring(0, col).replace(/\t/g, "    ").length);
+        return { line, lineNum, caretPad };
+    }
+
+    //useful in parser it seems.
+    logTokenError(token: Token, message: string): void {
+        const RESET = "\x1b[0m";
+        const BOLD = "\x1b[1m";
+        const DIM = "\x1b[2m";
+        const TEXT_ERROR = "\x1b[31m";
+        const TEXT_BLUE = "\x1b[34m";
+
+        const tokenName = TokenType[token.tokenType] ?? "Unknown";
+        const tokenText = token.span.resolve();
+        const { line, lineNum, caretPad } = this.resolveSpan(token.span.startIndex);
+        const caretLen = Math.max(token.span.endIndex - token.span.startIndex + 1, 1);
+        const lineLabel = String(lineNum + 1);
+        const pad = " ".repeat(lineLabel.length);
+
+        console.log(`${TEXT_ERROR}${BOLD}error${RESET}${BOLD}[TOKENIZER]${RESET}: ${message}`);
+        console.log(`${TEXT_BLUE}${BOLD}${pad} --> ${RESET}line ${lineNum + 1}, col ${caretPad.length + 1}`);
+        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET}`);
+        console.log(`${TEXT_BLUE}${BOLD}${lineLabel}  |${RESET} ${line}`);
+        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${TEXT_ERROR}${BOLD}${caretPad}${"^".repeat(caretLen)}${RESET}`);
+        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${DIM}token: ${tokenName} (${JSON.stringify(tokenText)})${RESET}`);
+        console.log();
+    }
+
     //helpers starts here
     getTokenTypeName(tokenType: TokenType) {
         return TokenType[tokenType]
     }
 
-    expectTill(maximum: number, expected: TokenType) {
+    // expectTill(maximum: number, expected: TokenType) {
 
-        let isFound = false;
-        let ctr = 0;
+    //     let isFound = false;
+    //     let ctr = 0;
 
-        while(ctr <= maximum) {
+    //     while(ctr <= maximum) {
 
-            if ( (this.peek(ctr) as Token).tokenType == expected ) {
-                return true
-            }
+    //         if ( (this.peek(ctr) as Token).tokenType == expected ) {
+    //             return true
+    //         }
 
-            ctr++;
+    //         ctr++;
 
-        }
+    //     }
 
-        return isFound
+    //     return isFound
 
-    }
+    // }
 
-    peek(amount: number) {
+    //@ts-ignore
+    peek(amount: number = 0): Token {
         //tells us what is at that
         if (this.tokenStream.length > amount + this.tokenIndex) {
+            //@ts-ignore
             return this.tokenStream[amount + this.tokenIndex]
-        } else {
-            return null
         }
     }
 
@@ -66,12 +100,12 @@ export class ParserBase {
         this.consume(1)
     }
 
-    expect(given: Token, expected: TokenType, callback: () => any) {
+    expect(given: Token, expected: TokenType, callback: () => any, message?: string) {
         if (given.tokenType == expected) {
             callback()
         } else {
 
-            log(Log.Error, "PARSER", "Unexpected Token", `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead`)
+            this.logTokenError(given, message == null ? `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead` : message)
             process.exit(1)
 
         }
