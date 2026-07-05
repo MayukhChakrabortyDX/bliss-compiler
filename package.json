@@ -5,8 +5,8 @@
     "@types/bun": "^1.3.14"
   },
   "scripts": {
-    "test": "bun tests/all.test.ts > out.json",
-    "full-test": "bun tests/suite-runner.test.ts"
+    "test-partial": "bun tests/all.test.ts > out.json",
+    "test": "bun tests/suite-runner.test.ts"
   },
   "peerDependencies": {
     "typescript": "^5"
