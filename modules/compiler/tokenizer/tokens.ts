@@ -42,6 +42,8 @@ export enum TokenType {
     K_Alias,
     K_Adrs,
     K_Sizeof,
+    K_Transform,
+    K_To,
 
     K_u8, K_u16, K_u32, K_u64,
     K_i8, K_i16, K_i32, K_i64,

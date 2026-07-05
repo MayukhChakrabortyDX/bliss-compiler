@@ -1,0 +1,125 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "body": [
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 0,
+      "end": 0,
+      "name": "main",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "void"
+      },
+      "argumentList": [],
+      "body": [
+        {
+          "type": 35,
+          "typeName": "ViewDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "A",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "i64"
+          },
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
+                "start": 0,
+                "end": 0,
+                "left": {
+                  "type": 36,
+                  "typeName": "SizeOfOperator",
+                  "start": 0,
+                  "end": 0,
+                  "expression": null
+                },
+                "right": {
+                  "type": 4,
+                  "typeName": "Number",
+                  "start": 0,
+                  "end": 0,
+                  "value": "8",
+                  "subtypes": 1
+                },
+                "operator": 0
+              }
+            ]
+          }
+        },
+        {
+          "type": 44,
+          "typeName": "TransformStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 36,
+                "typeName": "SizeOfOperator",
+                "start": 0,
+                "end": 0,
+                "expression": null
+              }
+            ]
+          },
+          "identifier": "byteArray",
+          "transformTo": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "u8"
+          }
+        }
+      ]
+    }
+  ],
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "start": 0,
+      "end": 0,
+      "moduleSequence": [
+        "std",
+        "mem",
+        "malloc"
+      ]
+    }
+  ]
+}

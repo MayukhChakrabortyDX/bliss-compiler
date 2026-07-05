@@ -22,9 +22,21 @@ export class ViewStatementNode extends Node {
     }
 }
 
+export class TransformStatementNode extends Node {
+    constructor(public expression: Expression, public identifier: string, public transformTo: TypeNode) {
+        super(NodeType.TransformStatement)
+    }
+}
+
 export class ViewDeclNode extends Node {
     constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
         super(NodeType.ViewDeclNode)
+    }
+}
+
+export class TransformDeclNode extends Node {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
+        super(NodeType.TransformDeclNode)
     }
 }
 
@@ -97,6 +109,67 @@ export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode 
 export class ParseStatement extends ParseTypes {
 
     statementSet = new Set([TokenType.K_View, TokenType.K_Unsafe, TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
+
+    parseTransformDecl() {
+
+        let thisViewCanBeInPlaceDefinition = false
+        let branchToDefinition2 = false;
+        this.shouldBe(TokenType.K_Transform)
+        let expression = this.parseExpression()
+        this.advance()
+
+        if (expression == null) {
+            throw Error("View expression cannot be null")
+        } else if (expression.type == NodeType.Identifier) {
+            thisViewCanBeInPlaceDefinition = true;
+        }
+
+        this.maybeExpect(this.peek(0) as Token, TokenType.K_To, () => {
+
+            //then things are going as usual
+            this.advance()
+
+        }, () => {
+
+            this.shouldBe(TokenType.Colon)
+            branchToDefinition2 = true;
+
+
+        })
+
+        if (branchToDefinition2 == false) {
+
+            let identifier = this.digest(TokenType.Identifier)
+            this.shouldBe(TokenType.Colon)
+            let type = this.parseType()
+            this.shouldBe(TokenType.Semicolon)
+
+            return new TransformStatementNode(expression, identifier, type)
+
+        } else {
+
+            return this.parseViewVariableDecl((expression as IdentifierNode).name)
+
+        }
+
+    }
+
+    parseTransformVariableDecl(variableName: string) {
+
+        let returnType = this.parseType()
+        this.shouldBe(TokenType.Assignment)
+        let expression = this.parseExpression()
+
+        if (expression == null) {
+            throw Error("Expression Expected")
+        }
+
+        this.advance()
+
+        this.shouldBe(TokenType.Semicolon)
+
+        return new TransformDeclNode(variableName, returnType, expression)
+    }
 
     parseViewDecl() {
 
@@ -386,6 +459,8 @@ export class ParseStatement extends ParseTypes {
                 return this.parsePointerDecl()
             case TokenType.K_Alias:
                 return this.parseAlias()
+            case TokenType.K_Transform:
+                return this.parseTransformDecl()
             case TokenType.K_View:
                 return this.parseViewDecl()
             case TokenType.K_Return:

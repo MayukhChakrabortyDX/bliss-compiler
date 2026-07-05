@@ -16,7 +16,7 @@ export enum NodeType {
     PointerExpressionNode, HandleExpressionNode, ReferenceExpressionNode,
     AddressOfOperator, ViewDeclNode, SizeOfOperator, MemberAccess, MemberAccessNode,
     ExpressionAsStatement, MagneticCallChain, AliasStatement, ViewExpression,
-    PointerDeclNode
+    PointerDeclNode, TransformStatement,TransformDeclNode
 }
 
 export class Node {
