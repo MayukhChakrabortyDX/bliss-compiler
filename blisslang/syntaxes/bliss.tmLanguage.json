@@ -11,7 +11,11 @@
     { "include": "#actionDecl" },
     { "include": "#funcDecl" },
     { "include": "#aliasStatement" },
+    { "include": "#transformDecl" },
+    { "include": "#transformStatement" },
+    { "include": "#viewDecl" },
     { "include": "#viewStatement" },
+    { "include": "#ptrDecl" },
     { "include": "#variableDecl" },
     { "include": "#controlFlow" },
     { "include": "#keywords" },
@@ -79,9 +83,12 @@
           }
         },
         {
-          "comment": "'as' keyword used in bind...as, alias...as, and view...as",
-          "name": "keyword.other.as.bliss",
-          "match": "\\b(as)\\b"
+          "comment": "Matches 'as NAME {' in bind decls",
+          "match": "\\b(as)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\{)",
+          "captures": {
+            "1": { "name": "keyword.other.as.bliss" },
+            "2": { "name": "entity.name.type.bliss" }
+          }
         }
       ]
     },
@@ -129,7 +136,7 @@
     },
 
     "actionDecl": {
-      "comment": "ACTION_DECL -> 'action' NAME '{' REDUCED_FUNC_DECL ';' (REDUCED_FUNC_DECL ';')* '}'",
+      "comment": "ACTION_DECL -> 'action' NAME '{' REDUCED_FUNC_DECL ';' ... '}'",
       "name": "meta.action-declaration.bliss",
       "match": "\\b(action)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
       "captures": {
@@ -139,7 +146,7 @@
     },
 
     "funcDecl": {
-      "comment": "FUNC_DECL / REDUCED_FUNC_DECL -> 'fx' NAME '(' ARGUMENT_LIST* ')' ':' TYPE ('{' ... '}')?",
+      "comment": "FUNC_DECL / REDUCED_FUNC_DECL -> 'fx' NAME '(' ARGUMENT_LIST* ')' ':' TYPE",
       "name": "meta.function-declaration.bliss",
       "match": "\\b(fx)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
       "captures": {
@@ -149,28 +156,59 @@
     },
 
     "aliasStatement": {
-      "comment": "ALIAS_STATEMENT -> 'alias' TYPE 'as' IDENTIFIER ';' — TYPE and trailing NAME handled by typeExpression/identifiers, 'as' handled by bindDecl's shared as-pattern",
+      "comment": "ALIAS_STATEMENT -> 'alias' TYPE 'as' IDENTIFIER ';'",
       "name": "keyword.control.alias.bliss",
       "match": "\\balias\\b"
     },
 
+    "transformDecl": {
+      "comment": "TRANSFORM_DECL -> 'transform' NAME ':' TYPE '=' EXPRESSION ';'",
+      "name": "meta.transform-declaration.bliss",
+      "match": "\\b(transform)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=:)",
+      "captures": {
+        "1": { "name": "keyword.declaration.transform.bliss" },
+        "2": { "name": "variable.other.bliss" }
+      }
+    },
+
+    "transformStatement": {
+      "comment": "TRANSFORM_STATEMENT -> 'transform' EXPRESSION 'to' NAME ':' TYPE ';'",
+      "name": "meta.transform-statement.bliss",
+      "match": "\\b(to)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=:)",
+      "captures": {
+        "1": { "name": "keyword.other.to.bliss" },
+        "2": { "name": "variable.other.bliss" }
+      }
+    },
+
+    "viewDecl": {
+      "comment": "VIEW_DECL -> 'view' NAME ':' TYPE '=' EXPRESSION ';'",
+      "name": "meta.view-declaration.bliss",
+      "match": "\\b(view)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=:)",
+      "captures": {
+        "1": { "name": "keyword.declaration.view.bliss" },
+        "2": { "name": "variable.other.bliss" }
+      }
+    },
+
     "viewStatement": {
-      "comment": "VIEW_DECL -> 'view' NAME ':' TYPE '=' EXPRESSION ';'  vs  VIEW_STATEMENT -> 'view' EXPRESSION 'as' NAME ':' TYPE ';' — disambiguated by lookahead for ':' immediately after the name",
-      "patterns": [
-        {
-          "name": "meta.view-declaration.bliss",
-          "match": "\\b(view)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=:)",
-          "captures": {
-            "1": { "name": "keyword.other.view.bliss" },
-            "2": { "name": "variable.other.bliss" }
-          }
-        },
-        {
-          "comment": "bare 'view' keyword — covers VIEW_STATEMENT, where EXPRESSION follows before 'as'",
-          "name": "keyword.other.view.bliss",
-          "match": "\\bview\\b"
-        }
-      ]
+      "comment": "VIEW_STATEMENT -> 'view' EXPRESSION 'as' NAME ':' TYPE ';'",
+      "name": "meta.view-statement.bliss",
+      "match": "\\b(as)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=:)",
+      "captures": {
+        "1": { "name": "keyword.other.as.bliss" },
+        "2": { "name": "variable.other.bliss" }
+      }
+    },
+
+    "ptrDecl": {
+      "comment": "PTR_DECL -> 'ptr' NAME ':' TYPE '=' EXPRESSION ';'",
+      "name": "meta.ptr-declaration.bliss",
+      "match": "\\b(ptr)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=:)",
+      "captures": {
+        "1": { "name": "keyword.declaration.ptr.bliss" },
+        "2": { "name": "variable.other.bliss" }
+      }
     },
 
     "variableDecl": {
@@ -230,7 +268,7 @@
         {
           "comment": "Declaration keywords (not handled by specialized patterns above)",
           "name": "keyword.declaration.bliss",
-          "match": "\\b(fx|data|action|bind|import|using)\\b"
+          "match": "\\b(fx|data|action|bind|import|using|transform|alias)\\b"
         },
         {
           "comment": "Modifier keywords",
@@ -243,9 +281,9 @@
           "match": "\\b(adrs|sizeof)\\b"
         },
         {
-          "comment": "Other / structural keywords. 'with' also appears bare in ACTION_BASED_ARGUMENT / DATA_ACTION_BASED_ARGUMENT outside bind-decl context",
+          "comment": "Other / structural keywords. Notice 'ptr' is intentionally excluded here so it acts purely as a primitive type if not caught by ptrDecl",
           "name": "keyword.other.bliss",
-          "match": "\\b(let|with|as|view)\\b"
+          "match": "\\b(let|with|as|view|to)\\b"
         }
       ]
     },
@@ -286,7 +324,7 @@
           "match": "`(?=[a-zA-Z_\\[`$#])"
         },
         {
-          "comment": "TYPE '$' prefix — view-space type sigil (distinct from $() operator)",
+          "comment": "TYPE '$' prefix — view-space type sigil",
           "name": "keyword.operator.type.viewspace.bliss",
           "match": "\\$(?=[a-zA-Z_\\[`$#])"
         },
@@ -390,7 +428,6 @@
           "match": "\\)"
         },
         {
-          "comment": "'[' used in TYPE (array wrapper '[' TYPE ']', sized array TYPE '[' INT ']'), DATA_ARRAY_DECL, and array/slice literals ('[' EXPR ('|' EXPR)? ']', '#[' EXPR ('|' EXPR)? ']')",
           "name": "punctuation.definition.array.begin.bliss",
           "match": "\\["
         },
@@ -399,22 +436,19 @@
           "match": "\\]"
         },
         {
-          "comment": "'.' used in import/using path separators and MEMBER_ACCESS",
           "name": "punctuation.separator.dot.bliss",
           "match": "\\."
         },
         {
-          "comment": "'#' used as TYPE prefix sigil for pointer types, and as the '#[' array literal prefix",
           "name": "punctuation.definition.hash.bliss",
           "match": "#"
         },
         {
-          "comment": "'`' used as TYPE prefix sigil for view/borrow types, and as the ATOMIC_EXPRESSION '`' EXPRESSION prefix",
           "name": "punctuation.definition.backtick.bliss",
           "match": "`"
         },
         {
-          "comment": "'$' used as TYPE prefix sigil for view-space types",
+          "comment": "'$' used as TYPE prefix sigil and ATOMIC_EXPRESSION prefix",
           "name": "punctuation.definition.dollar.bliss",
           "match": "\\$"
         }

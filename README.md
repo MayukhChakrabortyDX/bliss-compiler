@@ -10,4 +10,4 @@ Put valid bliss code in the input.txt file and from the root directory run the f
 bun run test
 ```
 
-The output will be generated in the out.json file
+This will process all the test suite programs in tests/programs folder and will produce either a JSON output, or compiler error depending upon the program
