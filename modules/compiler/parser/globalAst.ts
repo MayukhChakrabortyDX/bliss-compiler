@@ -1,11 +1,11 @@
 //declare nodes based on rules
 export enum NodeType {
-    Program, FunctionDefinition, 
-    ReturnStatement, Identifier, 
-    Number, BinaryOperationExpression, 
-    Import, Using, 
-    String, Break, 
-    Loop, ConditionUnit, 
+    Program, FunctionDefinition,
+    ReturnStatement, Identifier,
+    Number, BinaryOperationExpression,
+    Import, Using,
+    String, Break,
+    Loop, ConditionUnit,
     Condition, CallSignature,
     CallStatement, ScalarType, CompositeType,
     VariableDeclNode, AssignmentNode,
@@ -15,7 +15,8 @@ export enum NodeType {
     ViewStatement, HandlePointer, Pointer, Reference, ViewPointer,
     PointerExpressionNode, HandleExpressionNode, ReferenceExpressionNode,
     AddressOfOperator, ViewDeclNode, SizeOfOperator, MemberAccess, MemberAccessNode,
-    ExpressionAsStatement, MagneticCallChain, AliasStatement, ViewExpression
+    ExpressionAsStatement, MagneticCallChain, AliasStatement, ViewExpression,
+    PointerDeclNode
 }
 
 export class Node {
@@ -23,7 +24,7 @@ export class Node {
     typeName: string;
     start: number = 0;
     end: number = 0;
-    
+
     constructor(public type: NodeType) {
         this.typeName = NodeType[type]
     }

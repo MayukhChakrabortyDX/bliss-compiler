@@ -24,13 +24,19 @@ export class ViewStatementNode extends Node {
 
 export class ViewDeclNode extends Node {
     constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
-        super( NodeType.ViewDeclNode )
+        super(NodeType.ViewDeclNode)
     }
 }
 
 export class VariableDeclNode extends Node {
     constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression, public isUnsafe: boolean = false) {
-        super( NodeType.VariableDeclNode )
+        super(NodeType.VariableDeclNode)
+    }
+}
+
+export class PointerDeclNode extends Node {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
+        super(NodeType.PointerDeclNode)
     }
 }
 
@@ -42,7 +48,7 @@ export class LoopNode extends Node {
 
 export class IdentifierNode extends Node {
 
-    constructor( public name: string ) {
+    constructor(public name: string) {
         super(NodeType.Identifier)
     }
 
@@ -120,7 +126,7 @@ export class ParseStatement extends ParseTypes {
         })
 
         if (branchToDefinition2 == false) {
-            
+
             let identifier = this.digest(TokenType.Identifier)
             this.shouldBe(TokenType.Colon)
             let type = this.parseType()
@@ -151,6 +157,32 @@ export class ParseStatement extends ParseTypes {
         this.shouldBe(TokenType.Semicolon)
 
         return new ViewDeclNode(variableName, returnType, expression)
+    }
+
+    parsePointerDecl() {
+
+        let variableName: string = ""
+
+        this.shouldBe(TokenType.K_Ptr)
+
+        variableName = this.digest(TokenType.Identifier)
+
+        this.shouldBe(TokenType.Colon)
+
+        let returnType = this.parseType()
+        this.shouldBe(TokenType.Assignment)
+        let expression = this.parseExpression()
+
+        if (expression == null) {
+            throw Error("Expression Expected")
+        }
+
+        this.advance()
+
+        this.shouldBe(TokenType.Semicolon)
+
+        return new PointerDeclNode(variableName, returnType, expression)
+
     }
 
     parseVariableDecl() {
@@ -350,6 +382,8 @@ export class ParseStatement extends ParseTypes {
         //we do branching here
         switch (initial?.tokenType) {
 
+            case TokenType.K_Ptr:
+                return this.parsePointerDecl()
             case TokenType.K_Alias:
                 return this.parseAlias()
             case TokenType.K_View:
@@ -377,7 +411,7 @@ export class ParseStatement extends ParseTypes {
 
             default:
                 const __expr = this.parseExpression()
-                if ( __expr != null ) {
+                if (__expr != null) {
                     this.advance()
                     this.shouldBe(TokenType.Semicolon)
                     return new ExpressionAsStatement(__expr)

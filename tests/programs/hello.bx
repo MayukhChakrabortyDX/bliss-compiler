@@ -1,0 +1,7 @@
+import std.io.println;
+
+fx main(): void {
+
+    println("Hello World");
+
+}

@@ -1,0 +1,70 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "body": [
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 0,
+      "end": 0,
+      "name": "main",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "void"
+      },
+      "argumentList": [],
+      "body": [
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "println"
+            },
+            "args": [
+              {
+                "type": 8,
+                "typeName": "String",
+                "start": 0,
+                "end": 0,
+                "span": {
+                  "startIndex": 56,
+                  "endIndex": 66,
+                  "str": "<ref ProgramString>"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "start": 0,
+      "end": 0,
+      "moduleSequence": [
+        "std",
+        "io",
+        "println"
+      ]
+    }
+  ]
+}

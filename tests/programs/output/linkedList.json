@@ -1,0 +1,266 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "body": [
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "start": 0,
+      "end": 0,
+      "name": "LinkedList",
+      "fields": [
+        {
+          "name": "next",
+          "type": {
+            "type": 30,
+            "typeName": "ViewPointer",
+            "start": 0,
+            "end": 0,
+            "value": {
+              "type": 15,
+              "typeName": "ScalarType",
+              "start": 0,
+              "end": 0,
+              "type_name": "LinkedList"
+            }
+          }
+        },
+        {
+          "name": "prev",
+          "type": {
+            "type": 30,
+            "typeName": "ViewPointer",
+            "start": 0,
+            "end": 0,
+            "value": {
+              "type": 15,
+              "typeName": "ScalarType",
+              "start": 0,
+              "end": 0,
+              "type_name": "LinkedList"
+            }
+          }
+        },
+        {
+          "name": "val",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "i32"
+          }
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 0,
+      "end": 0,
+      "name": "main",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "i32"
+      },
+      "argumentList": [],
+      "body": [
+        {
+          "type": 35,
+          "typeName": "ViewDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "root",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "LinkedList"
+          },
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 36,
+                "typeName": "SizeOfOperator",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "LinkedList"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": 43,
+          "typeName": "PointerDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "leftPtr",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "u8"
+          },
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 36,
+                "typeName": "SizeOfOperator",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "LinkedList"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": 26,
+          "typeName": "ViewStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 3,
+            "typeName": "Identifier",
+            "start": 0,
+            "end": 0,
+            "name": "leftPtr"
+          },
+          "identifier": "left",
+          "viewType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "LinkedList"
+          }
+        },
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 37,
+              "typeName": "MemberAccess",
+              "start": 0,
+              "end": 0,
+              "root": {
+                "type": 42,
+                "typeName": "ViewExpression",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "root"
+                }
+              },
+              "accessing": {
+                "type": 42,
+                "typeName": "ViewExpression",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "left"
+                }
+              }
+            },
+            "right": {
+              "type": 42,
+              "typeName": "ViewExpression",
+              "start": 0,
+              "end": 0,
+              "expression": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "left"
+              }
+            },
+            "operator": 8
+          }
+        },
+        {
+          "type": 2,
+          "typeName": "ReturnStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 4,
+            "typeName": "Number",
+            "start": 0,
+            "end": 0,
+            "value": "0",
+            "subtypes": 1
+          }
+        }
+      ]
+    }
+  ],
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "start": 0,
+      "end": 0,
+      "moduleSequence": [
+        "std",
+        "mem",
+        "malloc"
+      ]
+    }
+  ]
+}

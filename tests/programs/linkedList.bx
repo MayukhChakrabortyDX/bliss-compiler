@@ -1,0 +1,21 @@
+import std.mem.malloc;
+
+data LinkedList {
+    $LinkedList next;
+    $LinkedList prev;
+    i32 val;
+}
+
+fx main(): i32 {
+
+    //this is one valid approach
+    view root: LinkedList = malloc(sizeof LinkedList);
+
+    ptr leftPtr: u8 = malloc(sizeof LinkedList);
+    view leftPtr as left: LinkedList; //another valid approach
+
+    $root.$left = $left; //takes it from the view
+
+    return 0;
+
+}
