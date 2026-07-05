@@ -1,6 +1,11 @@
 import { Parser } from "../modules/compiler/parser/parser";
 import { Tokenizer } from "../modules/compiler/tokenizer/tokenizer";
 import { readFileSync } from "fs";
+import { TokenType } from "../modules/compiler/tokenizer/tokens";
+
+function getTokenTypeName(tokenType: TokenType) {
+    return TokenType[tokenType]
+}
 
 const rawSource = readFileSync("input.bx", "utf8")
 

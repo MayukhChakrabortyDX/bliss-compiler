@@ -1,6 +1,52 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
-import { CompositeTypeNode, HandlePointerValue, PointerValue, ReferenceValue, ScalarTypeNode, ViewPointerValue, type TypeNode } from "../ast";
-import { ParseExpressions } from "./expressions";
+import { Node, NodeType } from "../globalAst";
+import { ParseExpressions } from "./expressions/parser";
+
+export class ViewPointerValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.ViewPointer)
+    }
+
+}
+
+export class ScalarTypeNode extends Node {
+    constructor( public type_name: string ) {
+        super( NodeType.ScalarType )
+    }
+}
+
+export class ReferenceValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.Reference)
+    }
+
+}
+
+export class PointerValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.Pointer)
+    }
+
+}
+
+export class HandlePointerValue extends Node {
+
+    constructor(public value: TypeNode) {
+        super(NodeType.HandlePointer)
+    }
+
+}
+
+export class CompositeTypeNode extends Node {
+    constructor(public dataName: string, public attachedBindings: string[]) {
+        super( NodeType.CompositeType )
+    }
+}
+
+export type TypeNode = ScalarTypeNode | CompositeTypeNode | HandlePointerValue | PointerValue | ReferenceValue | ViewPointerValue
 
 export class ParseTypes extends ParseExpressions {
 
@@ -105,7 +151,9 @@ export class ParseTypes extends ParseExpressions {
                 return new PointerValue(type_)
 
             default:
-                throw new Error(`Unrecognized Type ${this.getTokenTypeName(token.tokenType)}`)
+                this.logTokenError(token, `Unrecognized Type ${this.getTokenTypeName(token.tokenType)}`)
+                process.exit(-1)
+                //throw new Error()
         }
 
     }

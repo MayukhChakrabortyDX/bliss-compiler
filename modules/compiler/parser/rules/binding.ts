@@ -1,6 +1,13 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
-import { BindingNode, type FunctionDefinitionNode } from "../ast";
+import { Node, NodeType } from "../globalAst";
+import { type FunctionDefinitionNode } from './function'
 import { ParseAction } from "./action";
+
+export class BindingNode extends Node {
+    constructor(public dataName: string, public bindingName: string, public actionNames: string[], public functionDefinitions: FunctionDefinitionNode[]) {
+        super(NodeType.BindingNode)
+    }
+}
 
 export class ParseBinds extends ParseAction {
 

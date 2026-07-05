@@ -1,9 +1,14 @@
+import type { Diagnostic } from "typescript";
 import { Log, log } from "../../logger";
 import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
 
 //this consists of the base helpers and the fundamental values
 export class ParserBase {
 
+    //store all the diagnostics here which we will use to render
+    //errors.
+
+    diagnostics: Diagnostic[] = []
     tokenIndex: number = 0;
     constructor(public tokenStream: Token[], public source: StringContainer) { }
 
@@ -32,8 +37,7 @@ export class ParserBase {
         const lineLabel = String(lineNum + 1);
         const pad = " ".repeat(lineLabel.length);
 
-        console.log(`${TEXT_ERROR}${BOLD}error${RESET}${BOLD}[TOKENIZER]${RESET}: ${message}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad} --> ${RESET}line ${lineNum + 1}, col ${caretPad.length + 1}`);
+        log(Log.Error, "PARSER", message, `${TEXT_BLUE}${BOLD} ${RESET}line ${lineNum + 1}, col ${caretPad.length + 1}`)
         console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET}`);
         console.log(`${TEXT_BLUE}${BOLD}${lineLabel}  |${RESET} ${line}`);
         console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${TEXT_ERROR}${BOLD}${caretPad}${"^".repeat(caretLen)}${RESET}`);
@@ -108,6 +112,15 @@ export class ParserBase {
             this.logTokenError(given, message == null ? `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead` : message)
             process.exit(1)
 
+        }
+    }
+
+    recoverableExpect(given: Token, expected: TokenType, callback: () => any, message?: string) {
+        if (given.tokenType == expected) {
+            callback()
+            return true
+        } else {
+            return false
         }
     }
 

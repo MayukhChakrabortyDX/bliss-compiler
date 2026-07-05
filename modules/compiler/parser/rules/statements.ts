@@ -1,46 +1,96 @@
-import { Log, log } from "../../../logger";
 import { Token, TokenType } from "../../tokenizer/tokens";
 import {
-    AssignmentNode, BreakStatementNode,
-    CallSignatureNode, CallStatement,
-    ConditionalNode, ConditionNode,
-    ExpressionAsStatement,
-    IdentifierNode,
-    LoopNode, NodeType, ReturnStatementNode,
-    VariableDeclNode, ViewDeclNode, ViewStatementNode, type Expression,
-    type StatementNode
-} from "../ast";
+    NodeType, Node,
+} from "../globalAst";
+
+import { type TypeNode } from "./types";
+
 import { ParseTypes } from "./types";
+import { CallSignatureNode } from "./expressions/ast";
+
+import type { Expression } from "./expressions/ast";
+
+export class CallStatement extends Node {
+    constructor(public callExpr: CallSignatureNode) {
+        super(NodeType.CallStatement)
+    }
+}
+
+export class ViewStatementNode extends Node {
+    constructor(public expression: Expression, public identifier: string, public viewType: TypeNode) {
+        super(NodeType.ViewStatement)
+    }
+}
+
+export class ViewDeclNode extends Node {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression) {
+        super( NodeType.ViewDeclNode )
+    }
+}
+
+export class VariableDeclNode extends Node {
+    constructor(public name: string, public type_of_variable: TypeNode, public expression: Expression, public isUnsafe: boolean = false) {
+        super( NodeType.VariableDeclNode )
+    }
+}
+
+export class LoopNode extends Node {
+    constructor(public body: StatementNode[], public identifier?: string) {
+        super(NodeType.Loop)
+    }
+}
+
+export class IdentifierNode extends Node {
+
+    constructor( public name: string ) {
+        super(NodeType.Identifier)
+    }
+
+}
+
+export class ExpressionAsStatement extends Node {
+    constructor(public expression: Expression) {
+        super(NodeType.ExpressionAsStatement)
+    }
+}
+
+export class ConditionalNode extends Node {
+    constructor(public conditionBody: StatementNode[], public condition?: Expression) {
+        super(NodeType.ConditionUnit)
+    }
+}
+
+export class ConditionNode extends Node {
+    constructor(public if_branch: ConditionalNode, public elif_branch: ConditionalNode[], public else_branch?: ConditionalNode) {
+        super(NodeType.Condition)
+    }
+}
+
+export class AliasStatement extends Node {
+    constructor(public aliasType: TypeNode, aliasName: string) {
+        super(NodeType.AliasStatement)
+    }
+}
+
+export class ReturnStatementNode extends Node {
+
+    constructor(public expression?: Expression) {
+        super(NodeType.ReturnStatement)
+    }
+
+}
+
+export class BreakStatementNode extends Node {
+    constructor(public identifier?: string) {
+        super(NodeType.Break)
+    }
+}
+
+export type StatementNode = ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode | CallStatement | ViewStatementNode;
 
 export class ParseStatement extends ParseTypes {
 
     statementSet = new Set([TokenType.K_View, TokenType.K_Unsafe, TokenType.K_Let, TokenType.K_Return, TokenType.K_Break, TokenType.K_Loop, TokenType.K_If, TokenType.Identifier])
-
-    parseAssignment() {
-
-        let variableName: string = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-
-            const token = this.peek(0) as Token
-            variableName = this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
-            this.advance()
-
-        })
-
-        this.shouldBe(TokenType.Assignment);
-
-        let expression = this.parseExpression()
-
-        if (expression == null) {
-            throw Error("Expression Expected")
-        }
-
-        this.advance()
-        this.shouldBe(TokenType.Semicolon)
-
-        return new AssignmentNode(variableName, expression)
-
-    }
 
     parseViewDecl() {
 
@@ -282,12 +332,26 @@ export class ParseStatement extends ParseTypes {
 
     }
 
+    parseAlias() {
+
+        this.shouldBe(TokenType.K_Alias)
+        const type = this.parseType()
+        this.shouldBe(TokenType.K_As)
+        const identifier = this.digest(TokenType.Identifier);
+        this.shouldBe(TokenType.Semicolon);
+
+        return new AliasStatement(type, identifier)
+
+    }
+
     parseStatement(): ReturnStatementNode | BreakStatementNode | LoopNode | ConditionNode {
 
         const initial = this.peek(0)
         //we do branching here
         switch (initial?.tokenType) {
 
+            case TokenType.K_Alias:
+                return this.parseAlias()
             case TokenType.K_View:
                 return this.parseViewDecl()
             case TokenType.K_Return:
@@ -312,7 +376,7 @@ export class ParseStatement extends ParseTypes {
                 return this.parseVariableDecl()
 
             default:
-                const __expr = this.parseMemberAccess()
+                const __expr = this.parseExpression()
                 if ( __expr != null ) {
                     this.advance()
                     this.shouldBe(TokenType.Semicolon)

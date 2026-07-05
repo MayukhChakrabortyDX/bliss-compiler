@@ -1,5 +1,9 @@
-fx main(): b {
+action viewl {
+    fx doesSomething(): p;
 
-    hello().#[ptrval].view;
+fx main() {
+
+    println("Hello World")
+    let x = 10;
 
 }

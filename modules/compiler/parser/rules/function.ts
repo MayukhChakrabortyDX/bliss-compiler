@@ -1,11 +1,38 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import {
-    ActionBasedArgument, DataAndActionBasedArgument,
-    FunctionDefinitionNode, TypeBasedArgument,
-    type ArgumentList, type StatementNode,
-    type TypeNode
-} from "../ast";
+    Node, NodeType,
+} from "../globalAst";
 import { ParseData } from "./data";
+import type { StatementNode } from "./statements";
+import { type TypeNode } from "./types";
+
+export class TypeBasedArgument extends Node {
+    constructor(public typeInfo: TypeNode, public argumentName: string) {
+        super(NodeType.TypeBasedArgument)
+    }
+}
+
+export class FunctionDefinitionNode extends Node {
+    constructor(public name: string, public returnType: TypeNode, public argumentList: ArgumentList[], public body?: StatementNode[]) {
+        super(NodeType.FunctionDefinition)
+    }
+}
+
+export class ActionBasedArgument extends Node {
+    //names of action with the argument present.
+    constructor(public argumentName: string, public actionList: string[]) {
+        super(NodeType.ActionBasedArgument)
+    }
+}
+
+export class DataAndActionBasedArgument extends Node {
+    //note - this is strictly data
+    constructor(public argumentName: string, public actionList: string[], public dataType: TypeNode) {
+        super(NodeType.DataAndActionBasedArgument)
+    }
+}
+
+export type ArgumentList = TypeBasedArgument | ActionBasedArgument | DataAndActionBasedArgument;
 
 class ParseArguments extends ParseData {
     parseTypeBasedArgument(type: TypeNode, name: string) {
@@ -154,7 +181,7 @@ export class ParseFunction extends ParseArguments {
         this.shouldBe(TokenType.LBracket)
 
         //we consume the statements
-        while (this.statementSet.has((this.peek(0) as Token).tokenType)) {
+        while (this.peek().tokenType != TokenType.RBracket) {
             head.body.push(this.parseStatement())
         }
 

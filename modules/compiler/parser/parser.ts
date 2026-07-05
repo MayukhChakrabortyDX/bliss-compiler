@@ -1,15 +1,24 @@
 import {
-    FunctionDefinitionNode,
-    ProgramNode,
-    type ImportNode, type DataNode,
-    ActionNode,
-    BindingNode,
-    AnnotationNode,
-} from "./ast";
+    NodeType, Node
+} from "./globalAst";
+
+import { FunctionDefinitionNode } from "./rules/function";
+import type { ImportNode } from "./rules/imports";
+import type { DataNode } from "./rules/data";
+import type { ActionNode } from "./rules/action";
+import type { BindingNode } from "./rules/binding";
+import type { AnnotationNode } from "./rules/annotation";
 
 import { Token, TokenType } from "../tokenizer/tokens";
-import { log, Log } from "../../logger";
 import { ParseAnnotation } from "./rules/annotation";
+
+export class ProgramNode extends Node {
+
+    constructor(public body: (FunctionDefinitionNode | DataNode | ActionNode | BindingNode | AnnotationNode)[], public importList: ImportNode[]) {
+        super(NodeType.Program)
+    }
+
+}
 
 export class Parser extends ParseAnnotation {
 

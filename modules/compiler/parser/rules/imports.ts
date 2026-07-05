@@ -1,6 +1,18 @@
 import { TokenType, type Token } from "../../tokenizer/tokens";
-import { ImportNode, UsingNode } from "../ast";
+import { Node, NodeType } from "../globalAst";
 import { ParseBinds } from "./binding";
+
+export class ImportNode extends Node {
+    constructor( public moduleSequence: string[] ) {
+        super(NodeType.Import)
+    }
+}
+
+export class UsingNode extends Node {
+    constructor( public moduleSequence: string[] ) {
+        super(NodeType.Using)
+    }
+}
 
 export class ParseImports extends ParseBinds {
 

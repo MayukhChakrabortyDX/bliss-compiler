@@ -5,6 +5,57 @@
   "end": 0,
   "body": [
     {
+      "type": 19,
+      "typeName": "DataNode",
+      "start": 0,
+      "end": 0,
+      "name": "LinkedList",
+      "fields": [
+        {
+          "name": "next",
+          "type": {
+            "type": 30,
+            "typeName": "ViewPointer",
+            "start": 0,
+            "end": 0,
+            "value": {
+              "type": 15,
+              "typeName": "ScalarType",
+              "start": 0,
+              "end": 0,
+              "type_name": "LinkedList"
+            }
+          }
+        },
+        {
+          "name": "prev",
+          "type": {
+            "type": 30,
+            "typeName": "ViewPointer",
+            "start": 0,
+            "end": 0,
+            "value": {
+              "type": 15,
+              "typeName": "ScalarType",
+              "start": 0,
+              "end": 0,
+              "type_name": "LinkedList"
+            }
+          }
+        },
+        {
+          "name": "val",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "i32"
+          }
+        }
+      ]
+    },
+    {
       "type": 1,
       "typeName": "FunctionDefinition",
       "start": 0,
@@ -15,42 +66,102 @@
         "typeName": "ScalarType",
         "start": 0,
         "end": 0,
-        "type_name": "b"
+        "type_name": "void"
       },
       "argumentList": [],
       "body": [
         {
-          "type": 39,
-          "typeName": "ExpressionAsStatement",
+          "type": 12,
+          "typeName": "Condition",
           "start": 0,
           "end": 0,
-          "expression": {
-            "type": 37,
-            "typeName": "MemberAccess",
+          "if_branch": {
+            "type": 11,
+            "typeName": "ConditionUnit",
             "start": 0,
             "end": 0,
-            "root": {
-              "type": 37,
-              "typeName": "MemberAccess",
+            "conditionBody": [],
+            "condition": {
+              "type": 5,
+              "typeName": "BinaryOperationExpression",
               "start": 0,
               "end": 0,
-              "root": {
-                "type": 13,
-                "typeName": "CallSignature",
+              "left": {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
                 "start": 0,
                 "end": 0,
-                "callee": {
+                "left": {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "start": 0,
+                  "end": 0,
+                  "left": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "a"
+                  },
+                  "right": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "b"
+                  },
+                  "operator": 9
+                },
+                "right": {
                   "type": 3,
                   "typeName": "Identifier",
                   "start": 0,
                   "end": 0,
-                  "name": "hello"
+                  "name": "c"
                 },
-                "args": []
+                "operator": 10
               },
-              "accessing": {
-                "type": 32,
-                "typeName": "HandleExpressionNode",
+              "right": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "d"
+              },
+              "operator": 9
+            }
+          },
+          "elif_branch": []
+        },
+        {
+          "type": 35,
+          "typeName": "ViewDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "left",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "LinkedList"
+          },
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 36,
+                "typeName": "SizeOfOperator",
                 "start": 0,
                 "end": 0,
                 "expression": {
@@ -58,14 +169,229 @@
                   "typeName": "Identifier",
                   "start": 0,
                   "end": 0,
-                  "name": "ptrval"
-                },
-                "offset": null
+                  "name": "LinkedList"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": 35,
+          "typeName": "ViewDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "right",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "LinkedList"
+          },
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 36,
+                "typeName": "SizeOfOperator",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "LinkedList"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 37,
+              "typeName": "MemberAccess",
+              "start": 0,
+              "end": 0,
+              "root": {
+                "type": 42,
+                "typeName": "ViewExpression",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "left"
+                }
+              },
+              "accessing": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "val"
               }
             },
-            "accessing": {
-              "type": 31,
-              "typeName": "PointerExpressionNode",
+            "right": {
+              "type": 4,
+              "typeName": "Number",
+              "start": 0,
+              "end": 0,
+              "value": "10",
+              "subtypes": 1
+            },
+            "operator": 8
+          }
+        },
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 37,
+              "typeName": "MemberAccess",
+              "start": 0,
+              "end": 0,
+              "root": {
+                "type": 42,
+                "typeName": "ViewExpression",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "right"
+                }
+              },
+              "accessing": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "val"
+              }
+            },
+            "right": {
+              "type": 4,
+              "typeName": "Number",
+              "start": 0,
+              "end": 0,
+              "value": "20",
+              "subtypes": 1
+            },
+            "operator": 8
+          }
+        },
+        {
+          "type": 35,
+          "typeName": "ViewDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "node",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "LinkedList"
+          },
+          "expression": {
+            "type": 13,
+            "typeName": "CallSignature",
+            "start": 0,
+            "end": 0,
+            "callee": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "malloc"
+            },
+            "args": [
+              {
+                "type": 36,
+                "typeName": "SizeOfOperator",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "LinkedList"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 37,
+              "typeName": "MemberAccess",
+              "start": 0,
+              "end": 0,
+              "root": {
+                "type": 42,
+                "typeName": "ViewExpression",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "node"
+                }
+              },
+              "accessing": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "left"
+              }
+            },
+            "right": {
+              "type": 42,
+              "typeName": "ViewExpression",
               "start": 0,
               "end": 0,
               "expression": {
@@ -73,14 +399,91 @@
                 "typeName": "Identifier",
                 "start": 0,
                 "end": 0,
-                "name": "viewva"
+                "name": "left"
+              }
+            },
+            "operator": 8
+          }
+        },
+        {
+          "type": 39,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 37,
+              "typeName": "MemberAccess",
+              "start": 0,
+              "end": 0,
+              "root": {
+                "type": 42,
+                "typeName": "ViewExpression",
+                "start": 0,
+                "end": 0,
+                "expression": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "node"
+                }
               },
-              "offset": null
-            }
+              "accessing": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "right"
+              }
+            },
+            "right": {
+              "type": 42,
+              "typeName": "ViewExpression",
+              "start": 0,
+              "end": 0,
+              "expression": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "right"
+              }
+            },
+            "operator": 8
+          }
+        },
+        {
+          "type": 2,
+          "typeName": "ReturnStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 3,
+            "typeName": "Identifier",
+            "start": 0,
+            "end": 0,
+            "name": "node"
           }
         }
       ]
     }
   ],
-  "importList": []
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "start": 0,
+      "end": 0,
+      "moduleSequence": [
+        "std",
+        "utils",
+        "console"
+      ]
+    }
+  ]
 }

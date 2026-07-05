@@ -1,10 +1,40 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import {
-    DataArrayNode, DataScalarNode,
-    DataSoloNode, DataStructField,
-    DataStructNode, Number, NumberNode
-} from "../ast";
+    Node, NodeType
+} from "../globalAst";
 import { ParseStatement } from "./statements";
+import { Number, NumberNode } from "./expressions/ast";
+import { type TypeNode } from "./types";
+
+export class DataStructNode extends Node {
+    constructor(public name: string, public fields: DataStructField[]) {
+        super( NodeType.DataNode )
+    }
+}
+
+export class DataStructField {
+    constructor( public name: string, public type: TypeNode ) {}
+}
+
+export class DataSoloNode extends Node {
+    constructor( public name: string ) {
+        super( NodeType.DataNode )
+    }
+}
+
+export class DataScalarNode extends Node {
+    constructor( public name: string, public dataType: TypeNode ) {
+        super(NodeType.DataNode);
+    }
+}
+
+export class DataArrayNode extends Node {
+    constructor( public name: string, public dataType: TypeNode, public size: NumberNode ) {
+        super(NodeType.DataNode);
+    }
+}
+
+export type DataNode = DataSoloNode | DataStructNode | DataScalarNode | DataArrayNode;
 
 export class ParseData extends ParseStatement {
 

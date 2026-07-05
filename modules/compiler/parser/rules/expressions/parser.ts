@@ -1,19 +1,15 @@
-import { Token, TokenType } from "../../tokenizer/tokens";
+import { Token, TokenType } from "../../../tokenizer/tokens";
+import { IdentifierNode } from "../statements";
+import { ParserBase } from "../../helper";
 
-import {
-    AddressOfOperator,
-    BinaryOperation, BinaryOperatorNode,
-    CallSignatureNode, HandlExpressionNode, IdentifierNode,
-    MagneticCallChain,
-    MemberAccess,
-    Number, NumberNode,
-    PointerExpressionNode,
-    ReferenceExpressionNode,
-    SizeOfOperator,
-    StringNode, type Expression
-} from "../ast";
-
-import { ParserBase } from "../helper";
+import { 
+    type Expression, Number,
+    NumberNode, StringNode, 
+    PointerExpressionNode, HandlExpressionNode, 
+    SizeOfOperator, AddressOfOperator, 
+    ViewExpression, ReferenceExpressionNode, 
+    CallSignatureNode, MagneticCallChain,BinaryOperation, BinaryOperatorNode, MemberAccess,
+} from './ast'
 
 export class ParseExpressions extends ParserBase {
 
@@ -69,55 +65,55 @@ export class ParseExpressions extends ParserBase {
 
     }
 
-    parseInequalities(): Expression {
-        //@ts-ignore
-        const left = this.parseAdditionSubtraction();
+    // parseInequalities(): Expression {
+    //     //@ts-ignore
+    //     const left = this.parseAdditionSubtraction();
 
-        //@ts-ignore
-        if (left == null) return null;
+    //     //@ts-ignore
+    //     if (left == null) return null;
 
-        //if not, let's see where we can go.
-        let finalExpr = left;
+    //     //if not, let's see where we can go.
+    //     let finalExpr = left;
 
-        const operatorExist = this.peek(1);
-        if (
-            operatorExist?.tokenType == TokenType.LessThan || operatorExist?.tokenType == TokenType.GreaterThan ||
-            operatorExist?.tokenType == TokenType.LessThanEqual || operatorExist?.tokenType == TokenType.GreaterThanEqual
-        ) {
-            this.consume(2)
-            //@ts-ignore
-            let right = this.parseAdditionSubtraction();
+    //     const operatorExist = this.peek(1);
+    //     if (
+    //         operatorExist?.tokenType == TokenType.LessThan || operatorExist?.tokenType == TokenType.GreaterThan ||
+    //         operatorExist?.tokenType == TokenType.LessThanEqual || operatorExist?.tokenType == TokenType.GreaterThanEqual
+    //     ) {
+    //         this.consume(2)
+    //         //@ts-ignore
+    //         let right = this.parseAdditionSubtraction();
 
-            if (right != null) {
+    //         if (right != null) {
 
-                finalExpr = new BinaryOperatorNode(left as Expression, right as Expression,
-                    operatorExist.tokenType == TokenType.LessThan ? BinaryOperation.LessThan :
-                        operatorExist.tokenType == TokenType.GreaterThan ? BinaryOperation.GreaterThan :
-                            operatorExist.tokenType == TokenType.GreaterThanEqual ? BinaryOperation.GreaterThanEqual :
-                                BinaryOperation.LessThanEqual
-                );
+    //             finalExpr = new BinaryOperatorNode(left as Expression, right as Expression,
+    //                 operatorExist.tokenType == TokenType.LessThan ? BinaryOperation.LessThan :
+    //                     operatorExist.tokenType == TokenType.GreaterThan ? BinaryOperation.GreaterThan :
+    //                         operatorExist.tokenType == TokenType.GreaterThanEqual ? BinaryOperation.GreaterThanEqual :
+    //                             BinaryOperation.LessThanEqual
+    //             );
 
-            } else {
+    //         } else {
 
-                //invalid grammar.
-                this.logTokenError(operatorExist, `Unexpected token ${this.getTokenTypeName(operatorExist.tokenType)}. Expected an Expression instead`)
-                process.exit(1)
+    //             //invalid grammar.
+    //             this.logTokenError(operatorExist, `Unexpected token ${this.getTokenTypeName(operatorExist.tokenType)}. Expected an Expression instead`)
+    //             process.exit(1)
 
-            }
+    //         }
 
-        } else {
+    //     } else {
 
-            //this just means we only have 'left' left
-            //@ts-ignore
-            return left;
+    //         //this just means we only have 'left' left
+    //         //@ts-ignore
+    //         return left;
 
-        }
+    //     }
 
-        return finalExpr;
+    //     return finalExpr;
 
-    }
+    // }
 
-    parseLeftAssociativeOperator(support: () => Expression, operators: Map<TokenType, (left: Expression, right: Expression) => Expression>): Expression {
+    parseLeftAssociativeOperator(support: () => Expression, operators: Map<TokenType, (left: Expression, right: Expression) => Expression>, limit: null | number = null): Expression {
 
         const left = support();
 
@@ -126,53 +122,79 @@ export class ParseExpressions extends ParserBase {
         //if not, let's see where we can go.
         let finalExpr: Expression = left;
 
+        //optimize
         const operatorExist = () => this.peek(1) as Token;
-        if (operators.has(operatorExist().tokenType)) {
+        let generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
 
-            let generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
-
+        let count = 0;
+        while (operators.has(operatorExist().tokenType) && (limit == null ? true : count < limit)) {
+            generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
             this.consume(2)
-            //@ts-ignore
+            //while this is true
             let right = support();
 
             if (right != null) {
 
-                finalExpr = generator(left, right);
-
-                while (operators.has(operatorExist().tokenType)) {
-                    generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
-                    this.consume(2)
-                    //while this is true
-                    right = support();
-
-                    if (right != null) {
-
-                        finalExpr = generator(finalExpr, right);
-
-                    } else {
-
-                        this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
-                        process.exit(1)
-
-                    }
-
-                }
+                finalExpr = generator(finalExpr, right);
 
             } else {
 
-                //invalid grammar.
-
-                this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
+                this.logTokenError(this.peek(), `Unexpected token ${this.getTokenTypeName(this.peek().tokenType)}. Expected an Expression instead`)
                 process.exit(1)
 
             }
 
-        } else {
-
-            //this just means we only have 'left' left
-            return left;
-
+            count++;
         }
+
+        // if (operators.has(operatorExist().tokenType)) {
+
+        //     let generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
+
+        //     this.consume(2)
+
+        //     //@ts-ignore
+        //     let right = support();
+        //     //console.log(this.getTokenTypeName(operatorExist().tokenType))
+
+        //     if (right != null) {
+
+        //         finalExpr = generator(left, right);
+
+        //         while (operators.has(operatorExist().tokenType)) {
+        //             generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
+        //             this.consume(2)
+        //             //while this is true
+        //             right = support();
+
+        //             if (right != null) {
+
+        //                 finalExpr = generator(finalExpr, right);
+
+        //             } else {
+
+        //                 this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
+        //                 process.exit(1)
+
+        //             }
+
+        //         }
+
+        //     } else {
+
+        //         //invalid grammar.
+
+        //         this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
+        //         process.exit(1)
+
+        //     }
+
+        // } else {
+
+        //     //this just means we only have 'left' left
+        //     return left;
+
+        // }
 
         return finalExpr;
 
@@ -227,6 +249,44 @@ export class ParseExpressions extends ParserBase {
         )
     }
 
+    parseInequalities(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseAdditionSubtraction(),
+            new Map(
+                [
+                    [TokenType.GreaterThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThan)],
+                    [TokenType.GreaterThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThanEqual)],
+                    [TokenType.LessThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThan)],
+                    [TokenType.LessThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThanEqual)]
+                ]
+            ),
+            1
+        )
+    }
+
+    parseEquality(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseInequalities(),
+            new Map([
+                [TokenType.Compare, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Equals)],
+                [TokenType.NotEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.NotEquals)]
+            ]),
+        );
+    }
+
+    parseAssignment(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseEquality(),
+            new Map(
+                [
+                    [
+                        TokenType.Assignment,
+                        (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Assignment)
+                    ]
+                ]
+            ),
+        );
+    }
 
     //@ts-ignore
     parseAtomicExpression(): Expression {
@@ -310,6 +370,11 @@ export class ParseExpressions extends ParserBase {
                 const $$_expr = this.parseAtomicExpression()
                 return new SizeOfOperator($$_expr)
 
+            case TokenType.DollarSign:
+                this.advance()
+                const $_expr = this.parseAtomicExpression()
+                return new ViewExpression($_expr)
+
             case TokenType.Backtick:
                 //console.log('This one')
                 this.advance()
@@ -324,7 +389,7 @@ export class ParseExpressions extends ParserBase {
 
     //@ts-ignore
     parseExpression(): Expression {
-        return this.parseInequalities()
+        return this.parseAssignment()
     }
 
 }

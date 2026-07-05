@@ -1,6 +1,12 @@
 import { TokenType } from "../../tokenizer/tokens";
-import { AnnotationNode } from "../ast";
+import { Node, NodeType } from "../globalAst";
 import { ParseImports } from "./imports";
+
+export class AnnotationNode extends Node {
+    constructor(public name: string) {
+        super(NodeType.Annotation)
+    }
+}
 
 export class ParseAnnotation extends ParseImports {
 

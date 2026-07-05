@@ -1,10 +1,11 @@
 //imports token types and creates tokens from an input string
 
+import { TokenizeComments } from "./comment";
 import { ProcessStringToken } from "./string";
 import { StringContainer, StringSpan, Token, TokenType } from "./tokens";
 import 'bun'
 
-export class Tokenizer extends ProcessStringToken {
+export class Tokenizer extends TokenizeComments {
 
     constructor(source: string) {
         super(new StringContainer(source), source)
@@ -251,8 +252,27 @@ export class Tokenizer extends ProcessStringToken {
 
                     //we will add nuances when adding comments
                     if (char == "/") {
-                        this.soloCharacter(TokenType.Divide)
+
+                        const next = this.peek()
+                        if (next == "/") {
+
+                            //this is basically start of comment
+                            this.presentState = TokenType.ScanningState
+                            this.processInlineComment()
+
+                        } else if ( next == '*' )  {
+                            this.presentState = TokenType.ScanningState
+                            this.processInplaceComment()
+                        }
+                        
+                        else {
+
+                            this.soloCharacter(TokenType.Divide)
+
+                        }
+
                         continue;
+
                     }
 
                     if (char == '@') {
