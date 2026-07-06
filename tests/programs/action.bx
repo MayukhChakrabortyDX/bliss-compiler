@@ -1,0 +1,9 @@
+action Itemize {
+    
+    fx run(): void;
+    fx main(): limit;
+    fx itemize(): [item];
+    fx doesSomething(): `i32;
+    fx doesSomethingElse(Item::Leftenant maker with (Doable)): Item::Rightanent;
+
+}

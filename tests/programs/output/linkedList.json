@@ -7,8 +7,8 @@
     {
       "type": 19,
       "typeName": "DataNode",
-      "start": 0,
-      "end": 0,
+      "start": 24,
+      "end": 99,
       "name": "LinkedList",
       "fields": [
         {
@@ -56,10 +56,56 @@
       ]
     },
     {
+      "type": 19,
+      "typeName": "DataNode",
+      "start": 102,
+      "end": 111,
+      "name": "Solo"
+    },
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "start": 113,
+      "end": 130,
+      "name": "Maximum",
+      "dataType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "i32"
+      }
+    },
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "start": 132,
+      "end": 170,
+      "name": "Lucrative",
+      "dataType": {
+        "type": 16,
+        "typeName": "CompositeType",
+        "start": 0,
+        "end": 0,
+        "dataName": "Itemze",
+        "attachedBindings": [
+          "Solvable"
+        ]
+      },
+      "size": {
+        "type": 4,
+        "typeName": "Number",
+        "start": 0,
+        "end": 0,
+        "value": "58",
+        "subtypes": 1
+      }
+    },
+    {
       "type": 1,
       "typeName": "FunctionDefinition",
-      "start": 0,
-      "end": 0,
+      "start": 173,
+      "end": 460,
       "name": "main",
       "returnType": {
         "type": 15,
@@ -71,7 +117,7 @@
       "argumentList": [],
       "body": [
         {
-          "type": 35,
+          "type": 34,
           "typeName": "ViewDeclNode",
           "start": 0,
           "end": 0,
@@ -97,8 +143,8 @@
             },
             "args": [
               {
-                "type": 36,
-                "typeName": "SizeOfOperator",
+                "type": 43,
+                "typeName": "UnaryOperation",
                 "start": 0,
                 "end": 0,
                 "expression": {
@@ -107,13 +153,14 @@
                   "start": 0,
                   "end": 0,
                   "name": "LinkedList"
-                }
+                },
+                "operator": 1
               }
             ]
           }
         },
         {
-          "type": 43,
+          "type": 40,
           "typeName": "PointerDeclNode",
           "start": 0,
           "end": 0,
@@ -139,8 +186,8 @@
             },
             "args": [
               {
-                "type": 36,
-                "typeName": "SizeOfOperator",
+                "type": 43,
+                "typeName": "UnaryOperation",
                 "start": 0,
                 "end": 0,
                 "expression": {
@@ -149,7 +196,8 @@
                   "start": 0,
                   "end": 0,
                   "name": "LinkedList"
-                }
+                },
+                "operator": 1
               }
             ]
           }
@@ -176,7 +224,7 @@
           }
         },
         {
-          "type": 39,
+          "type": 36,
           "typeName": "ExpressionAsStatement",
           "start": 0,
           "end": 0,
@@ -186,12 +234,12 @@
             "start": 0,
             "end": 0,
             "left": {
-              "type": 37,
-              "typeName": "MemberAccess",
+              "type": 5,
+              "typeName": "BinaryOperationExpression",
               "start": 0,
               "end": 0,
-              "root": {
-                "type": 42,
+              "left": {
+                "type": 39,
                 "typeName": "ViewExpression",
                 "start": 0,
                 "end": 0,
@@ -203,8 +251,8 @@
                   "name": "root"
                 }
               },
-              "accessing": {
-                "type": 42,
+              "right": {
+                "type": 39,
                 "typeName": "ViewExpression",
                 "start": 0,
                 "end": 0,
@@ -215,10 +263,11 @@
                   "end": 0,
                   "name": "left"
                 }
-              }
+              },
+              "operator": 12
             },
             "right": {
-              "type": 42,
+              "type": 39,
               "typeName": "ViewExpression",
               "start": 0,
               "end": 0,

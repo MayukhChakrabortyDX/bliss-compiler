@@ -170,13 +170,13 @@ export class ParseFunction extends ParseArguments {
 
         //expect a type
         let returnType = this.parseType()
-
-        //body to be worked out.
         return new FunctionDefinitionNode(name, returnType, argumentList)
+
     }
 
     parseFunctionDefinition() {
 
+        const finish = this.start()
         const head = this.parseFunctionHead(); head.body = []
         this.shouldBe(TokenType.LBracket)
 
@@ -187,16 +187,16 @@ export class ParseFunction extends ParseArguments {
 
         this.shouldBe(TokenType.RBracket)
 
-        return head
+        return finish(head)
 
     }
 
     parseReducedFunction() {
 
+        const finish = this.start()
         const parseHead = this.parseFunctionHead()
         this.shouldBe(TokenType.Semicolon)
-
-        return parseHead
+        return finish(parseHead, -1)
     }
 
 }

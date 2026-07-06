@@ -13,6 +13,7 @@ export class ParseBinds extends ParseAction {
 
     parseBinding() {
 
+        const finish = this.start()
         this.shouldBe(TokenType.K_Bind)
 
         let variableName: string = this.digest(TokenType.Identifier)
@@ -64,7 +65,7 @@ export class ParseBinds extends ParseAction {
 
         this.shouldBe(TokenType.RBracket)
 
-        return new BindingNode(variableName, bindedAs, actionNames, functionBody)
+        return finish(new BindingNode(variableName, bindedAs, actionNames, functionBody))
 
     }
 

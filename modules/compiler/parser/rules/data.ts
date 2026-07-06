@@ -114,22 +114,27 @@ export class ParseData extends ParseStatement {
 
     parseData() {
 
+        const finish = this.start()
+        let node: Node;
+
         const _token = (this.peek(2) as Token).tokenType
         if (_token == TokenType.Semicolon) {
             //this is what we will handle right now
-            return this.parseDataSoloDecl()
+            node = this.parseDataSoloDecl()
 
         } else if (_token == TokenType.LSquareBrace) {
-            return this.parseDataArrayDecl()
+            node = this.parseDataArrayDecl()
         }
 
         else if (_token == TokenType.LBrace) {
-            return this.parseDataScalarNodeDecl()
+            node = this.parseDataScalarNodeDecl()
         }
 
         else {
-            return this.parseDataStructDecl()
+            node = this.parseDataStructDecl()
         }
+
+        return finish(node, -1)
 
     }
 

@@ -2,116 +2,17 @@ import { Token, TokenType } from "../../../tokenizer/tokens";
 import { IdentifierNode } from "../statements";
 import { ParserBase } from "../../helper";
 
-import { 
+import {
     type Expression, Number,
-    NumberNode, StringNode, 
-    PointerExpressionNode, HandlExpressionNode, 
-    SizeOfOperator, AddressOfOperator, 
-    ViewExpression, ReferenceExpressionNode, 
-    CallSignatureNode, MagneticCallChain,BinaryOperation, BinaryOperatorNode, MemberAccess,
+    NumberNode, StringNode,
+    PointerExpressionNode, HandlExpressionNode,
+    ViewExpression, ReferenceExpressionNode,
+    CallSignatureNode, BinaryOperation, BinaryOperatorNode,
+    UnaryOperation,
+    UnaryOperatorNode,
 } from './ast'
 
 export class ParseExpressions extends ParserBase {
-
-    parseCallSignature(): Expression {
-
-        let identifierName = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-            const _thisToken = this.peek(0) as Token
-            identifierName = this.source.str.substring(_thisToken.span.startIndex, _thisToken.span.endIndex + 1)
-            this.advance()
-        })
-        this.expect(this.peek(0) as Token, TokenType.LBrace, () => this.advance())
-
-        let argumentList: Expression[] = []
-
-        if ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
-
-
-            let expr = this.parseExpression()
-            if (expr != null) {
-
-                argumentList.push(expr)
-                this.advance()
-                while ((this.peek(0) as Token).tokenType == TokenType.Comma) {
-
-                    this.advance()
-
-                    let __expr = this.parseExpression()
-                    if (__expr != null) {
-
-                        argumentList.push(__expr)
-                        this.advance()
-
-                    } else {
-
-                        let _v = this.peek()
-                        this.logTokenError(_v, `Unexpected token ${this.getTokenTypeName(_v.tokenType)}. Expected an expression instead`)
-                        process.exit(1)
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        this.expect(this.peek(0) as Token, TokenType.RBrace, () => {
-            //this.advance()
-        })
-
-        return new CallSignatureNode(new IdentifierNode(identifierName), argumentList)
-
-    }
-
-    // parseInequalities(): Expression {
-    //     //@ts-ignore
-    //     const left = this.parseAdditionSubtraction();
-
-    //     //@ts-ignore
-    //     if (left == null) return null;
-
-    //     //if not, let's see where we can go.
-    //     let finalExpr = left;
-
-    //     const operatorExist = this.peek(1);
-    //     if (
-    //         operatorExist?.tokenType == TokenType.LessThan || operatorExist?.tokenType == TokenType.GreaterThan ||
-    //         operatorExist?.tokenType == TokenType.LessThanEqual || operatorExist?.tokenType == TokenType.GreaterThanEqual
-    //     ) {
-    //         this.consume(2)
-    //         //@ts-ignore
-    //         let right = this.parseAdditionSubtraction();
-
-    //         if (right != null) {
-
-    //             finalExpr = new BinaryOperatorNode(left as Expression, right as Expression,
-    //                 operatorExist.tokenType == TokenType.LessThan ? BinaryOperation.LessThan :
-    //                     operatorExist.tokenType == TokenType.GreaterThan ? BinaryOperation.GreaterThan :
-    //                         operatorExist.tokenType == TokenType.GreaterThanEqual ? BinaryOperation.GreaterThanEqual :
-    //                             BinaryOperation.LessThanEqual
-    //             );
-
-    //         } else {
-
-    //             //invalid grammar.
-    //             this.logTokenError(operatorExist, `Unexpected token ${this.getTokenTypeName(operatorExist.tokenType)}. Expected an Expression instead`)
-    //             process.exit(1)
-
-    //         }
-
-    //     } else {
-
-    //         //this just means we only have 'left' left
-    //         //@ts-ignore
-    //         return left;
-
-    //     }
-
-    //     return finalExpr;
-
-    // }
 
     parseLeftAssociativeOperator(support: () => Expression, operators: Map<TokenType, (left: Expression, right: Expression) => Expression>, limit: null | number = null): Expression {
 
@@ -200,95 +101,6 @@ export class ParseExpressions extends ParserBase {
 
     }
 
-    parseMagneticAccess(): Expression {
-
-        return this.parseLeftAssociativeOperator(
-            () => this.parseAtomicExpression(),
-            new Map(
-                [[
-                    TokenType.ArrowRight,
-                    (left, right) => new MagneticCallChain(left, right)
-                ]]
-            ),
-        );
-
-    }
-
-    parseMemberAccess(): Expression {
-
-        return this.parseLeftAssociativeOperator(
-            () => this.parseMagneticAccess(),
-            new Map([[TokenType.Dot,
-            (left, right) => new MemberAccess(left, right)]]),
-        );
-
-    }
-
-    parseMultiplicationDivision(): Expression {
-        return this.parseLeftAssociativeOperator(
-            () => this.parseMemberAccess(),
-            new Map(
-                [
-                    [TokenType.Divide, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Divide)],
-                    [TokenType.Multiply, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Multiply)]
-                ]
-            ),
-        )
-    }
-
-    //@ts-ignore
-    parseAdditionSubtraction(): Expression {
-        return this.parseLeftAssociativeOperator(
-            () => this.parseMultiplicationDivision(),
-            new Map(
-                [
-                    [TokenType.Add, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Add)],
-                    [TokenType.Minus, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Subtract)]
-                ]
-            )
-        )
-    }
-
-    parseInequalities(): Expression {
-        return this.parseLeftAssociativeOperator(
-            () => this.parseAdditionSubtraction(),
-            new Map(
-                [
-                    [TokenType.GreaterThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThan)],
-                    [TokenType.GreaterThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThanEqual)],
-                    [TokenType.LessThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThan)],
-                    [TokenType.LessThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThanEqual)]
-                ]
-            ),
-            1
-        )
-    }
-
-    parseEquality(): Expression {
-        return this.parseLeftAssociativeOperator(
-            () => this.parseInequalities(),
-            new Map([
-                [TokenType.Compare, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Equals)],
-                [TokenType.NotEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.NotEquals)]
-            ]),
-        );
-    }
-
-    parseAssignment(): Expression {
-        return this.parseLeftAssociativeOperator(
-            () => this.parseEquality(),
-            new Map(
-                [
-                    [
-                        TokenType.Assignment,
-                        (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Assignment)
-                    ]
-                ]
-            ),
-        );
-    }
-
-    //@ts-ignore
     parseAtomicExpression(): Expression {
         const token = this.peek(0)
         switch (token?.tokenType) {
@@ -363,12 +175,12 @@ export class ParseExpressions extends ParserBase {
             case TokenType.K_Adrs:
                 this.advance()
                 const $__expr = this.parseAtomicExpression()
-                return new AddressOfOperator($__expr)
+                return new UnaryOperatorNode($__expr, UnaryOperation.AddressOf)
 
             case TokenType.K_Sizeof:
                 this.advance()
                 const $$_expr = this.parseAtomicExpression()
-                return new SizeOfOperator($$_expr)
+                return new UnaryOperatorNode($$_expr, UnaryOperation.SizeOf)
 
             case TokenType.DollarSign:
                 this.advance()
@@ -387,7 +199,145 @@ export class ParseExpressions extends ParserBase {
         }
     }
 
-    //@ts-ignore
+    parseCallSignature(): Expression {
+
+        let identifierName = ""
+        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
+            const _thisToken = this.peek(0) as Token
+            identifierName = this.source.str.substring(_thisToken.span.startIndex, _thisToken.span.endIndex + 1)
+            this.advance()
+        })
+        this.expect(this.peek(0) as Token, TokenType.LBrace, () => this.advance())
+
+        let argumentList: Expression[] = []
+
+        if ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
+
+
+            let expr = this.parseExpression()
+            if (expr != null) {
+
+                argumentList.push(expr)
+                this.advance()
+                while ((this.peek(0) as Token).tokenType == TokenType.Comma) {
+
+                    this.advance()
+
+                    let __expr = this.parseExpression()
+                    if (__expr != null) {
+
+                        argumentList.push(__expr)
+                        this.advance()
+
+                    } else {
+
+                        let _v = this.peek()
+                        this.logTokenError(_v, `Unexpected token ${this.getTokenTypeName(_v.tokenType)}. Expected an expression instead`)
+                        process.exit(1)
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        this.expect(this.peek(0) as Token, TokenType.RBrace, () => {
+            //this.advance()
+        })
+
+        return new CallSignatureNode(new IdentifierNode(identifierName), argumentList)
+
+    }
+
+    parseMagneticAccess(): Expression {
+
+        return this.parseLeftAssociativeOperator(
+            () => this.parseAtomicExpression(),
+            new Map(
+                [[
+                    TokenType.ArrowRight,
+                    (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.MagneticCall)
+                ]]
+            ),
+        );
+
+    }
+
+    parseMemberAccess(): Expression {
+
+        return this.parseLeftAssociativeOperator(
+            () => this.parseMagneticAccess(),
+            new Map([[TokenType.Dot,
+            (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.MemberAccess)]]),
+        );
+
+    }
+
+    parseMultiplicationDivision(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseMemberAccess(),
+            new Map(
+                [
+                    [TokenType.Divide, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Divide)],
+                    [TokenType.Multiply, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Multiply)]
+                ]
+            ),
+        )
+    }
+
+    parseAdditionSubtraction(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseMultiplicationDivision(),
+            new Map(
+                [
+                    [TokenType.Add, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Add)],
+                    [TokenType.Minus, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Subtract)]
+                ]
+            )
+        )
+    }
+
+    parseInequalities(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseAdditionSubtraction(),
+            new Map(
+                [
+                    [TokenType.GreaterThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThan)],
+                    [TokenType.GreaterThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThanEqual)],
+                    [TokenType.LessThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThan)],
+                    [TokenType.LessThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThanEqual)]
+                ]
+            ),
+            1
+        )
+    }
+
+    parseEquality(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseInequalities(),
+            new Map([
+                [TokenType.Compare, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Equals)],
+                [TokenType.NotEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.NotEquals)]
+            ]),
+        );
+    }
+
+    parseAssignment(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseEquality(),
+            new Map(
+                [
+                    [
+                        TokenType.Assignment,
+                        (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.Assignment)
+                    ]
+                ]
+            ),
+        );
+    }
+
     parseExpression(): Expression {
         return this.parseAssignment()
     }

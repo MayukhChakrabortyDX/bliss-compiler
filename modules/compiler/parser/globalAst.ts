@@ -14,9 +14,10 @@ export enum NodeType {
     DataAndActionBasedArgument, Annotation,
     ViewStatement, HandlePointer, Pointer, Reference, ViewPointer,
     PointerExpressionNode, HandleExpressionNode, ReferenceExpressionNode,
-    AddressOfOperator, ViewDeclNode, SizeOfOperator, MemberAccess, MemberAccessNode,
+    ViewDeclNode, MemberAccessNode,
     ExpressionAsStatement, MagneticCallChain, AliasStatement, ViewExpression,
-    PointerDeclNode, TransformStatement,TransformDeclNode
+    PointerDeclNode, TransformStatement,TransformDeclNode, UnaryOperation,
+    DataFieldNode
 }
 
 export class Node {

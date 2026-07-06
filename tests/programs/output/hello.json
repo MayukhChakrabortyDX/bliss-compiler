@@ -7,8 +7,8 @@
     {
       "type": 1,
       "typeName": "FunctionDefinition",
-      "start": 0,
-      "end": 0,
+      "start": 24,
+      "end": 73,
       "name": "main",
       "returnType": {
         "type": 15,
@@ -20,7 +20,7 @@
       "argumentList": [],
       "body": [
         {
-          "type": 39,
+          "type": 36,
           "typeName": "ExpressionAsStatement",
           "start": 0,
           "end": 0,

@@ -1,6 +1,7 @@
 import type { Diagnostic } from "typescript";
 import { Log, log } from "../../logger";
-import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
+import { StringSpan, TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
+import type { Node } from "./globalAst";
 
 //this consists of the base helpers and the fundamental values
 export class ParserBase {
@@ -10,9 +11,10 @@ export class ParserBase {
 
     diagnostics: Diagnostic[] = []
     tokenIndex: number = 0;
+
     constructor(public tokenStream: Token[], public source: StringContainer) { }
 
-    private resolveSpan(start: number): { line: string; lineNum: number; caretPad: string } {
+    resolveSpan(start: number): { line: string; lineNum: number; caretPad: string } {
         const upToStart = this.source.str.substring(0, start);
         const lineNum = upToStart.split("\n").length - 1;
         const lastNL = upToStart.lastIndexOf("\n");
@@ -50,25 +52,6 @@ export class ParserBase {
         return TokenType[tokenType]
     }
 
-    // expectTill(maximum: number, expected: TokenType) {
-
-    //     let isFound = false;
-    //     let ctr = 0;
-
-    //     while(ctr <= maximum) {
-
-    //         if ( (this.peek(ctr) as Token).tokenType == expected ) {
-    //             return true
-    //         }
-
-    //         ctr++;
-
-    //     }
-
-    //     return isFound
-
-    // }
-
     //@ts-ignore
     peek(amount: number = 0): Token {
         //tells us what is at that
@@ -80,9 +63,9 @@ export class ParserBase {
 
     consume(tokens: number) {
         //consume this many tokens
-        if (this.tokenIndex + tokens > this.tokenStream.length) {
-            log(Log.Error, "PARSER", "Internal Error - Token Consumption Failed", "The parser tried to consume tokens from outside the token range")
-        }
+        // if (this.tokenIndex + tokens > this.tokenStream.length) {
+        //     log(Log.Error, "PARSER", "Internal Error - Token Consumption Failed", "The parser tried to consume tokens from outside the token range")
+        // }
         this.tokenIndex += tokens; //increase this much
     }
 
@@ -136,4 +119,18 @@ export class ParserBase {
         //a smaller version that's used a LOT
         this.expect(this.peek(0) as Token, expected, () => this.advance())
     }
+
+    start() {
+        const start = this.peek().span.startIndex;
+
+        return <T extends Node>(node: T, offset: number = 0): T => {
+            node.start = start;
+            node.end = this.peek(offset).span.endIndex;
+            
+            console.log( `[${this.source.str.substring( node.start, node.end + 1 )}]` )
+
+            return node;
+        };
+    }
+
 }

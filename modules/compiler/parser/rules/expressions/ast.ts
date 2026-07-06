@@ -36,28 +36,6 @@ export class ReferenceExpressionNode extends Node {
 
 }
 
-export class SizeOfOperator extends Node {
-
-    constructor(public expression: Expression) {
-        super(NodeType.SizeOfOperator)
-    }
-
-}
-
-export class MemberAccess extends Node {
-
-    constructor(public root: Expression, public accessing: Expression) {
-        super(NodeType.MemberAccess)
-    }
-
-}
-
-export class MagneticCallChain extends Node {
-    constructor(public argument: Expression, public callee: Expression) {
-        super(NodeType.MagneticCallChain)
-    }
-}
-
 export class ViewExpression extends Node {
     constructor(public expression: Expression) {
         super(NodeType.ViewExpression)        
@@ -78,18 +56,18 @@ export class CallSignatureNode extends Node {
     }
 }
 
-export class AddressOfOperator extends Node {
+export enum BinaryOperation {
+    //arithmetic
+    Multiply, Divide, Add, Subtract,
+    //expresion based
+    GreaterThan, LessThan, GreaterThanEqual, LessThanEqual, Assignment,
+    Equals, NotEquals,
 
-    constructor( public expression: Expression ) {
-        super(NodeType.AddressOfOperator)
-    }
-
+    MagneticCall, MemberAccess,
 }
 
-export enum BinaryOperation {
-    Multiply, Divide, Add, Subtract,
-    GreaterThan, LessThan, GreaterThanEqual, LessThanEqual, Assignment,
-    Equals, NotEquals
+export enum UnaryOperation {
+    AddressOf, SizeOf
 }
 
 export class BinaryOperatorNode extends Node {
@@ -99,4 +77,16 @@ export class BinaryOperatorNode extends Node {
 
 }
 
-export type Expression = ViewExpression | MagneticCallChain | MemberAccess | ExpressionAsStatement | AddressOfOperator | SizeOfOperator | IdentifierNode | NumberNode| PointerExpressionNode | HandlExpressionNode | ReferenceExpressionNode | StringNode | BinaryOperatorNode | CallSignatureNode | null;
+export class UnaryOperatorNode extends Node {
+    constructor( public expression: Expression, public operator: UnaryOperation ) {
+        super(NodeType.UnaryOperation)
+    }
+}   
+
+export type Expression = 
+    ViewExpression | ExpressionAsStatement | 
+    UnaryOperatorNode | IdentifierNode | 
+    NumberNode| PointerExpressionNode | 
+    HandlExpressionNode | ReferenceExpressionNode | 
+    StringNode | BinaryOperatorNode | 
+    CallSignatureNode | null;

@@ -6,6 +6,10 @@ data LinkedList {
     i32 val;
 }
 
+data Solo;
+data Maximum(i32);
+data Lucrative[Itemze::(Solvable), 58];
+
 fx main(): i32 {
 
     //this is one valid approach

@@ -1,0 +1,80 @@
+
+--- Running action.bx ---
+[fx run(): void;]
+[fx main(): limit;]
+[fx itemize(): [item];]
+[fx doesSomething(): `i32;]
+[fx doesSomethingElse(Item::Leftenant maker with (Doable)): Item::Rightanent;]
+[action Itemize {
+    
+    fx run(): void;
+    fx main(): limit;
+    fx itemize(): [item];
+    fx doesSomething(): `i32;
+    fx doesSomethingElse(Item::Leftenant maker with (Doable)): Item::Rightanent;
+
+}]
+
+=== action ===
+--> written to tests\programs\output\action.json
+
+--- Running binding.bx ---
+
+=== binding ===
+--> written to tests\programs\output\binding.json
+
+--- Running hello.bx ---
+[fx main(): void {
+
+    println("Hello World");
+
+}]
+
+=== hello ===
+--> written to tests\programs\output\hello.json
+
+--- Running linkedList.bx ---
+[data LinkedList {
+    $LinkedList next;
+    $LinkedList prev;
+    i32 val;
+}]
+[data Solo;]
+[data Maximum(i32);]
+[data Lucrative[Itemze::(Solvable), 58];]
+[fx main(): i32 {
+
+    //this is one valid approach
+    view root: LinkedList = malloc(sizeof LinkedList);
+
+    ptr leftPtr: u8 = malloc(sizeof LinkedList);
+    view leftPtr as left: LinkedList; //another valid approach
+
+    $root.$left = $left; //takes it from the view
+
+    return 0;
+
+}]
+
+=== linkedList ===
+--> written to tests\programs\output\linkedList.json
+
+--- Running userAlloc.bx ---
+[fx main(): void {
+
+    transform A: i64 = malloc((sizeof u8) * 8); //case a where we are transforming this to a 64 bit data
+    transform malloc(sizeof u32) to byteArray: u8; //this is basically transformation of the pointer types.
+
+}]
+
+=== userAlloc ===
+--> written to tests\programs\output\userAlloc.json
+
+=== Summary ===
+PASS  action.bx
+PASS  binding.bx
+PASS  hello.bx
+PASS  linkedList.bx
+PASS  userAlloc.bx
+
+5/5 succeeded

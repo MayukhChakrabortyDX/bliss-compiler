@@ -14,6 +14,7 @@ export class ParseAction extends ParseFunction {
 
     parseAction() {
 
+        const finish = this.start()
         this.shouldBe(TokenType.K_Action)
         let variableName: string = this.digest(TokenType.Identifier)
 
@@ -29,7 +30,7 @@ export class ParseAction extends ParseFunction {
 
         this.shouldBe(TokenType.RBracket)
 
-        return new ActionNode(variableName, body)
+        return finish(new ActionNode(variableName, body))
 
     }
 

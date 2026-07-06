@@ -12,8 +12,9 @@ export class ParseAnnotation extends ParseImports {
 
     parseAnnotation() {
 
+        const finish = this.start()
         this.shouldBe(TokenType.AtSymbol)
-        return new AnnotationNode(this.digest(TokenType.Identifier))
+        return finish(new AnnotationNode(this.digest(TokenType.Identifier)))
 
     }
 

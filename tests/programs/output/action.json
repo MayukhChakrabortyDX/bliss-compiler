@@ -1,0 +1,129 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "body": [
+    {
+      "type": 20,
+      "typeName": "ActionNode",
+      "start": 0,
+      "end": 203,
+      "name": "Itemize",
+      "functions": [
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 26,
+          "end": 40,
+          "name": "run",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "void"
+          },
+          "argumentList": []
+        },
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 46,
+          "end": 62,
+          "name": "main",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "limit"
+          },
+          "argumentList": []
+        },
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 68,
+          "end": 88,
+          "name": "itemize",
+          "returnType": {
+            "type": 28,
+            "typeName": "Pointer",
+            "start": 0,
+            "end": 0,
+            "value": {
+              "type": 15,
+              "typeName": "ScalarType",
+              "start": 0,
+              "end": 0,
+              "type_name": "item"
+            }
+          },
+          "argumentList": []
+        },
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 94,
+          "end": 118,
+          "name": "doesSomething",
+          "returnType": {
+            "type": 29,
+            "typeName": "Reference",
+            "start": 0,
+            "end": 0,
+            "value": {
+              "type": 15,
+              "typeName": "ScalarType",
+              "start": 0,
+              "end": 0,
+              "type_name": "i32"
+            }
+          },
+          "argumentList": []
+        },
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 124,
+          "end": 199,
+          "name": "doesSomethingElse",
+          "returnType": {
+            "type": 16,
+            "typeName": "CompositeType",
+            "start": 0,
+            "end": 0,
+            "dataName": "Item",
+            "attachedBindings": [
+              "Rightanent"
+            ]
+          },
+          "argumentList": [
+            {
+              "type": 24,
+              "typeName": "DataAndActionBasedArgument",
+              "start": 0,
+              "end": 0,
+              "argumentName": "maker",
+              "actionList": [
+                "Doable"
+              ],
+              "dataType": {
+                "type": 16,
+                "typeName": "CompositeType",
+                "start": 0,
+                "end": 0,
+                "dataName": "Item",
+                "attachedBindings": [
+                  "Leftenant"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "importList": []
+}
