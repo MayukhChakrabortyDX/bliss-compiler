@@ -101,6 +101,59 @@ export class ParseExpressions extends ParserBase {
 
     }
 
+    parseCallSignature(): Expression {
+
+        let identifierName = ""
+        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
+            const _thisToken = this.peek(0) as Token
+            identifierName = this.source.str.substring(_thisToken.span.startIndex, _thisToken.span.endIndex + 1)
+            this.advance()
+        })
+
+        this.expect(this.peek(0) as Token, TokenType.LBrace, () => this.advance())
+
+        let argumentList: Expression[] = []
+
+        if ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
+
+
+            let expr = this.parseExpression()
+            if (expr != null) {
+
+                argumentList.push(expr)
+                this.advance()
+                while ((this.peek(0) as Token).tokenType == TokenType.Comma) {
+
+                    this.advance()
+
+                    let __expr = this.parseExpression()
+                    if (__expr != null) {
+
+                        argumentList.push(__expr)
+                        this.advance()
+
+                    } else {
+
+                        let _v = this.peek()
+                        this.logTokenError(_v, `Unexpected token ${this.getTokenTypeName(_v.tokenType)}. Expected an expression instead`)
+                        process.exit(1)
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        this.expect(this.peek(0) as Token, TokenType.RBrace, () => {
+            //this.advance()
+        })
+
+        return new CallSignatureNode(new IdentifierNode(identifierName), argumentList)
+
+    }
+
     parseAtomicExpression(): Expression {
         const token = this.peek(0)
         switch (token?.tokenType) {
@@ -199,62 +252,29 @@ export class ParseExpressions extends ParserBase {
         }
     }
 
-    parseCallSignature(): Expression {
+    parseCLSignature(): Expression {
 
-        let identifierName = ""
-        this.expect(this.peek(0) as Token, TokenType.Identifier, () => {
-            const _thisToken = this.peek(0) as Token
-            identifierName = this.source.str.substring(_thisToken.span.startIndex, _thisToken.span.endIndex + 1)
-            this.advance()
-        })
-        this.expect(this.peek(0) as Token, TokenType.LBrace, () => this.advance())
+        
 
-        let argumentList: Expression[] = []
+    }
 
-        if ((this.peek(0) as Token).tokenType != TokenType.RBrace) {
-
-
-            let expr = this.parseExpression()
-            if (expr != null) {
-
-                argumentList.push(expr)
-                this.advance()
-                while ((this.peek(0) as Token).tokenType == TokenType.Comma) {
-
-                    this.advance()
-
-                    let __expr = this.parseExpression()
-                    if (__expr != null) {
-
-                        argumentList.push(__expr)
-                        this.advance()
-
-                    } else {
-
-                        let _v = this.peek()
-                        this.logTokenError(_v, `Unexpected token ${this.getTokenTypeName(_v.tokenType)}. Expected an expression instead`)
-                        process.exit(1)
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        this.expect(this.peek(0) as Token, TokenType.RBrace, () => {
-            //this.advance()
-        })
-
-        return new CallSignatureNode(new IdentifierNode(identifierName), argumentList)
-
+    parseBindingAccess(): Expression {
+        return this.parseLeftAssociativeOperator(
+            () => this.parseAtomicExpression(),
+            new Map(
+                [[
+                    TokenType.DoubleColon,
+                    (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.BindingAccess)
+                ]]
+            ),
+            1
+        );
     }
 
     parseMagneticAccess(): Expression {
 
         return this.parseLeftAssociativeOperator(
-            () => this.parseAtomicExpression(),
+            () => this.parseBindingAccess(),
             new Map(
                 [[
                     TokenType.ArrowRight,

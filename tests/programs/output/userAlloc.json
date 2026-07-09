@@ -8,7 +8,7 @@
       "type": 1,
       "typeName": "FunctionDefinition",
       "start": 24,
-      "end": 258,
+      "end": 302,
       "name": "main",
       "returnType": {
         "type": 15,
@@ -107,6 +107,77 @@
             "end": 0,
             "type_name": "u8"
           }
+        },
+        {
+          "type": 17,
+          "typeName": "VariableDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "x",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "text"
+          },
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 5,
+              "typeName": "BinaryOperationExpression",
+              "start": 0,
+              "end": 0,
+              "left": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "User"
+              },
+              "right": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "Macro"
+              },
+              "operator": 13
+            },
+            "right": {
+              "type": 5,
+              "typeName": "BinaryOperationExpression",
+              "start": 0,
+              "end": 0,
+              "left": {
+                "type": 3,
+                "typeName": "Identifier",
+                "start": 0,
+                "end": 0,
+                "name": "hello"
+              },
+              "right": {
+                "type": 13,
+                "typeName": "CallSignature",
+                "start": 0,
+                "end": 0,
+                "callee": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "X"
+                },
+                "args": []
+              },
+              "operator": 13
+            },
+            "operator": 12
+          },
+          "isUnsafe": false
         }
       ]
     }
@@ -118,9 +189,15 @@
       "start": 0,
       "end": 0,
       "moduleSequence": [
-        "std",
-        "mem",
-        "malloc"
+        [
+          "std"
+        ],
+        [
+          "mem"
+        ],
+        [
+          "malloc"
+        ]
       ]
     }
   ]

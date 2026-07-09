@@ -3,13 +3,13 @@ import { Node, NodeType } from "../globalAst";
 import { ParseBinds } from "./binding";
 
 export class ImportNode extends Node {
-    constructor( public moduleSequence: string[] ) {
+    constructor( public moduleSequence: string[][] ) {
         super(NodeType.Import)
     }
 }
 
 export class UsingNode extends Node {
-    constructor( public moduleSequence: string[] ) {
+    constructor( public moduleSequence: string[][] ) {
         super(NodeType.Using)
     }
 }
@@ -18,19 +18,39 @@ export class ParseImports extends ParseBinds {
 
     parseImportSequence() {
         
-        let moduleSequence: string[] = []
+        let moduleSequence: string[][] = []
 
         moduleSequence.push(
-            this.digest(TokenType.Identifier)
+            [this.digest(TokenType.Identifier)]
         )
 
-        while ((this.peek(0) as Token).tokenType == TokenType.Dot) {
+        while (this.peek().tokenType == TokenType.Dot) {
 
             this.advance()
 
-            moduleSequence.push(
-                this.digest(TokenType.Identifier)
-            )
+            if ( this.peek().tokenType == TokenType.LBrace ) {
+                this.advance()
+                //start the sub-module level scan
+                let subModules: string[] = []
+                //there must be atleast one module
+                subModules.push(this.digest(TokenType.Identifier))
+
+                while(this.peek().tokenType != TokenType.RBrace) {
+
+                    this.shouldBe(TokenType.Comma)
+                    subModules.push(this.digest(TokenType.Identifier))
+
+                }
+
+                this.shouldBe(TokenType.RBrace)
+                moduleSequence.push(subModules)
+
+            } else {
+
+                moduleSequence.push(
+                    [this.digest(TokenType.Identifier)]
+                )
+            }
 
         }
 
@@ -52,6 +72,5 @@ export class ParseImports extends ParseBinds {
         return new UsingNode(this.parseImportSequence())
 
     }
-
 
 }

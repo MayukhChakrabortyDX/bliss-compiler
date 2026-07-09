@@ -63,7 +63,7 @@ export enum BinaryOperation {
     GreaterThan, LessThan, GreaterThanEqual, LessThanEqual, Assignment,
     Equals, NotEquals,
 
-    MagneticCall, MemberAccess,
+    MagneticCall, MemberAccess, BindingAccess
 }
 
 export enum UnaryOperation {
