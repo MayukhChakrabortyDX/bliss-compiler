@@ -8,7 +8,7 @@
       "type": 1,
       "typeName": "FunctionDefinition",
       "start": 24,
-      "end": 302,
+      "end": 324,
       "name": "main",
       "returnType": {
         "type": 15,
@@ -33,42 +33,51 @@
             "type_name": "i64"
           },
           "expression": {
-            "type": 13,
-            "typeName": "CallSignature",
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
-            "callee": {
+            "left": {
               "type": 3,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "malloc"
             },
-            "args": [
-              {
-                "type": 5,
-                "typeName": "BinaryOperationExpression",
-                "start": 0,
-                "end": 0,
-                "left": {
-                  "type": 43,
-                  "typeName": "UnaryOperation",
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
-                  "expression": null,
-                  "operator": 1
-                },
-                "right": {
-                  "type": 4,
-                  "typeName": "Number",
-                  "start": 0,
-                  "end": 0,
-                  "value": "8",
-                  "subtypes": 1
-                },
-                "operator": 0
-              }
-            ]
+                  "left": {
+                    "type": 43,
+                    "typeName": "UnaryOperation",
+                    "start": 0,
+                    "end": 0,
+                    "expression": null,
+                    "operator": 1
+                  },
+                  "right": {
+                    "type": 4,
+                    "typeName": "Number",
+                    "start": 0,
+                    "end": 0,
+                    "value": "8",
+                    "subtypes": 1
+                  },
+                  "operator": 0,
+                  "operatorName": "Multiply"
+                }
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
           }
         },
         {
@@ -77,27 +86,35 @@
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 13,
-            "typeName": "CallSignature",
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
-            "callee": {
+            "left": {
               "type": 3,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "malloc"
             },
-            "args": [
-              {
-                "type": 43,
-                "typeName": "UnaryOperation",
-                "start": 0,
-                "end": 0,
-                "expression": null,
-                "operator": 1
-              }
-            ]
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 43,
+                  "typeName": "UnaryOperation",
+                  "start": 0,
+                  "end": 0,
+                  "expression": null,
+                  "operator": 1
+                }
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
           },
           "identifier": "byteArray",
           "transformTo": {
@@ -139,13 +156,22 @@
                 "name": "User"
               },
               "right": {
-                "type": 3,
-                "typeName": "Identifier",
+                "type": 13,
+                "typeName": "CallSignature",
                 "start": 0,
                 "end": 0,
-                "name": "Macro"
+                "args": [
+                  {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "Itemize"
+                  }
+                ]
               },
-              "operator": 13
+              "operator": 13,
+              "operatorName": "BindingAccess"
             },
             "right": {
               "type": 5,
@@ -153,29 +179,69 @@
               "start": 0,
               "end": 0,
               "left": {
-                "type": 3,
-                "typeName": "Identifier",
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
                 "start": 0,
                 "end": 0,
-                "name": "hello"
-              },
-              "right": {
-                "type": 13,
-                "typeName": "CallSignature",
-                "start": 0,
-                "end": 0,
-                "callee": {
+                "left": {
                   "type": 3,
                   "typeName": "Identifier",
                   "start": 0,
                   "end": 0,
-                  "name": "X"
+                  "name": "hello"
                 },
-                "args": []
+                "right": {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "start": 0,
+                  "end": 0,
+                  "left": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "X"
+                  },
+                  "right": {
+                    "type": 13,
+                    "typeName": "CallSignature",
+                    "start": 0,
+                    "end": 0,
+                    "args": []
+                  },
+                  "operator": 14,
+                  "operatorName": "CallSignature"
+                },
+                "operator": 13,
+                "operatorName": "BindingAccess"
               },
-              "operator": 13
+              "right": {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
+                "start": 0,
+                "end": 0,
+                "left": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "itemize"
+                },
+                "right": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "start": 0,
+                  "end": 0,
+                  "args": []
+                },
+                "operator": 14,
+                "operatorName": "CallSignature"
+              },
+              "operator": 11,
+              "operatorName": "MagneticCall"
             },
-            "operator": 12
+            "operator": 12,
+            "operatorName": "MemberAccess"
           },
           "isUnsafe": false
         }

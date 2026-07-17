@@ -1,0 +1,19 @@
+//let's say I have a circular linked list
+
+data LinkedList {
+
+    [LinkedList] left;
+    [LinkedList] right;
+    i32 value;
+
+}
+
+fx main(): void {
+
+    transform root: LinkedList = malloc(sizeof LinkedList);
+    transform root_left: LinkedList = malloc(sizeof LinkedList);
+    [root].[left] = [root_left];
+
+    //since root_left is unused, the compiler optimizes it towards a single allocation in C anyways
+
+}

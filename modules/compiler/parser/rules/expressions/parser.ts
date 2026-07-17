@@ -10,6 +10,7 @@ import {
     CallSignatureNode, BinaryOperation, BinaryOperatorNode,
     UnaryOperation,
     UnaryOperatorNode,
+    CallSignature,
 } from './ast'
 
 export class ParseExpressions extends ParserBase {
@@ -47,55 +48,6 @@ export class ParseExpressions extends ParserBase {
 
             count++;
         }
-
-        // if (operators.has(operatorExist().tokenType)) {
-
-        //     let generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
-
-        //     this.consume(2)
-
-        //     //@ts-ignore
-        //     let right = support();
-        //     //console.log(this.getTokenTypeName(operatorExist().tokenType))
-
-        //     if (right != null) {
-
-        //         finalExpr = generator(left, right);
-
-        //         while (operators.has(operatorExist().tokenType)) {
-        //             generator = (operators.get(operatorExist().tokenType) as (left: Expression, right: Expression) => Expression)
-        //             this.consume(2)
-        //             //while this is true
-        //             right = support();
-
-        //             if (right != null) {
-
-        //                 finalExpr = generator(finalExpr, right);
-
-        //             } else {
-
-        //                 this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
-        //                 process.exit(1)
-
-        //             }
-
-        //         }
-
-        //     } else {
-
-        //         //invalid grammar.
-
-        //         this.logTokenError(operatorExist(), `Unexpected token ${this.getTokenTypeName(operatorExist().tokenType)}. Expected an Expression instead`)
-        //         process.exit(1)
-
-        //     }
-
-        // } else {
-
-        //     //this just means we only have 'left' left
-        //     return left;
-
-        // }
 
         return finalExpr;
 
@@ -158,9 +110,6 @@ export class ParseExpressions extends ParserBase {
         const token = this.peek(0)
         switch (token?.tokenType) {
             case TokenType.Identifier:
-                if ((this.peek(1) as Token).tokenType == TokenType.LBrace) {
-                    return this.parseCallSignature()
-                }
                 return new IdentifierNode(
                     this.source.str.substring(token.span.startIndex, token.span.endIndex + 1)
                 )
@@ -179,13 +128,47 @@ export class ParseExpressions extends ParserBase {
                     token.span
                 )
             case TokenType.LBrace:
+
                 this.advance()
                 //@ts-ignore
-                const expr = this.parseExpression();
+                let expr = this.parseExpression();
                 //console.log([ this.source.str.substring( this.peek(0)?.span.startIndex, this.peek(0)?.span.endIndex + 1 ) ])
                 //@ts-ignore
-                this.expect(this.peek(1), TokenType.RBrace, () => this.advance())
+
+                if (this.peek(1).tokenType == TokenType.Comma) {
+                    this.consume(2)
+                    //then capture
+                    let argumentList: Expression[] = [];
+
+                    while (this.peek().tokenType != TokenType.RBrace) {
+
+                        let val = this.parseExpression()
+                        this.advance()
+
+                        if (val != null) {
+                            argumentList.push(val)
+                        } else {
+
+                            this.logTokenError(this.peek(), `Unexpected token ${this.getTokenTypeName(this.peek().tokenType)}. Expected an Expression instead`)
+                            process.exit(1)
+                        }
+
+                        if (this.peek().tokenType != TokenType.RBrace) {
+                            this.shouldBe(TokenType.Comma)
+                        }
+
+                    }
+
+                    expr = new CallSignature(argumentList)
+
+                } else {
+
+                    this.expect(this.peek(1), TokenType.RBrace, () => this.advance())
+                
+                }
+
                 return expr
+
             case TokenType.LSquareBrace:
                 this.advance()
                 let offset = null
@@ -254,13 +237,46 @@ export class ParseExpressions extends ParserBase {
 
     parseCLSignature(): Expression {
 
-        
+        const left = this.parseAtomicExpression()
+        if (left == null) return null;
+
+        let finalExpr: Expression = left;
+
+        const operatorExist = () => this.peek(1) as Token;
+
+        if (operatorExist().tokenType == TokenType.LBrace) {
+            //we process
+            this.consume(2)
+            let argumentList: Expression[] = []
+
+            while (this.peek().tokenType != TokenType.RBrace) {
+
+                let right = this.parseExpression()
+                this.advance()
+                if (right != null) {
+                    argumentList.push(right)
+                } else {
+                    this.logTokenError(this.peek(), `Unexpected token ${this.getTokenTypeName(this.peek().tokenType)}. Expected an Expression instead`)
+                    process.exit(1)
+                }
+
+                if (this.peek().tokenType != TokenType.RBrace) {
+                    this.shouldBe(TokenType.Comma)
+                }
+
+            }
+
+            finalExpr = new BinaryOperatorNode(finalExpr, new CallSignature(argumentList), BinaryOperation.CallSignature)
+
+        }
+
+        return finalExpr
 
     }
 
     parseBindingAccess(): Expression {
         return this.parseLeftAssociativeOperator(
-            () => this.parseAtomicExpression(),
+            () => this.parseCLSignature(),
             new Map(
                 [[
                     TokenType.DoubleColon,

@@ -82,7 +82,7 @@ export class Tokenizer extends TokenizeComments {
                     const char = this.source.charAt(this.span_end);
                     const codePoint = char.charCodeAt(0);
 
-                    if ((65 <= codePoint && codePoint <= 90) || (97 <= codePoint && codePoint <= 122)) {
+                    if ((65 <= codePoint && codePoint <= 90) || (97 <= codePoint && codePoint <= 122) || char == "_") {
 
                         //this is a english character.
                         //possbile cases - scanning was already being done, and we are adding a new scan.

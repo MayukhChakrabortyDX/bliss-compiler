@@ -1,0 +1,615 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "body": [
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 95,
+      "end": 270,
+      "name": "naivePrint",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "void"
+      },
+      "argumentList": [
+        {
+          "type": 22,
+          "typeName": "TypeBasedArgument",
+          "start": 0,
+          "end": 0,
+          "typeInfo": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "String"
+          },
+          "argumentName": "str"
+        }
+      ],
+      "body": [
+        {
+          "type": 17,
+          "typeName": "VariableDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "buffer",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "String"
+          },
+          "expression": {
+            "type": 3,
+            "typeName": "Identifier",
+            "start": 0,
+            "end": 0,
+            "name": "str"
+          },
+          "isUnsafe": true
+        },
+        {
+          "type": 36,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "write"
+            },
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 4,
+                  "typeName": "Number",
+                  "start": 0,
+                  "end": 0,
+                  "value": "1",
+                  "subtypes": 1
+                },
+                {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "start": 0,
+                  "end": 0,
+                  "left": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "buffer"
+                  },
+                  "right": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "rawStr"
+                  },
+                  "operator": 12,
+                  "operatorName": "MemberAccess"
+                },
+                {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "start": 0,
+                  "end": 0,
+                  "left": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "buffer"
+                  },
+                  "right": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "len"
+                  },
+                  "operator": 12,
+                  "operatorName": "MemberAccess"
+                }
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
+          }
+        }
+      ]
+    },
+    {
+      "type": 20,
+      "typeName": "ActionNode",
+      "start": 265,
+      "end": 315,
+      "name": "Printable",
+      "functions": [
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 288,
+          "end": 309,
+          "name": "toString",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "String"
+          },
+          "argumentList": []
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 314,
+      "end": 393,
+      "name": "print",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "void"
+      },
+      "argumentList": [
+        {
+          "type": 23,
+          "typeName": "ActionBasedArgument",
+          "start": 0,
+          "end": 0,
+          "argumentName": "str",
+          "actionList": [
+            "Printable"
+          ]
+        }
+      ],
+      "body": [
+        {
+          "type": 36,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "naivePrint"
+            },
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "start": 0,
+                  "end": 0,
+                  "left": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "str"
+                  },
+                  "right": {
+                    "type": 5,
+                    "typeName": "BinaryOperationExpression",
+                    "start": 0,
+                    "end": 0,
+                    "left": {
+                      "type": 3,
+                      "typeName": "Identifier",
+                      "start": 0,
+                      "end": 0,
+                      "name": "toString"
+                    },
+                    "right": {
+                      "type": 13,
+                      "typeName": "CallSignature",
+                      "start": 0,
+                      "end": 0,
+                      "args": []
+                    },
+                    "operator": 14,
+                    "operatorName": "CallSignature"
+                  },
+                  "operator": 12,
+                  "operatorName": "MemberAccess"
+                }
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
+          }
+        }
+      ]
+    },
+    {
+      "type": 19,
+      "typeName": "DataNode",
+      "start": 390,
+      "end": 434,
+      "name": "User",
+      "fields": [
+        {
+          "name": "name",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "String"
+          }
+        },
+        {
+          "name": "age",
+          "type": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "i32"
+          }
+        }
+      ]
+    },
+    {
+      "type": 21,
+      "typeName": "BindingNode",
+      "start": 437,
+      "end": 582,
+      "dataName": "User",
+      "bindingName": "PrintableUser",
+      "actionNames": [
+        "Printable"
+      ],
+      "functionDefinitions": [
+        {
+          "type": 1,
+          "typeName": "FunctionDefinition",
+          "start": 486,
+          "end": 578,
+          "name": "toString",
+          "returnType": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "String"
+          },
+          "argumentList": [
+            {
+              "type": 22,
+              "typeName": "TypeBasedArgument",
+              "start": 0,
+              "end": 0,
+              "typeInfo": {
+                "type": 15,
+                "typeName": "ScalarType",
+                "start": 0,
+                "end": 0,
+                "type_name": "User"
+              },
+              "argumentName": "this"
+            }
+          ],
+          "body": [
+            {
+              "type": 2,
+              "typeName": "ReturnStatement",
+              "start": 0,
+              "end": 0,
+              "expression": {
+                "type": 5,
+                "typeName": "BinaryOperationExpression",
+                "start": 0,
+                "end": 0,
+                "left": {
+                  "type": 3,
+                  "typeName": "Identifier",
+                  "start": 0,
+                  "end": 0,
+                  "name": "join"
+                },
+                "right": {
+                  "type": 13,
+                  "typeName": "CallSignature",
+                  "start": 0,
+                  "end": 0,
+                  "args": [
+                    {
+                      "type": 5,
+                      "typeName": "BinaryOperationExpression",
+                      "start": 0,
+                      "end": 0,
+                      "left": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "start": 0,
+                        "end": 0,
+                        "name": "name"
+                      },
+                      "right": {
+                        "type": 5,
+                        "typeName": "BinaryOperationExpression",
+                        "start": 0,
+                        "end": 0,
+                        "left": {
+                          "type": 3,
+                          "typeName": "Identifier",
+                          "start": 0,
+                          "end": 0,
+                          "name": "toStr"
+                        },
+                        "right": {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "start": 0,
+                          "end": 0,
+                          "args": []
+                        },
+                        "operator": 14,
+                        "operatorName": "CallSignature"
+                      },
+                      "operator": 11,
+                      "operatorName": "MagneticCall"
+                    },
+                    {
+                      "type": 5,
+                      "typeName": "BinaryOperationExpression",
+                      "start": 0,
+                      "end": 0,
+                      "left": {
+                        "type": 3,
+                        "typeName": "Identifier",
+                        "start": 0,
+                        "end": 0,
+                        "name": "age"
+                      },
+                      "right": {
+                        "type": 5,
+                        "typeName": "BinaryOperationExpression",
+                        "start": 0,
+                        "end": 0,
+                        "left": {
+                          "type": 3,
+                          "typeName": "Identifier",
+                          "start": 0,
+                          "end": 0,
+                          "name": "toStr"
+                        },
+                        "right": {
+                          "type": 13,
+                          "typeName": "CallSignature",
+                          "start": 0,
+                          "end": 0,
+                          "args": []
+                        },
+                        "operator": 14,
+                        "operatorName": "CallSignature"
+                      },
+                      "operator": 11,
+                      "operatorName": "MagneticCall"
+                    }
+                  ]
+                },
+                "operator": 14,
+                "operatorName": "CallSignature"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": 1,
+      "typeName": "FunctionDefinition",
+      "start": 581,
+      "end": 719,
+      "name": "main",
+      "returnType": {
+        "type": 15,
+        "typeName": "ScalarType",
+        "start": 0,
+        "end": 0,
+        "type_name": "i32"
+      },
+      "argumentList": [],
+      "body": [
+        {
+          "type": 17,
+          "typeName": "VariableDeclNode",
+          "start": 0,
+          "end": 0,
+          "name": "user",
+          "type_of_variable": {
+            "type": 15,
+            "typeName": "ScalarType",
+            "start": 0,
+            "end": 0,
+            "type_name": "User"
+          },
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "User"
+            },
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 8,
+                  "typeName": "String",
+                  "start": 0,
+                  "end": 0,
+                  "span": {
+                    "startIndex": 626,
+                    "endIndex": 631,
+                    "str": "<ref ProgramString>"
+                  }
+                },
+                {
+                  "type": 4,
+                  "typeName": "Number",
+                  "start": 0,
+                  "end": 0,
+                  "value": "21",
+                  "subtypes": 1
+                }
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
+          },
+          "isUnsafe": false
+        },
+        {
+          "type": 36,
+          "typeName": "ExpressionAsStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
+            "start": 0,
+            "end": 0,
+            "left": {
+              "type": 3,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "name": "print"
+            },
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 5,
+                  "typeName": "BinaryOperationExpression",
+                  "start": 0,
+                  "end": 0,
+                  "left": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "user"
+                  },
+                  "right": {
+                    "type": 3,
+                    "typeName": "Identifier",
+                    "start": 0,
+                    "end": 0,
+                    "name": "PrintableUser"
+                  },
+                  "operator": 13,
+                  "operatorName": "BindingAccess"
+                }
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
+          }
+        },
+        {
+          "type": 2,
+          "typeName": "ReturnStatement",
+          "start": 0,
+          "end": 0,
+          "expression": {
+            "type": 4,
+            "typeName": "Number",
+            "start": 0,
+            "end": 0,
+            "value": "0",
+            "subtypes": 1
+          }
+        }
+      ]
+    }
+  ],
+  "importList": [
+    {
+      "type": 6,
+      "typeName": "Import",
+      "start": 0,
+      "end": 0,
+      "moduleSequence": [
+        [
+          "std"
+        ],
+        [
+          "syscall"
+        ],
+        [
+          "write"
+        ]
+      ]
+    },
+    {
+      "type": 6,
+      "typeName": "Import",
+      "start": 0,
+      "end": 0,
+      "moduleSequence": [
+        [
+          "std"
+        ],
+        [
+          "types"
+        ],
+        [
+          "String",
+          "join",
+          "toStr"
+        ]
+      ]
+    }
+  ]
+}

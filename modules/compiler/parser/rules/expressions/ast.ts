@@ -3,7 +3,7 @@ import { StringSpan } from "../../../tokenizer/tokens"
 import { IdentifierNode, ExpressionAsStatement } from "../statements"
 
 export class StringNode extends Node {
-    constructor( public span: StringSpan) {
+    constructor(public span: StringSpan) {
         super(NodeType.String)
     }
 }
@@ -14,7 +14,7 @@ export enum Number {
 
 export class NumberNode extends Node {
 
-    constructor( public value: string, public subtypes: Number.Real | Number.Integer ) {
+    constructor(public value: string, public subtypes: Number.Real | Number.Integer) {
         super(NodeType.Number)
     }
 
@@ -30,7 +30,7 @@ export class PointerExpressionNode extends Node {
 
 export class ReferenceExpressionNode extends Node {
 
-    constructor( public expression: Expression ) {
+    constructor(public expression: Expression) {
         super(NodeType.ReferenceExpressionNode)
     }
 
@@ -38,7 +38,7 @@ export class ReferenceExpressionNode extends Node {
 
 export class ViewExpression extends Node {
     constructor(public expression: Expression) {
-        super(NodeType.ViewExpression)        
+        super(NodeType.ViewExpression)
     }
 }
 
@@ -56,6 +56,12 @@ export class CallSignatureNode extends Node {
     }
 }
 
+export class CallSignature extends Node {
+    constructor(public args: Expression[]) {
+        super(NodeType.CallSignature)
+    }
+}
+
 export enum BinaryOperation {
     //arithmetic
     Multiply, Divide, Add, Subtract,
@@ -63,7 +69,7 @@ export enum BinaryOperation {
     GreaterThan, LessThan, GreaterThanEqual, LessThanEqual, Assignment,
     Equals, NotEquals,
 
-    MagneticCall, MemberAccess, BindingAccess
+    MagneticCall, MemberAccess, BindingAccess, CallSignature
 }
 
 export enum UnaryOperation {
@@ -71,22 +77,28 @@ export enum UnaryOperation {
 }
 
 export class BinaryOperatorNode extends Node {
-    constructor( public left: Expression, public right: Expression, public operator: BinaryOperation ) {
+    constructor(public left: Expression, public right: Expression, public operator: BinaryOperation) {
         super(NodeType.BinaryOperationExpression)
+    }
+
+    toJSON() {
+        return {
+            ...this, operatorName: BinaryOperation[ this.operator ]
+        }
     }
 
 }
 
 export class UnaryOperatorNode extends Node {
-    constructor( public expression: Expression, public operator: UnaryOperation ) {
+    constructor(public expression: Expression, public operator: UnaryOperation) {
         super(NodeType.UnaryOperation)
     }
-}   
+}
 
-export type Expression = 
-    ViewExpression | ExpressionAsStatement | 
-    UnaryOperatorNode | IdentifierNode | 
-    NumberNode| PointerExpressionNode | 
-    HandlExpressionNode | ReferenceExpressionNode | 
-    StringNode | BinaryOperatorNode | 
+export type Expression = CallSignature |
+    ViewExpression | ExpressionAsStatement |
+    UnaryOperatorNode | IdentifierNode |
+    NumberNode | PointerExpressionNode |
+    HandlExpressionNode | ReferenceExpressionNode |
+    StringNode | BinaryOperatorNode |
     CallSignatureNode | null;

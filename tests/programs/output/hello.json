@@ -25,30 +25,38 @@
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 13,
-            "typeName": "CallSignature",
+            "type": 5,
+            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
-            "callee": {
+            "left": {
               "type": 3,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "println"
             },
-            "args": [
-              {
-                "type": 8,
-                "typeName": "String",
-                "start": 0,
-                "end": 0,
-                "span": {
-                  "startIndex": 56,
-                  "endIndex": 66,
-                  "str": "<ref ProgramString>"
+            "right": {
+              "type": 13,
+              "typeName": "CallSignature",
+              "start": 0,
+              "end": 0,
+              "args": [
+                {
+                  "type": 8,
+                  "typeName": "String",
+                  "start": 0,
+                  "end": 0,
+                  "span": {
+                    "startIndex": 56,
+                    "endIndex": 66,
+                    "str": "<ref ProgramString>"
+                  }
                 }
-              }
-            ]
+              ]
+            },
+            "operator": 14,
+            "operatorName": "CallSignature"
           }
         }
       ]

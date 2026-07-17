@@ -1,0 +1,46 @@
+import std.syscall.write;
+import std.types.(String, join, toStr);
+
+//this only prints a string
+fx naivePrint(String str): void {
+
+    //gets a copy of the string.
+    unsafe let buffer: String = str; //copies the string
+    write(1, buffer.rawStr, buffer.len);
+
+}
+
+action Printable {
+    fx toString(): String;
+}
+
+fx print(str with Printable): void {
+
+    naivePrint( str.toString() );
+
+}
+
+data User {
+
+    String name;
+    i32 age;
+
+}
+
+bind User with Printable as PrintableUser {
+
+    fx toString(User this): String {
+
+        return join(name->toStr(), age->toStr());
+
+    }
+
+}
+
+fx main(): i32 {
+
+    let user: User = User("Mayukh", 21);
+    print(user::PrintableUser); //because user itself is data.
+    return 0;
+
+}

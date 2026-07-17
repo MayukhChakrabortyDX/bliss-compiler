@@ -49,6 +49,7 @@ export enum TokenType {
     K_i8, K_i16, K_i32, K_i64,
     K_f32, K_f64, //that's it for now
 
+    Underscore,
     ScanningState, //this means when we are starting to scan basically
     Identifier,
     Integer,

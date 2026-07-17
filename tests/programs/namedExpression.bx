@@ -1,0 +1,7 @@
+import UILib;
+
+fx main(): void {
+
+    let x: UILib = UILib(name="Mayukh Chakraborty", age=21);
+
+}
