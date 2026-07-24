@@ -1,0 +1,7 @@
+//modifiers are basically keywords and annotations
+//used before nodes/structures to denote some additional
+//information about the said node / structure
+
+//for now, our modifiers are simply keywords as seen here
+
+MODIFIER -> "unsafe" | "trans" | "ptr" | "volatile";

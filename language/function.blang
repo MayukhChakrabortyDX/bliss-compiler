@@ -1,0 +1,19 @@
+ACTION -> 'with' (
+    '(' @IDENTIFIER (',' @IDENTIFIER)* ')' //list of identifiers
+    | @IDENTIFIER //or a single name
+);
+
+//refer languages/type
+TYPED -> type.TYPE @IDENTIFIER;
+
+COMPOSITE -> TYPED ACTION;
+
+ARGS -> TYPED | @IDENTIFIER ACTION | COMPOSITE;
+
+//refer languages/type
+HEAD -> "fx" @IDENTIFIER "(" ARGS*[separated_by ','] ")" ':' type.TYPE;
+
+//refer languages/node, languages/structures
+BODY -> "{" (structures.STRUCTURE | node.NODE ';') "}";
+
+FUNCTION -> HEAD BODY;

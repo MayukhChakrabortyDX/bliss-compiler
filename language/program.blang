@@ -1,0 +1,4 @@
+PROGRAM -> 
+    (module.IMPORT | module.USING)* 
+    (function.FUNCTION | daop.DAOP)*
+;

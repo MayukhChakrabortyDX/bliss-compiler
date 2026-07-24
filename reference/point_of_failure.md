@@ -1,389 +1,450 @@
-# Bliss Point of Failure (POF) Specification
-**Version:** 2.0 Draft
+# Point of Failure (POF)
+## High Precision Tracking Runtime
+
+> **Point of Failure (POF)** is Bliss's semantic observability system for manual memory management. Rather than attempting to prohibit unsafe programs, POF tracks ownership, semantic dependencies, and programmer assumptions throughout execution. It allows developers to consciously acknowledge risks while preserving a complete audit trail of memory-related decisions.
 
 ---
 
-# 1. Introduction
+# Design Philosophy
 
-Point of Failure (POF) is Bliss's semantic verification system.
+Bliss does **not** attempt to eliminate manual memory management.
 
-Unlike traditional memory safety systems, POF does **not** attempt to prove that a program is free of memory errors.
+Instead, it embraces three principles:
 
-Instead, POF identifies operations that invalidate assumptions about memory and requires those assumptions to become explicit and reviewable.
+1. Heap memory is explicitly managed.
+2. Stack values never escape lexical scope.
+3. Every ownership assumption should be observable.
 
-The goal of POF is **accountability**, not restriction.
-
----
-
-# 2. Design Philosophy
-
-POF is based on one simple observation.
-
-> Most memory bugs originate from incorrect assumptions rather than incorrect syntax.
-
-Traditional languages allow these assumptions to remain implicit.
-
-Bliss records them.
-
-POF therefore answers a different question than a borrow checker.
-
-Instead of asking
-
-> "Is this program legal?"
-
-it asks
-
-> "What assumptions does this operation require?"
-
-If those assumptions cannot be automatically justified, the programmer acknowledges them explicitly.
+This allows Bliss to preserve the flexibility of C while providing significantly higher insight into potential memory failures.
 
 ---
 
-# 3. What POF Is Not
+# What POF Is Not
 
-POF is **not**
+POF is **not**:
 
-- a garbage collector
-- a borrow checker
-- a theorem prover
-- a static memory safety proof
-- an ownership type system
+- A garbage collector.
+- A borrow checker.
+- A lifetime inference engine.
+- A formal proof system.
+- A runtime sanitizer.
 
-Programs are never rejected simply because they perform manual memory management.
+POF does **not** guarantee memory safety.
 
-Instead, POF records where engineering judgement becomes necessary.
-
----
-
-# 4. Semantic State Analysis
-
-POF operates after semantic analysis.
-
-The parser and semantic analyzer first resolve
-
-- types
-- symbols
-- member access
-- ownership kinds
-- function calls
-
-Once the program has been semantically resolved, POF performs an additional analysis.
-
-Rather than executing the program's values, POF symbolically executes its **ownership state**.
+Instead, it continuously records semantic ownership relationships and potential failure points so that every dangerous assumption becomes visible and reviewable.
 
 ---
 
-# 5. Semantic Events
+# Core Language Assumptions
 
-POF recognizes a very small number of semantic events.
+POF relies on two fundamental language guarantees.
+
+## Stack Values Never Escape
+
+A value allocated on the stack may never escape its lexical scope.
+
+```bliss
+fx bad(): `String {
+    let s: String = {};
+    return `s;
+}
+```
+
+The compiler rejects this during semantic analysis.
+
+This guarantee completely eliminates dangling references to stack storage without requiring explicit lifetime annotations.
+
+---
+
+## Heap Lifetime Is Explicit
+
+Heap allocations are not tied to lexical scope.
+
+```bliss
+transform text: String = malloc(sizeof String);
+```
+
+The allocation remains valid until ownership explicitly releases it.
+
+Leaving a scope destroys only the local binding—not the underlying allocation.
+
+---
+
+# POF Model
+
+POF tracks two independent but connected graphs.
+
+---
+
+# 1. Ownership State Graph
+
+The ownership graph tracks the lifecycle of every heap allocation.
+
+Example:
+
+```
+Allocation
+
+↓
+
+Transform
+
+↓
+
+Take
+
+↓
+
+Free
+```
+
+Every ownership operation updates this graph.
+
+---
+
+# 2. Semantic Dependency Graph
+
+The dependency graph records how values become semantically related.
+
+Example:
+
+```bliss
+result = longer(a, b);
+```
+
+The compiler records:
+
+```
+result
+
+↓
+
+depends on
+
+↓
+
+{a, b}
+```
+
+This relationship exists regardless of which value is returned at runtime.
+
+---
+
+# Why Dependencies Matter
+
+Suppose:
+
+```bliss
+result = longer(outer, inner);
+```
+
+Later:
+
+```bliss
+free(inner);
+```
+
+POF knows:
+
+```
+outer ─┐
+        │
+        ▼
+     longer()
+        │
+        ▼
+     result
+        ▲
+        │
+inner ──┘
+```
+
+Therefore any ownership event involving `inner` may also affect `result`.
+
+This allows POF to explain *why* a potential failure exists rather than merely reporting one.
+
+---
+
+# Semantic Events
+
+POF records semantic events instead of simply observing instructions.
+
+---
 
 ## Read
 
+Reading memory.
+
+Example:
+
 ```bliss
-let value = *ptr;
+[value]->length();
 ```
-
-Reads do not invalidate assumptions.
-
-No POF event occurs.
 
 ---
 
 ## Write
 
+Writing to memory.
+
+Example:
+
 ```bliss
-[node].left = child;
+[value]->length = 5;
 ```
-
-Writes modify program state.
-
-POF records writes because they may change future assumptions.
 
 ---
 
 ## Transform
 
-```bliss
-ack transform node: Node =
-    malloc(sizeof Node);
-```
-
-Transforms reinterpret memory.
-
-Since reinterpretation changes the semantic meaning of memory, every transform participates in POF.
-
----
-
-## Ownership Capture
-
-```bliss
-take memory;
-```
-
-Ownership transfers to the current function.
-
-This establishes a new ownership state and becomes a Point of Failure event.
-
----
-
-# 6. Ownership State
-
-POF maintains an abstract ownership graph throughout analysis.
-
-For example,
-
-```bliss
-transform root: Node = malloc(...);
-transform left: Node = malloc(...);
-
-[root].left = left;
-```
-
-produces an abstract state similar to
-
-```
-root
-└── left
-```
-
-The graph is symbolic.
-
-It does not represent runtime values.
-
-Instead, it represents ownership relationships known during compilation.
-
----
-
-# 7. State Transitions
-
-Every semantic event updates the ownership graph.
-
-For example,
-
-```bliss
-free([root].[left]);
-```
-
-internally performs
-
-```bliss
-take left;
-```
-
-The graph becomes
-
-```
-root
-└── left (captured)
-```
-
-Subsequent operations that depend upon the previous state may require acknowledgement.
-
----
-
-# 8. Assumption Boundaries
-
-Consider
-
-```bliss
-free([root].[left]);
-
-free([root].[right]);
-```
-
-The second operation depends on traversing `root`.
-
-However, `root` has already experienced an ownership transition through one of its members.
-
-POF therefore reports that the operation depends on assumptions which can no longer be automatically justified.
-
-The programmer may
-
-- restructure the code
-- explicitly acknowledge the assumption
-
-The language itself imposes no restriction.
-
----
-
-# 9. Acknowledgements
-
-Acknowledgements document engineering judgement.
-
-For example,
-
-```bliss
-ack;
-
-free([root].[right]);
-```
-
-indicates
-
-> The programmer understands that previous ownership transitions affect this operation and intentionally accepts responsibility.
-
-Acknowledgements do not silence errors by hiding them.
-
-They record responsibility.
-
----
-
-# 10. Linear Ownership
-
-POF naturally rewards APIs that consume old ownership and return new ownership.
+Ownership changes.
 
 Example:
 
 ```bliss
-root = free(root, root.left);
+transform text: String = malloc(sizeof String);
 ```
-
-Instead of partially modifying an existing ownership graph, the function
-
-- captures ownership
-- performs its work
-- returns a new ownership state
-
-The caller continues using the returned object.
-
-Since previous assumptions are no longer relied upon, no acknowledgement is required.
-
-This style minimizes Point of Failure interactions while remaining entirely optional.
 
 ---
 
-# 11. Freedom of Expression
+## Take
 
-POF never removes expressive power from the language.
+Ownership is transferred.
 
-Programs that are possible in C remain possible in Bliss.
-
-For example,
+Example:
 
 ```bliss
-free([root].[left]);
-free([root].[right]);
+take node;
 ```
 
-is legal Bliss.
+---
 
-The compiler simply records that the second operation depends upon assumptions introduced by the first.
+## Free
 
-The programmer remains in control.
+Ownership is explicitly released.
+
+Example:
+
+```bliss
+free(node);
+```
 
 ---
 
-# 12. Accountability
+## Dependency
 
-The purpose of POF is accountability.
+A new semantic dependency is introduced.
 
-It records
+Examples:
 
-- ownership transitions
-- reinterpretation of memory
-- assumption boundaries
+```bliss
+let y = x;
+```
 
-rather than attempting to automatically determine correctness.
-
-Engineering judgement remains with the programmer.
-
-POF ensures that judgement becomes
-
-- explicit
-- reviewable
-- auditable
+```
+y ← x
+```
 
 ---
 
-# 13. Interoperability
+```bliss
+let c = a + b;
+```
 
-POF does not interfere with interoperability.
-
-Bliss is designed to remain ABI-compatible with C.
-
-Whether compiled through
-
-- C
-- LLVM
-- another backend
-
-the language preserves C interoperability.
-
-Manual memory management remains available.
-
-Foreign libraries remain usable.
-
-Existing projects may migrate incrementally.
-
-POF operates entirely at the Bliss semantic level and introduces no runtime overhead.
+```
+c ← {a, b}
+```
 
 ---
 
-# 14. Design Principles
+```bliss
+result = longer(a, b);
+```
 
-Point of Failure follows six guiding principles.
-
-## Explicit Assumptions
-
-Assumptions should never remain invisible.
-
----
-
-## Minimal Semantic Model
-
-POF reasons about a small number of semantic events rather than a large collection of language constructs.
+```
+result ← {a, b}
+```
 
 ---
 
-## Accountability over Restriction
+```bliss
+return x;
+```
 
-POF records engineering decisions.
+```
+return ← x
+```
 
-It does not replace them.
-
----
-
-## Zero Runtime Cost
-
-POF exists entirely during compilation.
-
-No runtime metadata or runtime verifier is required.
+Dependency creation allows ownership events to propagate through the semantic graph.
 
 ---
 
-## Backend Independence
+## Acknowledgement
 
-POF analyzes Bliss semantics.
+The programmer explicitly accepts responsibility for a semantic assumption.
 
-Its behavior is independent of the compiler backend.
+Example:
+
+```bliss
+ack result;
+```
+
+Acknowledgements never remove semantic information.
+
+They only record that the programmer has consciously reviewed and accepted a particular assumption.
 
 ---
 
-## Incremental Adoption
+# Dependency Propagation
 
-Existing C projects should be able to adopt Bliss gradually.
+Whenever an ownership event occurs, POF propagates that event through the dependency graph.
 
-POF complements existing systems programming rather than replacing them.
+Example:
+
+```bliss
+result = longer(a, b);
+
+free(b);
+```
+
+The compiler reasons:
+
+```
+result depends on b
+
+↓
+
+b freed
+
+↓
+
+result may reference freed allocation
+```
+
+This warning is produced because of semantic dependency—not because of lexical lifetime analysis.
 
 ---
 
-# 15. Summary
+# Function Calls
 
-Point of Failure is a semantic ownership analysis system.
+Function calls are semantic boundaries.
 
-Rather than proving correctness, it tracks ownership state transitions and identifies operations whose correctness depends upon programmer assumptions.
+Whenever a function returns one of its arguments—or any value derived from them—the compiler records that dependency.
 
-POF recognizes only a small number of semantic events:
+Example:
 
-| Event | Purpose |
-|--------|---------|
-| Read | Observe memory |
-| Write | Modify memory state |
-| Transform | Reinterpret memory |
-| Take | Capture ownership |
+```bliss
+fx longer([String] a, [String] b): [String] {
+    if ([a]->length() > [b]->length())
+        return a;
 
-These events update an abstract ownership graph throughout compilation.
+    return b;
+}
+```
 
-Whenever future operations depend upon assumptions that can no longer be automatically justified, POF requires those assumptions to become explicit.
+The compiler records:
 
-The result is a programming model that preserves the freedom of low-level systems programming while making ownership assumptions visible, reviewable, and auditable.
+```
+return ← {a, b}
+```
+
+Every caller automatically inherits this dependency.
+
+---
+
+# Assumption Boundaries
+
+POF identifies places where correctness depends upon programmer assumptions.
+
+Examples include:
+
+- Ownership transfers
+- Conditional ownership
+- Returned ownership
+- Manual frees
+- Unsafe casts
+- External libraries
+- Raw pointer manipulation
+- Platform APIs
+
+These become explicit review points.
+
+---
+
+# Accountability
+
+POF does not prevent unsafe code.
+
+Instead, it makes unsafe assumptions explicit.
+
+Example:
+
+```bliss
+result = longer(a, b);
+
+ack result;
+
+free(b);
+```
+
+The programmer has accepted responsibility for the dependency involving `result`.
+
+The compiler continues tracking the relationship.
+
+If future failures involve this dependency, the acknowledgement remains part of the audit trail.
+
+---
+
+# Freedom of Expression
+
+Bliss intentionally permits programs that may be unsafe.
+
+Programmers retain complete control over memory management.
+
+POF exists to ensure that dangerous assumptions are observable rather than hidden.
+
+---
+
+# Interoperability
+
+POF fully supports Bliss's C interoperability model.
+
+External functions are treated as semantic boundaries.
+
+Their effects may be:
+
+- inferred,
+- declared,
+- or acknowledged.
+
+This allows existing C libraries to participate in POF analysis without modification.
+
+---
+
+# Design Principles
+
+POF follows several principles.
+
+- Manual memory remains manual.
+- Ownership should be observable.
+- Dependencies should be traceable.
+- Assumptions should be explicit.
+- Stack values never escape.
+- Heap lifetime is explicit.
+- Unsafe code is allowed.
+- Every semantic decision should be auditable.
+
+---
+
+# Summary
+
+Point of Failure is a semantic observability system.
+
+Rather than proving programs correct, POF constructs two connected models:
+
+- An ownership state graph describing heap allocation state.
+- A semantic dependency graph describing how values influence one another.
+
+Ownership events propagate through semantic dependencies, allowing the compiler to explain not only *what* may fail, but *why*.
+
+The result is a programming model that preserves the power and flexibility of manual memory management while providing unprecedented insight into ownership flow, dependency propagation, and programmer assumptions.

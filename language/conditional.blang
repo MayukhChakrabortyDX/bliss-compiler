@@ -1,0 +1,19 @@
+//refer languages/node, languages/structures
+CONDITION -> 
+    "if" '(' node.NODE ')' '{' 
+        (structures.STRUCTURE | node.NODE ';' )* 
+    '}' 
+    
+    (
+        "elif" '(' EXPRESSION ')' '{' 
+            (structures.STRUCTURE | node.NODE ';' )* 
+        '}'
+    
+    )* 
+    
+    (
+        "else" '{'
+            (structures.STRUCTURE | node.NODE ';' )* 
+        '}'
+    )?
+;

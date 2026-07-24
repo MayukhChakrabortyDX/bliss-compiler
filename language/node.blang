@@ -1,0 +1,34 @@
+NUMBER -> @INTEGER | @REAL;
+
+//------------------EXPRESSION NODES------------------//
+
+ATOM -> @IDENTIFIER | NUMBER | @STRING | "(" NODE ")" | "[" NODE ( "|" NODE )? "]" | 
+"#[" NODE ( "|" NODE )? "]" | '`' ATOM | '&' ATOM | `sizeof` ATOM;
+
+//binary kinds
+CALL -> ATOM ( "(" (NODE ("," NODE)*)? ")" )?;
+BINDING -> CALL ('::' CALL)*;
+MAGNETIC -> BINDING ('->' BINDING)*;
+ACCESS -> MAGNETIC ('.' MAGNETIC)*;
+PRODUCT -> ACCESS (('*' | '/') ACCESS)*;
+SUM -> PRODUCT (('-' | '+') PRODUCT)*;
+INEQUALITY -> SUM (('<' | '>' | '<=' | '>=') SUM)*;
+EQUALITY -> INEQUALITY (('==' | '!=') INEQUALITY)*;
+ASSIGNMENT -> EQUALITY ('=' EQUALITY)*;
+
+
+//------------------STATEMENT NODES------------------//
+
+RETURN -> "return" ASSIGNMENT? ';';
+BREAK -> "break" @IDENTIFIER? ';';
+
+//refer languages/type languages/modifiers
+LET -> modifiers.MODIFIER* "let" @IDENTIFIER ':' type.TYPE "=" ASSIGNMENT ';';
+TRANSFORMER -> "transform" ASSIGNMENT "to" @IDENTIFIER ':' type.TYPE ';';
+
+STATEMENT -> RETURN | BREAK | LET | TRANSFORMER;
+
+//------------------ROOT------------------//
+
+//root connector
+NODE -> ASSIGNMENT | STATEMENT;

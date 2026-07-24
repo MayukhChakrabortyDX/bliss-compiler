@@ -1,0 +1,27 @@
+//refer languages/function
+ACTION -> "action" @IDENTIFIER '{' function.HEAD ';' (function.HEAD ';')* '}';
+
+DATA ->
+    //named token
+    "data" @IDENTIFIER ';';
+
+    //linear, refer languages/type
+    "data" @IDENTIFIER '(' type.TYPE ')' ';';
+
+    //array, refer languages/node, refer languages/type
+    "data" @IDENTIFIER '[' type.TYPE ',' node.INTEGER ']' ';';
+
+    //struct-like
+    "data" @IDENTIFIER '{' FIELD (FIELD)* '}'
+;
+
+//refer languages/type
+FIELD -> type.TYPE @IDENTIFIER ';';
+
+BIND -> "bind" @IDENTIFIER "with" ( @IDENTIFIER | ('(' @IDENTIFIER (',' @IDENTIFIER)* ')') ) "as" @IDENTIFIER '{'
+    function.FUNCTION (function.FUNCTION)*
+'}';
+
+ALIAS -> "alias" type.TYPE "as" @IDENTIFIER ';';
+
+DAOP -> DATA | ACTION | BIND | ALIAS;
