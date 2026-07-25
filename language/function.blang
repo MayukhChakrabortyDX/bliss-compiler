@@ -3,17 +3,17 @@ ACTION -> 'with' (
     | @IDENTIFIER //or a single name
 );
 
-//refer languages/type
+//refer language/type
 TYPED -> type.TYPE @IDENTIFIER;
 
 COMPOSITE -> TYPED ACTION;
 
 ARGS -> TYPED | @IDENTIFIER ACTION | COMPOSITE;
 
-//refer languages/type
+//refer language/type
 HEAD -> "fx" @IDENTIFIER "(" ARGS*[separated_by ','] ")" ':' type.TYPE;
 
-//refer languages/node, languages/structures
+//refer language/node, language/structures
 BODY -> "{" (structures.STRUCTURE | node.NODE ';') "}";
 
 FUNCTION -> HEAD BODY;

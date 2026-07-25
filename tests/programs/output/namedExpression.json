@@ -11,7 +11,7 @@
       "end": 97,
       "name": "main",
       "returnType": {
-        "type": 15,
+        "type": 17,
         "typeName": "ScalarType",
         "start": 0,
         "end": 0,
@@ -20,50 +20,46 @@
       "argumentList": [],
       "body": [
         {
-          "type": 17,
+          "type": 19,
           "typeName": "VariableDeclNode",
           "start": 0,
           "end": 0,
           "name": "x",
           "type_of_variable": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
             "type_name": "UILib"
           },
           "expression": {
-            "type": 5,
-            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
             "left": {
-              "type": 3,
+              "type": 5,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "UILib"
             },
             "right": {
-              "type": 13,
+              "type": 15,
               "typeName": "CallSignature",
               "start": 0,
               "end": 0,
               "args": [
                 {
-                  "type": 5,
-                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
                   "left": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
                     "name": "name"
                   },
                   "right": {
-                    "type": 8,
+                    "type": 10,
                     "typeName": "String",
                     "start": 0,
                     "end": 0,
@@ -77,19 +73,17 @@
                   "operatorName": "Assignment"
                 },
                 {
-                  "type": 5,
-                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
                   "left": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
                     "name": "age"
                   },
                   "right": {
-                    "type": 4,
+                    "type": 6,
                     "typeName": "Number",
                     "start": 0,
                     "end": 0,
@@ -111,7 +105,7 @@
   ],
   "importList": [
     {
-      "type": 6,
+      "type": 8,
       "typeName": "Import",
       "start": 0,
       "end": 0,

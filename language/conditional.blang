@@ -1,4 +1,4 @@
-//refer languages/node, languages/structures
+//refer language/node, language/structures
 CONDITION -> 
     "if" '(' node.NODE ')' '{' 
         (structures.STRUCTURE | node.NODE ';' )* 

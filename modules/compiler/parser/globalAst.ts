@@ -1,8 +1,8 @@
 //declare nodes based on rules
 export enum NodeType {
-    Program, FunctionDefinition,
+    Program, FunctionDefinition, EmptyNode, CallList,
     ReturnStatement, Identifier,
-    Number, BinaryOperationExpression,
+    Number, BinaryOperation,
     Import, Using,
     String, Break,
     Loop, ConditionUnit,
@@ -17,7 +17,8 @@ export enum NodeType {
     ViewDeclNode, MemberAccessNode,
     ExpressionAsStatement, MagneticCallChain, AliasStatement, ViewExpression,
     PointerDeclNode, TransformStatement,TransformDeclNode, UnaryOperation,
-    DataFieldNode
+    DataFieldNode,
+    Integer
 }
 
 export class Node {

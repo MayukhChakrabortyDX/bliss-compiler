@@ -1,7 +1,7 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import {
     NodeType, Node,
-} from "../globalAst";
+} from "../../parser/globalAst";
 
 import { type TypeNode } from "./types";
 

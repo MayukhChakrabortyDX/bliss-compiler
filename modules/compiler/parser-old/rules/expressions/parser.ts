@@ -13,6 +13,37 @@ import {
     CallSignature,
 } from './ast'
 
+class LeftAssociative {
+
+    operators: Map<TokenType, (left: Expression, right: Expression) => Expression> = new Map
+    limit: null | number = null
+    constructor(public analyzer: () => Expression, public parent: ParseExpressions) { }
+
+    setLimit(num: number) {
+        this.limit = num
+        return this
+    }
+
+    addOperator(_type: TokenType, callback: (left: Expression, right: Expression) => Expression) {
+
+        this.operators.set(_type, callback)
+        return this
+
+    }
+
+    produceAST() {
+
+        return this.parent.parseLeftAssociativeOperator(
+            () => this.analyzer(),
+            this.operators,
+            this.limit
+        )
+
+    }
+
+
+}
+
 export class ParseExpressions extends ParserBase {
 
     parseLeftAssociativeOperator(support: () => Expression, operators: Map<TokenType, (left: Expression, right: Expression) => Expression>, limit: null | number = null): Expression {
@@ -164,7 +195,7 @@ export class ParseExpressions extends ParserBase {
                 } else {
 
                     this.expect(this.peek(1), TokenType.RBrace, () => this.advance())
-                
+
                 }
 
                 return expr
@@ -275,6 +306,12 @@ export class ParseExpressions extends ParserBase {
     }
 
     parseBindingAccess(): Expression {
+
+        return (new LeftAssociative(() => this.parseCLSignature(), this))
+            .setLimit(1)
+            .addOperator(TokenType.DoubleColon, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.BindingAccess))
+            .produceAST()
+
         return this.parseLeftAssociativeOperator(
             () => this.parseCLSignature(),
             new Map(
@@ -288,6 +325,10 @@ export class ParseExpressions extends ParserBase {
     }
 
     parseMagneticAccess(): Expression {
+
+        return (new LeftAssociative(() => this.parseBindingAccess(), this))
+            .addOperator(TokenType.ArrowRight, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.MagneticCall))
+            .produceAST()
 
         return this.parseLeftAssociativeOperator(
             () => this.parseBindingAccess(),
@@ -336,6 +377,15 @@ export class ParseExpressions extends ParserBase {
     }
 
     parseInequalities(): Expression {
+
+        return (new LeftAssociative(() => this.parseAdditionSubtraction(), this))
+            .setLimit(1)
+            .addOperator(TokenType.GreaterThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThan))
+            .addOperator(TokenType.GreaterThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.GreaterThanEqual))
+            .addOperator(TokenType.LessThan, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThan))
+            .addOperator(TokenType.LessThanEqual, (left, right) => new BinaryOperatorNode(left, right, BinaryOperation.LessThanEqual))
+            .produceAST()
+
         return this.parseLeftAssociativeOperator(
             () => this.parseAdditionSubtraction(),
             new Map(

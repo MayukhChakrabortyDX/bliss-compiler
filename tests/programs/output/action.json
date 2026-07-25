@@ -5,7 +5,7 @@
   "end": 0,
   "body": [
     {
-      "type": 20,
+      "type": 22,
       "typeName": "ActionNode",
       "start": 0,
       "end": 203,
@@ -18,7 +18,7 @@
           "end": 40,
           "name": "run",
           "returnType": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -33,7 +33,7 @@
           "end": 62,
           "name": "main",
           "returnType": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -48,12 +48,12 @@
           "end": 88,
           "name": "itemize",
           "returnType": {
-            "type": 28,
+            "type": 30,
             "typeName": "Pointer",
             "start": 0,
             "end": 0,
             "value": {
-              "type": 15,
+              "type": 17,
               "typeName": "ScalarType",
               "start": 0,
               "end": 0,
@@ -69,12 +69,12 @@
           "end": 118,
           "name": "doesSomething",
           "returnType": {
-            "type": 29,
+            "type": 31,
             "typeName": "Reference",
             "start": 0,
             "end": 0,
             "value": {
-              "type": 15,
+              "type": 17,
               "typeName": "ScalarType",
               "start": 0,
               "end": 0,
@@ -90,7 +90,7 @@
           "end": 199,
           "name": "doesSomethingElse",
           "returnType": {
-            "type": 16,
+            "type": 18,
             "typeName": "CompositeType",
             "start": 0,
             "end": 0,
@@ -101,7 +101,7 @@
           },
           "argumentList": [
             {
-              "type": 24,
+              "type": 26,
               "typeName": "DataAndActionBasedArgument",
               "start": 0,
               "end": 0,
@@ -110,7 +110,7 @@
                 "Doable"
               ],
               "dataType": {
-                "type": 16,
+                "type": 18,
                 "typeName": "CompositeType",
                 "start": 0,
                 "end": 0,

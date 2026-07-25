@@ -1,5 +1,5 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
-import { Node, NodeType } from "../globalAst";
+import { Node, NodeType } from "../../parser/globalAst";
 import { type FunctionDefinitionNode } from './function'
 import { ParseAction } from "./action";
 

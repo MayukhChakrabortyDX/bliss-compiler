@@ -1,5 +1,5 @@
 import { TokenType, type Token } from "../../tokenizer/tokens";
-import { Node, NodeType } from "../globalAst";
+import { Node, NodeType } from "../../parser/globalAst";
 import { ParseBinds } from "./binding";
 
 export class ImportNode extends Node {

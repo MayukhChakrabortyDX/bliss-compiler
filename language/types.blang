@@ -1,7 +1,7 @@
 //composition mode - there are multiple builtins as you can see how they originate
 BUILTIN -> `${u, i}${8, 16, 32, 64}` | `f${32, 64}`;
 
-//refer languages/node
+//refer language/node
 COMPOSITE -> node.NODE '::' (
     '(' ( @IDENTIFIER (',' @IDENTIFIER)* ) ')'
     | @IDENTIFIER

@@ -1,3 +1,4 @@
+//refer language/module, language/function, language/daop
 PROGRAM -> 
     (module.IMPORT | module.USING)* 
     (function.FUNCTION | daop.DAOP)*

@@ -1,6 +1,6 @@
 import { Log, log } from "../../logger";
 import { TokenizeBase } from "./helper";
-import { Token, TokenType } from "./tokens";
+import { TokenType } from "./tokens";
 
 //error handling (much more efficient and verbose) for tokenization phase
 export class ErrorHandling extends TokenizeBase {

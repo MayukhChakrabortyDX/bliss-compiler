@@ -1,7 +1,7 @@
 import type { Diagnostic } from "typescript";
 import { Log, log } from "../../logger";
 import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
-import type { Node } from "./globalAst";
+import type { Node } from "../parser/globalAst";
 
 //this consists of the base helpers and the fundamental values
 export class ParserBase {

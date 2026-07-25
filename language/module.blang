@@ -1,4 +1,4 @@
 //Module system
-//refer languages/node
+//refer language/node
 IMPORT -> "import" node.ACCESS ';' ;
 USING -> "using" node.ACCESS ';' ;

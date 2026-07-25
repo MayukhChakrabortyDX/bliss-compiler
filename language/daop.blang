@@ -1,21 +1,21 @@
-//refer languages/function
+//refer language/function
 ACTION -> "action" @IDENTIFIER '{' function.HEAD ';' (function.HEAD ';')* '}';
 
 DATA ->
     //named token
     "data" @IDENTIFIER ';';
 
-    //linear, refer languages/type
+    //linear, refer language/type
     "data" @IDENTIFIER '(' type.TYPE ')' ';';
 
-    //array, refer languages/node, refer languages/type
+    //array, refer language/node, refer language/type
     "data" @IDENTIFIER '[' type.TYPE ',' node.INTEGER ']' ';';
 
     //struct-like
     "data" @IDENTIFIER '{' FIELD (FIELD)* '}'
 ;
 
-//refer languages/type
+//refer language/type
 FIELD -> type.TYPE @IDENTIFIER ';';
 
 BIND -> "bind" @IDENTIFIER "with" ( @IDENTIFIER | ('(' @IDENTIFIER (',' @IDENTIFIER)* ')') ) "as" @IDENTIFIER '{'

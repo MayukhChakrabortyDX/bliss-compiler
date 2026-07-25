@@ -1,0 +1,15 @@
+//the allocator strategy as discussed in the allocation document
+
+ALLOCATOR -> 
+    "allocator" @IDENTIFIER '{'
+
+        //refer language/function
+        function.FUNCTION*
+
+        //technically, we only need the allocate and deallocate portions (or handlers basically)
+        //And I think the AST analyzer is much better suited for that.
+
+    '}'
+;
+
+//The AST will manage the rest.

@@ -1,7 +1,6 @@
 //imports token types and creates tokens from an input string
 
 import { TokenizeComments } from "./comment";
-import { ProcessStringToken } from "./string";
 import { StringContainer, StringSpan, Token, TokenType } from "./tokens";
 import 'bun'
 

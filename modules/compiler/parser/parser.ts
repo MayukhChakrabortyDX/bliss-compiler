@@ -1,68 +1,75 @@
-import {
-    NodeType, Node
-} from "./globalAst";
+//we are going to use the DI approach for better parsing management
 
-import { FunctionDefinitionNode } from "./rules/function";
-import type { ImportNode } from "./rules/imports";
-import type { DataNode } from "./rules/data";
-import type { ActionNode } from "./rules/action";
-import type { BindingNode } from "./rules/binding";
-import type { AnnotationNode } from "./rules/annotation";
+import type { TokenType } from "../tokenizer/tokens";
+import type { Node } from "./globalAst";
+import { ParserBase } from "./helper";
+import { decideCallOrArray, parseAccess, parseArray, parseAssignment, parseAtom, parseBinaryOperator, parseBinding, parseCall, parseEquality, parseInequality, parseLeftAssociativeOperator, parseNode, parseProduct, parserMagnetic, parseSum } from "./rules/node";
 
-import { Token, TokenType } from "../tokenizer/tokens";
-import { ParseAnnotation } from "./rules/annotation";
+//contains the DI portion.
+export class Parser extends ParserBase {
 
-export class ProgramNode extends Node {
-
-    constructor(public body: (FunctionDefinitionNode | DataNode | ActionNode | BindingNode | AnnotationNode)[], public importList: ImportNode[]) {
-        super(NodeType.Program)
+    parseAtom() {
+        return parseAtom(this)
     }
 
-}
+    parseNode() {
+        return parseNode(this)
+    }
 
-export class Parser extends ParseAnnotation {
+    parseArray(atom: Node) {
+        return parseArray(atom, this)
+    }
 
-    programSet = new Set([TokenType.AtSymbol, TokenType.K_Fx, TokenType.K_Data, TokenType.K_Action, TokenType.K_Bind])
-    parseProgram() {
+    parseCall(atom: Node) {
+        return parseCall(atom, this)
+    }
 
-        const importList: ImportNode[] = [];
-        const body: (FunctionDefinitionNode | DataNode | ActionNode | BindingNode | AnnotationNode)[] = []
+    decideCallOrArray() {
+        return decideCallOrArray(this)
+    }
 
-        while ((this.peek(0) as Token).tokenType == TokenType.K_Import || (this.peek(0) as Token).tokenType == TokenType.K_Using) {
-            importList.push(
-                (this.peek(0) as Token).tokenType == TokenType.K_Import ? this.parseImport() : this.parseUsing()
-            );
-        }
+    parseLeftAssociativeOperator(
+        support: () => Node,
+        operators: Map<TokenType, (left: Node, right: Node) => Node>,
+        limit: null | number = null
+    ) {
+        return parseLeftAssociativeOperator(support, operators, this, limit)
+    }
 
-        while (this.programSet.has((this.peek(0) as Token).tokenType)) {
-            switch ((this.peek(0) as Token).tokenType) {
-                case TokenType.AtSymbol:
-                    body.push(this.parseAnnotation())
-                    break;
-                case TokenType.K_Fx:
-                    body.push(this.parseFunctionDefinition())
-                    break
-                case TokenType.K_Data:
-                    body.push(this.parseData())
-                    break
-                case TokenType.K_Action:
-                    body.push(this.parseAction())
-                    break
-                case TokenType.K_Bind:
-                    body.push(this.parseBinding())
-                    break
-            }
-            //console.log( this.source.str.substring( this.peek(0)?.span.startIndex, this.peek(0)?.span.endIndex + 1 ) )
-        }
+    parseBinaryOperator(generator: () => Node) {
+        return parseBinaryOperator(generator, this)
+    }
 
-        if (this.peek(0)?.tokenType != TokenType.EOF) {
-            this.logTokenError(this.peek(), `Unexpected token ${this.peek().tokenType}. Expected token type ${TokenType.EOF} instead`)
-            process.exit(1)
+    parseBinding() {
+        return parseBinding(this)
+    }
 
-        }
+    parseMagnetic() {
+        return parserMagnetic(this)
+    }
 
-        return new ProgramNode(body, importList);
+    parseAccess() {
+        return parseAccess(this)
+    }
 
+    parseProduct() {
+        return parseProduct(this)
+    }
+
+    parseSum() {
+        return parseSum(this)
+    }
+
+    parseInequality() {
+        return parseInequality(this)
+    }
+
+    parseEquality() {
+        return parseEquality(this)
+    }
+
+    parseAssignment() {
+        return parseAssignment(this)
     }
 
 }

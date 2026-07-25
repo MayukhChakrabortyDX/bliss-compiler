@@ -11,7 +11,7 @@
       "end": 270,
       "name": "naivePrint",
       "returnType": {
-        "type": 15,
+        "type": 17,
         "typeName": "ScalarType",
         "start": 0,
         "end": 0,
@@ -19,12 +19,12 @@
       },
       "argumentList": [
         {
-          "type": 22,
+          "type": 24,
           "typeName": "TypeBasedArgument",
           "start": 0,
           "end": 0,
           "typeInfo": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -35,20 +35,20 @@
       ],
       "body": [
         {
-          "type": 17,
+          "type": 19,
           "typeName": "VariableDeclNode",
           "start": 0,
           "end": 0,
           "name": "buffer",
           "type_of_variable": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
             "type_name": "String"
           },
           "expression": {
-            "type": 3,
+            "type": 5,
             "typeName": "Identifier",
             "start": 0,
             "end": 0,
@@ -57,30 +57,28 @@
           "isUnsafe": true
         },
         {
-          "type": 36,
+          "type": 38,
           "typeName": "ExpressionAsStatement",
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 5,
-            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
             "left": {
-              "type": 3,
+              "type": 5,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "write"
             },
             "right": {
-              "type": 13,
+              "type": 15,
               "typeName": "CallSignature",
               "start": 0,
               "end": 0,
               "args": [
                 {
-                  "type": 4,
+                  "type": 6,
                   "typeName": "Number",
                   "start": 0,
                   "end": 0,
@@ -88,19 +86,17 @@
                   "subtypes": 1
                 },
                 {
-                  "type": 5,
-                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
                   "left": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
                     "name": "buffer"
                   },
                   "right": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
@@ -110,19 +106,17 @@
                   "operatorName": "MemberAccess"
                 },
                 {
-                  "type": 5,
-                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
                   "left": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
                     "name": "buffer"
                   },
                   "right": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
@@ -140,7 +134,7 @@
       ]
     },
     {
-      "type": 20,
+      "type": 22,
       "typeName": "ActionNode",
       "start": 265,
       "end": 315,
@@ -153,7 +147,7 @@
           "end": 309,
           "name": "toString",
           "returnType": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -170,7 +164,7 @@
       "end": 393,
       "name": "print",
       "returnType": {
-        "type": 15,
+        "type": 17,
         "typeName": "ScalarType",
         "start": 0,
         "end": 0,
@@ -178,7 +172,7 @@
       },
       "argumentList": [
         {
-          "type": 23,
+          "type": 25,
           "typeName": "ActionBasedArgument",
           "start": 0,
           "end": 0,
@@ -190,54 +184,48 @@
       ],
       "body": [
         {
-          "type": 36,
+          "type": 38,
           "typeName": "ExpressionAsStatement",
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 5,
-            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
             "left": {
-              "type": 3,
+              "type": 5,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "naivePrint"
             },
             "right": {
-              "type": 13,
+              "type": 15,
               "typeName": "CallSignature",
               "start": 0,
               "end": 0,
               "args": [
                 {
-                  "type": 5,
-                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
                   "left": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
                     "name": "str"
                   },
                   "right": {
-                    "type": 5,
-                    "typeName": "BinaryOperationExpression",
                     "start": 0,
                     "end": 0,
                     "left": {
-                      "type": 3,
+                      "type": 5,
                       "typeName": "Identifier",
                       "start": 0,
                       "end": 0,
                       "name": "toString"
                     },
                     "right": {
-                      "type": 13,
+                      "type": 15,
                       "typeName": "CallSignature",
                       "start": 0,
                       "end": 0,
@@ -258,7 +246,7 @@
       ]
     },
     {
-      "type": 19,
+      "type": 21,
       "typeName": "DataNode",
       "start": 390,
       "end": 434,
@@ -267,7 +255,7 @@
         {
           "name": "name",
           "type": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -277,7 +265,7 @@
         {
           "name": "age",
           "type": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -287,7 +275,7 @@
       ]
     },
     {
-      "type": 21,
+      "type": 23,
       "typeName": "BindingNode",
       "start": 437,
       "end": 582,
@@ -304,7 +292,7 @@
           "end": 578,
           "name": "toString",
           "returnType": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
@@ -312,12 +300,12 @@
           },
           "argumentList": [
             {
-              "type": 22,
+              "type": 24,
               "typeName": "TypeBasedArgument",
               "start": 0,
               "end": 0,
               "typeInfo": {
-                "type": 15,
+                "type": 17,
                 "typeName": "ScalarType",
                 "start": 0,
                 "end": 0,
@@ -328,54 +316,48 @@
           ],
           "body": [
             {
-              "type": 2,
+              "type": 4,
               "typeName": "ReturnStatement",
               "start": 0,
               "end": 0,
               "expression": {
-                "type": 5,
-                "typeName": "BinaryOperationExpression",
                 "start": 0,
                 "end": 0,
                 "left": {
-                  "type": 3,
+                  "type": 5,
                   "typeName": "Identifier",
                   "start": 0,
                   "end": 0,
                   "name": "join"
                 },
                 "right": {
-                  "type": 13,
+                  "type": 15,
                   "typeName": "CallSignature",
                   "start": 0,
                   "end": 0,
                   "args": [
                     {
-                      "type": 5,
-                      "typeName": "BinaryOperationExpression",
                       "start": 0,
                       "end": 0,
                       "left": {
-                        "type": 3,
+                        "type": 5,
                         "typeName": "Identifier",
                         "start": 0,
                         "end": 0,
                         "name": "name"
                       },
                       "right": {
-                        "type": 5,
-                        "typeName": "BinaryOperationExpression",
                         "start": 0,
                         "end": 0,
                         "left": {
-                          "type": 3,
+                          "type": 5,
                           "typeName": "Identifier",
                           "start": 0,
                           "end": 0,
                           "name": "toStr"
                         },
                         "right": {
-                          "type": 13,
+                          "type": 15,
                           "typeName": "CallSignature",
                           "start": 0,
                           "end": 0,
@@ -388,31 +370,27 @@
                       "operatorName": "MagneticCall"
                     },
                     {
-                      "type": 5,
-                      "typeName": "BinaryOperationExpression",
                       "start": 0,
                       "end": 0,
                       "left": {
-                        "type": 3,
+                        "type": 5,
                         "typeName": "Identifier",
                         "start": 0,
                         "end": 0,
                         "name": "age"
                       },
                       "right": {
-                        "type": 5,
-                        "typeName": "BinaryOperationExpression",
                         "start": 0,
                         "end": 0,
                         "left": {
-                          "type": 3,
+                          "type": 5,
                           "typeName": "Identifier",
                           "start": 0,
                           "end": 0,
                           "name": "toStr"
                         },
                         "right": {
-                          "type": 13,
+                          "type": 15,
                           "typeName": "CallSignature",
                           "start": 0,
                           "end": 0,
@@ -441,7 +419,7 @@
       "end": 719,
       "name": "main",
       "returnType": {
-        "type": 15,
+        "type": 17,
         "typeName": "ScalarType",
         "start": 0,
         "end": 0,
@@ -450,38 +428,36 @@
       "argumentList": [],
       "body": [
         {
-          "type": 17,
+          "type": 19,
           "typeName": "VariableDeclNode",
           "start": 0,
           "end": 0,
           "name": "user",
           "type_of_variable": {
-            "type": 15,
+            "type": 17,
             "typeName": "ScalarType",
             "start": 0,
             "end": 0,
             "type_name": "User"
           },
           "expression": {
-            "type": 5,
-            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
             "left": {
-              "type": 3,
+              "type": 5,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "User"
             },
             "right": {
-              "type": 13,
+              "type": 15,
               "typeName": "CallSignature",
               "start": 0,
               "end": 0,
               "args": [
                 {
-                  "type": 8,
+                  "type": 10,
                   "typeName": "String",
                   "start": 0,
                   "end": 0,
@@ -492,7 +468,7 @@
                   }
                 },
                 {
-                  "type": 4,
+                  "type": 6,
                   "typeName": "Number",
                   "start": 0,
                   "end": 0,
@@ -507,42 +483,38 @@
           "isUnsafe": false
         },
         {
-          "type": 36,
+          "type": 38,
           "typeName": "ExpressionAsStatement",
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 5,
-            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
             "left": {
-              "type": 3,
+              "type": 5,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "print"
             },
             "right": {
-              "type": 13,
+              "type": 15,
               "typeName": "CallSignature",
               "start": 0,
               "end": 0,
               "args": [
                 {
-                  "type": 5,
-                  "typeName": "BinaryOperationExpression",
                   "start": 0,
                   "end": 0,
                   "left": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
                     "name": "user"
                   },
                   "right": {
-                    "type": 3,
+                    "type": 5,
                     "typeName": "Identifier",
                     "start": 0,
                     "end": 0,
@@ -558,12 +530,12 @@
           }
         },
         {
-          "type": 2,
+          "type": 4,
           "typeName": "ReturnStatement",
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 4,
+            "type": 6,
             "typeName": "Number",
             "start": 0,
             "end": 0,
@@ -576,7 +548,7 @@
   ],
   "importList": [
     {
-      "type": 6,
+      "type": 8,
       "typeName": "Import",
       "start": 0,
       "end": 0,
@@ -593,7 +565,7 @@
       ]
     },
     {
-      "type": 6,
+      "type": 8,
       "typeName": "Import",
       "start": 0,
       "end": 0,

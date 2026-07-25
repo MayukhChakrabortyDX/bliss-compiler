@@ -1,7 +1,7 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import { type FunctionDefinitionNode } from "./function";
 import { ParseFunction } from "./function";
-import { Node, NodeType } from "../globalAst";
+import { Node, NodeType } from "../../parser/globalAst";
 //asts are now being localized.
 
 export class ActionNode extends Node {

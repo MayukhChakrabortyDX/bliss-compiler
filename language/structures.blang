@@ -1,4 +1,4 @@
 //A structure is a construction, like a blueprint
 
-//refer languages/function languages/loop languages/conditional
+//refer language/function language/loop language/conditional
 STRUCTURE -> function.FUNCTION | loop.LOOP | conditional.CONDITION;

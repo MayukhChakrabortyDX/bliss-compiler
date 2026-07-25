@@ -11,7 +11,7 @@
       "end": 73,
       "name": "main",
       "returnType": {
-        "type": 15,
+        "type": 17,
         "typeName": "ScalarType",
         "start": 0,
         "end": 0,
@@ -20,30 +20,28 @@
       "argumentList": [],
       "body": [
         {
-          "type": 36,
+          "type": 38,
           "typeName": "ExpressionAsStatement",
           "start": 0,
           "end": 0,
           "expression": {
-            "type": 5,
-            "typeName": "BinaryOperationExpression",
             "start": 0,
             "end": 0,
             "left": {
-              "type": 3,
+              "type": 5,
               "typeName": "Identifier",
               "start": 0,
               "end": 0,
               "name": "println"
             },
             "right": {
-              "type": 13,
+              "type": 15,
               "typeName": "CallSignature",
               "start": 0,
               "end": 0,
               "args": [
                 {
-                  "type": 8,
+                  "type": 10,
                   "typeName": "String",
                   "start": 0,
                   "end": 0,
@@ -64,7 +62,7 @@
   ],
   "importList": [
     {
-      "type": 6,
+      "type": 8,
       "typeName": "Import",
       "start": 0,
       "end": 0,

@@ -1,4 +1,4 @@
-import { NodeType, Node } from "../../globalAst"
+import { NodeType, Node } from "../../../parser/globalAst"
 import { StringSpan } from "../../../tokenizer/tokens"
 import { IdentifierNode, ExpressionAsStatement } from "../statements"
 

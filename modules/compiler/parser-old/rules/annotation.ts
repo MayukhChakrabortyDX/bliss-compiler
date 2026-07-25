@@ -1,5 +1,5 @@
 import { TokenType } from "../../tokenizer/tokens";
-import { Node, NodeType } from "../globalAst";
+import { Node, NodeType } from "../../parser/globalAst";
 import { ParseImports } from "./imports";
 
 export class AnnotationNode extends Node {
