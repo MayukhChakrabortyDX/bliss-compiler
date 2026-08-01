@@ -4,4 +4,4 @@
 
 //for now, our modifiers are simply keywords as seen here
 
-MODIFIER -> "unsafe" | "trans" | "ptr" | "volatile";
+MODIFIER -> "unsafe" | "trans" | "volatile";

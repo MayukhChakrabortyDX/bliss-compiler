@@ -18,7 +18,8 @@ export enum NodeType {
     ExpressionAsStatement, MagneticCallChain, AliasStatement, ViewExpression,
     PointerDeclNode, TransformStatement,TransformDeclNode, UnaryOperation,
     DataFieldNode,
-    Integer
+    Integer, DataType, TokenNode, BinaryRelation, ListOfNodes, Modifier, LetNode, TransformNode,
+    Allocator, Module, Function, Body
 }
 
 export class Node {

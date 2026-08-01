@@ -1,6 +1,7 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
 import type { Parser } from "../parser";
+import type { Modifier } from "./modifiers";
 
 export class Identifier extends Node {
     constructor(public identifier: string) {
@@ -27,7 +28,7 @@ export class Reference extends Node {
 }
 
 export enum UnaryOperationEnum {
-    AddressOf, SizeOf
+    AddressOf, SizeOf, Return, Break
 }
 
 export class UnaryOperation extends Node {
@@ -41,7 +42,9 @@ export enum BinaryOperationEnum {
     Multiply, Divide, Add, Subtract,
     LessThan, GreaterThan, LessThanEqual, GreaterThanEqual,
     Equals, NotEquals,
-    Assignment
+    Assignment,
+    Allocate, Free,
+    Substitute
 }
 
 export class BinaryOperation extends Node {
@@ -53,6 +56,20 @@ export class BinaryOperation extends Node {
 export class EmptyNode extends Node {
     constructor() {
         super(NodeType.EmptyNode)
+    }
+}
+
+export class LetNode extends Node {
+    constructor(public modifiers: Node[], public name: Node, public dataType: Node, public expression: Node) {
+        super(NodeType.LetNode)
+    }
+}
+
+export class TransformNode extends Node {
+    constructor(public fromExpr: Node, public toType: Node, public withName: Node) {
+
+        super(NodeType.TransformNode)
+
     }
 }
 
@@ -468,8 +485,185 @@ export function parseAssignment(parser: Parser): Node {
 
 }
 
+//------------------STATEMENT NODES------------------//
+
+export function parseReturnStatement(parser: Parser): Node {
+
+    parser.shouldBe(TokenType.K_Return);
+
+    if (parser.peek().tokenType == TokenType.Semicolon) {
+
+        parser.shouldBe(TokenType.Semicolon)
+        return new UnaryOperation(UnaryOperationEnum.Return, new EmptyNode())
+
+    }
+
+    const expr = parser.parseAssignment()
+    parser.shouldBe(TokenType.Semicolon)
+
+    return new UnaryOperation(UnaryOperationEnum.Return, expr)
+
+}
+
+export function parseBreakStatement(parser: Parser): Node {
+
+    parser.shouldBe(TokenType.K_Break);
+
+    if (parser.peek().tokenType == TokenType.Semicolon) {
+
+        parser.shouldBe(TokenType.Semicolon)
+        return new UnaryOperation(UnaryOperationEnum.Break, new EmptyNode())
+
+    }
+
+    const expr = parser.parseAssignment()
+    parser.shouldBe(TokenType.Semicolon)
+
+    return new UnaryOperation(UnaryOperationEnum.Break, expr)
+
+}
+
+export function parseLet(parser: Parser) : Node {
+
+    let modifiers: Node[] = []
+
+    while( parser.peek().tokenType != TokenType.K_Let ) {
+        modifiers.push(
+            parser.parseModifier()
+        )
+    }
+
+    parser.shouldBe(TokenType.K_Let)
+    
+    const variableName = new Identifier(parser.digest(TokenType.Identifier))
+    parser.shouldBe(TokenType.Colon)
+    
+    const type = parser.parseType()
+    parser.shouldBe(TokenType.Assignment)
+
+    const expression = parser.parseNode()
+    parser.shouldBe(TokenType.Semicolon)
+
+    return new LetNode(
+        modifiers, variableName, type, expression
+    )
+
+}
+
+export function parseTransform(parser: Parser): Node {
+
+    parser.shouldBe(TokenType.K_Transform)
+    const expression = parser.parseNode()
+    parser.shouldBe(TokenType.K_To)
+    const name = new Identifier(parser.digest(TokenType.Identifier))
+    parser.shouldBe(TokenType.Colon)
+    const type = parser.parseType()
+    parser.shouldBe(TokenType.Semicolon)
+
+    return new TransformNode(expression, type, name)
+
+}
+
+export function parseSubstitution(parser: Parser): Node {
+
+    parser.shouldBe(TokenType.K_Sub)
+    const expr = parser.parseNode()
+    parser.shouldBe(TokenType.K_With)
+    const name = new Identifier(parser.digest(TokenType.Identifier))
+    parser.shouldBe(TokenType.Semicolon)
+
+    return new BinaryOperation(
+        BinaryOperationEnum.Substitute,
+        expr,
+        name
+    )
+
+}
+
+export function decideStatement(parser: Parser): Node {
+
+    let statement = [
+        parser.parseReturnStatement,
+        parser.parseBreakStatement,
+        parser.parseLet,
+        parser.parseTransform,
+        parser.parseSubstitution
+    ]
+
+    for (let caller of statement) {
+
+        const branch = parser.branchMode(() => caller())
+        if (branch.status == false) {
+            return branch.expr
+        }
+
+    }
+
+    return new EmptyNode();
+
+}
+
+//------------------MEMORY ALLOCATION------------------//
+
+export function parseNew(parser: Parser): Node {
+
+    parser.shouldBe(TokenType.K_New);
+    parser.shouldBe(TokenType.LessThan);
+    const allocatorName = parser.digest(TokenType.Identifier);
+    parser.shouldBe(TokenType.GreaterThan);
+    const expr = parser.parseAssignment();
+    parser.shouldBe(TokenType.Semicolon);
+
+    return new BinaryOperation(
+        BinaryOperationEnum.Allocate,
+        new Identifier(allocatorName), expr
+    )
+
+}
+
+export function parseFree(parser: Parser): Node {
+
+    parser.shouldBe(TokenType.K_Free);
+    parser.shouldBe(TokenType.LessThan);
+    const allocatorName = parser.digest(TokenType.Identifier);
+    parser.shouldBe(TokenType.GreaterThan);
+    const expr = parser.parseAssignment();
+    parser.shouldBe(TokenType.Semicolon);
+
+    return new BinaryOperation(
+        BinaryOperationEnum.Allocate,
+        new Identifier(allocatorName), expr
+    )
+
+}
+
+export function decideAllocator(parser: Parser): Node {
+
+    if (parser.peek().tokenType == TokenType.K_New) {
+        return parser.parseNew()
+    }
+
+    return parser.parseFree()
+
+}
+
 export function parseNode(parser: Parser): Node {
 
-    return parser.parseAtom()
+    let nodes = [
+        parser.parseAssignment,
+        parser.decideStatement,
+        parser.decideAllocator,
+    ]
+
+    for (let caller of nodes) {
+
+        const branch = parser.branchMode(() => caller())
+        if (branch.status == false) {
+            return branch.expr
+        }
+
+    }
+
+    return new EmptyNode();
 
 }

@@ -1,0 +1,5 @@
+//refer language/module, language/function, language/daop, language/allocator
+PROGRAM -> 
+    (module.IMPORT | module.USING)* 
+    (function.FUNCTION | daop.DAOP | allocator.ALLOCATOR)*
+;

@@ -20,25 +20,28 @@ INEQUALITY -> SUM (('<' | '>' | '<=' | '>=') SUM)*;
 EQUALITY -> INEQUALITY (('==' | '!=') INEQUALITY)*;
 ASSIGNMENT -> EQUALITY ('=' EQUALITY)*;
 
-//--- Implemented till this portion, 25th July 2026
 
 //------------------STATEMENT NODES------------------//
 
 RETURN -> "return" ASSIGNMENT? ';';
 BREAK -> "break" @IDENTIFIER? ';';
 
-//refer language/type language/modifiers
-LET -> modifiers.MODIFIER* "let" @IDENTIFIER ':' type.TYPE "=" ASSIGNMENT ';';
-TRANSFORMER -> "transform" ASSIGNMENT "to" @IDENTIFIER ':' type.TYPE ';';
+//@#--- Implemented till this portion, 29th July 2026
 
-STATEMENT -> RETURN | BREAK | LET | TRANSFORMER;
+//refer language/type language/modifiers
+LET -> modifiers.MODIFIER* "let" @IDENTIFIER ':' type.TYPE "=" NODE ';';
+TRANSFORMER -> "transform" ASSIGNMENT "to" @IDENTIFIER ':' type.TYPE ';';
+SUB -> "sub" NODE "with" NODE ';'; //zero-cost substitution
+
+STATEMENT -> RETURN | BREAK | LET | TRANSFORMER | SUB;
 
 //------------------MEMORY ALLOCATION------------------//
 
-NEW -> "new" '<' @IDENTIFIER '>' ASSIGNMENT;
+NEW -> "new" '<' @IDENTIFIER '>' ASSIGNMENT ';';
 FREE -> "free" '<' @IDENTIFIER '>' ASSIGNMENT ';';
 
+ALLOCATORS -> NEW | FREE;
 //------------------ROOT------------------//
 
 //root connector
-NODE -> ASSIGNMENT | STATEMENT | NEW | FREE;
+NODE -> ASSIGNMENT | STATEMENT | ALLOCATORS;

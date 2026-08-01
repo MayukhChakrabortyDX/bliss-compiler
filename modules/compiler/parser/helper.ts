@@ -3,6 +3,10 @@ import { Log, log } from "../../logger";
 import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
 import type { Node } from "./globalAst";
 
+enum ParserMode {
+    ScanMode, BranchMode
+}
+
 //this consists of the base helpers and the fundamental values
 export class ParserBase {
 
@@ -11,6 +15,24 @@ export class ParserBase {
 
     diagnostics: Diagnostic[] = []
     tokenIndex: number = 0;
+
+    mode: ParserMode = ParserMode.ScanMode;
+    structuralMismatch: boolean = false;
+
+    builtinTypes = new Set([
+        TokenType.K_u8,
+        TokenType.K_u16,
+        TokenType.K_u32,
+        TokenType.K_u64,
+
+        TokenType.K_i8,
+        TokenType.K_i16,
+        TokenType.K_i32,
+        TokenType.K_i64,
+
+        TokenType.K_f32,
+        TokenType.K_f64
+    ])
 
     constructor(public tokenStream: Token[], public source: StringContainer) { }
 
@@ -52,6 +74,17 @@ export class ParserBase {
         return TokenType[tokenType]
     }
 
+    panic(given: Token, message: string) {
+
+        if (this.mode == ParserMode.ScanMode) {
+            this.logTokenError(given, message)
+            process.exit(1)
+        } else {
+            this.structuralMismatch = true;
+        }
+
+    }
+
     //@ts-ignore
     peek(amount: number = 0): Token {
         //tells us what is at that
@@ -87,14 +120,26 @@ export class ParserBase {
         this.consume(1)
     }
 
+    branchMode(callback: () => Node) {
+
+        this.mode = ParserMode.BranchMode;
+        const expr = callback()
+        this.mode = ParserMode.ScanMode;
+
+        const status = this.structuralMismatch;
+        this.structuralMismatch = false;
+
+        return {
+            status, expr
+        }
+
+    }
+
     expect(given: Token, expected: TokenType, callback: () => any, message?: string) {
         if (given.tokenType == expected) {
             callback()
         } else {
-
-            this.logTokenError(given, message == null ? `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead` : message)
-            process.exit(1)
-
+            this.panic(given, message == null ? `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead` : message)
         }
     }
 
@@ -126,8 +171,8 @@ export class ParserBase {
         return <T extends Node>(node: T, offset: number = 0): T => {
             node.start = start;
             node.end = this.peek(offset).span.endIndex;
-            
-            console.log( `[${this.source.str.substring( node.start, node.end + 1 )}]` )
+
+            console.log(`[${this.source.str.substring(node.start, node.end + 1)}]`)
 
             return node;
         };
