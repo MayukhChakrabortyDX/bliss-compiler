@@ -110,17 +110,7 @@ function parseArgument(parser: Parser): Node {
         }
     ]
 
-    for (let caller of branches) {
-
-        const branch = parser.branchMode(() => caller())
-        if (branch.status == false) {
-            return branch.expr
-        }
-
-    }
-
-    return new EmptyNode();
-
+    return parser.useBranch(branches, "Invalid Argument Structure")
 
 }
 
@@ -132,19 +122,23 @@ export function parseFunctionHead(parser: Parser): Node {
 
     const args: Node[] = []
 
-    while (true) {
+    if (parser.peek().tokenType != TokenType.RBrace) {
+        while (true) {
 
-        args.push(
-            parseArgument(parser)
-        )
+            args.push(
+                parseArgument(parser)
+            )
 
-        if (parser.peek().tokenType == TokenType.RBrace) {
-            parser.shouldBe(TokenType.RBrace)
-            break
-        } else {
-            parser.shouldBe(TokenType.Comma)
+            if (parser.peek().tokenType == TokenType.RBrace) {
+                parser.shouldBe(TokenType.RBrace)
+                break
+            } else {
+                parser.shouldBe(TokenType.Comma)
+            }
+
         }
-
+    } else {
+        parser.shouldBe(TokenType.RBrace)
     }
 
     parser.shouldBe(TokenType.Colon)
@@ -159,12 +153,16 @@ export function parseBody(parser: Parser): Node {
     parser.shouldBe(TokenType.LBracket)
     const body: Node[] = []
 
-    while (parser.peek().tokenType != TokenType.RBracket) {
+    if (parser.peek().tokenType != TokenType.RBracket) {
+        while (parser.peek().tokenType != TokenType.RBracket) {
 
-        body.push(
-            parser.decideBody()
-        )
+            body.push(
+                parser.decideBody()
+            )
 
+        }
+    } else {
+        parser.shouldBe(TokenType.RBracket)
     }
 
     return new Body(body)

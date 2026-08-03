@@ -5,11 +5,13 @@ import type { Node } from "./globalAst";
 import { ParserBase } from "./helper";
 import { parseAllocator } from "./rules/allocator";
 import { parseCondition } from "./rules/conditional";
-import { parseBody, parseFunction } from "./rules/function";
+import { parseAction, parseAlias, parseBind, parseDAOP, parseData } from "./rules/daop";
+import { parseBody, parseFunction, parseFunctionHead } from "./rules/function";
 import { decideBody, parseLoop } from "./rules/loop";
 import { parseModifier } from "./rules/modifiers";
 import { parseModule } from "./rules/module";
 import { decideAllocator, decideCallOrArray, decideStatement, parseAccess, parseArray, parseAssignment, parseAtom, parseBinaryOperator, parseBinding, parseBreakStatement, parseCall, parseEquality, parseFree, parseInequality, parseLeftAssociativeOperator, parseLet, parseNew, parseNode, parseProduct, parseReturnStatement, parserMagnetic, parseSubstitution, parseSum, parseTransform } from "./rules/node";
+import { parseProgram } from "./rules/program";
 import { parseStructures } from "./rules/structures";
 import { parseArrayType, parseBuiltinTypes, parseCompositeType, parseHandleType, parseIdentifierType, parsePointerType, parseReferenceType, parseType } from "./rules/types";
 
@@ -177,12 +179,40 @@ export class Parser extends ParserBase {
         return parseBody(this)
     }
 
+    parseFunctionHead() {
+        return parseFunctionHead(this)
+    }
+
     parseFunction() {
         return parseFunction(this)
     }
 
     parseCondition() {
         return parseCondition(this)
+    }
+
+    parseAlias() {
+        return parseAlias(this)
+    }
+
+    parseAction() {
+        return parseAction(this)
+    }
+
+    parseBind() {
+        return parseBind(this)
+    }
+
+    parseData() {
+        return parseData(this)
+    }
+
+    parseDAOP() {
+        return parseDAOP(this)
+    }
+
+    parseProgram() {
+        return parseProgram(this)
     }
 
 }

@@ -19,7 +19,7 @@ export enum NodeType {
     PointerDeclNode, TransformStatement,TransformDeclNode, UnaryOperation,
     DataFieldNode,
     Integer, DataType, TokenNode, BinaryRelation, ListOfNodes, Modifier, LetNode, TransformNode,
-    Allocator, Module, Function, Body
+    Allocator, Module, Function, Body, If, Elif, Else
 }
 
 export class Node {

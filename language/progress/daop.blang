@@ -1,15 +1,18 @@
 //refer language/function
-ACTION -> "action" @IDENTIFIER '{' function.HEAD ';' (function.HEAD ';')* '}';
+ACTION -> "action" @IDENTIFIER '{' 
+    function.HEAD ';' 
+    (function.HEAD ';')* 
+'}';
 
 DATA ->
     //named token
-    "data" @IDENTIFIER ';';
+    "data" @IDENTIFIER ';' |
 
     //linear, refer language/type
-    "data" @IDENTIFIER '(' type.TYPE ')' ';';
+    "data" @IDENTIFIER '(' type.TYPE ')' ';' |
 
     //array, refer language/node, refer language/type
-    "data" @IDENTIFIER '[' type.TYPE ',' node.INTEGER ']' ';';
+    "data" @IDENTIFIER '[' type.TYPE ',' node.INTEGER ']' ';' |
 
     //struct-like
     "data" @IDENTIFIER '{' FIELD (FIELD)* '}'

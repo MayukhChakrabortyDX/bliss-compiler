@@ -2,6 +2,8 @@ import type { Diagnostic } from "typescript";
 import { Log, log } from "../../logger";
 import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
 import type { Node } from "./globalAst";
+import { EmptyNode } from "./rules/node";
+import { printNestedStackTrace } from "./debug";
 
 enum ParserMode {
     ScanMode, BranchMode
@@ -69,12 +71,29 @@ export class ParserBase {
         console.log();
     }
 
+    skippedCallbacks = new Set<String>()
+
+    skipCallback(name: string) {
+        this.skippedCallbacks.add(name)
+    }
+
+    useCallback<T>(name: string, callback: () => T): T | null {
+        if (this.skippedCallbacks.has(name)) {
+            this.skippedCallbacks.delete(name)
+            return null
+        }
+
+        return callback()
+    }
+
     //helpers starts here
     getTokenTypeName(tokenType: TokenType) {
         return TokenType[tokenType]
     }
 
     panic(given: Token, message: string) {
+
+        printNestedStackTrace()
 
         if (this.mode == ParserMode.ScanMode) {
             this.logTokenError(given, message)
@@ -132,6 +151,25 @@ export class ParserBase {
         return {
             status, expr
         }
+
+    }
+
+    useBranch(branches: (() => Node)[], panic: string) {
+
+        for (let caller of branches) {
+
+            const startIndex = this.tokenIndex
+            const branch = this.branchMode(() => caller())
+            if (branch.status == false) {
+                return branch.expr
+            }
+
+            this.tokenIndex = startIndex; //reset
+
+        }
+
+        this.panic(this.peek(), panic)
+        return new EmptyNode();
 
     }
 

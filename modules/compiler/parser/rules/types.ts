@@ -43,7 +43,8 @@ export class ListOfNodes extends Node {
 export function parseBuiltinTypes(parser: Parser): Node {
 
     if (parser.builtinTypes.has(parser.peek().tokenType)) {
-
+        
+        parser.advance()
         return new DataType(DataTypeEnum.builtin, new TokenNode(parser.peek()))
 
     } else {
@@ -159,24 +160,15 @@ export function parseArrayType(parser: Parser): Node {
 export function parseType(parser: Parser): Node {
 
     let branches = [
-        parser.parseBuiltinTypes,
-        parser.parseCompositeType,
-        parser.parseIdentifierType,
-        parser.parseHandleType,
-        parser.parsePointerType,
-        parser.parseReferenceType,
-        parser.parseArrayType,
+        () => parser.parseBuiltinTypes(),
+        () => parser.parseCompositeType(),
+        () => parser.parseIdentifierType(),
+        () => parser.parseHandleType(),
+        () => parser.parsePointerType(),
+        () => parser.parseReferenceType(),
+        () => parser.parseArrayType(),
     ]
 
-    for (let caller of branches) {
-
-        const branch = parser.branchMode(() => caller())
-        if (branch.status == false) {
-            return branch.expr
-        }
-
-    }
-
-    return new EmptyNode();
+    return parser.useBranch(branches, "Invalid Type Structure")
 
 }

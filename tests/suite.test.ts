@@ -1,4 +1,5 @@
-import { Parser } from "../modules/compiler/parser-old/parser";
+//replace with old one to check for the outputs.
+import { Parser } from "../modules/compiler/parser/parser";
 import { Tokenizer } from "../modules/compiler/tokenizer/tokenizer";
 import { readFileSync, mkdirSync, writeFileSync, existsSync } from "fs";
 import path from "path";

@@ -1,0 +1,78 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "nodes": [
+    {
+      "type": 56,
+      "typeName": "Module",
+      "start": 0,
+      "end": 0,
+      "kind": 0,
+      "accessor": {
+        "type": 5,
+        "typeName": "Identifier",
+        "start": 0,
+        "end": 0,
+        "identifier": "hello"
+      }
+    },
+    {
+      "type": 56,
+      "typeName": "Module",
+      "start": 0,
+      "end": 0,
+      "kind": 1,
+      "accessor": {
+        "type": 7,
+        "typeName": "BinaryOperation",
+        "start": 0,
+        "end": 0,
+        "operation": 5,
+        "left": {
+          "type": 5,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "identifier": "src"
+        },
+        "right": {
+          "type": 5,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "identifier": "main"
+        }
+      }
+    },
+    {
+      "type": 56,
+      "typeName": "Module",
+      "start": 0,
+      "end": 0,
+      "kind": 0,
+      "accessor": {
+        "type": 7,
+        "typeName": "BinaryOperation",
+        "start": 0,
+        "end": 0,
+        "operation": 5,
+        "left": {
+          "type": 5,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "identifier": "std"
+        },
+        "right": {
+          "type": 5,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "identifier": "item"
+        }
+      }
+    }
+  ]
+}

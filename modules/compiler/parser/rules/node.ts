@@ -44,7 +44,8 @@ export enum BinaryOperationEnum {
     Equals, NotEquals,
     Assignment,
     Allocate, Free,
-    Substitute
+    Substitute,
+    Alias
 }
 
 export class BinaryOperation extends Node {
@@ -583,23 +584,14 @@ export function parseSubstitution(parser: Parser): Node {
 export function decideStatement(parser: Parser): Node {
 
     let statement = [
-        parser.parseReturnStatement,
-        parser.parseBreakStatement,
-        parser.parseLet,
-        parser.parseTransform,
-        parser.parseSubstitution
+        () => parser.parseReturnStatement(),
+        () => parser.parseBreakStatement(),
+        () => parser.parseLet(),
+        () => parser.parseTransform(),
+        () => parser.parseSubstitution()
     ]
 
-    for (let caller of statement) {
-
-        const branch = parser.branchMode(() => caller())
-        if (branch.status == false) {
-            return branch.expr
-        }
-
-    }
-
-    return new EmptyNode();
+    return parser.useBranch(statement, "Invalid statement structure")
 
 }
 
@@ -650,20 +642,11 @@ export function decideAllocator(parser: Parser): Node {
 export function parseNode(parser: Parser): Node {
 
     let nodes = [
-        parser.parseAssignment,
-        parser.decideStatement,
-        parser.decideAllocator,
+        () => parser.parseAssignment(),
+        () => parser.decideStatement(),
+        () => parser.decideAllocator(),
     ]
 
-    for (let caller of nodes) {
-
-        const branch = parser.branchMode(() => caller())
-        if (branch.status == false) {
-            return branch.expr
-        }
-
-    }
-
-    return new EmptyNode();
+    return parser.useBranch(nodes, "Invalid Node Structure")
 
 }

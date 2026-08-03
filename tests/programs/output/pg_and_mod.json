@@ -1,0 +1,50 @@
+{
+  "type": 0,
+  "typeName": "Program",
+  "start": 0,
+  "end": 0,
+  "nodes": [
+    {
+      "type": 56,
+      "typeName": "Module",
+      "start": 0,
+      "end": 0,
+      "kind": 0,
+      "accessor": {
+        "type": 5,
+        "typeName": "Identifier",
+        "start": 0,
+        "end": 0,
+        "identifier": "stdio"
+      }
+    },
+    {
+      "type": 57,
+      "typeName": "Function",
+      "start": 0,
+      "end": 0,
+      "name": {
+        "type": 5,
+        "typeName": "Identifier",
+        "start": 0,
+        "end": 0,
+        "identifier": "main"
+      },
+      "args": [],
+      "returnType": {
+        "type": 48,
+        "typeName": "DataType",
+        "start": 0,
+        "end": 0,
+        "dataType": 0
+      },
+      "body": {
+        "type": 58,
+        "typeName": "Body",
+        "start": 0,
+        "end": 0,
+        "nodes": []
+      }
+    }
+  ]
+}
