@@ -1,17 +1,23 @@
-import { charLogFilter } from "../logger/filters/charLog.filter";
-import { Log, LogType } from "../logger/logger";
+import { log, LogType } from "../logger/logger";
 import { TokenizeBase } from "./helper";
 
-// error handling (much more efficient and verbose) for tokenization phase
+// error handling for tokenization phase
 export class ErrorHandling extends TokenizeBase {
     logCharError(char: string, message: string): void {
-        const forSource = charLogFilter(this.source);
+        const source = this.sourceContainer.str;
+        const position = this.span_end;
 
-        Log({
+        const row = source.slice(0, position).split("\n").length;
+        const lastNewline = source.lastIndexOf("\n", position - 1);
+        const col = position - lastNewline;
+
+        log({
             type: LogType.Error,
-            stage: "tokenizer",
-            message,
-            filter: forSource(char, this.presentState, this.span_end),
+            where: "TOKENIZER",
+            title: message,
+            description:
+                `Unexpected character ${JSON.stringify(char)} ` +
+                `at row ${row}, col ${col}.`,
         });
 
         process.exit(1);
