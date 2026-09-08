@@ -2,6 +2,7 @@
 
 import { TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import { EmptyNode, Identifier } from "./node";
 
@@ -45,12 +46,12 @@ export class Body extends Node {
 
 function parseAction(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_With)
+    if ( parser.shouldBe(TokenType.K_With) ) return new PanicNode();
     if (parser.peek().tokenType == TokenType.LBrace) {
 
         const names: Node[] = []
 
-        parser.shouldBe(TokenType.LBrace)
+        if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
         while (true) {
 
             names.push(
@@ -58,10 +59,10 @@ function parseAction(parser: Parser): Node {
             )
 
             if (parser.peek().tokenType == TokenType.RBrace) {
-                parser.shouldBe(TokenType.RBrace)
+                if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
                 break;
             } else {
-                parser.shouldBe(TokenType.Comma)
+                if ( parser.shouldBe(TokenType.Comma) ) return new PanicNode();
             }
 
         }
@@ -116,9 +117,9 @@ function parseArgument(parser: Parser): Node {
 
 export function parseFunctionHead(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Fx)
+    if ( parser.shouldBe(TokenType.K_Fx) ) return new PanicNode();
     const name = parser.digest(TokenType.Identifier)
-    parser.shouldBe(TokenType.LBrace)
+    if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
 
     const args: Node[] = []
 
@@ -130,18 +131,18 @@ export function parseFunctionHead(parser: Parser): Node {
             )
 
             if (parser.peek().tokenType == TokenType.RBrace) {
-                parser.shouldBe(TokenType.RBrace)
+                if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
                 break
             } else {
-                parser.shouldBe(TokenType.Comma)
+                if ( parser.shouldBe(TokenType.Comma) ) return new PanicNode();
             }
 
         }
     } else {
-        parser.shouldBe(TokenType.RBrace)
+        if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
     }
 
-    parser.shouldBe(TokenType.Colon)
+    if ( parser.shouldBe(TokenType.Colon) ) return new PanicNode();
     const returnType = parser.parseType();
 
     return new Function(new Identifier(name), args, returnType)
@@ -150,7 +151,7 @@ export function parseFunctionHead(parser: Parser): Node {
 
 export function parseBody(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.LBracket)
+    if ( parser.shouldBe(TokenType.LBracket) ) return new PanicNode();
     const body: Node[] = []
 
     if (parser.peek().tokenType != TokenType.RBracket) {
@@ -161,8 +162,12 @@ export function parseBody(parser: Parser): Node {
             )
 
         }
+
+        if ( parser.shouldBe(TokenType.RBracket) ) return new PanicNode();
+
     } else {
-        parser.shouldBe(TokenType.RBracket)
+        
+        if ( parser.shouldBe(TokenType.RBracket) ) return new PanicNode();
     }
 
     return new Body(body)

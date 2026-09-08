@@ -1,15 +1,16 @@
 import { TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import { BinaryOperation, BinaryOperationEnum, EmptyNode, Identifier } from "./node";
 
 export function parseAlias(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Alias)
+    if ( parser.shouldBe(TokenType.K_Alias) ) return new PanicNode();
     const type = parser.parseType()
-    parser.shouldBe(TokenType.K_As)
+    if ( parser.shouldBe(TokenType.K_As) ) return new PanicNode();
     const name = new Identifier(parser.digest(TokenType.Identifier))
-    parser.shouldBe(TokenType.Semicolon)
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new BinaryOperation(
         BinaryOperationEnum.Alias,
@@ -28,10 +29,10 @@ export class Action extends Node {
 
 export function parseAction(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Action)
+    if ( parser.shouldBe(TokenType.K_Action) ) return new PanicNode();
     const name = new Identifier(parser.digest(TokenType.Identifier))
 
-    parser.shouldBe(TokenType.LBracket)
+    if ( parser.shouldBe(TokenType.LBracket) ) return new PanicNode();
 
     const actionBody: Node[] = []
 
@@ -41,11 +42,11 @@ export function parseAction(parser: Parser): Node {
             parser.parseFunctionHead()
         )
 
-        parser.shouldBe(TokenType.Semicolon)
+        if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     }
 
-    parser.shouldBe(TokenType.RBracket)
+    if ( parser.shouldBe(TokenType.RBracket) ) return new PanicNode();
 
     return new Action(name, actionBody)
 
@@ -63,9 +64,9 @@ export class Bind extends Node {
 
 export function parseBind(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Bind)
+    if ( parser.shouldBe(TokenType.K_Bind) ) return new PanicNode();
     const dataName = new Identifier(parser.digest(TokenType.Identifier))
-    parser.shouldBe(TokenType.K_With)
+    if ( parser.shouldBe(TokenType.K_With) ) return new PanicNode();
 
     const actions: Node[] = []
 
@@ -83,7 +84,7 @@ export function parseBind(parser: Parser): Node {
 
     parser.useCallback("check-bracket-identifiers", () => {
 
-        parser.shouldBe(TokenType.LBrace)
+        if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
 
         while (true) {
 
@@ -94,20 +95,20 @@ export function parseBind(parser: Parser): Node {
             )
 
             if ( parser.peek().tokenType == TokenType.RBrace ) {
-                parser.shouldBe(TokenType.RBrace)
+                if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
                 return
             }
 
-            parser.shouldBe(TokenType.Comma)
+            if ( parser.shouldBe(TokenType.Comma) ) return new PanicNode();
 
         }
 
     })
 
-    parser.shouldBe(TokenType.K_As)
+    if ( parser.shouldBe(TokenType.K_As) ) return new PanicNode();
     const bindingName = new Identifier(parser.digest(TokenType.Identifier))
 
-    parser.shouldBe(TokenType.LBracket)
+    if ( parser.shouldBe(TokenType.LBracket) ) return new PanicNode();
 
     const functions: Node[] = []
 
@@ -119,7 +120,7 @@ export function parseBind(parser: Parser): Node {
 
     }
 
-    parser.shouldBe(TokenType.RBracket)
+    if ( parser.shouldBe(TokenType.RBracket) ) return new PanicNode();
     return new Bind( dataName, actions, bindingName, functions )
 
 }

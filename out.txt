@@ -1,80 +1,409 @@
 
---- Running action.bx ---
-[fx run(): void;]
-[fx main(): limit;]
-[fx itemize(): [item];]
-[fx doesSomething(): `i32;]
-[fx doesSomethingElse(Item::Leftenant maker with (Doable)): Item::Rightanent;]
-[action Itemize {
-    
-    fx run(): void;
-    fx main(): limit;
-    fx itemize(): [item];
-    fx doesSomething(): `i32;
-    fx doesSomethingElse(Item::Leftenant maker with (Doable)): Item::Rightanent;
+--- Running function.bx ---
+[]
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseModule[0m [90m(modules\compiler\parser\rules\module.ts:33:11)[0m[0m
+                  [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
 
-}]
+=== function ===
+--> written to tests\programs\output\function.json
 
-=== action ===
---> written to tests\programs\output\action.json
+--- Running fxbody.bx ---
+[]
+[
+  Module {
+    [0mtype[2m:[0m [0m[33m56[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Module"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mkind[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0maccessor[2m:[0m BinaryOperation {
+      [0mtype[2m:[0m [0m[33m7[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"BinaryOperation"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0moperation[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mleft[2m:[0m [0m[36m[Object ...][0m[0m[2m,[0m
+      [0mright[2m:[0m [0m[36m[Object ...][0m[0m[2m,[0m
+    }[0m[2m,[0m
+  }
+]
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseModule[0m [90m(modules\compiler\parser\rules\module.ts:33:11)[0m[0m
+                  [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                  [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:161:23)[0m[0m
+                    [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                      [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                        [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                          [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                            [90m└─ [0m[36mparseLoop[0m [90m(modules\compiler\parser\rules\loop.ts:35:15)[0m[0m
+                              [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                                [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                                  [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                  [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:161:23)[0m[0m
+                    [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                      [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                        [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                          [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                            [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:175:17)[0m[0m
+                              [90m└─ [0m[36mparseFunctionHead[0m [90m(modules\compiler\parser\rules\function.ts:120:16)[0m[0m
+                                [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                                  [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                                    [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                  [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:161:23)[0m[0m
+                    [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                      [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                        [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                          [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                            [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                              [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:154:16)[0m[0m
+                                [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                                  [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                                    [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                  [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:161:23)[0m[0m
+                    [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                      [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                        [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                          [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                            [90m└─ [0m[36mparseCondition[0m [90m(modules\compiler\parser\rules\conditional.ts:81:19)[0m[0m
+                              [90m└─ [0m[36mparseIf[0m [90m(modules\compiler\parser\rules\conditional.ts:43:16)[0m[0m
+                                [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                                  [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                                    [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                  [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:161:23)[0m[0m
+                    [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                      [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                        [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:174:13)[0m[0m
+                          [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[
+  Module {
+    [0mtype[2m:[0m [0m[33m56[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Module"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mkind[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0maccessor[2m:[0m BinaryOperation {
+      [0mtype[2m:[0m [0m[33m7[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"BinaryOperation"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0moperation[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mleft[2m:[0m [0m[36m[Object ...][0m[0m[2m,[0m
+      [0mright[2m:[0m [0m[36m[Object ...][0m[0m[2m,[0m
+    }[0m[2m,[0m
+  }[0m[2m,[0m Function {
+    [0mtype[2m:[0m [0m[33m57[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Function"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mname[2m:[0m Identifier {
+      [0mtype[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"Identifier"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0midentifier[2m:[0m [0m[32m[0m[32m"main"[0m[0m[0m[2m,[0m
+    }[0m[2m,[0m
+    [0margs[2m:[0m [][0m[2m,[0m
+    [0mreturnType[2m:[0m DataType {
+      [0mtype[2m:[0m [0m[33m48[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"DataType"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mdataType[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    }[0m[2m,[0m
+    [0mbody[2m:[0m Body {
+      [0mtype[2m:[0m [0m[33m58[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"Body"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mnodes[2m:[0m [
+        [0m[36m[Object ...][0m
+      ][0m[2m,[0m
+    }[0m[2m,[0m
+  }
+]
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseModule[0m [90m(modules\compiler\parser\rules\module.ts:33:11)[0m[0m
+                  [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:175:17)[0m[0m
+                  [90m└─ [0m[36mparseFunctionHead[0m [90m(modules\compiler\parser\rules\function.ts:120:16)[0m[0m
+                    [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                      [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                        [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseFunction[0m [90m(modules\compiler\parser\rules\function.ts:176:24)[0m[0m
+                  [90m└─ [0m[36mparseBody[0m [90m(modules\compiler\parser\rules\function.ts:154:16)[0m[0m
+                    [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                      [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                        [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                  [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                    [90m└─ [0m[36mparseAlias[0m [90m(modules\compiler\parser\rules\daop.ts:9:16)[0m[0m
+                      [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                        [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                          [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                  [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                    [90m└─ [0m[36mparseAction[0m [90m(modules\compiler\parser\rules\daop.ts:32:16)[0m[0m
+                      [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                        [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                          [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+                  [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                    [90m└─ [0m[36mparseBind[0m [90m(modules\compiler\parser\rules\daop.ts:67:16)[0m[0m
+                      [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                        [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                          [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:174:13)[0m[0m
+                  [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseAllocator[0m [90m(modules\compiler\parser\rules\allocator.ts:15:16)[0m[0m
+                  [90m└─ [0m[36mshouldBe[0m [90m(modules\compiler\parser\helper.ts:191:21)[0m[0m
+                    [90m└─ [0m[36mexpect[0m [90m(modules\compiler\parser\helper.ts:184:17)[0m[0m
+                      [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:174:13)[0m[0m
+              [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
+[2m[14:52:39][0m [41m[37m ERROR [0m [31m[1m[PARSER][0m [1mNo valid root structure matched.[0m
+[2m  └─ [34m[1m [0mline 5, col 1[0m
 
---- Running binding.bx ---
+[34m[1m   |[0m
+[34m[1m5  |[0m }
+[34m[1m   |[0m [31m[1m^[0m
+[34m[1m   |[0m [2mtoken: RBracket ("}")[0m
 
-=== binding ===
---> written to tests\programs\output\binding.json
 
---- Running hello.bx ---
-[fx main(): void {
+--- Running module.bx ---
+[]
+[
+  Module {
+    [0mtype[2m:[0m [0m[33m56[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Module"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mkind[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0maccessor[2m:[0m Identifier {
+      [0mtype[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"Identifier"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0midentifier[2m:[0m [0m[32m[0m[32m"hello"[0m[0m[0m[2m,[0m
+    }[0m[2m,[0m
+  }
+]
+[
+  Module {
+    [0mtype[2m:[0m [0m[33m56[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Module"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mkind[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0maccessor[2m:[0m Identifier {
+      [0mtype[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"Identifier"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0midentifier[2m:[0m [0m[32m[0m[32m"hello"[0m[0m[0m[2m,[0m
+    }[0m[2m,[0m
+  }[0m[2m,[0m Module {
+    [0mtype[2m:[0m [0m[33m56[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Module"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mkind[2m:[0m [0m[33m1[0m[0m[2m,[0m
+    [0maccessor[2m:[0m BinaryOperation {
+      [0mtype[2m:[0m [0m[33m7[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"BinaryOperation"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0moperation[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mleft[2m:[0m [0m[36m[Object ...][0m[0m[2m,[0m
+      [0mright[2m:[0m [0m[36m[Object ...][0m[0m[2m,[0m
+    }[0m[2m,[0m
+  }
+]
 
-    println("Hello World");
+=== module ===
+--> written to tests\programs\output\module.json
 
-}]
+--- Running pg_and_mod.bx ---
+[]
+[
+  Module {
+    [0mtype[2m:[0m [0m[33m56[0m[0m[2m,[0m
+    [0mtypeName[2m:[0m [0m[32m[0m[32m"Module"[0m[0m[0m[2m,[0m
+    [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0mkind[2m:[0m [0m[33m0[0m[0m[2m,[0m
+    [0maccessor[2m:[0m Identifier {
+      [0mtype[2m:[0m [0m[33m5[0m[0m[2m,[0m
+      [0mtypeName[2m:[0m [0m[32m[0m[32m"Identifier"[0m[0m[0m[2m,[0m
+      [0mstart[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0mend[2m:[0m [0m[33m0[0m[0m[2m,[0m
+      [0midentifier[2m:[0m [0m[32m[0m[32m"stdio"[0m[0m[0m[2m,[0m
+    }[0m[2m,[0m
+  }
+]
+[31m▶ Call Chain[0m
+[36mloadAndEvaluateModule[0m [90m(:2:0)[0m[0m
+  [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+    [90m└─ [0m[36mmoduleEvaluation[0m [90m(:1:10)[0m[0m
+      [90m└─ [0m[36m[0m [90m(tests\suite.test.ts:45:0)[0m[0m
+        [90m└─ [0m[36mmain[0m [90m(tests\suite.test.ts:32:23)[0m[0m
+          [90m└─ [0m[36mparseProgram[0m [90m(modules\compiler\parser\rules\program.ts:31:28)[0m[0m
+            [90m└─ [0m[36museBranch[0m [90m(modules\compiler\parser\helper.ts:165:32)[0m[0m
+              [90m└─ [0m[36mbranchMode[0m [90m(modules\compiler\parser\helper.ts:148:21)[0m[0m
+                [90m└─ [0m[36mparseModule[0m [90m(modules\compiler\parser\rules\module.ts:33:11)[0m[0m
+                  [90m└─ [0m[33mpanic[0m [90m(modules\compiler\parser\helper.ts:99:8)[0m[0m
 
-=== hello ===
---> written to tests\programs\output\hello.json
-
---- Running linkedList.bx ---
-[data LinkedList {
-    $LinkedList next;
-    $LinkedList prev;
-    i32 val;
-}]
-[data Solo;]
-[data Maximum(i32);]
-[data Lucrative[Itemze::(Solvable), 58];]
-[fx main(): i32 {
-
-    //this is one valid approach
-    view root: LinkedList = malloc(sizeof LinkedList);
-
-    ptr leftPtr: u8 = malloc(sizeof LinkedList);
-    view leftPtr as left: LinkedList; //another valid approach
-
-    $root.$left = $left; //takes it from the view
-
-    return 0;
-
-}]
-
-=== linkedList ===
---> written to tests\programs\output\linkedList.json
-
---- Running userAlloc.bx ---
-[fx main(): void {
-
-    transform A: i64 = malloc((sizeof u8) * 8); //case a where we are transforming this to a 64 bit data
-    transform malloc(sizeof u32) to byteArray: u8; //this is basically transformation of the pointer types.
-
-}]
-
-=== userAlloc ===
---> written to tests\programs\output\userAlloc.json
+=== pg_and_mod ===
+--> written to tests\programs\output\pg_and_mod.json
 
 === Summary ===
-PASS  action.bx
-PASS  binding.bx
-PASS  hello.bx
-PASS  linkedList.bx
-PASS  userAlloc.bx
+PASS  function.bx
+FAIL  fxbody.bx  (exit 1)
+PASS  module.bx
+PASS  pg_and_mod.bx
 
-5/5 succeeded
+3/4 succeeded

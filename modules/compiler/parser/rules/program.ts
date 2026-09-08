@@ -12,7 +12,6 @@ export class Program extends Node {
 
 export function parseProgram(parser: Parser): Node {
 
-
     //this parses a program
     let nodes: Node[] = []
     const branches = [
@@ -24,17 +23,18 @@ export function parseProgram(parser: Parser): Node {
 
     while (true) {
 
-        const node = parser.useBranch(branches, "No valid structure matched.")
+        if ( parser.peek().tokenType == TokenType.EOF ) {
+            break
+        }
 
-        if ( node.type == NodeType.EmptyNode ) {
+        //console.log(JSON.stringify(nodes, undefined, 2))
+        const node = parser.useBranch(branches, "No valid root structure matched.")
+
+        if ( node.type == NodeType.EmptyNode || node.type == NodeType.Panic ) {
             break
         }
 
         nodes.push(node)
-
-        if ( parser.peek().tokenType == TokenType.EOF ) {
-            break
-        }
 
     }
 

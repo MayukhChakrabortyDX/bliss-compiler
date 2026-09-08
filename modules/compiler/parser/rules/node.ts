@@ -1,5 +1,6 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import type { Modifier } from "./modifiers";
 
@@ -113,20 +114,20 @@ export function parseAtom(parser: Parser): Node {
             return StrNode
 
         case TokenType.LBrace:
-            parser.shouldBe(TokenType.LBrace)
+            if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
             const NodeInBraces = parser.parseNode()
-            parser.shouldBe(TokenType.RBrace)
+            if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
             return NodeInBraces
 
         case TokenType.LSquareBrace:
-            parser.shouldBe(TokenType.LSquareBrace)
+            if ( parser.shouldBe(TokenType.LSquareBrace) ) return new PanicNode();
             const PointerAccess = parser.parseNode()
 
             if (parser.peek().tokenType == TokenType.StraightBar) {
 
-                parser.shouldBe(TokenType.StraightBar)
+                if ( parser.shouldBe(TokenType.StraightBar) ) return new PanicNode();
                 const PointerIndex = parser.parseNode()
-                parser.shouldBe(TokenType.RSquareBrace)
+                if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
                 parser.advance()
                 return new BinaryOperation(
@@ -137,7 +138,7 @@ export function parseAtom(parser: Parser): Node {
 
             }
 
-            parser.shouldBe(TokenType.RSquareBrace)
+            if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
             parser.advance()
             return new BinaryOperation(
@@ -147,16 +148,16 @@ export function parseAtom(parser: Parser): Node {
             )
 
         case TokenType.HashSymbol:
-            parser.shouldBe(TokenType.HashSymbol)
-            parser.shouldBe(TokenType.LSquareBrace)
+            if ( parser.shouldBe(TokenType.HashSymbol) ) return new PanicNode();
+            if ( parser.shouldBe(TokenType.LSquareBrace) ) return new PanicNode();
 
             const HandleAccess = parser.parseNode()
 
             if (parser.peek().tokenType == TokenType.StraightBar) {
 
-                parser.shouldBe(TokenType.StraightBar)
+                if ( parser.shouldBe(TokenType.StraightBar) ) return new PanicNode();
                 const HandleIndex = parser.parseNode()
-                parser.shouldBe(TokenType.RSquareBrace)
+                if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
                 parser.advance()
                 return new BinaryOperation(
@@ -167,7 +168,7 @@ export function parseAtom(parser: Parser): Node {
 
             }
 
-            parser.shouldBe(TokenType.RSquareBrace)
+            if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
             parser.advance()
             return new BinaryOperation(
@@ -177,23 +178,23 @@ export function parseAtom(parser: Parser): Node {
             )
 
         case TokenType.Backtick:
-            parser.shouldBe(TokenType.Backtick)
+            if ( parser.shouldBe(TokenType.Backtick) ) return new PanicNode();
             const ReferenceNode = parser.parseAtom()
             return new Reference(ReferenceNode)
 
         case TokenType.K_Adrs:
-            parser.shouldBe(TokenType.K_Adrs)
+            if ( parser.shouldBe(TokenType.K_Adrs) ) return new PanicNode();
             const AddressOf = parser.parseAtom()
             return new UnaryOperation(UnaryOperationEnum.AddressOf, AddressOf)
 
         case TokenType.K_Sizeof:
-            parser.shouldBe(TokenType.K_Sizeof)
+            if ( parser.shouldBe(TokenType.K_Sizeof) ) return new PanicNode();
             const SizeOf = parser.parseAtom()
             return new UnaryOperation(UnaryOperationEnum.SizeOf, SizeOf);
 
     }
-
-    parser.advance()
+    
+    parser.panic(parser.peek(), "No expression found")
     return new EmptyNode() //the nothing denoter.
 
 }
@@ -202,9 +203,9 @@ export function parseArray(atom: Node, parser: Parser): Node {
 
     if (parser.peek().tokenType == TokenType.LSquareBrace) {
 
-        parser.shouldBe(TokenType.LSquareBrace)
+        if ( parser.shouldBe(TokenType.LSquareBrace) ) return new PanicNode();
         const index = parser.parseAtom()
-        parser.shouldBe(TokenType.RSquareBrace)
+        if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
         parser.advance()
         return new BinaryOperation(
@@ -232,16 +233,16 @@ export function parseCall(atom: Node, parser: Parser): Node {
     if (parser.peek().tokenType == TokenType.LBrace) {
 
         const argumentList: Node[] = []
-        parser.shouldBe(TokenType.LBrace)
+        if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
 
         while (true) {
 
             argumentList.push(parser.parseAtom())
 
             if (parser.peek().tokenType != TokenType.RBrace) {
-                parser.shouldBe(TokenType.Comma)
+                if ( parser.shouldBe(TokenType.Comma) ) return new PanicNode();
             } else {
-                parser.shouldBe(TokenType.RBrace)
+                if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
                 break
             }
 
@@ -490,17 +491,17 @@ export function parseAssignment(parser: Parser): Node {
 
 export function parseReturnStatement(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Return);
+    if ( parser.shouldBe(TokenType.K_Return) ) return new PanicNode();
 
     if (parser.peek().tokenType == TokenType.Semicolon) {
 
-        parser.shouldBe(TokenType.Semicolon)
+        if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
         return new UnaryOperation(UnaryOperationEnum.Return, new EmptyNode())
 
     }
 
     const expr = parser.parseAssignment()
-    parser.shouldBe(TokenType.Semicolon)
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new UnaryOperation(UnaryOperationEnum.Return, expr)
 
@@ -508,17 +509,17 @@ export function parseReturnStatement(parser: Parser): Node {
 
 export function parseBreakStatement(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Break);
+    if ( parser.shouldBe(TokenType.K_Break) ) return new PanicNode();
 
     if (parser.peek().tokenType == TokenType.Semicolon) {
 
-        parser.shouldBe(TokenType.Semicolon)
+        if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
         return new UnaryOperation(UnaryOperationEnum.Break, new EmptyNode())
 
     }
 
     const expr = parser.parseAssignment()
-    parser.shouldBe(TokenType.Semicolon)
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new UnaryOperation(UnaryOperationEnum.Break, expr)
 
@@ -534,16 +535,16 @@ export function parseLet(parser: Parser) : Node {
         )
     }
 
-    parser.shouldBe(TokenType.K_Let)
+    if ( parser.shouldBe(TokenType.K_Let) ) return new PanicNode();
     
     const variableName = new Identifier(parser.digest(TokenType.Identifier))
-    parser.shouldBe(TokenType.Colon)
+    if ( parser.shouldBe(TokenType.Colon) ) return new PanicNode();
     
     const type = parser.parseType()
-    parser.shouldBe(TokenType.Assignment)
+    if ( parser.shouldBe(TokenType.Assignment) ) return new PanicNode();
 
     const expression = parser.parseNode()
-    parser.shouldBe(TokenType.Semicolon)
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new LetNode(
         modifiers, variableName, type, expression
@@ -553,13 +554,13 @@ export function parseLet(parser: Parser) : Node {
 
 export function parseTransform(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Transform)
+    if ( parser.shouldBe(TokenType.K_Transform) ) return new PanicNode();
     const expression = parser.parseNode()
-    parser.shouldBe(TokenType.K_To)
+    if ( parser.shouldBe(TokenType.K_To) ) return new PanicNode();
     const name = new Identifier(parser.digest(TokenType.Identifier))
-    parser.shouldBe(TokenType.Colon)
+    if ( parser.shouldBe(TokenType.Colon) ) return new PanicNode();
     const type = parser.parseType()
-    parser.shouldBe(TokenType.Semicolon)
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new TransformNode(expression, type, name)
 
@@ -567,11 +568,11 @@ export function parseTransform(parser: Parser): Node {
 
 export function parseSubstitution(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Sub)
+    if ( parser.shouldBe(TokenType.K_Sub) ) return new PanicNode();
     const expr = parser.parseNode()
-    parser.shouldBe(TokenType.K_With)
+    if ( parser.shouldBe(TokenType.K_With) ) return new PanicNode();
     const name = new Identifier(parser.digest(TokenType.Identifier))
-    parser.shouldBe(TokenType.Semicolon)
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new BinaryOperation(
         BinaryOperationEnum.Substitute,
@@ -599,12 +600,12 @@ export function decideStatement(parser: Parser): Node {
 
 export function parseNew(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_New);
-    parser.shouldBe(TokenType.LessThan);
+    if ( parser.shouldBe(TokenType.K_New) ) return new PanicNode();
+    if ( parser.shouldBe(TokenType.LessThan) ) return new PanicNode();
     const allocatorName = parser.digest(TokenType.Identifier);
-    parser.shouldBe(TokenType.GreaterThan);
+    if ( parser.shouldBe(TokenType.GreaterThan) ) return new PanicNode();
     const expr = parser.parseAssignment();
-    parser.shouldBe(TokenType.Semicolon);
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new BinaryOperation(
         BinaryOperationEnum.Allocate,
@@ -615,12 +616,12 @@ export function parseNew(parser: Parser): Node {
 
 export function parseFree(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Free);
-    parser.shouldBe(TokenType.LessThan);
+    if ( parser.shouldBe(TokenType.K_Free) ) return new PanicNode();
+    if ( parser.shouldBe(TokenType.LessThan) ) return new PanicNode();
     const allocatorName = parser.digest(TokenType.Identifier);
-    parser.shouldBe(TokenType.GreaterThan);
+    if ( parser.shouldBe(TokenType.GreaterThan) ) return new PanicNode();
     const expr = parser.parseAssignment();
-    parser.shouldBe(TokenType.Semicolon);
+    if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
 
     return new BinaryOperation(
         BinaryOperationEnum.Allocate,
@@ -643,8 +644,8 @@ export function parseNode(parser: Parser): Node {
 
     let nodes = [
         () => parser.parseAssignment(),
-        () => parser.decideStatement(),
         () => parser.decideAllocator(),
+        () => parser.decideStatement(),
     ]
 
     return parser.useBranch(nodes, "Invalid Node Structure")

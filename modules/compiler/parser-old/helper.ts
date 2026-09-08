@@ -1,5 +1,5 @@
 import type { Diagnostic } from "typescript";
-import { Log, log } from "../../logger";
+import { Log, log } from "../../../compiler/logger/logger";
 import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
 import type { Node } from "../parser/globalAst";
 

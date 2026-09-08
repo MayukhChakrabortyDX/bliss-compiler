@@ -1,5 +1,6 @@
 import { Token, TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import { EmptyNode, Identifier, Integer } from "./node";
 
@@ -58,7 +59,7 @@ export function parseBuiltinTypes(parser: Parser): Node {
 export function parseCompositeType(parser: Parser): Node {
 
     const expr = parser.parseNode();
-    parser.shouldBe(TokenType.DoubleColon);
+    if ( parser.shouldBe(TokenType.DoubleColon) ) return new PanicNode();
 
     if (parser.peek().tokenType == TokenType.Identifier) {
 
@@ -74,7 +75,7 @@ export function parseCompositeType(parser: Parser): Node {
 
     }
 
-    parser.shouldBe(TokenType.LBrace)
+    if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
     const list = new ListOfNodes([])
 
     while (parser.peek().tokenType != TokenType.RBrace) {
@@ -85,12 +86,12 @@ export function parseCompositeType(parser: Parser): Node {
 
         if (parser.peek().tokenType == TokenType.RBrace) {
 
-            parser.shouldBe(TokenType.RBrace)
+            if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
             break
 
         }
 
-        parser.shouldBe(TokenType.Comma)
+        if ( parser.shouldBe(TokenType.Comma) ) return new PanicNode();
 
     }
 
@@ -115,7 +116,7 @@ export function parseIdentifierType(parser: Parser): Node {
 
 export function parseHandleType(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.HashSymbol)
+    if ( parser.shouldBe(TokenType.HashSymbol) ) return new PanicNode();
     return new DataType(
         DataTypeEnum.handle, parser.parseType()
     )
@@ -124,9 +125,9 @@ export function parseHandleType(parser: Parser): Node {
 
 export function parsePointerType(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.LSquareBrace)
+    if ( parser.shouldBe(TokenType.LSquareBrace) ) return new PanicNode();
     const type = parser.parseType()
-    parser.shouldBe(TokenType.RSquareBrace)
+    if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
     return new DataType(DataTypeEnum.pointer, type)
 
@@ -134,7 +135,7 @@ export function parsePointerType(parser: Parser): Node {
 
 export function parseReferenceType(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.Backtick)
+    if ( parser.shouldBe(TokenType.Backtick) ) return new PanicNode();
     const type = parser.parseType()
 
     return new DataType(DataTypeEnum.reference, type)
@@ -144,9 +145,9 @@ export function parseReferenceType(parser: Parser): Node {
 export function parseArrayType(parser: Parser): Node {
 
     const type = parser.parseType()
-    parser.shouldBe(TokenType.LSquareBrace)
+    if ( parser.shouldBe(TokenType.LSquareBrace) ) return new PanicNode();
     const integer = parser.digest(TokenType.Integer)
-    parser.shouldBe(TokenType.RSquareBrace)
+    if ( parser.shouldBe(TokenType.RSquareBrace) ) return new PanicNode();
 
     return new DataType(
         DataTypeEnum.array,

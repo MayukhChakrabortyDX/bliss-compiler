@@ -1,4 +1,4 @@
-import { log, Log } from "../modules/logger";
+import { log, Log } from "../compiler/logger/logger";
 // Example Usage:
 log(Log.Info, "AuthService", "User login successful", "User ID: 49201 connected from IP 192.168.1.1");
 log(Log.Warning, "Database", "Connection pool reaching capacity", "Active connections: 85/100. Consider scaling.");

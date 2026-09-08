@@ -1,5 +1,6 @@
 import { TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import { Parser } from "../parser";
 import { EmptyNode } from "./node";
 
@@ -39,12 +40,12 @@ export class Condition extends Node {
 
 function parseIf(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_If)
-    parser.shouldBe(TokenType.LBrace)
+    if ( parser.shouldBe(TokenType.K_If) ) return new PanicNode();
+    if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
 
     const condition: Node = parser.parseNode()
 
-    parser.shouldBe(TokenType.RBrace)
+    if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
 
     const body = parser.parseBody()
 
@@ -54,12 +55,12 @@ function parseIf(parser: Parser): Node {
 
 function parseElif(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Elif)
-    parser.shouldBe(TokenType.LBrace)
+    if ( parser.shouldBe(TokenType.K_Elif) ) return new PanicNode();
+    if ( parser.shouldBe(TokenType.LBrace) ) return new PanicNode();
 
     const condition: Node = parser.parseNode()
 
-    parser.shouldBe(TokenType.RBrace)
+    if ( parser.shouldBe(TokenType.RBrace) ) return new PanicNode();
 
     const body = parser.parseBody()
 
@@ -69,7 +70,7 @@ function parseElif(parser: Parser): Node {
 function parseElse(parser: Parser): Node {
 
     
-    parser.shouldBe(TokenType.K_Else)
+    if ( parser.shouldBe(TokenType.K_Else) ) return new PanicNode();
     const body = parser.parseBody()
     return new Else(body)
 

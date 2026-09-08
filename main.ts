@@ -1,7 +1,7 @@
 declare const Bun: { argv: string[] };
 import * as fs from "fs";
 import * as path from "path";
-import { Log, log } from './modules/logger';
+import { Log, log } from './compiler/logger/logger';
 
 // ============================================================================
 // GLOBAL CONFIGURATION (Edit Name, Version, & Branding easily here)

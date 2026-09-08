@@ -1,5 +1,6 @@
 import { TokenType } from "../../tokenizer/tokens";
 import { NodeType, Node } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import { Identifier } from "./node";
 
@@ -11,9 +12,9 @@ export class Allocator extends Node {
 
 export function parseAllocator(parser: Parser): Node {
 
-    parser.shouldBe(TokenType.K_Allocator)
+    if ( parser.shouldBe(TokenType.K_Allocator) ) return new PanicNode();
     const name = new Identifier(parser.digest(TokenType.Identifier))
-    parser.shouldBe(TokenType.LBracket)
+    if ( parser.shouldBe(TokenType.LBracket) ) return new PanicNode();
 
     const functions: Node[] = []
 
@@ -26,7 +27,7 @@ export function parseAllocator(parser: Parser): Node {
 
     }
 
-    parser.shouldBe(TokenType.RBracket)
+    if ( parser.shouldBe(TokenType.RBracket) ) return new PanicNode();
 
     return new Allocator(name, functions)
 

@@ -1,5 +1,6 @@
 import { TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import { EmptyNode } from "./node";
 
@@ -20,15 +21,15 @@ export function parseModifier(parser: Parser): Node {
     switch( parser.peek().tokenType ) {
 
         case TokenType.K_Unsafe:
-            parser.shouldBe(TokenType.K_Unsafe)
+            if ( parser.shouldBe(TokenType.K_Unsafe) ) return new PanicNode();
             return new Modifier(ModifierEnum.unsafe)
 
         case TokenType.K_Trans:
-            parser.shouldBe(TokenType.K_Trans)
+            if ( parser.shouldBe(TokenType.K_Trans) ) return new PanicNode();
             return new Modifier(ModifierEnum.trans)
         
         case TokenType.K_Volatile:
-            parser.shouldBe(TokenType.K_Volatile)
+            if ( parser.shouldBe(TokenType.K_Volatile) ) return new PanicNode();
             return new Modifier(ModifierEnum.volatile)
 
     }

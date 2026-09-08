@@ -1,19 +1,18 @@
 export class StringContainer {
-    constructor(public str: string) {}
+    constructor(public str: string) { }
 
     toJSON() {
-        return "<ref ProgramString>"
+        return "<str.ctr>" //for JSON minifier
     }
 }
 
 export class StringSpan {
-    constructor( public startIndex: number, public endIndex: number, public str: StringContainer ) {}
-    
+    constructor(public startIndex: number, public endIndex: number, public str: StringContainer) { }
+
     resolve() {
         return this.str.str.substring(this.startIndex, this.endIndex + 1)
     }
 }
-
 
 export enum TokenType {
     K_Data,
@@ -94,11 +93,21 @@ export enum TokenType {
     LessThanEqual,
     Negation,
     NotEqual,
-    EOF
+    EOF,
+    UNDEFINED
 }
 
 export class Token {
 
-    constructor( public tokenType: TokenType, public span: StringSpan, public row: number, public column: number ) {}
+    constructor(
+        public tokenType: TokenType, 
+        public span: StringSpan, 
+        public row: number, 
+        public column: number
+    ) {}
 
+}
+
+export function getTokenTypeName(tokenType: TokenType) {
+    return TokenType[tokenType]
 }

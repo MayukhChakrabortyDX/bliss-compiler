@@ -1,5 +1,6 @@
 import { TokenType } from "../../tokenizer/tokens";
 import { Node, NodeType } from "../globalAst";
+import { PanicNode } from "../helper";
 import type { Parser } from "../parser";
 import { EmptyNode } from "./node";
 
@@ -19,13 +20,13 @@ export function parseModule(parser: Parser): Node {
         case TokenType.K_Import:
             parser.advance()
             const importPath = parser.parseAccess();
-            parser.shouldBe(TokenType.Semicolon)
+            if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
             return new Module(ModuleKind.Import, importPath)
         
         case TokenType.K_Using:
             parser.advance()
             const usingPath = parser.parseAccess()
-            parser.shouldBe(TokenType.Semicolon)
+            if ( parser.shouldBe(TokenType.Semicolon) ) return new PanicNode();
             return new Module(ModuleKind.Using, usingPath)
     }
 

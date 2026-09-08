@@ -1,14 +1,17 @@
 import type { Diagnostic } from "typescript";
-import { Log, log } from "../../logger";
+import { Log, log } from "../../../compiler/logger/logger";
 import { TokenType, type StringContainer, type Token } from "../tokenizer/tokens";
-import type { Node } from "./globalAst";
+import { Node, NodeType } from "./globalAst";
 import { EmptyNode } from "./rules/node";
 import { printNestedStackTrace } from "./debug";
 
-enum ParserMode {
-    ScanMode, BranchMode
-}
+export class PanicNode extends Node {
 
+    constructor() {
+        super(NodeType.Panic)
+    }
+
+}
 //this consists of the base helpers and the fundamental values
 export class ParserBase {
 
@@ -18,7 +21,7 @@ export class ParserBase {
     diagnostics: Diagnostic[] = []
     tokenIndex: number = 0;
 
-    mode: ParserMode = ParserMode.ScanMode;
+    branchDepth: number = 0; //default, no branching
     structuralMismatch: boolean = false;
 
     builtinTypes = new Set([
@@ -93,9 +96,9 @@ export class ParserBase {
 
     panic(given: Token, message: string) {
 
-        printNestedStackTrace()
+        //printNestedStackTrace()
 
-        if (this.mode == ParserMode.ScanMode) {
+        if (this.branchDepth == 0) {
             this.logTokenError(given, message)
             process.exit(1)
         } else {
@@ -141,9 +144,9 @@ export class ParserBase {
 
     branchMode(callback: () => Node) {
 
-        this.mode = ParserMode.BranchMode;
+        this.branchDepth++
         const expr = callback()
-        this.mode = ParserMode.ScanMode;
+        this.branchDepth--
 
         const status = this.structuralMismatch;
         this.structuralMismatch = false;
@@ -160,6 +163,11 @@ export class ParserBase {
 
             const startIndex = this.tokenIndex
             const branch = this.branchMode(() => caller())
+            
+            if ( branch.expr.type == NodeType.Panic || branch.expr.type == NodeType.EmptyNode ) {
+                break;
+            }
+
             if (branch.status == false) {
                 return branch.expr
             }
@@ -176,31 +184,16 @@ export class ParserBase {
     expect(given: Token, expected: TokenType, callback: () => any, message?: string) {
         if (given.tokenType == expected) {
             callback()
-        } else {
-            this.panic(given, message == null ? `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead` : message)
-        }
-    }
-
-    recoverableExpect(given: Token, expected: TokenType, callback: () => any, message?: string) {
-        if (given.tokenType == expected) {
-            callback()
             return true
         } else {
+            this.panic(given, message == null ? `Unexpected token ${this.getTokenTypeName(given.tokenType)}. Expected token type ${this.getTokenTypeName(expected)} instead` : message)
             return false
-        }
-    }
-
-    maybeExpect(given: Token, expected: TokenType, whenTrue: () => any, whenFalse: () => any) {
-        if (given.tokenType == expected) {
-            whenTrue()
-        } else {
-            whenFalse()
         }
     }
 
     shouldBe(expected: TokenType) {
         //a smaller version that's used a LOT
-        this.expect(this.peek(0) as Token, expected, () => this.advance())
+        return !this.expect(this.peek(0) as Token, expected, () => this.advance()) && (this.branchDepth > 0)
     }
 
     start() {

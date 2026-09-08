@@ -1,15 +1,13 @@
-//class to process string
-import { TokenizeBase } from "./helper";
-import { Log, log } from "../../logger";
+// class to process string
 import { ErrorHandling } from "./error";
 
 export class ProcessStringToken extends ErrorHandling {
-    
+
     processString(start: number) {
 
         let endSpan = start;
-        //the task: return a final span value basically.
-        //we have to handle escapes as well.
+        // the task: return a final span value basically.
+        // we have to handle escapes as well.
         enum StringState {
             Consume, Escape
         }
@@ -18,19 +16,19 @@ export class ProcessStringToken extends ErrorHandling {
 
         while (true) {
 
-            let char = this.source.charAt(endSpan)
+            let char = this.source.charAt(endSpan);
 
-            if (char == "") return endSpan
-            //we only care about special characters
+            if (char == "") return endSpan;
+            // we only care about special characters
             if (char == '\n') {
-                log(Log.Error, "LEXER", `String cannot contain newline characters`, `The source code has a string at [][] that has a newline which is not allowed`)
-                process.exit(1)
+                this.logCharError(char, "String cannot contain newline characters");
+                // logCharError already calls process.exit(1)
             }
 
             if (char == "\\") {
 
                 if (localState == StringState.Consume) {
-                    localState = StringState.Escape
+                    localState = StringState.Escape;
                     endSpan++;
                     continue;
                 } else {
@@ -45,7 +43,7 @@ export class ProcessStringToken extends ErrorHandling {
 
                 if (localState == StringState.Consume) {
 
-                    return endSpan //we are done
+                    return endSpan; // we are done
 
                 } else {
 
@@ -58,10 +56,10 @@ export class ProcessStringToken extends ErrorHandling {
             }
 
             if (localState == StringState.Escape) {
-                localState = StringState.Consume
+                localState = StringState.Consume;
             }
 
-            endSpan++
+            endSpan++;
 
         }
 
