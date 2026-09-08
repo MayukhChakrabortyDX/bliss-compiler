@@ -1,9 +1,10 @@
-import type { Token } from "../../lexer/tokens";
+import { TokenType, type Token } from "../../lexer/tokens";
+import { EmptyNode, Node } from "../ast";
 import type { Parser } from "../parser";
 
-export type BranchMap = Map<Token, () => any>;
+export type BranchMap = Map<TokenType, () => Node>;
 
-export function createBranch<T>(production: () => T, ...tokens: Token[]): BranchMap {
+export function createBranch<T extends Node>(production: () => T, ...tokens: TokenType[]): BranchMap {
 
     const branchMap: BranchMap = new Map()
     for (let token of tokens) {
@@ -33,14 +34,14 @@ export function branchGroup(...branches: BranchMap[]): BranchMap {
 
 }
 
-export function useBranch(parser: Parser, branchTable: BranchMap) {
+export function useBranch(parser: Parser, branchTable: BranchMap): Node {
 
-    const production = branchTable.get(parser.peek())
+    const production = branchTable.get(parser.peek().tokenType)
 
     if (production !== undefined) {
         return production()
     }
 
-    return parser.panic()
+    return new EmptyNode()
     
 }

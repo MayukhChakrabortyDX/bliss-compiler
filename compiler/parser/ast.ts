@@ -1,5 +1,5 @@
 export enum NodeType {
-    Program
+    Program, Empty, Function, Using, Identifier
 }
 
 export class Node {
@@ -11,4 +11,13 @@ export class Node {
     constructor(public type: NodeType) {
         this.typeName = NodeType[type]
     }
+}
+
+//utility nodes
+export class EmptyNode extends Node {
+    
+    constructor() {
+        super(NodeType.Empty)
+    }
+
 }
