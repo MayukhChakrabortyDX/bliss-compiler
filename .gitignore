@@ -1,7 +1,9 @@
 # dependencies (bun install)
 node_modules
 bliss-cli/target
-
+cache
+dist
+.temp
 # output
 out
 dist

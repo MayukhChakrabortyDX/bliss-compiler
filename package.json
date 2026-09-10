@@ -1,12 +1,17 @@
 {
   "name": "bliss-compiler",
   "private": true,
+  "type": "module",
   "devDependencies": {
-    "@types/bun": "^1.3.14"
+    "@types/bun": "^1.3.14",
+    "vitepress": "^1.6.4"
   },
   "scripts": {
     "test-partial": "bun tests/all.test.ts > out.json",
-    "test": "bun tests/suite-runner.test.ts"
+    "test": "bun tests/suite-runner.test.ts",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "peerDependencies": {
     "typescript": "^5"

@@ -1,0 +1,1135 @@
+/*
+ * Bliss Design System
+ *
+ * Global visual language for the Bliss website.
+ * Keep component-specific rules out of this file where possible.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+
+:root {
+  /* ----------------------------------------------------------
+     Color
+     ---------------------------------------------------------- */
+
+  --bliss-bg: #fafafa;
+  --bliss-bg-elevated: #ffffff;
+  --bliss-bg-subtle: #f4f4f5;
+
+  --bliss-fg: #09090b;
+  --bliss-fg-secondary: #27272a;
+  --bliss-fg-muted: #71717a;
+  --bliss-fg-subtle: #a1a1aa;
+
+  --bliss-border: #e4e4e7;
+  --bliss-border-subtle: #f0f0f1;
+
+  --bliss-inverse-bg: #09090b;
+  --bliss-inverse-fg: #fafafa;
+  --bliss-inverse-muted: #a1a1aa;
+
+
+  /* ----------------------------------------------------------
+     Ambient colors
+     ---------------------------------------------------------- */
+
+  --bliss-violet: #8b5cf6;
+  --bliss-blue: #60a5fa;
+  --bliss-amber: #f59e0b;
+
+  --bliss-violet-soft: rgba(139, 92, 246, 0.12);
+  --bliss-blue-soft: rgba(96, 165, 250, 0.12);
+  --bliss-amber-soft: rgba(245, 158, 11, 0.10);
+
+
+  /* ----------------------------------------------------------
+     Typography
+     ---------------------------------------------------------- */
+
+  --bliss-font-sans:
+    'DM Sans',
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  --bliss-font-mono:
+    'JetBrains Mono',
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+
+
+  /* ----------------------------------------------------------
+     Font sizes
+     ---------------------------------------------------------- */
+
+  --bliss-text-xs: 0.6875rem;   /* 11px */
+  --bliss-text-sm: 0.8125rem;   /* 13px */
+  --bliss-text-base: 1rem;      /* 16px */
+  --bliss-text-lg: 1.125rem;    /* 18px */
+  --bliss-text-xl: 1.25rem;     /* 20px */
+  --bliss-text-2xl: 1.5rem;     /* 24px */
+  --bliss-text-3xl: 1.875rem;   /* 30px */
+  --bliss-text-4xl: 2.25rem;    /* 36px */
+  --bliss-text-5xl: 3rem;       /* 48px */
+  --bliss-text-6xl: 3.75rem;    /* 60px */
+  --bliss-text-7xl: 4.5rem;     /* 72px */
+  --bliss-text-8xl: 6rem;       /* 96px */
+
+
+  /* ----------------------------------------------------------
+     Line heights
+     ---------------------------------------------------------- */
+
+  --bliss-leading-tight: 1;
+  --bliss-leading-snug: 1.1;
+  --bliss-leading-normal: 1.5;
+  --bliss-leading-relaxed: 1.7;
+
+
+  /* ----------------------------------------------------------
+     Font weights
+     ---------------------------------------------------------- */
+
+  --bliss-weight-normal: 400;
+  --bliss-weight-medium: 500;
+  --bliss-weight-semibold: 600;
+  --bliss-weight-bold: 700;
+
+
+  /* ----------------------------------------------------------
+     Spacing
+     ---------------------------------------------------------- */
+
+  --bliss-space-1: 0.25rem;
+  --bliss-space-2: 0.5rem;
+  --bliss-space-3: 0.75rem;
+  --bliss-space-4: 1rem;
+  --bliss-space-5: 1.25rem;
+  --bliss-space-6: 1.5rem;
+  --bliss-space-8: 2rem;
+  --bliss-space-10: 2.5rem;
+  --bliss-space-12: 3rem;
+  --bliss-space-16: 4rem;
+  --bliss-space-20: 5rem;
+  --bliss-space-24: 6rem;
+  --bliss-space-32: 8rem;
+
+
+  /* ----------------------------------------------------------
+     Layout
+     ---------------------------------------------------------- */
+
+  --bliss-content-width: 72rem;
+  --bliss-content-width-narrow: 48rem;
+  --bliss-content-width-wide: 80rem;
+
+  --bliss-page-padding: 1.5rem;
+
+  --bliss-nav-height: 4.5rem;
+
+
+  /* ----------------------------------------------------------
+     Geometry
+     ---------------------------------------------------------- */
+
+  --bliss-radius-sm: 0.5rem;
+  --bliss-radius-md: 0.75rem;
+  --bliss-radius-lg: 1rem;
+  --bliss-radius-xl: 1.5rem;
+  --bliss-radius-2xl: 2rem;
+  --bliss-radius-pill: 9999px;
+
+
+  /* ----------------------------------------------------------
+     Borders
+     ---------------------------------------------------------- */
+
+  --bliss-border-width: 1px;
+
+
+  /* ----------------------------------------------------------
+     Shadows
+     ---------------------------------------------------------- */
+
+  --bliss-shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.04);
+
+  --bliss-shadow-md:
+    0 4px 12px rgba(0, 0, 0, 0.05);
+
+  --bliss-shadow-lg:
+    0 12px 32px rgba(0, 0, 0, 0.06);
+
+
+  /* ----------------------------------------------------------
+     Transitions
+     ---------------------------------------------------------- */
+
+  --bliss-duration-fast: 120ms;
+  --bliss-duration-normal: 180ms;
+  --bliss-duration-slow: 300ms;
+
+  --bliss-ease:
+    cubic-bezier(0.22, 1, 0.36, 1);
+
+
+  /* ----------------------------------------------------------
+     Z-index
+     ---------------------------------------------------------- */
+
+  --bliss-z-base: 0;
+  --bliss-z-content: 1;
+  --bliss-z-nav: 100;
+  --bliss-z-overlay: 200;
+}
+
+
+/* ============================================================
+   2. GLOBAL RESET
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+
+  background: var(--bliss-bg);
+  color: var(--bliss-fg);
+
+  font-family: var(--bliss-font-sans);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  min-width: 320px;
+
+  background: var(--bliss-bg);
+  color: var(--bliss-fg);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  color: inherit;
+}
+
+
+/* ============================================================
+   3. SELECTION
+   ============================================================ */
+
+::selection {
+  background: var(--bliss-fg);
+  color: var(--bliss-bg);
+}
+
+
+/* ============================================================
+   4. TYPOGRAPHY
+   ============================================================ */
+
+.bliss-text {
+  font-family: var(--bliss-font-sans);
+}
+
+.bliss-mono {
+  font-family: var(--bliss-font-mono);
+}
+
+.bliss-label {
+  font-family: var(--bliss-font-mono);
+  font-size: var(--bliss-text-xs);
+  font-weight: var(--bliss-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bliss-display {
+  font-family: var(--bliss-font-sans);
+  font-weight: var(--bliss-weight-semibold);
+  letter-spacing: -0.055em;
+  line-height: var(--bliss-leading-tight);
+}
+
+.bliss-heading {
+  font-family: var(--bliss-font-sans);
+  font-weight: var(--bliss-weight-semibold);
+  letter-spacing: -0.04em;
+  line-height: var(--bliss-leading-snug);
+}
+
+.bliss-body {
+  font-size: var(--bliss-text-lg);
+  line-height: var(--bliss-leading-relaxed);
+  color: var(--bliss-fg-secondary);
+}
+
+
+/* ============================================================
+   5. LAYOUT PRIMITIVES
+   ============================================================ */
+
+.bliss-container {
+  width: min(
+    calc(100% - (var(--bliss-page-padding) * 2)),
+    var(--bliss-content-width)
+  );
+
+  margin-inline: auto;
+}
+
+.bliss-container--wide {
+  max-width: var(--bliss-content-width-wide);
+}
+
+.bliss-container--narrow {
+  max-width: var(--bliss-content-width-narrow);
+}
+
+
+/* ============================================================
+   6. SURFACES
+   ============================================================ */
+
+.bliss-surface {
+  background: var(--bliss-bg-elevated);
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  border-radius: var(--bliss-radius-xl);
+}
+
+.bliss-card {
+  background: var(--bliss-bg-elevated);
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  border-radius: var(--bliss-radius-xl);
+  box-shadow: var(--bliss-shadow-sm);
+
+  transition:
+    border-color var(--bliss-duration-normal) var(--bliss-ease),
+    box-shadow var(--bliss-duration-normal) var(--bliss-ease),
+    transform var(--bliss-duration-normal) var(--bliss-ease);
+}
+
+.bliss-card:hover {
+  border-color: #d4d4d8;
+  box-shadow: var(--bliss-shadow-md);
+}
+
+
+/* ============================================================
+   7. PILLS
+   ============================================================ */
+
+.bliss-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bliss-space-2);
+
+  padding: 0.4rem 0.75rem;
+
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  border-radius: var(--bliss-radius-pill);
+
+  background: rgba(255, 255, 255, 0.7);
+
+  font-family: var(--bliss-font-mono);
+  font-size: var(--bliss-text-xs);
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   8. BUTTONS
+   ============================================================ */
+
+.bliss-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bliss-space-2);
+
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+
+  border-radius: var(--bliss-radius-pill);
+
+  font-size: var(--bliss-text-sm);
+  font-weight: var(--bliss-weight-medium);
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    background var(--bliss-duration-fast) var(--bliss-ease),
+    color var(--bliss-duration-fast) var(--bliss-ease),
+    border-color var(--bliss-duration-fast) var(--bliss-ease),
+    transform var(--bliss-duration-fast) var(--bliss-ease);
+}
+
+.bliss-button:active {
+  transform: translateY(1px);
+}
+
+.bliss-button--primary {
+  background: var(--bliss-fg);
+  color: var(--bliss-bg);
+}
+
+.bliss-button--primary:hover {
+  background: #27272a;
+}
+
+.bliss-button--secondary {
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  background: var(--bliss-bg-elevated);
+  color: var(--bliss-fg);
+}
+
+.bliss-button--secondary:hover {
+  border-color: #d4d4d8;
+  background: var(--bliss-bg-subtle);
+}
+
+
+/* ============================================================
+   9. AMBIENT BACKGROUND
+   ============================================================ */
+
+.bliss-ambient {
+  position: absolute;
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: var(--bliss-z-base);
+}
+
+.bliss-ambient__blob {
+  position: absolute;
+
+  width: 24rem;
+  height: 24rem;
+
+  border-radius: 50%;
+
+  filter: blur(80px);
+
+  opacity: 0.12;
+}
+
+.bliss-ambient__blob--violet {
+  background: var(--bliss-violet);
+}
+
+.bliss-ambient__blob--blue {
+  background: var(--bliss-blue);
+}
+
+.bliss-ambient__blob--amber {
+  background: var(--bliss-amber);
+}
+
+
+/* ============================================================
+   10. DARK SURFACE
+   ============================================================ */
+
+.bliss-dark {
+  background: var(--bliss-inverse-bg);
+  color: var(--bliss-inverse-fg);
+}
+
+.bliss-dark .bliss-label {
+  color: var(--bliss-inverse-muted);
+}
+
+
+/* ============================================================
+   11. CODE
+   ============================================================ */
+
+.bliss-code {
+  font-family: var(--bliss-font-mono);
+  font-size: var(--bliss-text-sm);
+  line-height: 1.7;
+
+  tab-size: 2;
+}
+
+.bliss-code--panel {
+  overflow: auto;
+
+  padding: var(--bliss-space-6);
+
+  border-radius: var(--bliss-radius-lg);
+
+  background: #111113;
+  color: #e4e4e7;
+}
+
+
+/* ============================================================
+   12. ACCESSIBILITY
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--bliss-fg);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+
+/* ============================================================
+   13. RESPONSIVE TOKENS
+   ============================================================ */
+
+@media (min-width: 768px) {
+  :root {
+    --bliss-page-padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --bliss-page-padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --bliss-page-padding: 3rem;
+  }
+}
+
+/* =========================================================
+   Scrollbar
+   ========================================================= */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d8 transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+  background-color: #d4d4d8;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #a1a1aa;
+}
+
+html::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.bliss-site {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  /* `clip` preserves the background crop without creating a scroll container,
+     allowing documentation sidebars to stick to the viewport. */
+  overflow: clip;
+  background: var(--bliss-bg);
+}
+
+.bliss-site__background {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 760px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bliss-site__background-violet,
+.bliss-site__background-blue,
+.bliss-site__background-amber {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+}
+
+.bliss-site__background-violet {
+  left: 50%;
+  top: -300px;
+  width: 900px;
+  height: 620px;
+  transform: translateX(-50%);
+  background: rgb(221 214 254 / 50%);
+}
+
+.bliss-site__background-blue {
+  left: 10%;
+  top: 310px;
+  width: 256px;
+  height: 256px;
+  background: rgb(219 234 254 / 50%);
+}
+
+.bliss-site__background-amber {
+  right: 6%;
+  top: 250px;
+  width: 224px;
+  height: 224px;
+  background: rgb(254 243 199 / 40%);
+}
+/* ============================================================
+   14. CUSTOM SITE SHELL
+   ============================================================ */
+
+.bliss-site {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bliss-bg);
+  color: var(--bliss-fg);
+}
+
+.bliss-site > *:not(.bliss-site-ambient) {
+  position: relative;
+  z-index: 1;
+}
+
+.bliss-site-ambient {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 760px;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.bliss-site-ambient__violet,
+.bliss-site-ambient__blue,
+.bliss-site-ambient__amber {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+}
+
+.bliss-site-ambient__violet {
+  left: 50%;
+  top: -300px;
+  width: 900px;
+  height: 620px;
+  transform: translateX(-50%);
+  background: rgb(221 214 254 / 50%);
+}
+
+.bliss-site-ambient__blue {
+  left: 10%;
+  top: 310px;
+  width: 256px;
+  height: 256px;
+  background: rgb(219 234 254 / 50%);
+}
+
+.bliss-site-ambient__amber {
+  right: 6%;
+  top: 250px;
+  width: 224px;
+  height: 224px;
+  background: rgb(254 243 199 / 40%);
+}
+
+/* ============================================================
+   15. DOCUMENTATION
+   ============================================================ */
+
+.docs-page {
+  width: min(100% - 3rem, 1280px);
+  margin: 0 auto;
+  padding: 48px 0 96px;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 180px;
+  gap: 56px;
+}
+
+.docs-sidebar,
+.docs-outline {
+  align-self: start;
+  position: sticky;
+  top: 28px;
+}
+
+.docs-sidebar__group + .docs-sidebar__group {
+  margin-top: 32px;
+}
+
+.docs-sidebar__label,
+.docs-outline__label {
+  margin-bottom: 12px;
+  color: var(--bliss-fg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.docs-sidebar__nav,
+.docs-outline nav {
+  display: grid;
+  gap: 2px;
+}
+
+.docs-sidebar__link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--bliss-fg-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.docs-sidebar__link:hover {
+  color: var(--bliss-fg);
+  background: var(--bliss-bg-subtle);
+}
+
+.docs-sidebar__link.is-active {
+  color: var(--bliss-fg);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--bliss-border);
+}
+
+.docs-article {
+  min-width: 0;
+}
+
+.docs-breadcrumb {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  color: var(--bliss-fg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.docs-content {
+  max-width: 760px;
+}
+
+.docs-content h1,
+.docs-content h2,
+.docs-content h3,
+.docs-content h4 {
+  color: var(--bliss-fg);
+  font-family: var(--bliss-font-sans);
+  letter-spacing: -.035em;
+  line-height: 1.15;
+}
+
+.docs-content h1 {
+  margin: 0 0 24px;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -.055em;
+}
+
+.docs-content h2 {
+  margin: 56px 0 16px;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.docs-content h3 {
+  margin: 36px 0 12px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.docs-content p,
+.docs-content li {
+  color: var(--bliss-fg-secondary);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.docs-content p {
+  margin: 0 0 20px;
+}
+
+.docs-content ul,
+.docs-content ol {
+  margin: 0 0 24px;
+  padding-left: 24px;
+}
+
+.docs-content li + li {
+  margin-top: 6px;
+}
+
+.docs-content a {
+  color: var(--bliss-fg);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: #d4d4d8;
+  text-underline-offset: 3px;
+}
+
+.docs-content a:hover {
+  text-decoration-color: var(--bliss-fg);
+}
+
+.docs-content :not(pre) > code {
+  padding: .15rem .4rem;
+  border: 1px solid var(--bliss-border);
+  border-radius: 6px;
+  background: var(--bliss-bg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: .86em;
+}
+
+.docs-content pre {
+  margin: 28px 0;
+  overflow-x: auto;
+  padding: 22px;
+  border: 1px solid #27272a;
+  border-radius: 18px;
+  background: #09090b;
+  color: #e4e4e7;
+  box-shadow: var(--bliss-shadow-lg);
+}
+
+.docs-content pre code {
+  font-family: var(--bliss-font-mono);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.docs-content blockquote {
+  margin: 28px 0;
+  padding: 4px 0 4px 20px;
+  border-left: 2px solid #d4d4d8;
+  color: var(--bliss-fg-muted);
+}
+
+.docs-outline__link {
+  display: block;
+  padding: 5px 0;
+  color: var(--bliss-fg-subtle);
+  font-size: 12px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.docs-outline__link:hover {
+  color: var(--bliss-fg);
+}
+
+.docs-outline__link.level-3 {
+  padding-left: 12px;
+}
+
+.docs-pagination {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--bliss-border);
+}
+
+.docs-pagination__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border: 1px solid var(--bliss-border);
+  border-radius: 16px;
+  background: #fff;
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.docs-pagination__item:hover {
+  border-color: #d4d4d8;
+  transform: translateY(-1px);
+  box-shadow: var(--bliss-shadow-sm);
+}
+
+.docs-pagination__item--next {
+  text-align: right;
+}
+
+.docs-pagination__direction {
+  color: var(--bliss-fg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.docs-pagination__title {
+  color: var(--bliss-fg);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   16. BLOG
+   ============================================================ */
+
+.blog-shell {
+  width: min(100% - 3rem, 960px);
+  margin: 0 auto;
+  padding: 72px 0 112px;
+}
+
+.blog-index__header {
+  max-width: 700px;
+  margin-bottom: 56px;
+}
+
+.blog-eyebrow {
+  color: var(--bliss-fg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.blog-index__header h1,
+.blog-post__header h1 {
+  margin: 14px 0 18px;
+  color: var(--bliss-fg);
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -.055em;
+  line-height: 1;
+}
+
+.blog-index__header p,
+.blog-post__description {
+  margin: 0;
+  color: var(--bliss-fg-muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.blog-list {
+  display: grid;
+  gap: 16px;
+}
+
+.blog-card {
+  display: block;
+  padding: 28px;
+  border: 1px solid var(--bliss-border);
+  border-radius: 24px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.blog-card:hover {
+  border-color: #d4d4d8;
+  transform: translateY(-2px);
+  box-shadow: var(--bliss-shadow-md);
+}
+
+.blog-card__meta,
+.blog-post__meta {
+  display: flex;
+  gap: 14px;
+  color: var(--bliss-fg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.blog-card h2 {
+  margin: 16px 0 8px;
+  color: var(--bliss-fg);
+  font-size: 24px;
+  letter-spacing: -.03em;
+}
+
+.blog-card p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--bliss-fg-muted);
+  line-height: 1.7;
+}
+
+.blog-card__read {
+  display: inline-block;
+  margin-top: 22px;
+  color: var(--bliss-fg);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.blog-post {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.blog-post__header {
+  margin-bottom: 64px;
+}
+
+.blog-post__meta {
+  margin-top: 24px;
+}
+
+.blog-post__content h2,
+.blog-post__content h3 {
+  color: var(--bliss-fg);
+  letter-spacing: -.035em;
+}
+
+.blog-post__content h2 {
+  margin: 56px 0 16px;
+  font-size: 28px;
+}
+
+.blog-post__content h3 {
+  margin: 36px 0 12px;
+  font-size: 21px;
+}
+
+.blog-post__content p,
+.blog-post__content li {
+  color: var(--bliss-fg-secondary);
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+.blog-post__content p {
+  margin: 0 0 22px;
+}
+
+.blog-post__content pre {
+  margin: 28px 0;
+  overflow-x: auto;
+  padding: 22px;
+  border-radius: 18px;
+  background: #09090b;
+  color: #e4e4e7;
+}
+
+.blog-post__content code {
+  font-family: var(--bliss-font-mono);
+}
+
+@media (max-width: 1100px) {
+  .docs-page {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .docs-outline {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .docs-page,
+  .blog-shell {
+    width: min(100% - 2rem, 760px);
+  }
+
+  .docs-page {
+    display: block;
+    padding-top: 32px;
+  }
+
+  .docs-sidebar {
+    position: static;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--bliss-border);
+  }
+
+  .docs-sidebar__group + .docs-sidebar__group {
+    margin-top: 20px;
+  }
+
+  .docs-pagination {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-pagination__item--next {
+    text-align: left;
+  }
+
+  .blog-shell {
+    padding-top: 48px;
+  }
+}
