@@ -593,9 +593,6 @@ html::-webkit-scrollbar-corner {
   position: relative;
   isolation: isolate;
   min-height: 100vh;
-  /* `clip` preserves the background crop without creating a scroll container,
-     allowing documentation sidebars to stick to the viewport. */
-  overflow: clip;
   background: var(--bliss-bg);
 }
 
@@ -654,6 +651,11 @@ html::-webkit-scrollbar-corner {
 .bliss-site > *:not(.bliss-site-ambient) {
   position: relative;
   z-index: 1;
+}
+
+/* Fixed navigation needs a normal-flow counterpart to reserve its space. */
+.site-header {
+  height: 64px;
 }
 
 .bliss-site-ambient {
@@ -716,7 +718,7 @@ html::-webkit-scrollbar-corner {
 .docs-outline {
   align-self: start;
   position: sticky;
-  top: 28px;
+  top: 92px;
 }
 
 .docs-sidebar__group + .docs-sidebar__group {

@@ -1,5 +1,5 @@
 <template>
-  <nav class="bliss-nav">
+  <nav :class="['bliss-nav', { 'is-scrolled': isScrolled }]">
     <div class="bliss-nav__inner">
       <!-- Brand -->
       <a href="/" class="bliss-nav__brand">
@@ -52,12 +52,45 @@
   </nav>
 </template>
 
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+
+const isScrolled = ref(false)
+
+const updateScrollState = () => {
+  isScrolled.value = window.scrollY > 8
+}
+
+onMounted(() => {
+  updateScrollState()
+  window.addEventListener('scroll', updateScrollState, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updateScrollState)
+})
+</script>
+
 <style scoped>
 .bliss-nav {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 20;
   width: 100%;
+  border-bottom: 1px solid transparent;
   background: transparent;
+  transition:
+    background var(--bliss-duration-normal) var(--bliss-ease),
+    border-color var(--bliss-duration-normal) var(--bliss-ease),
+    box-shadow var(--bliss-duration-normal) var(--bliss-ease);
+}
+
+.bliss-nav.is-scrolled {
+  border-bottom: 1px solid rgb(228 228 231 / 75%);
+  background: rgb(250 250 250 / 78%);
+  box-shadow: 0 1px 12px rgb(9 9 11 / 4%);
+  backdrop-filter: blur(16px);
 }
 
 .bliss-nav__inner {

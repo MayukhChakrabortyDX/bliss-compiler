@@ -358,7 +358,9 @@
 .home-hero {
   width: min(100% - 3rem, 1024px);
   margin-inline: auto;
-  padding: 80px 0 96px;
+  /* Reserve the fixed, transparent marketing navigation without separating it
+     from the ambient homepage background. */
+  padding: 168px 0 96px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -918,7 +920,7 @@
 
 @media (max-width: 768px) {
   .home-hero {
-    padding-top: 64px;
+    padding-top: 152px;
     padding-bottom: 80px;
   }
 
@@ -958,7 +960,7 @@
   }
 
   .home-hero {
-    padding-top: 56px;
+    padding-top: 144px;
   }
 
   .home-hero__title {
