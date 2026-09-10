@@ -32,57 +32,6 @@
       </div>
     </section>
 
-    <section class="courses-workspace" aria-labelledby="workspace-heading">
-      <div class="courses-section-heading">
-        <div>
-          <span class="courses-workspace__eyebrow">Playable sample course</span>
-          <h2 id="workspace-heading">Compiler design fundamentals</h2>
-        </div>
-        <span>{{ completedLessons }} / {{ compilerLessons.length }} complete</span>
-      </div>
-
-      <div class="courses-player">
-        <div class="courses-player__video">
-          <iframe
-            :key="activeLesson.videoId"
-            :src="`https://www.youtube-nocookie.com/embed/${activeLesson.videoId}`"
-            :title="activeLesson.title"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          />
-        </div>
-
-        <div class="courses-player__details">
-          <span class="courses-workspace__eyebrow">Now playing · {{ activeLesson.duration }}</span>
-          <h3>{{ activeLesson.title }}</h3>
-          <p>{{ activeLesson.description }}</p>
-          <button
-            type="button"
-            :class="['courses-complete-button', { 'is-complete': isComplete(activeLesson.id) }]"
-            @click="toggleComplete(activeLesson.id)"
-          >
-            {{ isComplete(activeLesson.id) ? '✓ Completed' : 'Mark as complete' }}
-          </button>
-        </div>
-      </div>
-
-      <div class="courses-lesson-list" aria-label="Compiler design lessons">
-        <button
-          v-for="(lesson, index) in compilerLessons"
-          :key="lesson.id"
-          type="button"
-          :class="['courses-lesson', { 'is-active': lesson.id === activeLesson.id }]"
-          @click="activeLessonIndex = index"
-        >
-          <span :class="['courses-lesson__number', { 'is-complete': isComplete(lesson.id) }]">
-            {{ isComplete(lesson.id) ? '✓' : `0${index + 1}` }}
-          </span>
-          <span class="courses-lesson__copy"><strong>{{ lesson.title }}</strong><small>{{ lesson.duration }} · {{ lesson.source }}</small></span>
-          <span class="courses-lesson__play" aria-hidden="true">▶</span>
-        </button>
-      </div>
-    </section>
-
     <section class="courses-format" aria-label="Course format">
       <div><span class="courses-format__number">01</span><h2>Ideas first</h2><p>Start with the constraint, tradeoff, and design question—not an isolated syntax rule.</p></div>
       <div><span class="courses-format__number">02</span><h2>Build in public</h2><p>Follow language experiments and compiler changes as they become concrete.</p></div>
@@ -100,17 +49,9 @@ const courses = [
   { number: '03', art: 'amber', artLabel: 'Compiler notes', level: 'Intermediate', title: 'Building the compiler', description: 'Follow source text through parsing, semantic analysis, and the road ahead.', lessons: 8, duration: '1 hr 8 min' },
 ]
 
-const compilerLessons = [
-  { id: 'compiler-introduction', title: 'Introduction to compiler design', description: 'An accessible overview of what a compiler does and the major phases involved.', duration: '16 min', source: "Rayan's Classroom", videoId: 'WTo5GRwbPh8' },
-  { id: 'lexical-analysis', title: 'Lexical analysis', description: 'A practical introduction to turning source characters into tokens for later compiler stages.', duration: '19 min', source: 'Udemy sample lecture', videoId: 'h-7vnYTMQOM' },
-  { id: 'syntax-analysis', title: 'Lexical and syntax analysis', description: 'A second perspective on the lexer-parser handoff and the structures a parser builds.', duration: '24 min', source: 'GATE Crash Course', videoId: 'oq0lZwpApLo' },
-]
-
 const storageKey = 'bliss-courses:compiler-design-complete'
 const activeLessonIndex = ref(0)
 const completed = ref<string[]>([])
-const activeLesson = computed(() => compilerLessons[activeLessonIndex.value])
-const completedLessons = computed(() => completed.value.length)
 const isComplete = (lessonId: string) => completed.value.includes(lessonId)
 
 const saveProgress = () => {
