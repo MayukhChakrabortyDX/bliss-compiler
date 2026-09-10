@@ -1,4 +1,6 @@
+MODULE_ATOM -> @IDENTIFIER | '(' MODULE_PATH ( ',' MODULE_PATH )* ')' | "*";
+MODULE_PATH -> MODULE_ATOM ('.' MODULE_ATOM)*;
+
 //Module system
-//refer language/node
-IMPORT -> "import" node.ACCESS ';' ;
-USING -> "using" node.ACCESS ';' ;
+IMPORT -> "import" MODULE_PATH ';' ;
+USING -> "using" MODULE_PATH ';' ;

@@ -1,0 +1,17 @@
+### Parser Recovery — Branch Sync
+
+Use structured `till()` recovery:
+
+```ts
+parser.till({
+    expected,
+    syncTokens,
+    title,
+    production,
+    separator
+});
+```
+
+Additionally, branches can pass **branch-sync/end-token sets downward** into productions. If a child encounters such a token, it can **yield without consuming it**, allowing the branch parser to recognize and resume at the next sibling/top-level construct.
+
+This lets malformed constructs recover across missing delimiters without swallowing subsequent valid code.

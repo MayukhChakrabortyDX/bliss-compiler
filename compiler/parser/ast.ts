@@ -1,5 +1,8 @@
+import type { StringSpan } from "../lexer/tokens";
+
 export enum NodeType {
-    Program, Empty, Function, Using, Identifier
+    Program, Empty, Function, Using, Identifier,
+    IncludeAllPath, IncludePath, BinaryOps
 }
 
 export class Node {
@@ -16,8 +19,24 @@ export class Node {
 //utility nodes
 export class EmptyNode extends Node {
     
-    constructor() {
+    constructor(public name? : string) {
         super(NodeType.Empty)
     }
 
+}
+
+export class Identifier extends Node {
+    constructor(public value: string) {
+        super(NodeType.Identifier)
+    }
+}
+
+export enum BinaryOpsEnum {
+    IncludePath
+}
+
+export class BinaryOperatorNode extends Node {
+    constructor(public left: Node, public right: Node, public ops: BinaryOpsEnum) {
+        super(NodeType.BinaryOps)
+    }
 }
