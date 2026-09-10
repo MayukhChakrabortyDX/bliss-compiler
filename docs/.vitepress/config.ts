@@ -15,31 +15,21 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      { text: 'Language', link: '/language/' },
-      { text: 'Compiler', link: '/compiler/' },
+      { text: 'Language', link: '/docs/language' },
+      { text: 'Compiler', link: '/docs/compiler' },
       { text: 'Blog', link: '/blog/' },
       { text: 'Downloads', link: '/#downloads' },
     ],
 
     sidebar: {
-      '/language/': [
+      '/docs/': [
         {
           label: 'Language',
           items: [
-            { text: 'Overview', link: '/language/' },
-            { text: 'Syntax', link: '/language/syntax' },
-            { text: 'Types', link: '/language/types' },
-            { text: 'Memory', link: '/language/memory' },
-          ],
-        },
-      ],
-      '/compiler/': [
-        {
-          label: 'Compiler',
-          items: [
-            { text: 'Overview', link: '/compiler/' },
-            { text: 'Architecture', link: '/compiler/architecture' },
-            { text: 'Parsing', link: '/compiler/parsing' },
+            { text: 'Overview', link: '/docs/language' },
+            { text: 'Syntax', link: '/docs/syntax' },
+            { text: 'Types', link: '/docs/types' },
+            { text: 'Memory', link: '/docs/memory' },
           ],
         },
       ],

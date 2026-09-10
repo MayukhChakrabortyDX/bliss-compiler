@@ -5,8 +5,8 @@
 
       <div class="blog-nav__links">
         <a href="/blog/">All posts</a>
-        <a href="/language/">Language</a>
-        <a href="/compiler/">Docs</a>
+        <a href="/docs/language">Language</a>
+        <a href="/docs/">Docs</a>
         <a href="#subscribe" class="blog-nav__subscribe">Subscribe</a>
       </div>
     </div>

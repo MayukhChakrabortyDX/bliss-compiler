@@ -9,29 +9,28 @@ export type NavGroup = {
   items: NavItem[]
 }
 
-export const docsNavigation: Record<string, NavGroup[]> = {
-  language: [
-    {
-      label: 'Language',
-      items: [
-        { text: 'Overview', link: '/language/' },
-        { text: 'Syntax', link: '/language/syntax' },
-        { text: 'Types', link: '/language/types' },
-        { text: 'Memory', link: '/language/memory' },
-      ],
-    },
-  ],
-  compiler: [
-    {
-      label: 'Compiler',
-      items: [
-        { text: 'Overview', link: '/compiler/' },
-        { text: 'Architecture', link: '/compiler/architecture' },
-        { text: 'Parsing', link: '/compiler/parsing' },
-      ],
-    },
-  ],
-}
+export const docsNavigation: NavGroup[] = [
+  {
+    label: 'Language',
+    items: [
+      { text: 'Overview', link: '/docs/language' },
+      { text: 'Syntax', link: '/docs/syntax' },
+      { text: 'Types', link: '/docs/types' },
+      { text: 'Memory', link: '/docs/memory' },
+      { text: 'Language tour', link: '/docs/tour' },
+      { text: 'Memory walkthrough', link: '/docs/memory-walkthrough' },
+    ],
+  },
+  {
+    label: 'Compiler',
+    items: [
+      { text: 'Overview', link: '/docs/compiler' },
+      { text: 'Architecture', link: '/docs/architecture' },
+      { text: 'Parsing', link: '/docs/parsing' },
+      { text: 'Pipeline walkthrough', link: '/docs/pipeline-walkthrough' },
+    ],
+  },
+]
 
 export function flattenNavigation(groups: NavGroup[]) {
   return groups.flatMap((group) => flattenItems(group.items))

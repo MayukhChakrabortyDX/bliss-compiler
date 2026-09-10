@@ -44,7 +44,15 @@
 
     <aside v-if="headers.length" class="docs-outline">
       <div class="docs-outline__label">On this page</div>
-      <nav aria-label="On this page">
+      <nav
+        class="docs-outline__nav"
+        aria-label="On this page"
+        :style="{
+          '--docs-outline-progress-top': `${outlineProgress.top}%`,
+          '--docs-outline-progress-height': `${outlineProgress.height}%`,
+        }"
+      >
+        <span class="docs-outline__progress" aria-hidden="true" />
         <a
           v-for="header in headers"
           :key="header.slug"
@@ -59,20 +67,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { docsNavigation, flattenNavigation } from '../navigation'
 
 const route = useRoute()
 const { page } = useData()
-
-const section = computed(() => {
-  if (route.path.startsWith('/compiler/')) return 'compiler'
-  return 'language'
-})
-
-const groups = computed(() => docsNavigation[section.value] ?? [])
-const links = computed(() => flattenNavigation(groups.value))
+const outlineProgress = ref({ top: 0, height: 0 })
 
 const currentPath = computed(() => {
   const path = route.path.replace(/\/$/, '')
@@ -83,6 +84,15 @@ const normalizedLink = (link: string) => link.replace(/\/$/, '') || '/'
 
 const isActive = (link?: string) =>
   !!link && normalizedLink(link) === currentPath.value
+
+const activeGroup = computed(() =>
+  docsNavigation.find((group) =>
+    flattenNavigation([group]).some((item) => isActive(item.link)),
+  ) ?? docsNavigation[0],
+)
+
+const groups = computed(() => (activeGroup.value ? [activeGroup.value] : []))
+const links = computed(() => flattenNavigation(groups.value))
 
 const currentIndex = computed(() =>
   links.value.findIndex((item) => item.link && isActive(item.link)),
@@ -98,9 +108,7 @@ const next = computed(() =>
     : undefined,
 )
 
-const sectionLabel = computed(() =>
-  section.value === 'compiler' ? 'Compiler' : 'Language',
-)
+const sectionLabel = computed(() => activeGroup.value?.label ?? 'Documentation')
 
 const headers = computed(() =>
   page.value.headers
@@ -111,4 +119,43 @@ const headers = computed(() =>
       slug: header.slug,
     })),
 )
+
+const updateOutlineProgress = () => {
+  const content = document.querySelector<HTMLElement>('.docs-content')
+  if (!content) return
+
+  const articleTop = content.getBoundingClientRect().top + window.scrollY
+  const articleBottom = articleTop + content.offsetHeight
+  const articleHeight = articleBottom - articleTop
+
+  if (articleHeight <= 0) return
+
+  const viewportTop = window.scrollY + 64
+  const viewportBottom = window.scrollY + window.innerHeight
+  const visibleTop = Math.min(Math.max(viewportTop, articleTop), articleBottom)
+  const visibleBottom = Math.min(Math.max(viewportBottom, articleTop), articleBottom)
+
+  outlineProgress.value = {
+    top: ((visibleTop - articleTop) / articleHeight) * 100,
+    height: Math.max(0, ((visibleBottom - visibleTop) / articleHeight) * 100),
+  }
+}
+
+const refreshOutline = async () => {
+  await nextTick()
+  updateOutlineProgress()
+}
+
+onMounted(() => {
+  refreshOutline()
+  window.addEventListener('scroll', updateOutlineProgress, { passive: true })
+  window.addEventListener('resize', updateOutlineProgress)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', updateOutlineProgress)
+  window.removeEventListener('resize', updateOutlineProgress)
+})
+
+watch(() => route.path, refreshOutline)
 </script>

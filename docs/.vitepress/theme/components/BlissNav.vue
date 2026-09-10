@@ -27,8 +27,8 @@
 
       <!-- Desktop navigation -->
       <div class="bliss-nav__links">
-        <a href="/language">The language</a>
-        <a href="/language/">Docs</a>
+        <a href="/docs/language">The language</a>
+        <a href="/docs/">Docs</a>
         <a href="/blog">Blog</a>
         <a href="/#downloads">Downloads</a>
 

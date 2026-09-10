@@ -1,26 +1,18 @@
 <template>
   <nav class="section-nav" aria-label="Documentation navigation">
     <div class="section-nav__inner">
-      <a href="/language/" class="section-nav__brand">bliss <span>/ docs</span></a>
+      <a href="/docs/" class="section-nav__brand">bliss <span>/ docs</span></a>
 
       <div class="section-nav__links">
-        <a href="/language/" :class="{ 'is-active': isLanguage }">Language</a>
-        <a href="/compiler/" :class="{ 'is-active': isCompiler }">Compiler</a>
+        <a href="/docs/">Documentation</a>
+        <a href="/docs/language">Language</a>
+        <a href="/docs/compiler">Compiler</a>
         <a href="/blog/">Blog</a>
         <a href="https://github.com/MayukhChakrabortyDX/bliss-compiler" target="_blank" rel="noreferrer">GitHub ↗</a>
       </div>
     </div>
   </nav>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vitepress'
-
-const route = useRoute()
-const isCompiler = computed(() => route.path.startsWith('/compiler/'))
-const isLanguage = computed(() => !isCompiler.value)
-</script>
 
 <style scoped>
 .section-nav { position: fixed; top: 0; left: 0; z-index: 20; width: 100%; border-bottom: 1px solid var(--bliss-border); background: rgb(250 250 250 / 88%); backdrop-filter: blur(12px); }

@@ -25,9 +25,7 @@
         </a>
 
         <a
-          href="https://github.com/MayukhChakrabortyDX/bliss-compiler"
-          target="_blank"
-          rel="noreferrer"
+          href="/docs/compiler"
           class="home-button home-button--secondary"
         >
           Explore the compiler
@@ -199,17 +197,17 @@
               <div class="home-platform-icon home-platform-icon--linux">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
                   <path
-                    fill="currentColor"
-                    d="M24 4c-6.1 0-10.1 5.3-10.1 12.5 0 4.3-2.1 6.6-3.8 9.3-1.3 2.1-.8 5 1.8 6.2 1.5.7 3.1.3 4.3-.6 1.3 2.7 3.8 4.2 7.8 4.2s6.5-1.5 7.8-4.2c1.2.9 2.8 1.3 4.3.6 2.6-1.2 3.1-4.1 1.8-6.2-1.7-2.7-3.8-5-3.8-9.3C34.1 9.3 30.1 4 24 4Zm-6.2 28.7c-.9 0-1.7-.7-1.7-1.6s.8-1.6 1.7-1.6 1.7.7 1.7 1.6-.8 1.6-1.7 1.6Zm12.4 0c-.9 0-1.7-.7-1.7-1.6s.8-1.6 1.7-1.6 1.7.7 1.7 1.6-.8 1.6-1.7 1.6Z"
+                    fill="#27272a"
+                    d="M24 4c-6.5 0-10.3 5.9-10.3 13.5 0 3.7-1.7 7.2-3.5 10.4-1.5 2.7-.7 6.1 2.1 7.2 1.9.8 4 .2 5.2-1.4 1.4 3.7 3.7 5.6 6.5 5.6s5.1-1.9 6.5-5.6c1.2 1.6 3.3 2.2 5.2 1.4 2.8-1.1 3.6-4.5 2.1-7.2-1.8-3.2-3.5-6.7-3.5-10.4C34.3 9.9 30.5 4 24 4Z"
                   />
-                  <path
-                    fill="white"
-                    d="M19 16.2c0 1-.7 1.8-1.6 1.8s-1.6-.8-1.6-1.8.7-1.8 1.6-1.8 1.6.8 1.6 1.8Zm13.2 0c0 1-.7 1.8-1.6 1.8s-1.6-.8-1.6-1.8.7-1.8 1.6-1.8 1.6.8 1.6 1.8Z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M18.8 22.2c1.9 1.3 8.5 1.3 10.4 0 .5-.3 1.1-.2 1.4.3.3.5.2 1.1-.3 1.4-2.5 1.7-10.1 1.7-12.6 0-.5-.3-.6-.9-.3-1.4.3-.5.9-.6 1.4-.3Z"
-                  />
+                  <ellipse cx="24" cy="28.5" rx="8.2" ry="9.4" fill="#fafafa" />
+                  <ellipse cx="19.5" cy="16.8" rx="3.2" ry="4.2" fill="#fafafa" />
+                  <ellipse cx="28.5" cy="16.8" rx="3.2" ry="4.2" fill="#fafafa" />
+                  <circle cx="20.2" cy="17.3" r="1.1" fill="#18181b" />
+                  <circle cx="27.8" cy="17.3" r="1.1" fill="#18181b" />
+                  <path d="m21 20.8 3-2 3 2-3 2.2Z" fill="#f59e0b" />
+                  <ellipse cx="16.5" cy="38.4" rx="5.2" ry="1.8" fill="#f59e0b" />
+                  <ellipse cx="31.5" cy="38.4" rx="5.2" ry="1.8" fill="#f59e0b" />
                 </svg>
               </div>
 
@@ -282,7 +280,11 @@
         <article class="home-macos-card">
           <div>
             <div class="home-macos-card__title">
-              <div class="home-macos-icon">⌘</div>
+              <div class="home-macos-icon" aria-label="Apple">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.3.74 3.09.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.55 4.09ZM12.04 7.25C11.89 5.02 13.7 3.18 15.78 3c.29 2.58-2.34 4.5-3.74 4.25Z" />
+                </svg>
+              </div>
 
               <h3>macOS</h3>
 
@@ -866,8 +868,13 @@
   justify-content: center;
   border-radius: 12px;
   background: white;
-  font-size: 18px;
   box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+}
+
+.home-macos-icon svg {
+  width: 21px;
+  height: 21px;
+  fill: #27272a;
 }
 
 .home-macos-card h3 {
