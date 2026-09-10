@@ -30,6 +30,7 @@
         <a href="/docs/language">The language</a>
         <a href="/docs/">Docs</a>
         <a href="/blog">Blog</a>
+        <a href="/courses/">Courses</a>
         <a href="/#downloads">Downloads</a>
 
         <a

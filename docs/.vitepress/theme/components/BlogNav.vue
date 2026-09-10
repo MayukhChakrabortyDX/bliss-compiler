@@ -7,6 +7,7 @@
         <a href="/blog/">All posts</a>
         <a href="/docs/language">Language</a>
         <a href="/docs/">Docs</a>
+        <a href="/courses/">Courses</a>
         <a href="#subscribe" class="blog-nav__subscribe">Subscribe</a>
       </div>
     </div>

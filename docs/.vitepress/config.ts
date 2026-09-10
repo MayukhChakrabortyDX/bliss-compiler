@@ -18,6 +18,7 @@ export default defineConfig({
       { text: 'Language', link: '/docs/language' },
       { text: 'Compiler', link: '/docs/compiler' },
       { text: 'Blog', link: '/blog/' },
+      { text: 'Courses', link: '/courses/' },
       { text: 'Downloads', link: '/#downloads' },
     ],
 

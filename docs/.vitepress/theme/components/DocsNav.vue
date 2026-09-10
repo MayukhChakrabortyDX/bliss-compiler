@@ -8,6 +8,7 @@
         <a href="/docs/language">Language</a>
         <a href="/docs/compiler">Compiler</a>
         <a href="/blog/">Blog</a>
+        <a href="/courses/">Courses</a>
         <a href="https://github.com/MayukhChakrabortyDX/bliss-compiler" target="_blank" rel="noreferrer">GitHub ↗</a>
       </div>
     </div>
