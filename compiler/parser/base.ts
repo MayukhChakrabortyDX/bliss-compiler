@@ -5,10 +5,6 @@ import { LogType } from "../logger/logger";
 import type { Node } from "./ast";
 import { ParserDiagnostic } from "./errors";
 
-function showCallStack(message?: string): void {
-    console.trace(message ?? "Call stack");
-}
-
 interface MatchProps {
     expected: TokenType, sync: Set<TokenType>, title: string
 }
@@ -69,15 +65,6 @@ export class ParserBase {
         }
 
         return false
-    }
-
-    maybe(given: Token, expected: TokenType, whenTrue: () => any, whenFalse: () => any) {
-        if (given.tokenType == expected) {
-            whenTrue()
-            return
-        }
-
-        whenFalse()
     }
 
     syncToken(result: boolean, sync: Set<TokenType>, title: string) {

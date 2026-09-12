@@ -9,7 +9,7 @@ import { useExtension, type ExtensionMap } from "./utility/extension";
 
 export class Parser extends ParserBase {
 
-    useBranch(branchTable: BranchMap, title: string, sync: Set<TokenType> = new Set(branchTable.keys())) {
+    useBranch(branchTable: BranchMap, title: string, sync: Set<TokenType>) {
        return useBranch(this, branchTable, title, sync)
     }
 
