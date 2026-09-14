@@ -2,9 +2,9 @@ import { TokenType, type Token } from "../../lexer/tokens";
 import { EmptyNode, Node } from "../ast";
 import type { Parser } from "../parser";
 
-export type BranchMap = Map<TokenType, (parser: Parser) => Node>;
+export type BranchMap = Map<TokenType, (parser: Parser, sync: Set<TokenType>, title: string) => any>;
 
-export function createBranch<T extends Node>(production: (parser: Parser) => T, ...tokens: TokenType[]): BranchMap {
+export function createBranch<T>(production: (parser: Parser, sync: Set<TokenType>, title: string) => T, ...tokens: TokenType[]): BranchMap {
 
     const branchMap: BranchMap = new Map()
     for (let token of tokens) {
@@ -36,13 +36,14 @@ export function branchGroup(...branches: BranchMap[]): BranchMap {
 
 export function useBranch(parser: Parser, branchTable: BranchMap, title: string, sync: Set<TokenType>): Node {
 
-    const production = branchTable.get(parser.peek().tokenType)
+    const token = parser.peek()
+    const production = branchTable.get(token.tokenType)
 
     if (production !== undefined) {
-        return production(parser)
+        return production(parser, sync, title)
     }
 
-    parser.syncToken(false, sync, title)
+    parser.syncToken(false, sync, title, token)
     return new EmptyNode("From Branching")
     
 }

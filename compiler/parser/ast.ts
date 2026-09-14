@@ -2,7 +2,7 @@ import type { StringSpan } from "../lexer/tokens";
 
 export enum NodeType {
     Program, Empty, Function, Using, Identifier,
-    IncludeAllPath, IncludePath, BinaryOps
+    IncludeAllPath, IncludePath, BinaryOps, Import,
 }
 
 export class Node {

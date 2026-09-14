@@ -8,12 +8,12 @@ TYPED -> type.TYPE @IDENTIFIER;
 
 COMPOSITE -> TYPED ACTION;
 
-ARGS -> TYPED | @IDENTIFIER ACTION | COMPOSITE;
+ARGS -> TYPED | COMPOSITE; //here args is an extension
 
 //refer language/type
 HEAD -> "fx" @IDENTIFIER "(" ARGS*[separated_by ','] ")" ':' type.TYPE;
 
 //refer language/node, language/structures
-BODY -> "{" (structures.STRUCTURE | node.NODE ';') "}";
+BODY -> "{" (structures.STRUCTURE | node.NODE ';')* "}";
 
 FUNCTION -> HEAD BODY;

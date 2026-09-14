@@ -1,24 +1,17 @@
-import { log, LogType } from "../logger/logger";
+import type { Token } from "../lexer/tokens";
+import type { ParserBase } from "./base";
 
 export class ParserDiagnostic {
 
     constructor(
-        public type: LogType,
         public title: string,
-        public suggestion: string
+        public parser: ParserBase,
+        public token: Token
     ) {}
 
     //now we produce the printable
     print() {
-
-        log({
-            type: this.type,
-            where: "PARSER",
-            title: this.title,
-            description: `At line x, col y happend.`,
-            suggestion: this.suggestion
-        })
-
+        this.parser.logTokenError(this.token, this.title)
     }
 
 }

@@ -5,11 +5,10 @@ NUMBER -> @INTEGER | @REAL;
 ATOM -> @IDENTIFIER | NUMBER | @STRING | "(" NODE ")" | "[" NODE ( "|" NODE )? "]" | 
 "#[" NODE ( "|" NODE )? "]" | '`' ATOM | 'adrs' ATOM | `sizeof` ATOM;
 
-//binary kinds
-ARRAY -> ATOM ( '[' @INTEGER ']' )?; 
-CALL -> ATOM ( "(" (NODE ("," NODE)*)? ")" )?;
-
-DecideArrayOrCall -> CALL | ARRAY;
+DecideArrayOrCall -> ATOM (
+    ( '[' @INTEGER ']' ) | //this is for array access
+    ( "(" (NODE ("," NODE)*)? ")" )  //this is for call access
+)*;
 
 BINDING -> DecideArrayOrCall ('::' DecideArrayOrCall)*;
 MAGNETIC -> BINDING ('->' BINDING)*;
@@ -23,22 +22,22 @@ ASSIGNMENT -> EQUALITY ('=' EQUALITY)*;
 
 //------------------STATEMENT NODES------------------//
 
-RETURN -> "return" ASSIGNMENT? ';';
-BREAK -> "break" @IDENTIFIER? ';';
+RETURN -> "return" ASSIGNMENT?;
+BREAK -> "break" @IDENTIFIER?;
 
 //@#--- Implemented till this portion, 29th July 2026
 
 //refer language/type language/modifiers
-LET -> modifiers.MODIFIER* "let" @IDENTIFIER ':' type.TYPE "=" NODE ';';
-TRANSFORMER -> "transform" ASSIGNMENT "to" @IDENTIFIER ':' type.TYPE ';';
-SUB -> "sub" NODE "with" NODE ';'; //zero-cost substitution
+LET -> "let" ( '(' modifiers.MODIFIER (',' modifiers.MODIFIER)* ')')? @IDENTIFIER ':' type.TYPE "=" NODE;
+TRANSFORMER -> "transform" ASSIGNMENT "to" @IDENTIFIER ':' type.TYPE;
+SUB -> "sub" NODE "with" NODE; //zero-cost substitution
 
 STATEMENT -> RETURN | BREAK | LET | TRANSFORMER | SUB;
 
 //------------------MEMORY ALLOCATION------------------//
 
-NEW -> "new" '<' @IDENTIFIER '>' ASSIGNMENT ';';
-FREE -> "free" '<' @IDENTIFIER '>' ASSIGNMENT ';';
+NEW -> "new" '<' @IDENTIFIER '>' ASSIGNMENT;
+FREE -> "free" '<' @IDENTIFIER '>' ASSIGNMENT;
 
 ALLOCATORS -> NEW | FREE;
 //------------------ROOT------------------//

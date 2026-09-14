@@ -1,0 +1,868 @@
+{
+  "operator": "=",
+  "left": {
+    "operator": "=",
+    "left": {
+      "operator": "=",
+      "left": {
+        "operator": "=",
+        "left": {
+          "operator": "=",
+          "left": {
+            "operator": "Compare",
+            "left": {
+              "operator": "NotEqual",
+              "left": {
+                "operator": "Compare",
+                "left": {
+                  "operator": "NotEqual",
+                  "left": {
+                    "operator": "Compare",
+                    "left": {
+                      "operator": "GreaterThanEqual",
+                      "left": {
+                        "operator": "LessThanEqual",
+                        "left": {
+                          "operator": "GreaterThan",
+                          "left": {
+                            "operator": "LessThan",
+                            "left": {
+                              "operator": "GreaterThanEqual",
+                              "left": {
+                                "operator": "LessThanEqual",
+                                "left": {
+                                  "operator": "GreaterThan",
+                                  "left": {
+                                    "operator": "LessThan",
+                                    "left": {
+                                      "operator": "Add",
+                                      "left": {
+                                        "operator": "Add",
+                                        "left": {
+                                          "operator": "Minus",
+                                          "left": {
+                                            "operator": "Add",
+                                            "left": {
+                                              "operator": "Add",
+                                              "left": {
+                                                "operator": "Minus",
+                                                "left": {
+                                                  "operator": "Add",
+                                                  "left": {
+                                                    "operator": "Add",
+                                                    "left": {
+                                                      "operator": "Add",
+                                                      "left": {
+                                                        "operator": "Add",
+                                                        "left": {
+                                                          "operator": "Add",
+                                                          "left": {
+                                                            "operator": "Add",
+                                                            "left": {
+                                                              "operator": "Add",
+                                                              "left": {
+                                                                "operator": "Add",
+                                                                "left": {
+                                                                  "operator": "Add",
+                                                                  "left": {
+                                                                    "operator": "Add",
+                                                                    "left": {
+                                                                      "operator": "Add",
+                                                                      "left": {
+                                                                        "operator": "Add",
+                                                                        "left": {
+                                                                          "operator": "Add",
+                                                                          "left": {
+                                                                            "operator": "Add",
+                                                                            "left": {
+                                                                              "operator": "Add",
+                                                                              "left": {
+                                                                                "operator": "Add",
+                                                                                "left": {
+                                                                                  "operator": "Add",
+                                                                                  "left": {
+                                                                                    "operator": "Add",
+                                                                                    "left": {
+                                                                                      "operator": "Add",
+                                                                                      "left": {
+                                                                                        "operator": "Add",
+                                                                                        "left": {
+                                                                                          "operator": "Add",
+                                                                                          "left": {
+                                                                                            "operator": "Add",
+                                                                                            "left": {
+                                                                                              "operator": "Add",
+                                                                                              "left": {
+                                                                                                "operator": "Add",
+                                                                                                "left": {
+                                                                                                  "operator": "Add",
+                                                                                                  "left": {
+                                                                                                    "operator": "Add",
+                                                                                                    "left": {
+                                                                                                      "operator": "Add",
+                                                                                                      "left": {
+                                                                                                        "operator": "Add",
+                                                                                                        "left": {
+                                                                                                          "operator": "Add",
+                                                                                                          "left": "foo",
+                                                                                                          "right": "123"
+                                                                                                        },
+                                                                                                        "right": "123.456"
+                                                                                                      },
+                                                                                                      "right": "hello world"
+                                                                                                    },
+                                                                                                    "right": "alpha"
+                                                                                                  },
+                                                                                                  "right": {
+                                                                                                    "is": "pointer-access",
+                                                                                                    "of": "one"
+                                                                                                  }
+                                                                                                },
+                                                                                                "right": {
+                                                                                                  "is": "pointer-access",
+                                                                                                  "of": {
+                                                                                                    "is": "pointer-access",
+                                                                                                    "left": "one",
+                                                                                                    "right": "two"
+                                                                                                  }
+                                                                                                }
+                                                                                              },
+                                                                                              "right": {
+                                                                                                "is": "handle-pointer-access",
+                                                                                                "of": "three"
+                                                                                              }
+                                                                                            },
+                                                                                            "right": {
+                                                                                              "is": "handle-pointer-access",
+                                                                                              "of": {
+                                                                                                "is": "handle-pointer-access",
+                                                                                                "left": "three",
+                                                                                                "right": "four"
+                                                                                              }
+                                                                                            }
+                                                                                          },
+                                                                                          "right": {
+                                                                                            "is": "reference",
+                                                                                            "of": "foo"
+                                                                                          }
+                                                                                        },
+                                                                                        "right": {
+                                                                                          "is": "address_of",
+                                                                                          "of": "bar"
+                                                                                        }
+                                                                                      },
+                                                                                      "right": {
+                                                                                        "is": "size_of",
+                                                                                        "of": "baz"
+                                                                                      }
+                                                                                    },
+                                                                                    "right": {
+                                                                                      "is": "array-access",
+                                                                                      "from": "arr",
+                                                                                      "at": "0"
+                                                                                    }
+                                                                                  },
+                                                                                  "right": {
+                                                                                    "is": "array-access",
+                                                                                    "from": "matrix",
+                                                                                    "at": "10"
+                                                                                  }
+                                                                                },
+                                                                                "right": {
+                                                                                  "callee": "callback",
+                                                                                  "arguments": [
+                                                                                    "arg1",
+                                                                                    "arg2"
+                                                                                  ]
+                                                                                }
+                                                                              },
+                                                                              "right": {
+                                                                                "callee": "callback",
+                                                                                "arguments": []
+                                                                              }
+                                                                            },
+                                                                            "right": {
+                                                                              "callee": "nested",
+                                                                              "arguments": [
+                                                                                {
+                                                                                  "callee": "foo",
+                                                                                  "arguments": [
+                                                                                    "1",
+                                                                                    "2"
+                                                                                  ]
+                                                                                },
+                                                                                {
+                                                                                  "is": "array-access",
+                                                                                  "from": "bar",
+                                                                                  "at": "3"
+                                                                                }
+                                                                              ]
+                                                                            }
+                                                                          },
+                                                                          "right": {
+                                                                            "operator": "DoubleColon",
+                                                                            "left": "a",
+                                                                            "right": "b"
+                                                                          }
+                                                                        },
+                                                                        "right": {
+                                                                          "operator": "DoubleColon",
+                                                                          "left": {
+                                                                            "operator": "DoubleColon",
+                                                                            "left": "a",
+                                                                            "right": "b"
+                                                                          },
+                                                                          "right": "c"
+                                                                        }
+                                                                      },
+                                                                      "right": {
+                                                                        "operator": "ArrowRight",
+                                                                        "left": {
+                                                                          "operator": "DoubleColon",
+                                                                          "left": "a",
+                                                                          "right": "b"
+                                                                        },
+                                                                        "right": "c"
+                                                                      }
+                                                                    },
+                                                                    "right": {
+                                                                      "operator": "ArrowRight",
+                                                                      "left": {
+                                                                        "operator": "ArrowRight",
+                                                                        "left": {
+                                                                          "operator": "DoubleColon",
+                                                                          "left": "a",
+                                                                          "right": "b"
+                                                                        },
+                                                                        "right": {
+                                                                          "operator": "DoubleColon",
+                                                                          "left": "c",
+                                                                          "right": "d"
+                                                                        }
+                                                                      },
+                                                                      "right": "e"
+                                                                    }
+                                                                  },
+                                                                  "right": {
+                                                                    "operator": "Dot",
+                                                                    "left": "object",
+                                                                    "right": "field"
+                                                                  }
+                                                                },
+                                                                "right": {
+                                                                  "operator": "Dot",
+                                                                  "left": "object",
+                                                                  "right": {
+                                                                    "operator": "ArrowRight",
+                                                                    "left": "field",
+                                                                    "right": "method"
+                                                                  }
+                                                                }
+                                                              },
+                                                              "right": {
+                                                                "operator": "Dot",
+                                                                "left": {
+                                                                  "operator": "Dot",
+                                                                  "left": {
+                                                                    "operator": "ArrowRight",
+                                                                    "left": "a",
+                                                                    "right": "b"
+                                                                  },
+                                                                  "right": {
+                                                                    "operator": "ArrowRight",
+                                                                    "left": "c",
+                                                                    "right": "d"
+                                                                  }
+                                                                },
+                                                                "right": "e"
+                                                              }
+                                                            },
+                                                            "right": {
+                                                              "operator": "Multiply",
+                                                              "left": "a",
+                                                              "right": "b"
+                                                            }
+                                                          },
+                                                          "right": {
+                                                            "operator": "Divide",
+                                                            "left": "a",
+                                                            "right": "b"
+                                                          }
+                                                        },
+                                                        "right": {
+                                                          "operator": "Multiply",
+                                                          "left": {
+                                                            "operator": "Divide",
+                                                            "left": {
+                                                              "operator": "Multiply",
+                                                              "left": "a",
+                                                              "right": "b"
+                                                            },
+                                                            "right": "c"
+                                                          },
+                                                          "right": "d"
+                                                        }
+                                                      },
+                                                      "right": "a"
+                                                    },
+                                                    "right": "b"
+                                                  },
+                                                  "right": "a"
+                                                },
+                                                "right": "b"
+                                              },
+                                              "right": "a"
+                                            },
+                                            "right": "b"
+                                          },
+                                          "right": "c"
+                                        },
+                                        "right": "d"
+                                      },
+                                      "right": "a"
+                                    },
+                                    "right": {
+                                      "operator": "Add",
+                                      "left": "b",
+                                      "right": "a"
+                                    }
+                                  },
+                                  "right": {
+                                    "operator": "Add",
+                                    "left": "b",
+                                    "right": "a"
+                                  }
+                                },
+                                "right": {
+                                  "operator": "Add",
+                                  "left": "b",
+                                  "right": "a"
+                                }
+                              },
+                              "right": {
+                                "operator": "Add",
+                                "left": "b",
+                                "right": "a"
+                              }
+                            },
+                            "right": "b"
+                          },
+                          "right": "c"
+                        },
+                        "right": "d"
+                      },
+                      "right": {
+                        "operator": "Add",
+                        "left": "e",
+                        "right": "a"
+                      }
+                    },
+                    "right": {
+                      "operator": "Add",
+                      "left": "b",
+                      "right": "a"
+                    }
+                  },
+                  "right": {
+                    "operator": "Add",
+                    "left": "b",
+                    "right": "a"
+                  }
+                },
+                "right": "b"
+              },
+              "right": "c"
+            },
+            "right": {
+              "operator": "Add",
+              "left": "d",
+              "right": "a"
+            }
+          },
+          "right": {
+            "operator": "Add",
+            "left": "b",
+            "right": "a"
+          }
+        },
+        "right": "b"
+      },
+      "right": {
+        "operator": "Compare",
+        "left": {
+          "operator": "Add",
+          "left": "c",
+          "right": "a"
+        },
+        "right": "b"
+      }
+    },
+    "right": {
+      "operator": "Add",
+      "left": {
+        "operator": "Add",
+        "left": {
+          "operator": "Add",
+          "left": {
+            "operator": "Add",
+            "left": {
+              "operator": "Add",
+              "left": {
+                "operator": "Add",
+                "left": {
+                  "operator": "Add",
+                  "left": {
+                    "operator": "Add",
+                    "left": {
+                      "operator": "Add",
+                      "left": "c",
+                      "right": {
+                        "operator": "Add",
+                        "left": "foo",
+                        "right": {
+                          "operator": "Multiply",
+                          "left": "123",
+                          "right": "bar"
+                        }
+                      }
+                    },
+                    "right": {
+                      "operator": "Multiply",
+                      "left": {
+                        "operator": "Dot",
+                        "left": {
+                          "operator": "ArrowRight",
+                          "left": {
+                            "operator": "DoubleColon",
+                            "left": "a",
+                            "right": "b"
+                          },
+                          "right": "c"
+                        },
+                        "right": "d"
+                      },
+                      "right": {
+                        "operator": "Add",
+                        "left": "x",
+                        "right": "y"
+                      }
+                    }
+                  },
+                  "right": {
+                    "is": "array-access",
+                    "from": "array",
+                    "at": "0"
+                  }
+                },
+                "right": {
+                  "callee": "function",
+                  "arguments": [
+                    "first",
+                    "second",
+                    {
+                      "callee": "third",
+                      "arguments": [
+                        "nested",
+                        {
+                          "is": "array-access",
+                          "from": "values",
+                          "at": "42"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "right": {
+                "is": "handle-pointer-access",
+                "of": {
+                  "is": "handle-pointer-access",
+                  "left": "alpha",
+                  "right": "beta"
+                }
+              }
+            },
+            "right": {
+              "is": "address_of",
+              "of": {
+                "is": "reference",
+                "of": {
+                  "is": "size_of",
+                  "of": {
+                    "is": "reference",
+                    "of": "pointer"
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "operator": "Dot",
+            "left": {
+              "operator": "ArrowRight",
+              "left": "root",
+              "right": {
+                "operator": "DoubleColon",
+                "left": "child",
+                "right": "grandchild"
+              }
+            },
+            "right": {
+              "operator": "ArrowRight",
+              "left": "field",
+              "right": {
+                "callee": "method",
+                "arguments": [
+                  "arg1",
+                  {
+                    "is": "array-access",
+                    "from": "arg2",
+                    "at": "10"
+                  },
+                  {
+                    "is": "handle-pointer-access",
+                    "of": {
+                      "is": "handle-pointer-access",
+                      "left": "x",
+                      "right": "y"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "right": {
+          "operator": "Minus",
+          "left": {
+            "operator": "Multiply",
+            "left": {
+              "operator": "Dot",
+              "left": {
+                "operator": "ArrowRight",
+                "left": {
+                  "operator": "DoubleColon",
+                  "left": "a",
+                  "right": "b"
+                },
+                "right": "c"
+              },
+              "right": {
+                "callee": "d",
+                "arguments": [
+                  "x",
+                  "y"
+                ]
+              }
+            },
+            "right": {
+              "operator": "Add",
+              "left": "p",
+              "right": {
+                "operator": "Divide",
+                "left": "q",
+                "right": "r"
+              }
+            }
+          },
+          "right": "s"
+        }
+      },
+      "right": {
+        "operator": "Compare",
+        "left": "first",
+        "right": "second"
+      }
+    }
+  },
+  "right": {
+    "operator": "Add",
+    "left": {
+      "operator": "Add",
+      "left": {
+        "operator": "Add",
+        "left": {
+          "operator": "Add",
+          "left": {
+            "operator": "Add",
+            "left": {
+              "operator": "Add",
+              "left": {
+                "operator": "Add",
+                "left": {
+                  "operator": "Add",
+                  "left": {
+                    "operator": "Add",
+                    "left": {
+                      "operator": "Add",
+                      "left": {
+                        "operator": "Add",
+                        "left": "result",
+                        "right": {
+                          "operator": "Dot",
+                          "left": {
+                            "operator": "Dot",
+                            "left": {
+                              "operator": "ArrowRight",
+                              "left": {
+                                "operator": "ArrowRight",
+                                "left": {
+                                  "operator": "DoubleColon",
+                                  "left": {
+                                    "operator": "DoubleColon",
+                                    "left": "deeply",
+                                    "right": "nested"
+                                  },
+                                  "right": "binding"
+                                },
+                                "right": {
+                                  "operator": "DoubleColon",
+                                  "left": {
+                                    "operator": "DoubleColon",
+                                    "left": {
+                                      "operator": "DoubleColon",
+                                      "left": "chain",
+                                      "right": "withx"
+                                    },
+                                    "right": "many"
+                                  },
+                                  "right": "parts"
+                                }
+                              },
+                              "right": "final"
+                            },
+                            "right": "property"
+                          },
+                          "right": "another"
+                        }
+                      },
+                      "right": {
+                        "callee": "call",
+                        "arguments": [
+                          {
+                            "operator": "Dot",
+                            "left": {
+                              "operator": "ArrowRight",
+                              "left": {
+                                "operator": "DoubleColon",
+                                "left": "a",
+                                "right": "b"
+                              },
+                              "right": "c"
+                            },
+                            "right": {
+                              "callee": "d",
+                              "arguments": [
+                                {
+                                  "is": "pointer-access",
+                                  "of": {
+                                    "is": "pointer-access",
+                                    "left": "1",
+                                    "right": "2"
+                                  }
+                                },
+                                {
+                                  "is": "handle-pointer-access",
+                                  "of": {
+                                    "is": "handle-pointer-access",
+                                    "left": "3",
+                                    "right": "4"
+                                  }
+                                },
+                                {
+                                  "is": "reference",
+                                  "of": "value"
+                                },
+                                {
+                                  "is": "address_of",
+                                  "of": "target"
+                                },
+                                {
+                                  "is": "size_of",
+                                  "of": "object"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "right": {
+                      "operator": "Minus",
+                      "left": {
+                        "operator": "Add",
+                        "left": {
+                          "is": "array-access",
+                          "from": "alpha",
+                          "at": "0"
+                        },
+                        "right": {
+                          "is": "array-access",
+                          "from": "beta",
+                          "at": "1"
+                        }
+                      },
+                      "right": {
+                        "operator": "Divide",
+                        "left": {
+                          "operator": "Multiply",
+                          "left": {
+                            "is": "array-access",
+                            "from": "gamma",
+                            "at": "2"
+                          },
+                          "right": {
+                            "is": "array-access",
+                            "from": "delta",
+                            "at": "3"
+                          }
+                        },
+                        "right": {
+                          "is": "array-access",
+                          "from": "epsilon",
+                          "at": "4"
+                        }
+                      }
+                    }
+                  },
+                  "right": {
+                    "operator": "=",
+                    "left": {
+                      "operator": "NotEqual",
+                      "left": {
+                        "operator": "Compare",
+                        "left": {
+                          "operator": "LessThan",
+                          "left": "a",
+                          "right": "b"
+                        },
+                        "right": "c"
+                      },
+                      "right": "d"
+                    },
+                    "right": "e"
+                  }
+                },
+                "right": "identifier"
+              },
+              "right": {
+                "is": "pointer-access",
+                "of": {
+                  "is": "pointer-access",
+                  "left": {
+                    "operator": "Add",
+                    "left": "a",
+                    "right": "b"
+                  },
+                  "right": {
+                    "operator": "Multiply",
+                    "left": "c",
+                    "right": "d"
+                  }
+                }
+              }
+            },
+            "right": {
+              "is": "handle-pointer-access",
+              "of": {
+                "is": "handle-pointer-access",
+                "left": {
+                  "operator": "Dot",
+                  "left": {
+                    "operator": "ArrowRight",
+                    "left": "foo",
+                    "right": "bar"
+                  },
+                  "right": "baz"
+                },
+                "right": {
+                  "is": "address_of",
+                  "of": {
+                    "is": "reference",
+                    "of": "pointer"
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "is": "size_of",
+            "of": "alpha"
+          }
+        },
+        "right": {
+          "is": "address_of",
+          "of": "target"
+        }
+      },
+      "right": {
+        "is": "reference",
+        "of": "value"
+      }
+    },
+    "right": {
+      "callee": "mega",
+      "arguments": [
+        {
+          "operator": "Dot",
+          "left": {
+            "operator": "ArrowRight",
+            "left": {
+              "operator": "DoubleColon",
+              "left": "a",
+              "right": "b"
+            },
+            "right": "c"
+          },
+          "right": {
+            "callee": "d",
+            "arguments": [
+              {
+                "is": "array-access",
+                "from": "x",
+                "at": "1"
+              },
+              {
+                "is": "array-access",
+                "from": "y",
+                "at": "2"
+              },
+              {
+                "is": "array-access",
+                "from": "z",
+                "at": "3"
+              }
+            ]
+          }
+        },
+        {
+          "is": "handle-pointer-access",
+          "of": {
+            "is": "handle-pointer-access",
+            "left": "one",
+            "right": "two"
+          }
+        },
+        {
+          "is": "pointer-access",
+          "of": {
+            "is": "pointer-access",
+            "left": "three",
+            "right": "four"
+          }
+        },
+        {
+          "is": "size_of",
+          "of": {
+            "is": "reference",
+            "of": "thing"
+          }
+        },
+        {
+          "is": "address_of",
+          "of": "target"
+        }
+      ]
+    }
+  }
+}

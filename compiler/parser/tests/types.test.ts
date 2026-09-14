@@ -3,28 +3,15 @@ import { TokenType } from "../../lexer/tokens";
 import { Parser } from "../parser";
 import { ImportProduction } from "../rules/module";
 import { ProgramProduction } from "../rules/program";
+import { Type } from "../rules/types";
 
-const code =
-`
-import a.b.c;
-using a.(b).c.x;
-fx
-fx
-import a..b.c.()..
-using left ()
-fx
-using;;;;;;fx fx garbage code lets see how parser handles this bull
-fx () => { println(js is hell!) }
-;using import x;
-fx fx data fx
-`
-const tokenizer = new Tokenizer(code)
+const tokenizer = new Tokenizer(`#\`f322::(A, B, C)[10]`)
 tokenizer.tokenize()
 const tokens = tokenizer.tokens; //stream of tokens
 
 const parser = new Parser(tokens, tokenizer.sourceContainer)
 
-const output = ProgramProduction.parse(parser)
-parser.print()
+const output = Type.parse(parser, new Set([ TokenType.EOF ]))
+console.log(JSON.stringify(output, null, 2))
 
-//console.log(JSON.stringify(output, null, 2))
+parser.print()

@@ -1,0 +1,6 @@
+//refer language/structures, language/node
+LOOP -> 
+
+"loop" @IDENTIFIER? '{' 
+    (structures.STRUCTURE | node.NODE ';')* 
+'}';

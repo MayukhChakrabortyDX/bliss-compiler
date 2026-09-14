@@ -1,113 +1,221 @@
-//we will use branching a lot today!
-
 import { TokenType } from "../../lexer/tokens";
-import { BinaryOperatorNode, BinaryOpsEnum, EmptyNode, Identifier, Node, NodeType } from "../ast";
+import { Identifier, Node, NodeType } from "../ast";
 import type { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 
-//for parseModuleAtom, we need a branch table
-const identifierBranch = createBranch((parser: Parser) => {
+export namespace ModuleAtom {
 
-    const finish = parser.start()
-    const name = parser.digest({
-        expected: TokenType.Identifier,
-        sync: new Set([TokenType.Identifier, TokenType.Dot, TokenType.LBrace, TokenType.EOF]),
-        title: "Invalid entry in module name"
-    })
-    return finish(new Identifier(name))
+    const identifierBranch = createBranch((parser, sync) => {
 
-}, TokenType.Identifier)
+        const name = parser.digest({
+            expected: TokenType.Identifier,
+            sync,
+            title: "Expected an indentifier"
+        })
 
-export class IncludePaths extends Node {
-    constructor(public paths: Node[]) {
-        super(NodeType.IncludePath)
-    }
-}
+        return new Identifier(name)
 
-const bracketBranch = createBranch((parser: Parser) => {
+    }, TokenType.Identifier)
 
-    const finish = parser.start()
-    parser.match({
-        expected: TokenType.LBrace,
-        sync: new Set([]),
-        title: "This message should not even appear"
-    })
-
-    const paths: Node[] = []
-
-    paths.push(
-        parser.module.parseModulePath()
-    )
-
-    while (true) {
-
-        if (parser.peek().tokenType != TokenType.RBrace) {
-            parser.match({
-                expected: TokenType.Comma,
-                sync: new Set(),
-                title: ""
-            })
-        } else {
-            parser.advance()
-            break;
+    export class Path extends Node {
+        constructor(public paths: Node[]) {
+            super(NodeType.IncludePath)
         }
+    }
+
+    const enclosedBracketBranch = createBranch((parser, sync) => {
+
+        parser.advance(); //because we already matched the first token in the branch itself.
+        const paths = []
 
         paths.push(
-            parser.module.parseModulePath()
+            ModulePath.parse(parser, sync.union(new Set([TokenType.Comma, TokenType.RBrace]).union(ModulePath.first)))
         )
 
-        if ( parser.isRecovery ) {
-            break;
+        while (true) {
+
+            //what token we encounter determines what happens
+            const tokenRoot = parser.peek()
+            const token = tokenRoot.tokenType
+
+            if (sync.has(token) && token != TokenType.RBrace && token != TokenType.Comma && !ModulePath.first.has(token)) {
+
+                //we have completed the sync and we have also crossed the delim
+                parser.syncToken(false, sync, "Expected a closing ')' bracket", tokenRoot)
+                break
+
+            }
+
+            if (token == TokenType.RBrace) {
+                //so this is our deliminator
+                parser.advance()
+                break
+            }
+
+            if (ModulePath.first.has(token)) {
+
+                //we encounted a new production without using the separator
+
+                //why? because if any previous error occurs, most likely due to separator, we do not report.
+                parser.report("Provide a separator, '.' (DOT) or ',' (COMMA) before a path", tokenRoot)
+
+                paths.push(
+                    ModulePath.parse(
+                        parser, sync.union(ModulePath.first).union(new Set([TokenType.RBrace, TokenType.Comma])) //the end sync ofc.
+                    )
+                )
+
+                continue;
+            }
+
+            if (token == TokenType.Comma) {
+
+                //if it's our separator
+                parser.advance()
+                paths.push(
+                    ModulePath.parse(
+                        parser, sync.union(ModulePath.first).union(new Set([TokenType.RBrace, TokenType.Comma])) //the end sync ofc.
+                    )
+                )
+
+                continue;
+
+            }
+
+            //otherwise we try to sync and continue. Eventually reaching EOF ofc.
+            parser.match({
+                expected: TokenType.Comma,
+                sync: sync.union(new Set([TokenType.RBrace])).union(ModulePath.first),
+                title: "Expected a comma separator, got something else"
+            })
+
         }
 
+        return new Path(paths)
+
+    }, TokenType.LBrace)
+
+    export class IncludeAllNode extends Node {
+        constructor() {
+            super(NodeType.IncludeAllPath)
+        }
     }
 
-    return finish(new IncludePaths(paths))
+    const asteriskBranch = createBranch((parser, sync) => {
 
-}, TokenType.LBrace)
-
-export class IncludeAllPath extends Node {
-    constructor() {
-        super(NodeType.IncludeAllPath)
-    }
-}
-
-const includeAllBranch = createBranch((parser: Parser) => {
-
-    const finish = parser.start()
-    parser.match({
-        expected: TokenType.Multiply,
-        sync: new Set([]),
-        title: "Invalid token I guess"
-    })
-
-    return finish(new IncludeAllPath())
-
-}, TokenType.Multiply)
-
-const group = branchGroup(identifierBranch, bracketBranch, includeAllBranch)
-
-export function parseModuleAtom(parser: Parser) {
-
-    const finish = parser.start()
-
-    return finish(
-        parser.useBranch(group, "Invalid import value", new Set([TokenType.Semicolon, TokenType.EOF, TokenType.Dot]))
-    )
-}
-
-export function parseModulePath(parser: Parser) {
-
-    const finish = parser.start()
-    let left = parser.module.parseModuleAtom()
-
-    if ( parser.peek().tokenType == TokenType.Dot ) {
+        //the reason is simple because this branch was even selected.
         parser.advance()
-        left = new BinaryOperatorNode(
-            left, parseModulePath(parser), BinaryOpsEnum.IncludePath
+        return new IncludeAllNode()
+
+    }, TokenType.Multiply)
+
+    const branch = branchGroup(identifierBranch, enclosedBracketBranch, asteriskBranch)
+
+    export const first: Set<TokenType> = new Set([TokenType.Identifier, TokenType.LBrace, TokenType.Multiply])
+    export function parse(parser: Parser, sync: Set<TokenType>) {
+
+        return parser.useBranch(
+            branch,
+            "Expected an identifier, or a '*' or a starting '(' bracket",
+            sync //whatever the external sync token happens to be
         )
+
+    }
+}
+
+export namespace ModulePath {
+    export class ModulePathNode extends Node {
+        constructor(public node: Node, public next: Node) {
+            super(NodeType.IncludePath)
+        }
     }
 
-    return finish(left)
+    export const first: Set<TokenType> = ModuleAtom.first;
+    export function parse(parser: Parser, sync: Set<TokenType>): Node {
+
+        let left = ModuleAtom.parse(
+            parser,
+            sync.union(new Set([TokenType.Dot])) //locally reachable only
+        )
+
+        if (parser.peek().tokenType == TokenType.Dot) {
+
+            parser.advance()
+            left = new ModulePathNode(
+                left, ModulePath.parse(parser, sync)
+            )
+
+        }
+
+        return left
+
+    }
+
+}
+
+export namespace ImportProduction {
+
+    export class ImportNode extends Node {
+        constructor(public node: Node) {
+            super(NodeType.Import)
+        }
+    }
+
+    export const first: Set<TokenType> = new Set([TokenType.K_Import])
+
+    export function parse(parser: Parser, sync: Set<TokenType>) {
+
+        parser.match({
+            expected: TokenType.K_Import,
+            sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
+            title: "Expected the keyword 'import'"
+        })
+
+        const body = ModulePath.parse(
+            parser,
+            sync.union(new Set([TokenType.Semicolon])),
+        )
+
+        parser.match({
+            expected: TokenType.Semicolon,
+            sync: sync,
+            title: "Expected a semicolon token" //because this is the end token
+        })
+
+        return new ImportNode(body)
+    }
+
+}
+
+export namespace UsingProduction {
+    export class UsingNode extends Node {
+        constructor(public node: Node) {
+            super(NodeType.Using)
+        }
+    }
+
+    export const first: Set<TokenType> = new Set([TokenType.K_Using])
+
+    export function parse(parser: Parser, sync: Set<TokenType>) {
+
+        parser.match({
+            expected: TokenType.K_Using,
+            sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
+            title: "Expected the keyword 'import'"
+        })
+
+        const body = ModulePath.parse(
+            parser,
+            sync.union(new Set([TokenType.Semicolon])),
+        )
+
+        parser.match({
+            expected: TokenType.Semicolon,
+            sync: sync,
+            title: "Expected a semicolon token" //because this is the end token
+        })
+
+        return new UsingNode(body)
+    }
 
 }

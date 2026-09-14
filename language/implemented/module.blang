@@ -4,3 +4,5 @@ MODULE_PATH -> MODULE_ATOM ('.' MODULE_ATOM)*;
 //Module system
 IMPORT -> "import" MODULE_PATH ';' ;
 USING -> "using" MODULE_PATH ';' ;
+
+//start(MODULE_PATH) = start(MODULE_ATOM)
