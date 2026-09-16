@@ -31,6 +31,7 @@
         <a href="/docs/">Docs</a>
         <a href="/blog">Blog</a>
         <a href="/courses/">Courses</a>
+        <a href="/papers/">Papers</a>
         <a href="/#downloads">Downloads</a>
 
         <a
@@ -42,12 +43,34 @@
         </a>
       </div>
 
-      <!-- Mobile -->
-      <a
-        href="/#downloads"
-        class="bliss-nav__mobile-downloads"
+      <button
+        class="bliss-nav__menu-button"
+        type="button"
+        :aria-expanded="isMenuOpen"
+        aria-controls="bliss-mobile-menu"
+        aria-label="Toggle navigation menu"
+        @click="isMenuOpen = !isMenuOpen"
       >
-        Downloads
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div v-if="isMenuOpen" id="bliss-mobile-menu" class="bliss-nav__mobile-menu">
+      <a href="/docs/language" @click="isMenuOpen = false">The language</a>
+      <a href="/docs/" @click="isMenuOpen = false">Docs</a>
+      <a href="/blog" @click="isMenuOpen = false">Blog</a>
+      <a href="/courses/" @click="isMenuOpen = false">Courses</a>
+      <a href="/papers/" @click="isMenuOpen = false">Papers</a>
+      <a href="/#downloads" @click="isMenuOpen = false">Downloads</a>
+      <a
+        href="https://github.com/MayukhChakrabortyDX/bliss-compiler"
+        target="_blank"
+        rel="noreferrer"
+        @click="isMenuOpen = false"
+      >
+        GitHub ↗
       </a>
     </div>
   </nav>
@@ -57,6 +80,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const isScrolled = ref(false)
+const isMenuOpen = ref(false)
 
 const updateScrollState = () => {
   isScrolled.value = window.scrollY > 8
@@ -184,7 +208,74 @@ onBeforeUnmount(() => {
   background: white;
 }
 
+.bliss-nav__menu-button,
+.bliss-nav__mobile-menu {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .bliss-nav__inner {
+    width: min(100% - 2rem, 1152px);
+    padding: 16px 0;
+  }
+
+  .bliss-nav__logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .bliss-nav__name {
+    font-size: 17px;
+  }
+
+  .bliss-nav__menu-button {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-content: center;
+    gap: 4px;
+    border: 1px solid var(--bliss-border);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 72%);
+    color: var(--bliss-fg);
+    cursor: pointer;
+  }
+
+  .bliss-nav__menu-button span {
+    width: 17px;
+    height: 1.5px;
+    background: currentColor;
+  }
+
+  .bliss-nav__mobile-menu {
+    position: absolute;
+    top: calc(100% - 4px);
+    right: 1rem;
+    left: 1rem;
+    display: grid;
+    gap: 2px;
+    padding: 8px;
+    border: 1px solid var(--bliss-border);
+    border-radius: 16px;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: var(--bliss-shadow-lg);
+    backdrop-filter: blur(16px);
+  }
+
+  .bliss-nav__mobile-menu a {
+    padding: 12px;
+    border-radius: 9px;
+    color: var(--bliss-fg-secondary);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .bliss-nav__mobile-menu a:hover {
+    background: var(--bliss-bg-subtle);
+  }
+
   .bliss-nav__inner {
     width: min(100% - 2rem, 1152px);
   }
@@ -194,7 +285,7 @@ onBeforeUnmount(() => {
   }
 
   .bliss-nav__mobile-downloads {
-    display: block;
+    display: none;
   }
 }
 </style>

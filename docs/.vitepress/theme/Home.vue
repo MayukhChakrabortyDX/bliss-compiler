@@ -3,11 +3,6 @@
 
     <!-- Hero -->
     <section class="home-hero">
-      <div class="home-status-pill">
-        <span class="home-status-dot"></span>
-        Early development
-      </div>
-
       <h1 class="home-hero__title">
         Rethink
         <span>systems.</span>
@@ -37,6 +32,12 @@
         <span>systems programming</span>
         <span>memory safety</span>
         <span>new paradigms</span>
+      </div>
+
+      <div class="home-hero__rail" aria-label="Bliss focus areas">
+        <span><strong>01</strong> language</span>
+        <span><strong>02</strong> compiler</span>
+        <span><strong>03</strong> systems</span>
       </div>
     </section>
 
@@ -358,6 +359,8 @@
 /* Hero */
 
 .home-hero {
+  position: relative;
+  isolation: isolate;
   width: min(100% - 3rem, 1024px);
   margin-inline: auto;
   /* Reserve the fixed, transparent marketing navigation without separating it
@@ -369,48 +372,57 @@
   align-items: center;
 }
 
-.home-status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 24px;
-  padding: 6px 14px;
-  border: 1px solid #e4e4e7;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 80%);
-  color: #52525b;
-  font-size: 12px;
-  font-weight: 500;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
-  backdrop-filter: blur(12px);
+.home-hero::before {
+  position: absolute;
+  top: 88px;
+  left: 50%;
+  bottom: 48px;
+  width: min(100%, 960px);
+  z-index: -1;
+  border-top: 1px solid rgb(9 9 11 / 8%);
+  border-bottom: 1px solid rgb(9 9 11 / 8%);
+  content: '';
+  pointer-events: none;
+  transform: translateX(-50%);
 }
 
-.home-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: #10b981;
+.home-hero::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  color: transparent;
+  content: 'BLISS';
+  font-family: var(--bliss-font-mono);
+  font-size: clamp(7rem, 22vw, 18rem);
+  font-weight: 600;
+  letter-spacing: .14em;
+  line-height: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  -webkit-text-stroke: 1px rgb(9 9 11 / 7%);
 }
 
 .home-hero__title {
   max-width: 896px;
   margin: 0;
-  font-size: 64px;
-  line-height: 1;
+  font-size: clamp(4rem, 9vw, 8rem);
+  line-height: .88;
   font-weight: 600;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.075em;
 }
 
 .home-hero__title span {
-  color: #a1a1aa;
+  color: #71717a;
 }
 
 .home-hero__description {
-  max-width: 672px;
-  margin: 28px 0 0;
+  max-width: 600px;
+  margin: 36px 0 0;
   color: #71717a;
-  font-size: 20px;
-  line-height: 2;
+  font-size: 18px;
+  line-height: 1.8;
 }
 
 .home-hero__actions {
@@ -466,13 +478,41 @@
   justify-content: center;
   column-gap: 32px;
   row-gap: 12px;
-  margin-top: 48px;
+  margin-top: 42px;
   color: #a1a1aa;
   font-family: var(--bliss-font-mono);
   font-size: 11px;
   line-height: 1.5;
   text-transform: uppercase;
   letter-spacing: 0.16em;
+}
+
+.home-hero__rail {
+  display: grid;
+  width: min(100%, 720px);
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 64px;
+  border-top: 1px solid rgb(9 9 11 / 14%);
+  border-bottom: 1px solid rgb(9 9 11 / 14%);
+  color: #71717a;
+  font-family: var(--bliss-font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.home-hero__rail span {
+  padding: 13px 16px;
+}
+
+.home-hero__rail span + span {
+  border-left: 1px solid rgb(9 9 11 / 14%);
+}
+
+.home-hero__rail strong {
+  margin-right: 8px;
+  color: #09090b;
+  font-weight: 500;
 }
 
 /* Thesis */
@@ -932,7 +972,7 @@
   }
 
   .home-hero__title {
-    font-size: 56px;
+    font-size: 72px;
   }
 
   .home-hero__description {
@@ -971,7 +1011,7 @@
   }
 
   .home-hero__title {
-    font-size: 48px;
+    font-size: 54px;
   }
 
   .home-hero__description {
@@ -987,6 +1027,20 @@
   .home-button {
     width: 100%;
     justify-content: center;
+  }
+
+  .home-hero__rail {
+    grid-template-columns: 1fr;
+    margin-top: 48px;
+  }
+
+  .home-hero__rail span + span {
+    border-top: 1px solid rgb(9 9 11 / 14%);
+    border-left: 0;
+  }
+
+  .home-hero__rail span {
+    text-align: left;
   }
 
   .home-heading--large {

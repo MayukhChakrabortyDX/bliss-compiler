@@ -19,6 +19,7 @@ export default defineConfig({
       { text: 'Compiler', link: '/docs/compiler' },
       { text: 'Blog', link: '/blog/' },
       { text: 'Courses', link: '/courses/' },
+      { text: 'Papers', link: '/papers/' },
       { text: 'Downloads', link: '/#downloads' },
     ],
 
@@ -28,9 +29,12 @@ export default defineConfig({
           label: 'Language',
           items: [
             { text: 'Overview', link: '/docs/language' },
-            { text: 'Syntax', link: '/docs/syntax' },
-            { text: 'Types', link: '/docs/types' },
-            { text: 'Memory', link: '/docs/memory' },
+            { text: 'Syntax', link: '/docs/language/syntax' },
+            { text: 'Types', link: '/docs/language/types' },
+            { text: 'Expressions', link: '/docs/language/expressions' },
+            { text: 'Statements and control flow', link: '/docs/language/statements' },
+            { text: 'Modules and declarations', link: '/docs/language/modules' },
+            { text: 'Language status', link: '/docs/language/status' },
           ],
         },
       ],
