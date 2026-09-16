@@ -1,17 +1,17 @@
 import { TokenType } from "../../lexer/tokens";
 import { EmptyNode } from "../ast";
+import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch, } from "../utility/branch";
 import { createExtension } from "../utility/extension";
-import { Atom } from "./node";
-
+import { union } from "../utility/union";
 namespace BuiltinType {
 
-    export const first = new Set([
+    export const first: Set<TokenType> = union(
         TokenType.K_u8, TokenType.K_u16, TokenType.K_u32, TokenType.K_u64,
         TokenType.K_i8, TokenType.K_i16, TokenType.K_i32, TokenType.K_i64,
-        TokenType.K_f32, TokenType.K_f64, //that's it for now
-    ])
+        TokenType.K_f32, TokenType.K_f64 //that's it for now
+    )
 
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
@@ -38,7 +38,7 @@ namespace BuiltinType {
 
 namespace CompositeType {
 
-    export const first = Parser.productions.atom.first
+    export const first = First.Atom
 
     const identifierSequenceExtension = createBranch((parser, sync) => {
 
@@ -137,11 +137,11 @@ namespace CompositeType {
         return parser.useExtension(
             () => {
 
-                const node = Atom.parse(parser, sync.union(new Set([TokenType.DoubleColon, TokenType.LBrace, TokenType.Identifier, TokenType.RBrace, TokenType.Comma])))
+                const node = parser.parseAtom(union(sync, TokenType.DoubleColon, TokenType.LBrace, TokenType.Identifier, TokenType.RBrace, TokenType.Comma))
                 return node
 
             },
-            
+
             createExtension((parser, from, sync) => {
 
                 parser.advance()
@@ -164,7 +164,7 @@ namespace CompositeType {
 
 namespace TypeAtom {
 
-    export const first = BuiltinType.first.union(CompositeType.first).union(new Set([TokenType.Identifier, TokenType.HashSymbol, TokenType.RSquareBrace, TokenType.Backtick]))
+    export const first: Set<TokenType> = union(BuiltinType.first, CompositeType.first, TokenType.Identifier, TokenType.HashSymbol, TokenType.RSquareBrace, TokenType.Backtick)
 
     const builtinBranch = createBranch((parser, sync) => BuiltinType.parse(parser, sync), ...BuiltinType.first)
     const compositeBranch = createBranch((parser, sync) => CompositeType.parse(parser, sync), ...CompositeType.first)
@@ -174,7 +174,7 @@ namespace TypeAtom {
         parser.advance()
         return {
             is: "handle-type",
-            type: Type.parse(parser, sync)
+            type: parser.parseType(sync)
         }
 
     }, TokenType.HashSymbol)
@@ -184,7 +184,7 @@ namespace TypeAtom {
         parser.advance()
         return {
             is: "reference-type",
-            type: Type.parse(parser, sync)
+            type: parser.parseType(sync)
         }
 
     }, TokenType.Backtick)
@@ -193,7 +193,7 @@ namespace TypeAtom {
 
         parser.advance()
 
-        const type = Type.parse(parser, sync.union(new Set([TokenType.RSquareBrace])))
+        const type = parser.parseType(union(sync, TokenType.RSquareBrace))
 
         parser.match({
             expected: TokenType.RSquareBrace,
@@ -218,11 +218,9 @@ namespace TypeAtom {
 
 }
 
-export namespace Type {
-
-    export const first = TypeAtom.first
+namespace TypeCache {
     //@ts-ignore
-    const arrayExtension = createExtension((parser, from, sync) => {
+    export const arrayExtension = createExtension((parser, from, sync) => {
 
         parser.advance()
         const value = parser.digest({
@@ -248,17 +246,17 @@ export namespace Type {
         }, arrayExtension, sync)
 
     }, TokenType.LSquareBrace)
+}
 
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+//* VERIFIED AND CACHED
+export function parseType(parser: Parser, sync: Set<TokenType>) {
 
-        return parser.useExtension(
-            () => {
-                return TypeAtom.parse(parser, sync.union(new Set([TokenType.LSquareBrace, TokenType.Integer, TokenType.RSquareBrace])))
-            },
-            arrayExtension,
-            sync
-        )
-
-    }
+    return parser.useExtension(
+        () => {
+            return TypeAtom.parse(parser, sync.union(new Set([TokenType.LSquareBrace, TokenType.Integer, TokenType.RSquareBrace])))
+        },
+        TypeCache.arrayExtension,
+        sync
+    )
 
 }

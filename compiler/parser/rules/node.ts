@@ -1,13 +1,15 @@
 //the strongest that I am going to attempt now.
 import { TokenType } from "../../lexer/tokens";
+import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 import { createExtension, extensionGroup, useExtension } from "../utility/extension";
 import { union } from "../utility/union";
-import { Modifier } from "./modifiers";
-import { Type } from "./types";
 
-export namespace Atom {
+//huge ammounts of 'first' is present here. and all of them are branches
+//oh my god lol.
+
+namespace AtomDetails {
 
     const identifierBranch = createBranch((parser, sync) => {
 
@@ -61,11 +63,11 @@ export namespace Atom {
 
         parser.match({
             expected: TokenType.LBrace,
-            sync: sync.union(Node.first).union(new Set([TokenType.RBrace])),
+            sync: sync.union(First.Node).union(new Set([TokenType.RBrace])),
             title: "Expected a starting bracket '('"
         })
 
-        const node = Node.parse(parser, sync.union(new Set([TokenType.RBrace])))
+        const node = parser.parseNode(sync.union(new Set([TokenType.RBrace])))
 
         parser.match({
             expected: TokenType.RBrace,
@@ -81,11 +83,11 @@ export namespace Atom {
 
         parser.match({
             expected: TokenType.Backtick,
-            sync: sync.union(Atom.first),
+            sync: sync.union(First.Atom),
             title: "Expected a backtick"
         })
 
-        const atom = Atom.parse(parser, sync)
+        const atom = parser.parseAtom(sync)
 
         return {
             is: "reference",
@@ -99,11 +101,11 @@ export namespace Atom {
 
         parser.match({
             expected: TokenType.K_Adrs,
-            sync: sync.union(Atom.first),
+            sync: sync.union(First.Atom),
             title: "Expected token 'adrs'"
         })
 
-        const atom = Atom.parse(parser, sync)
+        const atom = parser.parseAtom(sync)
 
         return {
             is: "address_of",
@@ -116,11 +118,11 @@ export namespace Atom {
 
         parser.match({
             expected: TokenType.K_Sizeof,
-            sync: sync.union(Atom.first),
+            sync: sync.union(First.Atom),
             title: "Expected token 'sizeof'"
         })
 
-        const atom = Atom.parse(parser, sync)
+        const atom = parser.parseAtom(sync)
 
         return {
             is: "size_of",
@@ -133,17 +135,17 @@ export namespace Atom {
 
         parser.match({
             expected: TokenType.LSquareBrace,
-            sync: sync.union(new Set([TokenType.StraightBar, TokenType.RBrace])),
+            sync: sync.union(new Set([TokenType.StraightBar, TokenType.RSquareBrace])),
             title: "Expected a starting '[' bracket"
         })
 
         const center = useExtension(
             parser,
-            () => Node.parse(parser, sync),
+            () => parser.parseNode(union(sync, TokenType.RSquareBrace)),
             createExtension((parser, from, sync) => {
 
                 parser.advance() //straight bar is known, no need to repeat.
-                const node = Node.parse(parser, sync.union(new Set([TokenType.RBrace])))
+                const node = parser.parseNode(union(sync, TokenType.RSquareBrace))
 
                 return {
 
@@ -186,11 +188,11 @@ export namespace Atom {
 
         const center = useExtension(
             parser,
-            () => Node.parse(parser, sync),
+            () => parser.parseNode(sync),
             createExtension((parser, from, sync) => {
 
                 parser.advance() //straight bar is known, no need to repeat.
-                const node = Node.parse(parser, sync.union(new Set([TokenType.RBrace])))
+                const node = parser.parseNode(sync.union(new Set([TokenType.RBrace])))
 
                 return {
 
@@ -220,20 +222,18 @@ export namespace Atom {
 
     }, TokenType.HashSymbol)
 
-    const branch = branchGroup(handleAccessBranch, pointerAccessBranch, sizeAtomBranch, addressAtomBranch, referenceAtomBranch, identifierBranch, realNumBranch, integerBranch, stringBranch, bracketNodeBranch)
+    export const branch = branchGroup(handleAccessBranch, pointerAccessBranch, sizeAtomBranch, addressAtomBranch, referenceAtomBranch, identifierBranch, realNumBranch, integerBranch, stringBranch, bracketNodeBranch)
 
-    export const first: Set<TokenType> = Parser.productions.atom.first
+}
 
-    //huge ammounts of 'first' is present here. and all of them are branches
-    //oh my god lol.
-    export function parse(parser: Parser, sync: Set<TokenType>) {
-        return parser.useBranch(
-            branch,
-            "Invalid expression start token",
-            sync
-        )
-    }
+//* VERIFIED AND CACHED
+export function parseAtom(parser: Parser, sync: Set<TokenType>) {
 
+    return parser.useBranch(
+        AtomDetails.branch,
+        "Invalid expression start token",
+        sync
+    )
 }
 
 // BINDING -> DecideArrayOrCall ('::' DecideArrayOrCall)*;
@@ -244,7 +244,7 @@ export namespace Atom {
 // INEQUALITY -> SUM (('<' | '>' | '<=' | '>=') SUM)*;
 // EQUALITY -> INEQUALITY (('==' | '!=') INEQUALITY)*;
 // ASSIGNMENT -> EQUALITY ('=' EQUALITY)*;
-export namespace DecideArrayOrCall {
+namespace DecideArrayOrCall {
 
     //we now finally get to use extensions
     //@ts-ignore
@@ -287,7 +287,7 @@ export namespace DecideArrayOrCall {
 
         parser.match({
             expected: TokenType.LBrace,
-            sync: sync.union(new Set([TokenType.RBrace, TokenType.Comma])).union(Node.first),
+            sync: sync.union(new Set([TokenType.RBrace, TokenType.Comma])).union(First.Node),
             title: "Expected a starting bracket '(' for call signature"
         })
 
@@ -305,7 +305,7 @@ export namespace DecideArrayOrCall {
 
             nodes.push(
                 //@ts-ignore
-                Node.parse(parser, sync.union(new Set([TokenType.LBrace, TokenType.Comma, TokenType.RBrace])))
+                parser.parseNode(sync.union(new Set([TokenType.LBrace, TokenType.Comma, TokenType.RBrace])))
             )
 
             //we now follow the algorithm of a loop.
@@ -315,7 +315,7 @@ export namespace DecideArrayOrCall {
             //! SINCE EXTERNAL SYNC TOKEN CAN CONTAIN THE TOKENS WE ARE SUPPOSE TO HANDLE
             //? sync.has(token) cannot guarantee a token exist outside our production's internal sync set.
             //? which means, we must guarantee that ourselves
-            if (sync.has(token.tokenType) && token.tokenType != TokenType.Comma && token.tokenType != TokenType.RBrace && !Node.first.has(token.tokenType)) {
+            if (sync.has(token.tokenType) && token.tokenType != TokenType.Comma && token.tokenType != TokenType.RBrace && !First.Node.has(token.tokenType)) {
 
                 parser.syncToken(false, sync, "Expected a ')' to end call signature", token)
                 break
@@ -329,7 +329,7 @@ export namespace DecideArrayOrCall {
 
             }
 
-            if (Node.first.has(token.tokenType)) {
+            if (First.Node.has(token.tokenType)) {
 
                 parser.report("Make sure to have arguments separated by comma", token)
                 continue;
@@ -345,7 +345,7 @@ export namespace DecideArrayOrCall {
 
             parser.match({
                 expected: TokenType.Comma,
-                sync: sync.union(new Set([TokenType.RBrace])).union(Node.first),
+                sync: sync.union(new Set([TokenType.RBrace])).union(First.Node),
                 title: "Expected a comma separator, got something else"
             })
 
@@ -363,12 +363,11 @@ export namespace DecideArrayOrCall {
     //@ts-ignore
     const extension = extensionGroup(arrayAccessExtension, callExtension)
 
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         return parser.useExtension(
-            () => Atom.parse(
-                parser,
+            () => parser.parseAtom(
                 sync.union(new Set([TokenType.LBrace, TokenType.LSquareBrace]))
             ),
             extension, sync
@@ -377,10 +376,10 @@ export namespace DecideArrayOrCall {
     }
 }
 
-export namespace Binding {
+namespace Binding {
 
     const operators = new Set([TokenType.DoubleColon])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>): Node {
 
         let left = DecideArrayOrCall.parse(parser, sync.union(operators))
@@ -407,10 +406,10 @@ export namespace Binding {
 
 }
 
-export namespace Magnetic {
+namespace Magnetic {
 
     const operators = new Set([TokenType.ArrowRight])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         let left = Binding.parse(parser, sync.union(operators))
@@ -435,10 +434,10 @@ export namespace Magnetic {
 
 }
 
-export namespace Access {
+namespace Access {
 
     const operators = new Set([TokenType.Dot])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
         let left = Magnetic.parse(parser, sync.union(operators))
 
@@ -463,10 +462,10 @@ export namespace Access {
 
 }
 
-export namespace Product {
+namespace Product {
 
     const operators = new Set([TokenType.Multiply, TokenType.Divide])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
         let left = Access.parse(parser, sync.union(operators))
 
@@ -491,10 +490,10 @@ export namespace Product {
 
 }
 
-export namespace Sum {
+namespace Sum {
 
     const operators = new Set([TokenType.Add, TokenType.Minus])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
         let left = Product.parse(parser, sync.union(operators))
 
@@ -519,10 +518,10 @@ export namespace Sum {
 
 }
 
-export namespace Inequality {
+namespace Inequality {
 
     const operators = new Set([TokenType.LessThan, TokenType.GreaterThan, TokenType.LessThanEqual, TokenType.GreaterThanEqual])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         let left = Sum.parse(parser, sync.union(operators))
@@ -548,10 +547,10 @@ export namespace Inequality {
 
 }
 
-export namespace Equality {
+namespace Equality {
 
     const operators = new Set([TokenType.Compare, TokenType.NotEqual])
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         let left = Inequality.parse(parser, sync.union(operators))
@@ -577,9 +576,9 @@ export namespace Equality {
 
 }
 
-export namespace Assignment {
+namespace Assignment {
 
-    export const first = Atom.first //obviously
+    export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         let left = Equality.parse(parser, sync.union(new Set([TokenType.Assignment])))
@@ -602,7 +601,7 @@ export namespace Assignment {
 
 }
 
-export namespace Return {
+namespace Return {
 
     export const first: Set<TokenType> = union(TokenType.K_Return)
     export function parse(parser: Parser, sync: Set<TokenType>) {
@@ -636,7 +635,7 @@ export namespace Return {
 
 }
 
-export namespace Break {
+namespace Break {
 
     export const first: Set<TokenType> = union(TokenType.K_Break)
     export function parse(parser: Parser, sync: Set<TokenType>) {
@@ -674,26 +673,26 @@ export namespace Break {
 
 }
 
-export namespace Substitution {
+namespace Substitution {
 
     export const first = new Set([TokenType.K_Sub])
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         parser.match({
             expected: TokenType.K_Sub,
-            sync: union(sync, Node.first, TokenType.K_With),
+            sync: union(sync, First.Node, TokenType.K_With),
             title: "Expected a sub keyword"
         })
 
-        const node1 = Node.parse(parser, union(sync, Node.first, TokenType.K_With))
+        const node1 = parser.parseNode(union(sync, First.Node, TokenType.K_With))
 
         parser.match({
             expected: TokenType.K_With,
-            sync: union(sync, Node.first),
+            sync: union(sync, First.Node),
             title: "Expected a 'with' keyword"
         })
 
-        const node2 = Node.parse(parser, sync)
+        const node2 = parser.parseNode(sync)
 
         return {
             is: "substitution",
@@ -705,7 +704,7 @@ export namespace Substitution {
 
 }
 
-export namespace Let {
+namespace Let {
 
     export const first = union(TokenType.K_Let)
 
@@ -713,28 +712,27 @@ export namespace Let {
 
         const identifier = parser.digest({
             expected: TokenType.Identifier,
-            sync: union(sync, TokenType.Colon, Type.first, TokenType.Assignment, Node.first),
+            sync: union(sync, TokenType.Colon, First.Type, TokenType.Assignment, First.Node),
             title: "Expected a name for the variable"
         })
 
         parser.match({
             expected: TokenType.Colon,
-            sync: union(sync, Type.first, TokenType.Assignment, Node.first),
+            sync: union(sync, First.Type, TokenType.Assignment, First.Node),
             title: "Expected a colon here"
         })
 
-        const type = Type.parse(
-            parser,
-            union(sync, TokenType.Assignment, Node.first)
+        const type = parser.parseType(
+            union(sync, TokenType.Assignment, First.Node)
         )
 
         parser.match({
             expected: TokenType.Assignment,
-            sync: union(sync, Node.first),
+            sync: union(sync, First.Node),
             title: "Expected equal sign here"
         })
 
-        const node = Node.parse(parser, sync)
+        const node = parser.parseNode(sync)
 
         return {
             identifier,
@@ -753,10 +751,10 @@ export namespace Let {
 
         parser.useLoop({
             callback: (item) => modifiers.push(item),
-            production: (parser, sync) => Modifier.parse(parser, sync),
+            production: (parser, sync) => parser.parseModifier(sync),
             deliminator: TokenType.RBrace,
             separator: TokenType.Comma,
-            first: Modifier.first,
+            first: First.Modifier,
             sync,
             titles: {
                 closing: "Expected a closing ')' bracket",
@@ -764,65 +762,6 @@ export namespace Let {
                 separatorMissing: "Expected a comma separator, got something else"
             }
         })
-
-        // modifiers.push(
-        //     Modifier.parse(parser, union(sync, TokenType.Comma, TokenType.RBrace, Modifier.first))
-        // )
-
-        // while (true) {
-
-        //     //what token we encounter determines what happens
-        //     const tokenRoot = parser.peek()
-        //     const token = tokenRoot.tokenType
-
-        //     if (sync.has(token) && token != TokenType.RBrace && token != TokenType.Comma && !Modifier.first.has(token)) {
-
-        //         //we have completed the sync and we have also crossed the delim
-        //         parser.syncToken(false, sync, "Expected a closing ')' bracket", tokenRoot)
-        //         break
-
-        //     }
-
-        //     if (token == TokenType.RBrace) {
-        //         //so this is our deliminator
-        //         parser.advance()
-        //         break
-        //     }
-
-        //     if (Modifier.first.has(token)) {
-
-        //         //we encounted a new production without using the separator
-
-        //         //why? because if any previous error occurs, most likely due to separator, we do not report.
-        //         parser.report("Provide a separator, '.' (DOT) or ',' (COMMA) before a path", tokenRoot)
-
-        //         modifiers.push(
-        //             Modifier.parse(parser, union(sync, TokenType.Comma, TokenType.RBrace, Modifier.first))
-        //         )
-
-        //         continue;
-        //     }
-
-        //     if (token == TokenType.Comma) {
-
-        //         //if it's our separator
-        //         parser.advance()
-        //         modifiers.push(
-        //             Modifier.parse(parser, union(sync, TokenType.Comma, TokenType.RBrace, Modifier.first))
-        //         )
-
-        //         continue;
-
-        //     }
-
-        //     //otherwise we try to sync and continue. Eventually reaching EOF ofc.
-        //     parser.match({
-        //         expected: TokenType.Comma,
-        //         sync: union(sync, TokenType.RBrace, Modifier.first),
-        //         title: "Expected a comma separator, got something else"
-        //     })
-
-        // }
 
         //@ts-ignore
         return modifiers
@@ -850,41 +789,41 @@ export namespace Let {
 
 }
 
-export namespace Transformer {
+namespace Transformer {
     export const first = union(TokenType.K_Transform)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         parser.match({
             expected: TokenType.K_Transform,
-            sync: union(sync, Type.first, TokenType.Colon, TokenType.Identifier, TokenType.K_To, Assignment.first),
+            sync: union(sync, First.Type, TokenType.Colon, TokenType.Identifier, TokenType.K_To, Assignment.first),
             title: "Expected a transform keyword"
         })
 
         const from = Assignment.parse(
             parser,
-            union(sync, Type.first, TokenType.Colon, TokenType.Identifier, TokenType.K_To)
+            union(sync, First.Type, TokenType.Colon, TokenType.Identifier, TokenType.K_To)
         )
 
         parser.match({
             expected: TokenType.K_To,
-            sync: union(sync, Type.first, TokenType.Colon, TokenType.Identifier),
+            sync: union(sync, First.Type, TokenType.Colon, TokenType.Identifier),
             title: "Expected keyword 'to'"
         })
 
         const name = parser.digest({
             expected: TokenType.Identifier,
-            sync: union(sync, Type.first, TokenType.Colon),
+            sync: union(sync, First.Type, TokenType.Colon),
             title: "Expected a name for this transformation"
         })
 
         parser.match({
             expected: TokenType.Colon,
-            sync: union(sync, Type.first),
+            sync: union(sync, First.Type),
             title: "Expected a colon (:) here"
         })
 
-        const type = Type.parse(
-            parser, sync
+        const type = parser.parseType(
+            sync
         )
 
         return {
@@ -897,7 +836,7 @@ export namespace Transformer {
     }
 }
 
-export namespace Statement {
+namespace Statement {
 
     export const first = union(Return.first, Break.first, Substitution.first, Transformer.first, Let.first)
 
@@ -917,7 +856,7 @@ export namespace Statement {
 
 }
 
-export namespace NewAllocation {
+namespace NewAllocation {
 
     export const first: Set<TokenType> = new Set([TokenType.K_New])
     export function parse(parser: Parser, sync: Set<TokenType>) {
@@ -959,7 +898,7 @@ export namespace NewAllocation {
 }
 
 
-export namespace FreeAllocation {
+namespace FreeAllocation {
 
     export const first: Set<TokenType> = union(TokenType.K_Free)
     export function parse(parser: Parser, sync: Set<TokenType>) {
@@ -1000,7 +939,7 @@ export namespace FreeAllocation {
 
 }
 
-export namespace Allocator {
+namespace Allocator {
 
     export const first = union(NewAllocation.first, FreeAllocation.first)
     const newAllocBranch = createBranch((parser, sync) => NewAllocation.parse(parser, sync), TokenType.K_New)
@@ -1014,24 +953,14 @@ export namespace Allocator {
     }
 }
 
-export namespace Node {
-
-    //* NODE -> ASSIGNMENT | STATEMENT | ALLOCATORS
-    //* BASICALLY IS A BRANCH HERE
-    export const first: Set<TokenType> = union(Assignment.first, Allocator.first, Statement.first) //with more coming
+export function parseNode(parser: Parser, sync: Set<TokenType>) {
 
     const assignmentBranch = createBranch((parser, sync) => Assignment.parse(parser, sync), ...Assignment.first.keys())
     const allocatorBranch = createBranch((parser, sync) => Allocator.parse(parser, sync), ...Allocator.first.keys())
     const statementBranch = createBranch((parser, sync) => Statement.parse(parser, sync), ...Statement.first.keys())
 
     const branch = branchGroup(allocatorBranch, assignmentBranch, statementBranch)
-
-    export function parse(parser: Parser, sync: Set<TokenType>) {
-
-        //for now.
-        return parser.useBranch(branch, "Expected an expression or allocator statement", sync)
-
-    }
-
+    //for now.
+    return parser.useBranch(branch, "Expected an expression or allocator statement", sync)
 
 }

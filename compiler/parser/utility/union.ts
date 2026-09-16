@@ -1,6 +1,8 @@
 import type { TokenType } from "../../lexer/tokens";
 
-export function union<T extends TokenType>(...values: (T | Set<T>)[]): Set<T> {
+type Sync = Set<TokenType>
+
+export function union<T extends TokenType>(...values: (T | Set<T>)[]): Sync {
     const result = new Set<T>();
 
     for (const value of values) {

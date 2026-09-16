@@ -3,7 +3,7 @@ import { Identifier, Node, NodeType } from "../ast";
 import type { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 
-export namespace ModuleAtom {
+namespace ModuleAtom {
 
     const identifierBranch = createBranch((parser, sync) => {
 
@@ -123,7 +123,7 @@ export namespace ModuleAtom {
     }
 }
 
-export namespace ModulePath {
+namespace ModulePath {
     export class ModulePathNode extends Node {
         constructor(public node: Node, public next: Node) {
             super(NodeType.IncludePath)
@@ -153,69 +153,61 @@ export namespace ModulePath {
 
 }
 
-export namespace ImportProduction {
 
-    export class ImportNode extends Node {
-        constructor(public node: Node) {
-            super(NodeType.Import)
-        }
+export class ImportNode extends Node {
+    constructor(public node: Node) {
+        super(NodeType.Import)
     }
-
-    export const first: Set<TokenType> = new Set([TokenType.K_Import])
-
-    export function parse(parser: Parser, sync: Set<TokenType>) {
-
-        parser.match({
-            expected: TokenType.K_Import,
-            sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
-            title: "Expected the keyword 'import'"
-        })
-
-        const body = ModulePath.parse(
-            parser,
-            sync.union(new Set([TokenType.Semicolon])),
-        )
-
-        parser.match({
-            expected: TokenType.Semicolon,
-            sync: sync,
-            title: "Expected a semicolon token" //because this is the end token
-        })
-
-        return new ImportNode(body)
-    }
-
 }
 
-export namespace UsingProduction {
-    export class UsingNode extends Node {
-        constructor(public node: Node) {
-            super(NodeType.Using)
-        }
+export function parseImport(parser: Parser, sync: Set<TokenType>) {
+
+    parser.match({
+        expected: TokenType.K_Import,
+        sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
+        title: "Expected the keyword 'import'"
+    })
+
+    const body = ModulePath.parse(
+        parser,
+        sync.union(new Set([TokenType.Semicolon])),
+    )
+
+    parser.match({
+        expected: TokenType.Semicolon,
+        sync: sync,
+        title: "Expected a semicolon token" //because this is the end token
+    })
+
+    return new ImportNode(body)
+}
+
+
+export class UsingNode extends Node {
+    constructor(public node: Node) {
+        super(NodeType.Using)
     }
+}
 
-    export const first: Set<TokenType> = new Set([TokenType.K_Using])
+//* VERIFIED AND CACHED
+export function parseUsing(parser: Parser, sync: Set<TokenType>) {
 
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    parser.match({
+        expected: TokenType.K_Using,
+        sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
+        title: "Expected the keyword 'import'"
+    })
 
-        parser.match({
-            expected: TokenType.K_Using,
-            sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
-            title: "Expected the keyword 'import'"
-        })
+    const body = ModulePath.parse(
+        parser,
+        sync.union(new Set([TokenType.Semicolon])),
+    )
 
-        const body = ModulePath.parse(
-            parser,
-            sync.union(new Set([TokenType.Semicolon])),
-        )
+    parser.match({
+        expected: TokenType.Semicolon,
+        sync: sync,
+        title: "Expected a semicolon token" //because this is the end token
+    })
 
-        parser.match({
-            expected: TokenType.Semicolon,
-            sync: sync,
-            title: "Expected a semicolon token" //because this is the end token
-        })
-
-        return new UsingNode(body)
-    }
-
+    return new UsingNode(body)
 }

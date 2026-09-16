@@ -1,7 +1,16 @@
 //the base class where all the rules will be used.
 
-import { TokenType, type Token } from "../lexer/tokens";
-import { ParserBase } from "./base";
+import { TokenType } from "../lexer/tokens";
+import { ParserLogger } from "./logger";
+import { parseAllocator } from "./rules/allocator";
+import { parseFunction } from "./rules/function";
+import { parseLoop } from "./rules/loop";
+import { parseModifier } from "./rules/modifiers";
+import { parseImport, parseUsing } from "./rules/module";
+import { parseAtom, parseNode } from "./rules/node";
+import { parseProgramProduction } from "./rules/program";
+import { parseBody, parseStructure } from "./rules/structure";
+import { parseType } from "./rules/types";
 import { useBranch, type BranchMap } from "./utility/branch";
 import { useExtension, type ExtensionMap } from "./utility/extension";
 import { union } from "./utility/union";
@@ -32,7 +41,7 @@ type loopWithoutSeparator<T> = {
     }
 }
 
-export class Parser extends ParserBase {
+export class Parser extends ParserLogger {
 
     useBranch(branchTable: BranchMap, title: string, sync: Set<TokenType>) {
         return useBranch(this, branchTable, title, sync)
@@ -58,7 +67,7 @@ export class Parser extends ParserBase {
         )
 
         while (true) {
-            
+
             const token = this.peek()
 
             if (
@@ -135,6 +144,7 @@ export class Parser extends ParserBase {
 
             if (first.has(token.tokenType)) {
 
+
                 this.report(titles.separator, token)
                 callback(
                     production(
@@ -161,27 +171,65 @@ export class Parser extends ParserBase {
 
             }
 
+            //console.log(TokenType[token.tokenType])
+
             this.match({
                 expected: separator,
-                sync: union(sync, deliminator, first),
+                sync: productionSync,
                 title: titles.separatorMissing
             })
 
         }
 
+
     }
 
-    static productions = {
-        atom: {
-            first:
-                new Set([
-                    TokenType.Identifier, TokenType.RealNumber,
-                    TokenType.Integer, TokenType.String,
-                    TokenType.LBrace, TokenType.LSquareBrace,
-                    TokenType.HashSymbol, TokenType.Backtick,
-                    TokenType.K_Adrs, TokenType.K_Sizeof
-                ])
-        }
+    parseProgramProduction() {
+        return parseProgramProduction(this)
+    }
+
+    parseFunction(sync: Set<TokenType>) {
+        return parseFunction(this, sync)
+    }
+
+    parseLoop(sync: Set<TokenType>) {
+        return parseLoop(this, sync)
+    }
+
+    parseModifier(sync: Set<TokenType>) {
+        return parseModifier(this, sync)
+    }
+
+    parseImport(sync: Set<TokenType>) {
+        return parseImport(this, sync)
+    }
+
+    parseUsing(sync: Set<TokenType>) {
+        return parseUsing(this, sync)
+    }
+
+    parseAtom(sync: Set<TokenType>) {
+        return parseAtom(this, sync)
+    }
+
+    parseNode(sync: Set<TokenType>) {
+        return parseNode(this, sync)
+    }
+
+    parseStructure(sync: Set<TokenType>) {
+        return parseStructure(this, sync)
+    }
+
+    parseBody(sync: Set<TokenType>, belongs: string) {
+        return parseBody(this, sync, belongs)
+    }
+
+    parseType(sync: Set<TokenType>) {
+        return parseType(this, sync)
+    }
+
+    parseAllocator(sync: Set<TokenType>) {
+        return parseAllocator(this, sync)
     }
 
 }

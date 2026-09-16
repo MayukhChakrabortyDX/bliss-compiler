@@ -1,39 +1,44 @@
 import { TokenType } from "../../lexer/tokens";
+import { First } from "../first";
 import type { Parser } from "../parser";
-import { branchGroup, createBranch } from "../utility/branch";
-import { ImportProduction, UsingProduction } from "./module";
+import { branchGroup, createBranch, useBranch } from "../utility/branch";
+import { union } from "../utility/union";
 
-export namespace ProgramProduction {
+const importBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Import)
+const usingBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Using)
+const functionBranch = createBranch((parser, sync) => parser.parseFunction(sync), ...First.FunctionProduction)
+const allocatorBranch = createBranch((parser, sync) => parser.parseAllocator(sync), ...First.Allocator)
 
-    export const first: Set<TokenType> =
-        ImportProduction.first.union(UsingProduction.first)
+const programBranch = branchGroup(importBranch, usingBranch, functionBranch, allocatorBranch)
+const first = union(First.Module.Import, First.Module.Using, First.FunctionProduction, First.Allocator)
 
-    const importBranch = createBranch(ImportProduction.parse, TokenType.K_Import)
-    const usingBranch = createBranch(UsingProduction.parse, TokenType.K_Using)
+//* VERIFIED AND CACHED
+export function parseProgramProduction(parser: Parser) {
 
-    const programBranch = branchGroup(importBranch, usingBranch)
+    //@ts-ignore
+    const nodes = []
 
-    export function parse(parser: Parser) {
+    if (parser.peek().tokenType != TokenType.EOF) {
 
-        const nodes = []
-
-        while (true) {
-
-            const token = parser.peek()
-            if (token.tokenType == TokenType.EOF) {
-                //we reached the delimiter
-                parser.advance()
-                break;
+        parser.useLoopWithoutSeparator({
+            callback: (item) => nodes.push(item),
+            production: (parser, sync) => parser.useBranch(programBranch, "Expected a valid token", sync),
+            deliminator: TokenType.EOF,
+            sync: union(TokenType.EOF),
+            first,
+            titles: {
+                closing: "",
+                invalidToken: "Invalid program body token"
             }
+        })
 
-            nodes.push(
-                parser.useBranch(programBranch, "Expected a valid branching structure", first.union(new Set([TokenType.EOF])))
-            )
+    } else {
 
-        }
-
-        return nodes
+        parser.advance()
 
     }
+
+    //@ts-ignore
+    return nodes
 
 }

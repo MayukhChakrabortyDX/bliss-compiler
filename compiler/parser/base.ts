@@ -3,7 +3,6 @@
 import { StringContainer, Token, TokenType } from "../lexer/tokens";
 import type { Node } from "./ast";
 import { ParserDiagnostic } from "./errors";
-import { Log, log } from "./utility/plog";
 
 interface MatchProps {
     expected: TokenType, sync: Set<TokenType>, title: string
@@ -98,15 +97,16 @@ export class ParserBase {
             )
             this.isRecovery = true
             this.recoveryCausedBy = token.tokenType
+            if (this.peek().tokenType != TokenType.EOF) {
+                this.advance()
+            }
+
             while (!sync.has(this.peek().tokenType)) {
                 this.advance() //advance till the token type is matched
             }
         }
 
-        // if ( this.isRecovery && !result ) {
-
-        //     //this means a future sync is in place and this rule
-        //     //is not suppose to sync.
+        // if (this.isRecovery && !result) {
 
         // }
     }
@@ -139,41 +139,6 @@ export class ParserBase {
             diag.print()
         }
 
-    }
-
-    ///////////////////////////////////////////
-
-    resolveSpan(start: number): { line: string; lineNum: number; caretPad: string } {
-        const upToStart = this.source.str.substring(0, start);
-        const lineNum = upToStart.split("\n").length - 1;
-        const lastNL = upToStart.lastIndexOf("\n");
-        const col = start - (lastNL + 1);
-        const line = this.source.str.split("\n")[lineNum] ?? "";
-        const caretPad = " ".repeat(line.substring(0, col).replace(/\t/g, "    ").length);
-        return { line, lineNum, caretPad };
-    }
-
-    //useful in parser it seems.
-    logTokenError(token: Token, message: string): void {
-        const RESET = "\x1b[0m";
-        const BOLD = "\x1b[1m";
-        const DIM = "\x1b[2m";
-        const TEXT_ERROR = "\x1b[31m";
-        const TEXT_BLUE = "\x1b[34m";
-
-        const tokenName = TokenType[token.tokenType] ?? "Unknown";
-        const tokenText = token.span.resolve();
-        const { line, lineNum, caretPad } = this.resolveSpan(token.span.startIndex);
-        const caretLen = Math.max(token.span.endIndex - token.span.startIndex + 1, 1);
-        const lineLabel = String(lineNum + 1);
-        const pad = " ".repeat(lineLabel.length);
-
-        log(Log.Error, "PARSER", message, `${TEXT_BLUE}${BOLD} ${RESET}line ${lineNum + 1}, col ${caretPad.length + 1}`)
-        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET}`);
-        console.log(`${TEXT_BLUE}${BOLD}${lineLabel}  |${RESET} ${line}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${TEXT_ERROR}${BOLD}${caretPad}${"^".repeat(caretLen)}${RESET}`);
-        console.log(`${TEXT_BLUE}${BOLD}${pad}  |${RESET} ${DIM}token: ${tokenName} (${JSON.stringify(tokenText)})${RESET}`);
-        console.log();
     }
 
 }
