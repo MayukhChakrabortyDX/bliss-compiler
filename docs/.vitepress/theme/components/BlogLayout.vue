@@ -53,6 +53,13 @@ const isIndex = computed(() => route.path === '/blog/' || route.path === '/blog'
 
 const posts = [
   {
+    title: 'Using the Bliss CLI',
+    description: 'A complete walkthrough of compiling Bliss programs from the command line.',
+    date: 'September 2026',
+    reading: '7 min read',
+    link: '/blog/posts/pre-alpha-release',
+  },
+  {
     title: 'Why Bliss exists',
     description: 'The questions behind building another systems programming language from first principles.',
     date: 'September 2026',
