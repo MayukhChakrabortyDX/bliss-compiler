@@ -27,21 +27,25 @@ export function log(
 
     let label = "";
     let accentColor = "";
+    let icon = "";
 
     switch (type) {
         case Log.Error:
-            label = `${BG_ERROR} ERROR ${RESET}`;
+            label = `${BG_ERROR} ✕ ERROR ${RESET}`;
             accentColor = TEXT_ERROR;
+            icon = "✕";
             break;
 
         case Log.Warning:
-            label = `${BG_WARN} WARN  ${RESET}`;
+            label = `${BG_WARN} ⚠ WARN  ${RESET}`;
             accentColor = TEXT_WARN;
+            icon = "⚠";
             break;
 
         case Log.Info:
-            label = `${BG_INFO} INFO  ${RESET}`;
+            label = `${BG_INFO} ℹ INFO  ${RESET}`;
             accentColor = TEXT_INFO;
+            icon = "ℹ";
             break;
     }
 
@@ -61,6 +65,67 @@ export function log(
             `${DIM}  └─${RESET} ${description}\n`
         );
     }
+}
+
+/*
+ * Maximum number of source characters shown per line
+ * inside the diagnostic box. Longer lines are truncated
+ * with a leading/trailing ellipsis, keeping the box a
+ * predictable, readable width.
+ */
+const MAX_LINE_WIDTH = 50;
+const ELLIPSIS = "...";
+
+/*
+ * Given a line and the start offset already chosen for
+ * the "focus" line (the offending line), slice out the
+ * same horizontal window from any line so that everything
+ * inside the box stays column-aligned.
+ */
+function applyWindow(
+    line: string,
+    windowStart: number
+): string {
+    if (windowStart === 0 && line.length <= MAX_LINE_WIDTH) {
+        return line;
+    }
+
+    const start = Math.min(windowStart, Math.max(line.length - 1, 0));
+    const end = Math.min(start + MAX_LINE_WIDTH, line.length);
+
+    let text = line.substring(start, end);
+
+    if (start > 0 && text.length > ELLIPSIS.length) {
+        text = ELLIPSIS + text.substring(ELLIPSIS.length);
+    }
+
+    if (end < line.length && text.length > ELLIPSIS.length) {
+        text = text.substring(0, text.length - ELLIPSIS.length) + ELLIPSIS;
+    }
+
+    return text;
+}
+
+/*
+ * Choose the horizontal window (character offset) for the
+ * offending line so that the highlighted token is centered
+ * and visible, reserving room on both sides for ellipses.
+ */
+function chooseWindowStart(
+    lineLength: number,
+    focusStart: number,
+    focusLen: number
+): number {
+    if (lineLength <= MAX_LINE_WIDTH) {
+        return 0;
+    }
+
+    let start =
+        focusStart - Math.floor((MAX_LINE_WIDTH - focusLen) / 2);
+
+    start = Math.max(0, Math.min(start, lineLength - MAX_LINE_WIDTH));
+
+    return start;
 }
 
 export class ParserLogger extends ParserBase {
@@ -238,29 +303,56 @@ export class ParserLogger extends ParserBase {
             ).length;
 
         /*
-         * Prepare rendered lines.
-         *
-         * Tabs are expanded so the underline
-         * and diagnostic text stay aligned.
+         * Prepare rendered lines (tab-expanded first,
+         * horizontal truncation window applied second).
          */
-        const renderedLines =
+        const tabExpanded =
             context.map(i => {
-                const line =
+                const raw =
                     sourceLines[i] ?? "";
 
+                return {
+                    index: i,
+                    line: raw.replace(/\t/g, "    ")
+                };
+            });
+
+        const offendingRaw =
+            tabExpanded.find(
+                ({ index }) => index === lineNum
+            );
+
+        const tokenStart =
+            caretPad.length;
+
+        const windowStart =
+            offendingRaw !== undefined
+                ? chooseWindowStart(
+                    offendingRaw.line.length,
+                    tokenStart,
+                    tokenLength
+                )
+                : 0;
+
+        /*
+         * The token's start column once the horizontal
+         * truncation window has been applied.
+         */
+        const displayTokenStart =
+            Math.max(tokenStart - windowStart, 0);
+
+        const renderedLines =
+            tabExpanded.map(({ index, line }) => {
                 const lineLabel =
-                    String(i + 1).padStart(
+                    String(index + 1).padStart(
                         lineLabelWidth,
                         " "
                     );
 
                 return {
-                    index: i,
+                    index,
                     lineLabel,
-                    line: line.replace(
-                        /\t/g,
-                        "    "
-                    )
+                    line: applyWindow(line, windowStart)
                 };
             });
 
@@ -279,24 +371,21 @@ export class ParserLogger extends ParserBase {
             const line =
                 offendingLine.line;
 
-            const tokenStart =
-                caretPad.length;
-
             const before =
                 line.substring(
                     0,
-                    tokenStart
+                    displayTokenStart
                 );
 
             const tokenPart =
                 line.substring(
-                    tokenStart,
-                    tokenStart + tokenLength
+                    displayTokenStart,
+                    displayTokenStart + tokenLength
                 );
 
             const after =
                 line.substring(
-                    tokenStart + tokenLength
+                    displayTokenStart + tokenLength
                 );
 
             highlightedLine =
@@ -314,7 +403,15 @@ export class ParserLogger extends ParserBase {
         const messageStart =
             lineLabelWidth +
             3 +
-            caretPad.length;
+            displayTokenStart;
+
+        /*
+         * The caret row drawn under the offending line,
+         * e.g. "      ^^^^ unexpected token".
+         */
+        const caretRow =
+            " ".repeat(displayTokenStart) +
+            "^".repeat(tokenLength);
 
         /*
          * Calculate source width.
@@ -329,7 +426,10 @@ export class ParserLogger extends ParserBase {
 
         const diagnosticWidth =
             messageStart +
-            message.length;
+            caretRow.length -
+            displayTokenStart +
+            1 +
+            suggestion.length;
 
         const sourceWidth =
             Math.max(
@@ -364,8 +464,11 @@ export class ParserLogger extends ParserBase {
             lineLabel,
             line
         } of renderedLines) {
+            const isOffending =
+                index === lineNum;
+
             const renderedLine =
-                index === lineNum
+                isOffending
                     ? highlightedLine
                     : line;
 
@@ -381,16 +484,21 @@ export class ParserLogger extends ParserBase {
                     )
                 );
 
+            const gutterMarker =
+                isOffending
+                    ? `${TEXT_ERROR}${BOLD}▶${RESET}`
+                    : `${TEXT_BLUE}${BOLD}│${RESET}`;
+
             console.log(
-                `${TEXT_BLUE}${BOLD}  │${RESET} ` +
-                `${index === lineNum
-                    ? TEXT_WHITE
+                `  ${gutterMarker} ` +
+                `${isOffending
+                    ? TEXT_ERROR + BOLD
                     : DIM
                 }` +
                 `${lineLabel}${RESET} ` +
                 `${TEXT_BLUE}│${RESET} ` +
                 `${
-                    index === lineNum
+                    isOffending
                         ? TEXT_WHITE
                         : DIM
                 }${renderedLine}${RESET}` +
@@ -399,28 +507,31 @@ export class ParserLogger extends ParserBase {
             );
 
             /*
-             * Diagnostic message.
-             *
-             * It begins at exactly the same
-             * horizontal position as the token.
+             * Caret + diagnostic message, drawn directly
+             * under the offending token — rustc/eslint style.
              */
-            if (index === lineNum) {
+            if (isOffending) {
+                const caretText =
+                    `${caretRow} ${suggestion}`;
+
                 const messagePadding =
                     " ".repeat(
                         Math.max(
                             sourceWidth -
-                            messageStart -
-                            suggestion.length,
+                            lineLabelWidth -
+                            3 -
+                            caretText.length,
                             0
                         )
                     );
 
                 console.log(
-                    `${TEXT_BLUE}${BOLD}  │${RESET} ` +
-                    `${" ".repeat(messageStart)}` +
+                    `  ${TEXT_BLUE}${BOLD}│${RESET} ` +
+                    `${" ".repeat(lineLabelWidth)} ` +
+                    `${TEXT_BLUE}│${RESET} ` +
                     `${TEXT_ERROR}${BOLD}` +
-                    `${suggestion}` +
-                    `${RESET}` +
+                    `${caretRow}${RESET} ` +
+                    `${TEXT_ERROR}${suggestion}${RESET}` +
                     `${messagePadding} ` +
                     `${TEXT_BLUE}${BOLD}│${RESET}`
                 );
@@ -440,7 +551,8 @@ export class ParserLogger extends ParserBase {
          * Token information.
          */
         console.log(
-            `     ${DIM}token:${RESET} ` +
+            `     ${DIM}token${RESET} ` +
+            `${TEXT_BLUE}›${RESET} ` +
             `${BOLD}${tokenName}${RESET} ` +
             `${DIM}(${JSON.stringify(tokenText)})${RESET}`
         );

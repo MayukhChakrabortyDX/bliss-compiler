@@ -14,7 +14,7 @@ action Printable {
     fx toString(): String;
 }
 
-fx print(str with Printable): void {
+fx print(str with (a)): void {
 
     naivePrint( str.toString() );
 

@@ -1,0 +1,102 @@
+[
+  {
+    "type": 8,
+    "typeName": "Import",
+    "start": 0,
+    "end": 0,
+    "node": {
+      "type": 6,
+      "typeName": "IncludePath",
+      "start": 0,
+      "end": 0,
+      "node": {
+        "type": 4,
+        "typeName": "Identifier",
+        "start": 0,
+        "end": 0,
+        "value": "std"
+      },
+      "next": {
+        "type": 6,
+        "typeName": "IncludePath",
+        "start": 0,
+        "end": 0,
+        "node": {
+          "type": 4,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "value": "syscall"
+        },
+        "next": {
+          "type": 4,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "value": "write"
+        }
+      }
+    }
+  },
+  {
+    "type": 8,
+    "typeName": "Import",
+    "start": 0,
+    "end": 0,
+    "node": {
+      "type": 6,
+      "typeName": "IncludePath",
+      "start": 0,
+      "end": 0,
+      "node": {
+        "type": 4,
+        "typeName": "Identifier",
+        "start": 0,
+        "end": 0,
+        "value": "std"
+      },
+      "next": {
+        "type": 6,
+        "typeName": "IncludePath",
+        "start": 0,
+        "end": 0,
+        "node": {
+          "type": 4,
+          "typeName": "Identifier",
+          "start": 0,
+          "end": 0,
+          "value": "types"
+        },
+        "next": {
+          "type": 6,
+          "typeName": "IncludePath",
+          "start": 0,
+          "end": 0,
+          "paths": [
+            {
+              "type": 4,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "value": "String"
+            },
+            {
+              "type": 4,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "value": "join"
+            },
+            {
+              "type": 4,
+              "typeName": "Identifier",
+              "start": 0,
+              "end": 0,
+              "value": "toStr"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

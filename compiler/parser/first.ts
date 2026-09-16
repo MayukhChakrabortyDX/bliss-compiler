@@ -50,5 +50,11 @@ export class First {
     )
 
     static Allocator = union(TokenType.K_Allocator)
+    static DAOP = union(
+        TokenType.K_Data,
+        TokenType.K_Action,
+        TokenType.K_Bind,
+        TokenType.K_Alias
+    )
 
 }

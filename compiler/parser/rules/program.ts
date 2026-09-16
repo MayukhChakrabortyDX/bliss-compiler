@@ -8,9 +8,10 @@ const importBranch = createBranch((parser, sync) => parser.parseImport(sync), ..
 const usingBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Using)
 const functionBranch = createBranch((parser, sync) => parser.parseFunction(sync), ...First.FunctionProduction)
 const allocatorBranch = createBranch((parser, sync) => parser.parseAllocator(sync), ...First.Allocator)
+const daopBranch = createBranch((parser, sync) => parser.parseDaop(sync), ...First.DAOP)
 
-const programBranch = branchGroup(importBranch, usingBranch, functionBranch, allocatorBranch)
-const first = union(First.Module.Import, First.Module.Using, First.FunctionProduction, First.Allocator)
+const programBranch = branchGroup(importBranch, usingBranch, functionBranch, allocatorBranch, daopBranch)
+const first = union(First.Module.Import, First.Module.Using, First.FunctionProduction, First.Allocator, First.DAOP)
 
 //* VERIFIED AND CACHED
 export function parseProgramProduction(parser: Parser) {
