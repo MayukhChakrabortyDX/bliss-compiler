@@ -250,6 +250,13 @@ button {
   border: 0;
 }
 
+a,
+button,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
 a {
   color: inherit;
 }
@@ -815,6 +822,12 @@ html::-webkit-scrollbar-corner {
   gap: 56px;
 }
 
+/* Collapsed navigation for narrow viewports; the sidebar and outline asides
+   take over from 1001px up. */
+.docs-mobile-nav {
+  display: none;
+}
+
 .docs-sidebar,
 .docs-outline {
   align-self: start;
@@ -892,6 +905,8 @@ html::-webkit-scrollbar-corner {
   font-family: var(--bliss-font-sans);
   letter-spacing: -.035em;
   line-height: 1.15;
+  /* Clears the fixed site nav when an outline link jumps to a heading. */
+  scroll-margin-top: 88px;
 }
 
 .docs-content h1 {
@@ -1171,6 +1186,11 @@ html::-webkit-scrollbar-corner {
   color: var(--bliss-fg);
 }
 
+.docs-outline__link.is-active {
+  color: var(--bliss-fg);
+  font-weight: 600;
+}
+
 .docs-outline__link.level-3 {
   padding-left: 23px;
 }
@@ -1363,8 +1383,215 @@ html::-webkit-scrollbar-corner {
     gap: 40px;
   }
 
+  /* The outline aside no longer fits, so it moves into the collapsed nav. */
   .docs-outline {
     display: none;
+  }
+
+  /* Explicit placement keeps the collapsed nav inside the content column while
+     the sidebar still spans the first column. */
+  .docs-mobile-nav {
+    position: relative;
+    z-index: 12;
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 28px;
+  }
+
+  .docs-sidebar {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .docs-article {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .docs-mobile-tools {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* The sidebar is still on screen at this width. */
+  .docs-mobile-tools__button--menu {
+    display: none;
+  }
+
+  .docs-mobile-tools__button {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--bliss-border);
+    border-radius: var(--bliss-radius-pill);
+    background: #fff;
+    box-shadow: var(--bliss-shadow-sm);
+    color: var(--bliss-fg-secondary);
+    font-family: var(--bliss-font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease,
+      transform 120ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .docs-mobile-tools__icon {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    color: var(--bliss-fg-subtle);
+    transition: color 160ms ease;
+  }
+
+  .docs-mobile-tools__text {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .docs-mobile-tools__chevron {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--bliss-fg-subtle);
+    border-bottom: 1.5px solid var(--bliss-fg-subtle);
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 160ms ease, border-color 160ms ease;
+  }
+
+  .docs-mobile-tools__button:active {
+    transform: scale(.98);
+  }
+
+  .docs-mobile-tools__button.is-active {
+    border-color: #c4b5fd;
+    background: var(--bliss-violet-soft);
+    box-shadow: none;
+    color: #6d28d9;
+  }
+
+  .docs-mobile-tools__button.is-active .docs-mobile-tools__icon {
+    color: currentColor;
+  }
+
+  .docs-mobile-tools__button.is-active .docs-mobile-tools__chevron {
+    border-color: currentColor;
+    transform: translateY(2px) rotate(225deg);
+  }
+
+  .docs-mobile-tools__button:focus-visible {
+    outline: 2px solid #71717a;
+    outline-offset: 2px;
+  }
+
+  /* Catches taps outside the panel; `touch-action` stops the page scrolling
+     behind an open panel. */
+  .docs-mobile-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgb(9 9 11 / 8%);
+    touch-action: none;
+  }
+
+  /* Anchored to the toggle bar rather than the document, so the panel always
+     opens in view. Absolute positioning also keeps it from shifting the
+     article, which would break the anchor jump on close. */
+  .docs-mobile-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    display: grid;
+    width: min(100%, 340px);
+    max-height: min(60vh, 440px);
+    padding: 8px;
+    border: 1px solid var(--bliss-border);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 98%);
+    box-shadow: 0 16px 36px rgb(9 9 11 / 14%);
+    backdrop-filter: blur(16px);
+  }
+
+  .docs-mobile-panel__scroll {
+    display: grid;
+    gap: 2px;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .docs-mobile-panel__group + .docs-mobile-panel__group {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--bliss-border-subtle);
+  }
+
+  .docs-mobile-panel__label {
+    padding: 8px 10px 5px;
+    color: var(--bliss-fg-subtle);
+    font-family: var(--bliss-font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .docs-mobile-panel a {
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--bliss-fg-muted);
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .docs-mobile-panel a:hover,
+  .docs-mobile-panel a.is-active {
+    background: var(--bliss-bg-subtle);
+    color: var(--bliss-fg);
+  }
+
+  .docs-mobile-panel a.is-active {
+    font-weight: 600;
+  }
+
+  .docs-mobile-panel a.level-3 {
+    padding-left: 24px;
+    color: var(--bliss-fg-subtle);
+    font-size: 13px;
+  }
+
+  .docs-mobile-panel a.level-3.is-active {
+    color: var(--bliss-fg);
+  }
+
+  .docs-mobile-panel__empty {
+    padding: 10px;
+    color: var(--bliss-fg-subtle);
+    font-size: 13px;
+  }
+
+  .docs-panel-enter-active,
+  .docs-panel-leave-active {
+    transition: opacity 140ms ease, transform 140ms ease;
+    transform-origin: top center;
+  }
+
+  .docs-panel-enter-from,
+  .docs-panel-leave-to {
+    opacity: 0;
+    transform: translateY(-6px) scale(.98);
   }
 }
 
@@ -1388,8 +1615,44 @@ html::-webkit-scrollbar-corner {
     padding-top: 32px;
   }
 
+  /* Full-bleed and pinned under the site nav so both toggles stay reachable
+     anywhere in a long page. */
+  .docs-mobile-nav {
+    position: sticky;
+    top: 64px;
+    z-index: 12;
+    width: calc(100% + 2rem);
+    margin: 0 -1rem 20px;
+  }
+
+  /* Frosted strip behind the pills so article text never shows through them. */
+  .docs-mobile-tools {
+    padding: 8px 1rem 10px;
+    border-bottom: 1px solid var(--bliss-border-subtle);
+    background: rgb(250 250 250 / 88%);
+    backdrop-filter: blur(16px) saturate(130%);
+  }
+
+  .docs-mobile-tools__button--menu {
+    display: flex;
+  }
+
+  .docs-mobile-tools__button {
+    flex: 1 1 0;
+  }
+
+  /* Inset from the full-bleed strip so the panel lines up with the gutters. */
+  .docs-mobile-panel {
+    top: calc(100% + 2px);
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    max-height: calc(100vh - 150px);
+  }
+
   .docs-sidebar {
     position: static;
+    display: none;
     margin-bottom: 40px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--bliss-border);
@@ -1397,6 +1660,14 @@ html::-webkit-scrollbar-corner {
 
   .docs-sidebar__group + .docs-sidebar__group {
     margin-top: 20px;
+  }
+
+  /* Headings have to clear the site nav plus the sticky toggle bar. */
+  .docs-content h1,
+  .docs-content h2,
+  .docs-content h3,
+  .docs-content h4 {
+    scroll-margin-top: 124px;
   }
 
   .docs-pagination {
@@ -1442,5 +1713,17 @@ html::-webkit-scrollbar-corner {
   .blog-post__content blockquote {
     margin-right: 0;
     margin-left: 0;
+  }
+}
+
+/* Smallest phones: drop the pill icons so "On this page" is never clipped. */
+@media (max-width: 360px) {
+  .docs-mobile-tools__button {
+    gap: 7px;
+    padding: 0 11px;
+  }
+
+  .docs-mobile-tools__icon {
+    display: none;
   }
 }

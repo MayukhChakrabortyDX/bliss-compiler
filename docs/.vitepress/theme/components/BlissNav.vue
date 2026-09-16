@@ -48,7 +48,7 @@
 
   <Teleport to="body">
     <button
-      class="bliss-nav__menu-button"
+      :class="['bliss-nav__menu-button', { 'is-open': isMenuOpen }]"
       type="button"
       :aria-expanded="isMenuOpen"
       aria-controls="bliss-mobile-menu"
@@ -58,7 +58,8 @@
       <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
     </button>
 
-    <div v-if="isMenuOpen" id="bliss-mobile-menu" class="bliss-nav__mobile-menu">
+    <Transition name="mobile-menu">
+      <nav v-if="isMenuOpen" id="bliss-mobile-menu" class="bliss-nav__mobile-menu" aria-label="Primary navigation">
       <a href="/docs/language" @click="isMenuOpen = false">The language</a>
       <a href="/docs/" @click="isMenuOpen = false">Docs</a>
       <a href="/blog" @click="isMenuOpen = false">Blog</a>
@@ -66,7 +67,8 @@
       <a href="/papers/" @click="isMenuOpen = false">Papers</a>
       <a href="/#downloads" @click="isMenuOpen = false">Downloads</a>
       <a href="https://github.com/MayukhChakrabortyDX/bliss-compiler" target="_blank" rel="noreferrer" @click="isMenuOpen = false">GitHub ↗</a>
-    </div>
+      </nav>
+    </Transition>
   </Teleport>
 </template>
 
@@ -97,8 +99,10 @@ onBeforeUnmount(() => {
   left: 0;
   z-index: 20;
   width: 100%;
-  border-bottom: 1px solid transparent;
-  background: transparent;
+  border-bottom: 1px solid rgb(228 228 231 / 68%);
+  background: rgb(250 250 250 / 72%);
+  box-shadow: 0 8px 24px rgb(9 9 11 / 4%);
+  backdrop-filter: blur(20px) saturate(135%);
   transition:
     background var(--bliss-duration-normal) var(--bliss-ease),
     border-color var(--bliss-duration-normal) var(--bliss-ease),
@@ -107,9 +111,9 @@ onBeforeUnmount(() => {
 
 .bliss-nav.is-scrolled {
   border-bottom: 1px solid rgb(228 228 231 / 75%);
-  background: rgb(250 250 250 / 78%);
-  box-shadow: 0 1px 12px rgb(9 9 11 / 4%);
-  backdrop-filter: blur(16px);
+  background: rgb(250 250 250 / 86%);
+  box-shadow: 0 8px 24px rgb(9 9 11 / 7%);
+  backdrop-filter: blur(24px) saturate(145%);
 }
 
 .bliss-nav__inner {
@@ -240,13 +244,23 @@ onBeforeUnmount(() => {
     color: #fafafa;
     box-shadow: 0 12px 28px rgb(9 9 11 / 24%), 0 0 0 4px rgb(255 255 255 / 80%);
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    transition: transform 160ms ease, box-shadow 160ms ease;
   }
 
   .bliss-nav__menu-button span {
     width: 17px;
     height: 1.5px;
     background: currentColor;
+    transition: transform 160ms ease, opacity 160ms ease;
   }
+
+  .bliss-nav__menu-button:active { transform: scale(.92); }
+  .bliss-nav__menu-button.is-open { box-shadow: 0 8px 20px rgb(9 9 11 / 20%), 0 0 0 4px rgb(255 255 255 / 80%); }
+  .bliss-nav__menu-button.is-open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+  .bliss-nav__menu-button.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .bliss-nav__menu-button.is-open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
   .bliss-nav__mobile-menu {
     position: fixed;
@@ -273,7 +287,19 @@ onBeforeUnmount(() => {
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
+
+  .bliss-nav__menu-button:active,
+  .bliss-nav__mobile-menu a:active { background-color: inherit; }
+
+  .bliss-nav__menu-button:focus-visible,
+  .bliss-nav__mobile-menu a:focus-visible { outline: 2px solid #71717a; outline-offset: 3px; }
+
+  .mobile-menu-enter-active,
+  .mobile-menu-leave-active { transition: opacity 160ms ease, transform 160ms ease; transform-origin: bottom right; }
+  .mobile-menu-enter-from,
+  .mobile-menu-leave-to { opacity: 0; transform: translateY(8px) scale(.96); }
 
   .bliss-nav.is-menu-open {
     background: transparent;

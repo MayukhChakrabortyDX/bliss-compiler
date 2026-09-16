@@ -1,4 +1,5 @@
 <template>
+  <RouteProgress />
   <NotFoundLayout v-if="isNotFound" />
   <template v-else>
     <BlogNav v-if="isBlog" />
@@ -42,6 +43,7 @@ import CoursesLayout from './components/CoursesLayout.vue'
 import PapersLayout from './components/PapersLayout.vue'
 import Home from './Home.vue'
 import NotFoundLayout from './components/NotFoundLayout.vue'
+import RouteProgress from './components/RouteProgress.vue'
 
 const { page } = useData()
 
