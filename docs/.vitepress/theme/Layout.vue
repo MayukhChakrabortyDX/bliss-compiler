@@ -1,25 +1,28 @@
 <template>
-  <BlogNav v-if="isBlog" />
-  <CoursesNav v-else-if="isCourses" />
-  <PapersNav v-else-if="isPapers" />
-  <DocsNav v-else-if="!isMarketing" />
-  <Teleport v-if="isMarketing" to="body">
-    <BlissNav />
-  </Teleport>
+  <NotFoundLayout v-if="isNotFound" />
+  <template v-else>
+    <BlogNav v-if="isBlog" />
+    <CoursesNav v-else-if="isCourses" />
+    <PapersNav v-else-if="isPapers" />
+    <DocsNav v-else-if="!isMarketing" />
+    <Teleport v-if="isMarketing" to="body">
+      <BlissNav />
+    </Teleport>
 
-  <div class="bliss-site">
-    <SiteAmbient v-if="isMarketing" />
-    <div v-else class="site-header" aria-hidden="true" />
+    <div class="bliss-site">
+      <SiteAmbient v-if="isMarketing" />
+      <div v-else class="site-header" aria-hidden="true" />
 
-    <Home v-if="isMarketing" />
-    <BlogLayout v-else-if="isBlog" />
-    <CoursesLayout v-else-if="isCourses" />
-    <PapersLayout v-else-if="isPapers" />
-    <DocsIndexLayout v-else-if="isDocsIndex" />
-    <DocsLayout v-else />
+      <Home v-if="isMarketing" />
+      <BlogLayout v-else-if="isBlog" />
+      <CoursesLayout v-else-if="isCourses" />
+      <PapersLayout v-else-if="isPapers" />
+      <DocsIndexLayout v-else-if="isDocsIndex" />
+      <DocsLayout v-else />
 
-    <BlissFooter />
-  </div>
+      <BlissFooter />
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -38,10 +41,12 @@ import BlogLayout from './components/BlogLayout.vue'
 import CoursesLayout from './components/CoursesLayout.vue'
 import PapersLayout from './components/PapersLayout.vue'
 import Home from './Home.vue'
+import NotFoundLayout from './components/NotFoundLayout.vue'
 
 const { page } = useData()
 
 const isMarketing = computed(() => page.value.relativePath === 'index.md')
+const isNotFound = computed(() => page.value.isNotFound || page.value.relativePath === '404.md')
 const isBlog = computed(() => page.value.relativePath.startsWith('blog/'))
 const isCourses = computed(() => page.value.relativePath.startsWith('courses/'))
 const isPapers = computed(() => page.value.relativePath.startsWith('papers/'))

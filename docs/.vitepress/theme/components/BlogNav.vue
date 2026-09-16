@@ -1,5 +1,5 @@
 <template>
-  <nav class="blog-nav" aria-label="Blog navigation">
+  <nav :class="['blog-nav', { 'is-menu-open': isMenuOpen }]" aria-label="Blog navigation">
     <div class="blog-nav__inner">
       <a href="/" class="blog-nav__brand" aria-label="Bliss home">bliss <span>journal</span></a>
 
@@ -12,15 +12,17 @@
         <a href="#subscribe" class="blog-nav__subscribe">Subscribe</a>
       </div>
 
-      <button class="blog-nav__menu-button" type="button" :aria-expanded="isMenuOpen" aria-controls="blog-mobile-menu" aria-label="Toggle navigation menu" @click="isMenuOpen = !isMenuOpen">
-        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
-      </button>
     </div>
+  </nav>
 
+  <Teleport to="body">
+    <button class="blog-nav__menu-button" type="button" :aria-expanded="isMenuOpen" aria-controls="blog-mobile-menu" aria-label="Toggle navigation menu" @click="isMenuOpen = !isMenuOpen">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
     <div v-if="isMenuOpen" id="blog-mobile-menu" class="blog-nav__mobile-menu">
       <a v-for="item in mobileLinks" :key="item.href" :href="item.href" @click="isMenuOpen = false">{{ item.label }}</a>
     </div>
-  </nav>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -50,9 +52,10 @@ const mobileLinks = [
 @media (max-width: 760px) {
   .blog-nav__inner { width: min(100% - 2rem, 960px); }
   .blog-nav__links { display: none; }
-  .blog-nav__menu-button { width: 44px; height: 44px; display: grid; place-content: center; gap: 4px; border: 1px solid var(--bliss-border); border-radius: 12px; background: rgb(255 255 255 / 72%); color: var(--bliss-fg); }
+  .blog-nav__menu-button { position: fixed; top: auto; right: 1rem; bottom: calc(1.25rem + env(safe-area-inset-bottom)); z-index: 30; width: 52px; height: 52px; display: grid; place-content: center; gap: 4px; border: 1px solid #27272a; border-radius: 50%; background: #09090b; color: #fafafa; box-shadow: 0 12px 28px rgb(9 9 11 / 24%), 0 0 0 4px rgb(255 255 255 / 80%); cursor: pointer; }
   .blog-nav__menu-button span { width: 17px; height: 1.5px; background: currentColor; }
-  .blog-nav__mobile-menu { position: absolute; top: calc(100% - 4px); right: 1rem; left: 1rem; display: grid; gap: 2px; padding: 8px; border: 1px solid var(--bliss-border); border-radius: 16px; background: rgb(255 255 255 / 96%); box-shadow: var(--bliss-shadow-lg); }
+  .blog-nav__mobile-menu { position: fixed; top: auto; right: 1rem; bottom: calc(1.25rem + env(safe-area-inset-bottom) + 64px); z-index: 29; width: min(calc(100% - 2rem), 300px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 10px; border: 1px solid var(--bliss-border); border-radius: 16px; background: rgb(255 255 255 / 96%); box-shadow: 0 16px 36px rgb(9 9 11 / 14%); backdrop-filter: blur(16px); }
+  .blog-nav.is-menu-open { background: transparent; }
   .blog-nav__mobile-menu a { padding: 12px; border-radius: 9px; color: var(--bliss-fg-secondary); font-size: 15px; font-weight: 500; text-decoration: none; }
   .blog-nav__mobile-menu a:hover { background: var(--bliss-bg-subtle); }
 }

@@ -372,38 +372,6 @@
   align-items: center;
 }
 
-.home-hero::before {
-  position: absolute;
-  top: 88px;
-  left: 50%;
-  bottom: 48px;
-  width: min(100%, 960px);
-  z-index: -1;
-  border-top: 1px solid rgb(9 9 11 / 8%);
-  border-bottom: 1px solid rgb(9 9 11 / 8%);
-  content: '';
-  pointer-events: none;
-  transform: translateX(-50%);
-}
-
-.home-hero::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: -1;
-  color: transparent;
-  content: 'BLISS';
-  font-family: var(--bliss-font-mono);
-  font-size: clamp(7rem, 22vw, 18rem);
-  font-weight: 600;
-  letter-spacing: .14em;
-  line-height: 1;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-  -webkit-text-stroke: 1px rgb(9 9 11 / 7%);
-}
-
 .home-hero__title {
   max-width: 896px;
   margin: 0;
