@@ -3,7 +3,8 @@
 import { TokenType } from "../lexer/tokens";
 import { ParserLogger } from "./logger";
 import { parseAllocator } from "./rules/allocator";
-import { parseFunction } from "./rules/function";
+import { parseCondition } from "./rules/condition";
+import { parseFunction, parseFunctionHead } from "./rules/function";
 import { parseLoop } from "./rules/loop";
 import { parseModifier } from "./rules/modifiers";
 import { parseImport, parseUsing } from "./rules/module";
@@ -230,6 +231,14 @@ export class Parser extends ParserLogger {
 
     parseAllocator(sync: Set<TokenType>) {
         return parseAllocator(this, sync)
+    }
+
+    parseCondition(sync: Set<TokenType>) {
+        return parseCondition(this, sync)
+    }
+
+    parseFunctionHead(sync: Set<TokenType>) {
+        return parseFunctionHead(this, sync)
     }
 
 }

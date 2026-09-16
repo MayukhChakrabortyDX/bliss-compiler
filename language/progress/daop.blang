@@ -4,6 +4,9 @@ ACTION -> "action" @IDENTIFIER '{'
     (function.HEAD ';')* 
 '}';
 
+//refer language/type
+FIELD -> type.TYPE @IDENTIFIER ';';
+
 DATA ->
     //named token
     "data" @IDENTIFIER ';' |
@@ -18,8 +21,6 @@ DATA ->
     "data" @IDENTIFIER '{' FIELD (FIELD)* '}'
 ;
 
-//refer language/type
-FIELD -> type.TYPE @IDENTIFIER ';';
 
 BIND -> "bind" @IDENTIFIER "with" ( @IDENTIFIER | ('(' @IDENTIFIER (',' @IDENTIFIER)* ')') ) "as" @IDENTIFIER '{'
     function.FUNCTION (function.FUNCTION)*

@@ -4,23 +4,29 @@ import { Parser } from "../parser";
 const tokenizer = new Tokenizer(
 `
 allocator item {
-
     fx alloc(): Type {
     
     }
-
 }
 
-fx main([u8] x): i32 {
+fx main(): i32 {
 
     loop {
-
         break;
+    }
 
+    if (true) {
+
+    }
+    elif (expected) {
+    
+    }
+    else {
+    
     }
 
     break;
-
+}
 `
 )
 tokenizer.tokenize()

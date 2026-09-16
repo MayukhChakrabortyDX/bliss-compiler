@@ -1,0 +1,9 @@
+//refer language/node, language/structures
+
+IF_COND -> "if" '(' node.NODE ')' '{' (structures.STRUCTURE | node.NODE ';' )* '}';
+ELIF_COND -> "elif" '(' node.NODE ')' '{' (structures.STRUCTURE | node.NODE ';' )* '}';
+ELSE_COND -> "else" '{' (structures.STRUCTURE | node.NODE ';' )* '}';
+
+CONDITION -> IF_COND | ELIF_COND | ELSE_COND;
+
+//To be analyzed by analyzer instead.

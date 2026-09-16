@@ -8,8 +8,9 @@ namespace StructureCache {
 
     const fxBranch = createBranch((parser, sync) => parser.parseFunction(sync), ...First.FunctionProduction)
     const loopBranch = createBranch((parser, sync) => parser.parseLoop(sync), ...First.LoopProduction)
+    const conditionBranch = createBranch((parser, sync) => parser.parseCondition(sync), ...First.Condition)
 
-    export const branch = branchGroup(fxBranch, loopBranch)
+    export const branch = branchGroup(fxBranch, loopBranch, conditionBranch)
 
 }
 

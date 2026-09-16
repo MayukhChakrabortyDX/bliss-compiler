@@ -3,7 +3,8 @@ import { union } from "./utility/union"
 
 export class First {
 
-    static FunctionProduction = union(TokenType.K_Fx)
+    static FunctionHead = union(TokenType.K_Fx)
+    static FunctionProduction = union(First.FunctionHead)
     static LoopProduction = union(TokenType.K_Loop)
     static Modifier = union(TokenType.K_Unsafe, TokenType.K_Trans, TokenType.K_Volatile)
     static Module = {
@@ -30,6 +31,9 @@ export class First {
         First.Module.Using
     )
 
+
+    static Condition = union(TokenType.K_If, TokenType.K_Elif, TokenType.K_Else)
+
     static BuiltinType = union(
         TokenType.K_u8, TokenType.K_u16, TokenType.K_u32, TokenType.K_u64,
         TokenType.K_i8, TokenType.K_i16, TokenType.K_i32, TokenType.K_i64,
@@ -37,7 +41,7 @@ export class First {
     )
 
     static Structure = {
-        Structure: union(First.FunctionProduction, First.LoopProduction),
+        Structure: union(First.FunctionProduction, First.LoopProduction, First.Condition),
         Body: union(TokenType.LBracket)
     }
 
@@ -46,4 +50,5 @@ export class First {
     )
 
     static Allocator = union(TokenType.K_Allocator)
+
 }
