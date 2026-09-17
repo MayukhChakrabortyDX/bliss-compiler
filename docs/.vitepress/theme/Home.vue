@@ -4,13 +4,14 @@
     <!-- Hero -->
     <section class="home-hero">
       <h1 class="home-hero__title">
-        Rethink
-        <span>systems.</span>
+        Native control.
+        <span>Zero runtime overhead.</span>
       </h1>
 
       <p class="home-hero__description">
-        Bliss is a systems programming language exploring a new outlook on
-        memory safety, programming paradigms, and the fundamentals of systems software.
+        Bliss is a compiled, statically typed systems programming language featuring
+        lexical ownership verification, progressive compiler diagnostics, and direct
+        native code generation without tracing garbage collection.
       </p>
 
       <div class="home-hero__actions">
@@ -29,15 +30,15 @@
       </div>
 
       <div class="home-keywords">
-        <span>systems programming</span>
-        <span>memory safety</span>
-        <span>new paradigms</span>
+        <span>lexical ownership</span>
+        <span>algebraic types</span>
+        <span>llvm backend</span>
       </div>
 
-      <div class="home-hero__rail" aria-label="Bliss focus areas">
-        <span><strong>01</strong> language</span>
-        <span><strong>02</strong> compiler</span>
-        <span><strong>03</strong> systems</span>
+      <div class="home-hero__rail" aria-label="Bliss compiler architecture">
+        <span><strong>01</strong> AST &amp; Lexer</span>
+        <span><strong>02</strong> Typed BIR</span>
+        <span><strong>03</strong> LLVM Target</span>
       </div>
     </section>
 
@@ -45,51 +46,51 @@
     <section id="language" class="home-section home-thesis">
       <div class="home-thesis__intro">
         <div>
-          <p class="home-eyebrow">Why Bliss?</p>
+          <p class="home-eyebrow">Technical design goals</p>
 
           <h2 class="home-heading home-heading--large">
-            Systems programming deserves another look.
+            Low-level control without undefined behavior.
           </h2>
         </div>
 
         <p class="home-thesis__description">
-          Bliss is being designed from first principles. Instead of treating today's
-          conventions as fixed boundaries, it asks what systems programming could look
-          like if memory, ownership, syntax, and the programming model were reconsidered together.
+          Modern systems engineering demands deterministic memory reclamation without
+          stop-the-world pause times, explicit struct layout control, and a resilient
+          compiler pipeline designed from the ground up for progressive error recovery.
         </p>
       </div>
 
       <div class="home-feature-grid">
         <article class="home-feature-card">
-          <div class="home-feature-card__number">01 / MEMORY</div>
+          <div class="home-feature-card__number">01 / MEMORY MODEL</div>
 
-          <h3>A new take on memory safety.</h3>
+          <h3>Lexical Ownership &amp; Lifetimes</h3>
 
           <p>
-            Memory safety is not treated as a single mechanism. Bliss explores different
-            ways to make safe systems software practical while preserving low-level control.
+            Compile-time borrow verification without tracing garbage collection. Values carry
+            explicit ownership semantics, enabling deterministic allocation and automatic resource cleanup at block boundaries.
           </p>
         </article>
 
         <article class="home-feature-card">
-          <div class="home-feature-card__number">02 / PARADIGM</div>
+          <div class="home-feature-card__number">02 / TYPE SYSTEM</div>
 
-          <h3>Programming, reconsidered.</h3>
+          <h3>Algebraic Types &amp; Exhaustiveness</h3>
 
           <p>
-            Bliss questions familiar assumptions about how programs are structured,
-            composed, and reasoned about — not just how syntax is written.
+            Discriminated unions, structural tuples, and strictly checked pattern matching.
+            The type checker enforces complete state coverage, eliminating null dereferences and unhandled variant branches.
           </p>
         </article>
 
         <article class="home-feature-card">
-          <div class="home-feature-card__number">03 / SYSTEM</div>
+          <div class="home-feature-card__number">03 / COMPILER PIPELINE</div>
 
-          <h3>Designed as a system.</h3>
+          <h3>Progressive Parser Synchronization</h3>
 
           <p>
-            The language and compiler are being developed together so that the ideas
-            can shape the generated program instead of becoming a layer on top.
+            A resilient recursive-descent parsing engine that synchronizes across bounded productions.
+            Compilation continues diagnosing downstream code even in the presence of syntax errors.
           </p>
         </article>
       </div>
@@ -99,16 +100,17 @@
     <section class="home-section home-idea">
       <div class="home-idea__panel">
         <div class="home-idea__copy">
-          <p class="home-eyebrow home-eyebrow--dark">The idea</p>
+          <p class="home-eyebrow home-eyebrow--dark">Systems syntax</p>
 
           <h2 class="home-heading home-heading--idea">
-            Less tradition.<br />
-            More intention.
+            Explicit semantics.<br />
+            Deterministic execution.
           </h2>
 
           <p class="home-idea__description">
-            Bliss is an exploration. The goal is not to make another familiar systems
-            language, but to investigate whether the pieces can fit together differently.
+            Bliss pairs procedural ergonomics with systems primitives: immutable bindings
+            by default, explicit error propagation via Result types, and direct manipulation
+            of native memory buffers.
           </p>
 
           <a
@@ -117,7 +119,7 @@
             rel="noreferrer"
             class="home-idea__link"
           >
-            Read the work on GitHub
+            View compiler source on GitHub
             <span aria-hidden="true">↗</span>
           </a>
         </div>
@@ -127,21 +129,23 @@
             <span></span>
             <span></span>
             <span></span>
-            <span class="home-code__title">bliss</span>
+            <span class="home-code__title">main.bliss</span>
           </div>
 
-          <pre><code><span class="home-code__comment">// an early language, still taking shape</span>
+          <pre><code><span class="home-code__keyword">import</span> std.io.println;
+<span class="home-code__keyword">import</span> std.types.*;
 
-<span class="home-code__keyword">fx</span> main() {
-    <span class="home-code__comment">// rethink the way systems are built</span>
+<span class="home-code__keyword">fx</span> main([String] args, i32 size): i32 {
+    println(<span class="home-code__comment">"Hello World"</span>);
+    <span class="home-code__keyword">return</span> 0;
 }</code></pre>
 
           <div class="home-code__footer">
             <div>
-              <span class="home-code__footer-label">Prototype compiler</span>
+              <span class="home-code__footer-label">Native Code Generation</span>
               <p>
-                Currently transforming Bliss source into an AST, with compilation
-                infrastructure evolving toward the next stages.
+                Lowered through Typed Bliss IR (BIR) directly to optimized machine code
+                via LLVM with zero runtime abstraction penalty.
               </p>
             </div>
           </div>
@@ -154,13 +158,13 @@
       <div class="home-status-card">
         <div class="home-status-card__content">
           <div>
-            <p class="home-eyebrow">Project status</p>
+            <p class="home-eyebrow">Open compiler development</p>
 
-            <h2>Bliss is being built in public.</h2>
+            <h2>Engineered entirely in the open.</h2>
 
             <p>
-              Follow the compiler repository for the latest language experiments,
-              implementation work, and tests.
+              Follow lexer milestones, AST lowerings, type inference algorithms,
+              and RFC benchmarks directly in the public source repository.
             </p>
           </div>
 
@@ -179,14 +183,14 @@
     <!-- Downloads -->
     <section id="downloads" class="home-section home-downloads">
       <div class="home-downloads__heading">
-        <p class="home-eyebrow">Downloads</p>
+        <p class="home-eyebrow">Toolchain targets</p>
 
         <div>
           <h2 class="home-heading home-heading--downloads">
-            Choose your machine.
+            Native cross-compilation.
           </h2>
 
-          <p>Releases are coming soon.</p>
+          <p>Prebuilt toolchains &amp; language server binaries.</p>
         </div>
       </div>
 
@@ -213,27 +217,27 @@
               </div>
 
               <h3>Linux</h3>
-              <p>x86-64 and ARM64</p>
+              <p>x86_64 and aarch64</p>
             </div>
 
-            <span class="home-soon-pill">Soon</span>
+            <span class="home-soon-pill">Target</span>
           </div>
 
           <div class="home-download-options">
             <a href="#" aria-disabled="true">
               <span>
                 <strong>Linux x86-64</strong>
-                <small>linux-x86_64</small>
+                <small>x86_64-unknown-linux-gnu</small>
               </span>
-              <span>Coming soon</span>
+              <span>Target Tier 1</span>
             </a>
 
             <a href="#" aria-disabled="true">
               <span>
                 <strong>Linux ARM64</strong>
-                <small>linux-aarch64</small>
+                <small>aarch64-unknown-linux-gnu</small>
               </span>
-              <span>Coming soon</span>
+              <span>Target Tier 1</span>
             </a>
           </div>
         </article>
@@ -252,27 +256,27 @@
               </div>
 
               <h3>Windows</h3>
-              <p>x86-64 and ARM64</p>
+              <p>x86_64 and aarch64</p>
             </div>
 
-            <span class="home-soon-pill">Soon</span>
+            <span class="home-soon-pill">Target</span>
           </div>
 
           <div class="home-download-options">
             <a href="#" aria-disabled="true">
               <span>
                 <strong>Windows x86-64</strong>
-                <small>windows-x86_64</small>
+                <small>x86_64-pc-windows-msvc</small>
               </span>
-              <span>Coming soon</span>
+              <span>Target Tier 1</span>
             </a>
 
             <a href="#" aria-disabled="true">
               <span>
                 <strong>Windows ARM64</strong>
-                <small>windows-aarch64</small>
+                <small>aarch64-pc-windows-msvc</small>
               </span>
-              <span>Coming soon</span>
+              <span>Target Tier 1</span>
             </a>
           </div>
         </article>
@@ -289,14 +293,14 @@
 
               <h3>macOS</h3>
 
-              <span>Coming later</span>
+              <span>Darwin LLVM</span>
             </div>
 
-            <p>macOS support is planned for a future release.</p>
+            <p>macOS support for Darwin targets (x86_64 and arm64-apple-darwin) in active development.</p>
           </div>
 
           <span class="home-macos-card__architectures">
-            x86-64 · ARM64
+            Apple Silicon · Intel
           </span>
         </article>
       </div>

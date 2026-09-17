@@ -251,10 +251,12 @@
   box-shadow: 0 24px 48px rgb(9 9 11 / 10%);
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
+  min-width: 0;
 }
 
 .home-idea__copy {
   padding: 48px;
+  min-width: 0;
 }
 
 .home-idea__description {
@@ -285,6 +287,8 @@
   padding: 48px;
   border-left: 1px solid rgb(255 255 255 / 10%);
   background: rgb(255 255 255 / 3.5%);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .home-code__header {
@@ -310,11 +314,39 @@
 
 .home-code pre {
   margin: 0;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   color: #d4d4d8;
   font-family: var(--bliss-font-mono);
   font-size: 14px;
   line-height: 1.75;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 20%) transparent;
+}
+
+.home-code pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.home-code pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.home-code pre::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 20%);
+  border-radius: 999px;
+}
+
+.home-code pre::-webkit-scrollbar-thumb:hover {
+  background: rgb(255 255 255 / 35%);
+}
+
+.home-code pre code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
 }
 
 .home-code__comment {
@@ -704,9 +736,14 @@
     font-size: 40px;
   }
 
-  .home-idea__copy,
+  .home-idea__copy {
+    padding: 32px 24px;
+  }
+
   .home-code {
-    padding: 32px;
+    padding: 28px 20px;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .home-download-grid {

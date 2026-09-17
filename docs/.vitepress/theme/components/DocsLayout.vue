@@ -180,17 +180,25 @@
         <nav
           v-if="isSiteNavOpen"
           id="docs-site-popover"
-          class="section-nav__mobile-menu docs-site-popover"
+          class="bliss-mobile-popover bliss-mobile-popover--site docs-site-popover"
           aria-label="Primary navigation"
         >
-          <a
-            v-for="item in siteNavLinks"
-            :key="item.href"
-            :href="item.href"
-            @click="isSiteNavOpen = false"
-          >
-            {{ item.label }}
-          </a>
+          <div class="bliss-mobile-popover__header">
+            <span class="bliss-mobile-popover__badge">Navigation</span>
+          </div>
+          <div class="bliss-mobile-popover__grid">
+            <a
+              v-for="item in siteNavLinks"
+              :key="item.href"
+              :href="item.href"
+              :class="['bliss-mobile-popover__link', { 'is-active': isPrimaryLinkActive(item.href) }]"
+              :target="item.href.startsWith('http') ? '_blank' : undefined"
+              :rel="item.href.startsWith('http') ? 'noreferrer' : undefined"
+              @click="isSiteNavOpen = false"
+            >
+              {{ item.label }}
+            </a>
+          </div>
         </nav>
       </Transition>
     </Teleport>
@@ -211,8 +219,7 @@ const activeSlug = ref('')
 
 const siteNavLinks = [
   { label: 'Docs', href: '/docs/' },
-  { label: 'Language', href: '/docs/language' },
-  { label: 'Compiler', href: '/docs/compiler' },
+  { label: 'Timeline', href: '/timeline/' },
   { label: 'Blog', href: '/blog/' },
   { label: 'Courses', href: '/courses/' },
   { label: 'Papers', href: '/papers/' },
@@ -257,6 +264,13 @@ const normalizedLink = (link: string) => link.replace(/\/$/, '') || '/'
 
 const isActive = (link?: string) =>
   !!link && normalizedLink(link) === currentPath.value
+
+const isPrimaryLinkActive = (href: string) => {
+  if (href.startsWith('http')) return false
+  const path = route.path.replace(/\/$/, '') || '/'
+  const target = href.replace(/\/$/, '') || '/'
+  return path.startsWith(target)
+}
 
 const activeGroup = computed(() =>
   docsNavigation.find((group) =>

@@ -104,22 +104,3 @@ onBeforeUnmount(() => {
   clearTimers()
 })
 </script>
-
-<style scoped>
-.route-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  height: 3px;
-  pointer-events: none;
-  background: var(--bliss-violet);
-  box-shadow: 0 0 10px rgb(139 92 246 / 42%);
-  opacity: 0;
-  transition: width 180ms ease, opacity 120ms ease;
-}
-
-.route-progress.is-visible {
-  opacity: 1;
-}
-</style>

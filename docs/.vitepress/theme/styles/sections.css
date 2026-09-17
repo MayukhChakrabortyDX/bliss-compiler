@@ -234,7 +234,7 @@
 .docs-outline {
   align-self: start;
   position: sticky;
-  top: 88px;
+  top: 124px;
   z-index: 10;
 }
 
@@ -317,7 +317,7 @@
   font-family: var(--bliss-font-sans);
   letter-spacing: -0.035em;
   line-height: 1.15;
-  scroll-margin-top: 88px;
+  scroll-margin-top: 124px;
 }
 
 .docs-content h1 {

@@ -56,6 +56,31 @@
       <path d="M48 45h44" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="3 3" />
     </svg>
 
+    <!-- Tour -->
+    <svg v-else-if="topic === 'tour'" class="docs-card__art-svg" viewBox="0 0 140 90" fill="none">
+      <circle cx="35" cy="45" r="12" stroke="rgba(59, 130, 246, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <circle cx="70" cy="45" r="12" stroke="rgba(59, 130, 246, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <circle cx="105" cy="45" r="12" stroke="rgba(59, 130, 246, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <path d="M47 45h11m24 0h11" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+      <path d="M35 40v10m35-10v10m35-10v10" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" />
+    </svg>
+
+    <!-- Memory Model -->
+    <svg v-else-if="topic === 'memory'" class="docs-card__art-svg" viewBox="0 0 140 90" fill="none">
+      <rect x="25" y="22" width="40" height="46" rx="8" stroke="rgba(244, 63, 94, 0.6)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.8)" />
+      <rect x="75" y="22" width="40" height="46" rx="8" stroke="rgba(244, 63, 94, 0.6)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.8)" />
+      <path d="M45 36h-8v18h8" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M95 36h8v18h-8" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M45 45h50" stroke="#f43f5e" stroke-width="1.75" stroke-dasharray="2 2" stroke-linecap="round" />
+    </svg>
+
+    <!-- Memory Walkthrough -->
+    <svg v-else-if="topic === 'memory-walkthrough'" class="docs-card__art-svg" viewBox="0 0 140 90" fill="none">
+      <rect x="30" y="20" width="80" height="50" rx="8" stroke="rgba(245, 158, 11, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <path d="M45 35h50M45 45h35M45 55h42" stroke="#d97706" stroke-width="2" stroke-linecap="round" />
+      <circle cx="95" cy="55" r="4" fill="#f59e0b" />
+    </svg>
+
     <!-- Status -->
     <svg v-else-if="topic === 'status'" class="docs-card__art-svg" viewBox="0 0 140 90" fill="none">
       <rect x="25" y="20" width="90" height="50" rx="8" stroke="rgba(113, 113, 122, 0.4)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />

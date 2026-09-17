@@ -28,11 +28,14 @@
   --bliss-blue-dark: #2563eb;
   --bliss-amber: #f59e0b;
   --bliss-emerald: #10b981;
+  --bliss-rose: #f43f5e;
+  --bliss-rose-dark: #e11d48;
 
   --bliss-violet-soft: rgba(139, 92, 246, 0.12);
   --bliss-blue-soft: rgba(96, 165, 250, 0.12);
   --bliss-amber-soft: rgba(245, 158, 11, 0.10);
   --bliss-emerald-soft: rgba(16, 185, 129, 0.12);
+  --bliss-rose-soft: rgba(244, 63, 94, 0.12);
 
   /* Typography Families */
   --bliss-font-sans:

@@ -22,5 +22,6 @@
 @import './styles/derived/derived-blog.css';
 @import './styles/derived/derived-courses.css';
 @import './styles/derived/derived-papers.css';
+@import './styles/derived/derived-timeline.css';
 @import './styles/derived/derived-notfound.css';
 @import './styles/derived/derived-footer.css';

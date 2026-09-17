@@ -1,13 +1,16 @@
 /*
- * Bliss UI Language - Derived Navbar Styles (.derived-nav-*)
+ * Bliss UI Language - Derived Navbar & Sub-Navbar Styles (.derived-nav-*)
  */
 
-/* Marketing Homepage Navbar (BlissNav) */
+/* ==========================================================================
+   1. Authoritative Site-Wide Main Top Navigation (.bliss-nav)
+   ========================================================================== */
+
 .bliss-nav {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 60;
   width: 100%;
   border-bottom: 1px solid transparent;
   background: transparent;
@@ -21,7 +24,9 @@
     -webkit-backdrop-filter var(--bliss-duration-normal) var(--bliss-ease);
 }
 
-.bliss-nav.is-scrolled {
+/* Scrolled or Segment Pages: Frosted Glass Navbar */
+.bliss-nav.is-scrolled,
+.bliss-nav:not(.is-marketing) {
   border-bottom: 1px solid rgba(228, 228, 231, 0.6);
   background: rgba(250, 250, 250, 0.72);
   box-shadow: none;
@@ -30,9 +35,9 @@
 }
 
 .bliss-nav__inner {
-  width: min(100% - 3rem, 1152px);
+  width: min(100% - 3rem, 1280px);
+  min-height: 64px;
   margin-inline: auto;
-  padding: 28px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -49,302 +54,388 @@
 }
 
 .bliss-nav__logo {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #09090b;
   color: white;
 }
 
 .bliss-nav__logo svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .bliss-nav__name {
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .bliss-nav__links {
   display: flex;
   align-items: center;
-  gap: 28px;
-  color: #71717a;
-  font-size: 14px;
+  gap: 26px;
+  color: var(--bliss-fg-muted);
+  font-size: 13.5px;
   font-weight: 500;
 }
 
-.bliss-nav__links a {
+.bliss-nav__link {
   color: inherit;
   text-decoration: none;
-  transition: color 180ms ease;
+  transition: color 160ms ease;
 }
 
-.bliss-nav__links a:hover {
-  color: #09090b;
+.bliss-nav__link:hover,
+.bliss-nav__link.is-active {
+  color: var(--bliss-fg);
 }
 
-.bliss-nav__menu-button,
-.bliss-nav__mobile-menu {
-  display: none;
+.bliss-nav__link.is-active {
+  font-weight: 600;
 }
 
-/* Documentation Navbar (DocsNav) */
-.section-nav {
+/* ==========================================================================
+   2. Dedicated Segment Sub-Navbar (.bliss-subnav)
+   ========================================================================== */
+
+.bliss-subnav {
   position: fixed;
-  top: 0;
+  top: 64px;
   left: 0;
-  z-index: 20;
+  z-index: 50;
   width: 100%;
+  height: 44px;
   border-bottom: 1px solid rgba(228, 228, 231, 0.6);
-  background: rgba(250, 250, 250, 0.65);
+  background: rgba(255, 255, 255, 0.82);
   box-shadow: none;
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   backdrop-filter: blur(16px) saturate(180%);
+  transition:
+    background var(--bliss-duration-normal) var(--bliss-ease),
+    border-color var(--bliss-duration-normal) var(--bliss-ease);
 }
 
-.section-nav__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.bliss-subnav__inner {
   width: min(100% - 3rem, 1280px);
-  min-height: 64px;
+  height: 100%;
   margin-inline: auto;
-}
-
-.section-nav__brand {
-  color: var(--bliss-fg);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  text-decoration: none;
-}
-
-.section-nav__brand span {
-  color: var(--bliss-fg-muted);
-  font-weight: 500;
-}
-
-.section-nav__links {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  color: var(--bliss-fg-muted);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.section-nav__links a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.section-nav__links a:hover,
-.section-nav__links .is-active {
-  color: var(--bliss-fg);
-}
-
-.section-nav__menu-button,
-.section-nav__mobile-menu {
-  display: none;
-}
-
-/* Blog Navbar (BlogNav) */
-.blog-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 20;
-  width: 100%;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.6);
-  background: rgba(250, 250, 250, 0.65);
-  box-shadow: none;
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  backdrop-filter: blur(16px) saturate(180%);
-}
-
-.blog-nav__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: min(100% - 3rem, 960px);
-  min-height: 64px;
-  margin-inline: auto;
 }
 
-.blog-nav__brand {
-  color: var(--bliss-fg);
+.bliss-subnav__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--bliss-font-mono);
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 600;
-  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bliss-fg-subtle);
 }
 
-.blog-nav__brand span {
-  color: var(--bliss-fg-muted);
-  font-weight: 400;
+.bliss-subnav__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.blog-nav__links {
+/* Segment Personality Accents for Sub-Navbar Dots */
+.bliss-subnav--docs .bliss-subnav__dot {
+  background: var(--bliss-violet);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.45);
+}
+
+.bliss-subnav--blog .bliss-subnav__dot {
+  background: var(--bliss-blue);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.45);
+}
+
+.bliss-subnav--courses .bliss-subnav__dot {
+  background: var(--bliss-emerald);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.45);
+}
+
+.bliss-subnav--papers .bliss-subnav__dot {
+  background: var(--bliss-amber);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.45);
+}
+
+.bliss-subnav--timeline .bliss-subnav__dot {
+  background: var(--bliss-rose);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.45);
+}
+
+.bliss-subnav__links {
   display: flex;
   align-items: center;
-  gap: 22px;
-  color: var(--bliss-fg-muted);
-  font-size: 13px;
-  font-weight: 500;
+  gap: 4px;
 }
 
-.blog-nav__links a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.blog-nav__links a:hover {
-  color: var(--bliss-fg);
-}
-
-.blog-nav__subscribe {
-  padding: 7px 11px;
-  border: 1px solid var(--bliss-border);
+.bliss-subnav__link {
+  padding: 4px 11px;
   border-radius: var(--bliss-radius-pill);
-  color: var(--bliss-fg) !important;
-}
-
-.blog-nav__menu-button,
-.blog-nav__mobile-menu {
-  display: none;
-}
-
-/* Courses Navbar (CoursesNav) */
-.courses-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 20;
-  width: 100%;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.6);
-  background: rgba(250, 250, 250, 0.65);
-  box-shadow: none;
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  backdrop-filter: blur(16px) saturate(180%);
-}
-
-.courses-nav__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(100% - 3rem, 1152px);
-  min-height: 64px;
-  margin-inline: auto;
-}
-
-.courses-nav__brand {
-  color: var(--bliss-fg);
-  font-family: var(--bliss-font-mono);
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.courses-nav__brand span {
-  color: var(--bliss-fg-muted);
-  font-weight: 400;
-}
-
-.courses-nav__links {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  color: var(--bliss-fg-muted);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 500;
-}
-
-.courses-nav__links a {
-  color: inherit;
+  color: var(--bliss-fg-muted);
   text-decoration: none;
+  transition: background 160ms ease, color 160ms ease;
 }
 
-.courses-nav__links a:hover {
+.bliss-subnav__link:hover {
+  background: var(--bliss-bg-subtle);
   color: var(--bliss-fg);
 }
 
-.courses-nav__youtube {
-  padding: 7px 11px;
-  border-radius: var(--bliss-radius-pill);
-  background: #ef4444;
-  color: white !important;
-}
-
-.courses-nav__menu-button,
-.courses-nav__mobile-menu {
-  display: none;
-}
-
-/* Papers Navbar (PapersNav) */
-.papers-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 20;
-  width: 100%;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.6);
-  background: rgba(250, 250, 250, 0.65);
-  box-shadow: none;
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  backdrop-filter: blur(16px) saturate(180%);
-}
-
-.papers-nav__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(100% - 3rem, 960px);
-  min-height: 64px;
-  margin-inline: auto;
-}
-
-.papers-nav__brand {
-  color: var(--bliss-fg);
-  font-family: var(--bliss-font-mono);
-  font-size: 14px;
+/* Active States per Segment in Sub-Navbar */
+.bliss-subnav--docs .bliss-subnav__link.is-active {
+  background: var(--bliss-violet-soft);
+  color: var(--bliss-violet-dark);
   font-weight: 600;
-  text-decoration: none;
 }
 
-.papers-nav__brand span {
-  color: var(--bliss-fg-muted);
-  font-weight: 400;
+.bliss-subnav--blog .bliss-subnav__link.is-active {
+  background: var(--bliss-blue-soft);
+  color: var(--bliss-blue-dark);
+  font-weight: 600;
 }
 
-.papers-nav__links {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  color: var(--bliss-fg-muted);
-  font-size: 13px;
-  font-weight: 500;
+.bliss-subnav--courses .bliss-subnav__link.is-active {
+  background: var(--bliss-emerald-soft);
+  color: var(--bliss-emerald-dark);
+  font-weight: 600;
 }
 
-.papers-nav__links a {
-  color: inherit;
-  text-decoration: none;
+.bliss-subnav--papers .bliss-subnav__link.is-active {
+  background: var(--bliss-amber-soft);
+  color: var(--bliss-amber-dark);
+  font-weight: 600;
 }
 
-.papers-nav__links a:hover {
-  color: var(--bliss-fg);
+.bliss-subnav--timeline .bliss-subnav__link.is-active {
+  background: var(--bliss-rose-soft);
+  color: var(--bliss-rose-dark);
+  font-weight: 600;
 }
 
-.papers-nav__menu-button,
-.papers-nav__mobile-menu {
+/* ==========================================================================
+   3. Unified Mobile Floating Capsule (.bliss-mobile-capsule)
+   ========================================================================== */
+
+.bliss-mobile-capsule {
   display: none;
 }
 
-/* Mobile Breakpoints for All Navbars */
-/* Mobile Menu Vue Transition */
+/* Mobile Breakpoints */
+@media (max-width: 768px) {
+  .bliss-nav__inner,
+  .bliss-subnav__inner {
+    width: min(100% - 2rem, 1280px);
+  }
+
+  .bliss-nav__links,
+  .bliss-subnav {
+    display: none;
+  }
+
+  /* Floating Pill Capsule across all pages */
+  .bliss-mobile-capsule {
+    position: fixed;
+    top: auto;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom));
+    right: 1.25rem;
+    z-index: 300;
+    width: 48px;
+    height: 94px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--bliss-border);
+    border-radius: var(--bliss-radius-pill);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 12px 32px rgba(9, 9, 11, 0.14), 0 0 0 4px rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    backdrop-filter: blur(18px) saturate(180%);
+    overflow: hidden;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  }
+
+  .bliss-mobile-capsule--single {
+    height: 48px;
+  }
+
+  .bliss-mobile-capsule:hover {
+    border-color: #d4d4d8;
+    box-shadow: 0 16px 36px rgba(9, 9, 11, 0.16), 0 0 0 4px rgba(255, 255, 255, 0.95);
+  }
+
+  .bliss-mobile-capsule__btn {
+    width: 100%;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: var(--bliss-fg-secondary);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 160ms ease, color 160ms ease;
+  }
+
+  .bliss-mobile-capsule__btn:hover {
+    color: var(--bliss-fg);
+    background: rgba(9, 9, 11, 0.04);
+  }
+
+  .bliss-mobile-capsule__btn.is-active {
+    background: var(--bliss-violet-soft);
+    color: var(--bliss-violet-dark);
+  }
+
+  .bliss-mobile-capsule--blog .bliss-mobile-capsule__btn.is-active {
+    background: var(--bliss-blue-soft);
+    color: var(--bliss-blue-dark);
+  }
+
+  .bliss-mobile-capsule--courses .bliss-mobile-capsule__btn.is-active {
+    background: var(--bliss-emerald-soft);
+    color: var(--bliss-emerald-dark);
+  }
+
+  .bliss-mobile-capsule--papers .bliss-mobile-capsule__btn.is-active {
+    background: var(--bliss-amber-soft);
+    color: var(--bliss-amber-dark);
+  }
+
+  .bliss-mobile-capsule--timeline .bliss-mobile-capsule__btn.is-active {
+    background: var(--bliss-rose-soft);
+    color: var(--bliss-rose-dark);
+  }
+
+  .bliss-mobile-capsule__icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bliss-mobile-capsule__divider {
+    width: 24px;
+    height: 1px;
+    background: var(--bliss-border-subtle);
+    flex-shrink: 0;
+  }
+
+  /* Frosted Glass Mobile Floating Popover */
+  .bliss-mobile-popover {
+    position: fixed;
+    top: auto;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom) + 106px);
+    right: 1.25rem;
+    left: auto;
+    z-index: 299;
+    width: min(calc(100vw - 2.5rem), 320px);
+    max-width: calc(100vw - 2.5rem);
+    max-height: min(60vh, 440px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--bliss-border);
+    border-radius: var(--bliss-radius-xl);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 48px rgba(9, 9, 11, 0.16);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .bliss-mobile-popover__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid var(--bliss-border-subtle);
+    background: rgba(244, 244, 245, 0.5);
+  }
+
+  .bliss-mobile-popover__badge {
+    font-family: var(--bliss-font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bliss-fg-subtle);
+  }
+
+  .bliss-mobile-popover__links {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px;
+    overflow-y: auto;
+  }
+
+  .bliss-mobile-popover__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .bliss-mobile-popover__link {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 10px 12px;
+    border-radius: var(--bliss-radius-md);
+    color: var(--bliss-fg-secondary);
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 160ms ease, color 160ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bliss-mobile-popover__link:hover {
+    background: var(--bliss-bg-subtle);
+    color: var(--bliss-fg);
+  }
+
+  .bliss-mobile-popover__link.is-active {
+    background: var(--bliss-violet-soft);
+    color: var(--bliss-violet-dark);
+    font-weight: 600;
+  }
+
+  .bliss-mobile-popover--blog .bliss-mobile-popover__link.is-active {
+    background: var(--bliss-blue-soft);
+    color: var(--bliss-blue-dark);
+  }
+
+  .bliss-mobile-popover--courses .bliss-mobile-popover__link.is-active {
+    background: var(--bliss-emerald-soft);
+    color: var(--bliss-emerald-dark);
+  }
+
+  .bliss-mobile-popover--papers .bliss-mobile-popover__link.is-active {
+    background: var(--bliss-amber-soft);
+    color: var(--bliss-amber-dark);
+  }
+
+  .bliss-mobile-popover--timeline .bliss-mobile-popover__link.is-active {
+    background: var(--bliss-rose-soft);
+    color: var(--bliss-rose-dark);
+  }
+}
+
+/* Vue Transition for Mobile Menus & Popovers */
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
   transition:
@@ -357,189 +448,4 @@
 .mobile-menu-leave-to {
   opacity: 0;
   transform: translateY(12px) scale(0.92);
-}
-
-/* Mobile Breakpoints & Floating Nav Button for All Navbars */
-@media (max-width: 768px) {
-  .bliss-nav__inner,
-  .section-nav__inner,
-  .blog-nav__inner,
-  .courses-nav__inner,
-  .papers-nav__inner {
-    width: min(100% - 2rem, 1280px);
-  }
-
-  .bliss-nav__inner {
-    padding: 16px 0;
-  }
-
-  .bliss-nav__logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-  }
-
-  .bliss-nav__name {
-    font-size: 17px;
-  }
-
-  .bliss-nav__links,
-  .section-nav__links,
-  .blog-nav__links,
-  .courses-nav__links,
-  .papers-nav__links {
-    display: none;
-  }
-
-  /* Frosted Glass Floating Navigation Button across all site segments */
-  .bliss-nav__menu-button,
-  .section-nav__menu-button,
-  .blog-nav__menu-button,
-  .courses-nav__menu-button,
-  .papers-nav__menu-button {
-    position: fixed;
-    top: auto;
-    bottom: calc(1.25rem + env(safe-area-inset-bottom));
-    right: 1.25rem;
-    z-index: 300;
-    width: 50px;
-    height: 50px;
-    display: grid !important;
-    place-content: center;
-    gap: 4.5px;
-    border: 1px solid var(--bliss-border);
-    border-radius: var(--bliss-radius-pill);
-    background: rgba(255, 255, 255, 0.92);
-    color: var(--bliss-fg);
-    box-shadow: 0 12px 32px rgba(9, 9, 11, 0.12), 0 0 0 4px rgba(255, 255, 255, 0.85);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    backdrop-filter: blur(16px) saturate(180%);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-appearance: none;
-    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
-  }
-
-  .bliss-nav__menu-button span,
-  .section-nav__menu-button span,
-  .blog-nav__menu-button span,
-  .courses-nav__menu-button span,
-  .papers-nav__menu-button span {
-    width: 18px;
-    height: 1.75px;
-    border-radius: 2px;
-    background: var(--bliss-fg);
-    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms ease;
-  }
-
-  .bliss-nav__menu-button:active,
-  .section-nav__menu-button:active,
-  .blog-nav__menu-button:active,
-  .courses-nav__menu-button:active,
-  .papers-nav__menu-button:active {
-    transform: scale(0.92);
-  }
-
-  .bliss-nav__menu-button:hover,
-  .section-nav__menu-button:hover,
-  .blog-nav__menu-button:hover,
-  .courses-nav__menu-button:hover,
-  .papers-nav__menu-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 36px rgba(9, 9, 11, 0.16), 0 0 0 4px rgba(255, 255, 255, 0.95);
-    border-color: #d4d4d8;
-  }
-
-  .bliss-nav__menu-button.is-open,
-  .section-nav__menu-button.is-open,
-  .blog-nav__menu-button.is-open,
-  .courses-nav__menu-button.is-open,
-  .papers-nav__menu-button.is-open {
-    border-color: rgba(139, 92, 246, 0.4);
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.18), 0 0 0 4px rgba(255, 255, 255, 0.95);
-  }
-
-  .bliss-nav__menu-button.is-open span:nth-child(1),
-  .section-nav__menu-button.is-open span:nth-child(1),
-  .blog-nav__menu-button.is-open span:nth-child(1),
-  .courses-nav__menu-button.is-open span:nth-child(1),
-  .papers-nav__menu-button.is-open span:nth-child(1) {
-    transform: translateY(6.25px) rotate(45deg);
-  }
-
-  .bliss-nav__menu-button.is-open span:nth-child(2),
-  .section-nav__menu-button.is-open span:nth-child(2),
-  .blog-nav__menu-button.is-open span:nth-child(2),
-  .courses-nav__menu-button.is-open span:nth-child(2),
-  .papers-nav__menu-button.is-open span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-
-  .bliss-nav__menu-button.is-open span:nth-child(3),
-  .section-nav__menu-button.is-open span:nth-child(3),
-  .blog-nav__menu-button.is-open span:nth-child(3),
-  .courses-nav__menu-button.is-open span:nth-child(3),
-  .papers-nav__menu-button.is-open span:nth-child(3) {
-    transform: translateY(-6.25px) rotate(-45deg);
-  }
-
-  /* Frosted Glass Mobile Floating Navigation Popup Menu */
-  .bliss-nav__mobile-menu,
-  .section-nav__mobile-menu,
-  .blog-nav__mobile-menu,
-  .courses-nav__mobile-menu,
-  .papers-nav__mobile-menu {
-    position: fixed;
-    top: auto;
-    bottom: calc(1.25rem + env(safe-area-inset-bottom) + 64px);
-    right: 1.25rem;
-    left: auto;
-    z-index: 299;
-    width: min(calc(100vw - 2.5rem), 320px);
-    max-width: calc(100vw - 2.5rem);
-    box-sizing: border-box;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-    padding: 12px;
-    border: 1px solid var(--bliss-border);
-    border-radius: var(--bliss-radius-xl);
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 20px 48px rgba(9, 9, 11, 0.16);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    backdrop-filter: blur(20px) saturate(180%);
-    overflow: hidden;
-  }
-
-  .bliss-nav__mobile-menu a,
-  .section-nav__mobile-menu a,
-  .blog-nav__mobile-menu a,
-  .courses-nav__mobile-menu a,
-  .papers-nav__mobile-menu a {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: 11px 14px;
-    border-radius: var(--bliss-radius-md);
-    color: var(--bliss-fg-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 160ms ease, color 160ms ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .bliss-nav__mobile-menu a:hover,
-  .section-nav__mobile-menu a:hover,
-  .blog-nav__mobile-menu a:hover,
-  .courses-nav__mobile-menu a:hover,
-  .papers-nav__mobile-menu a:hover {
-    background: var(--bliss-bg-subtle);
-    color: var(--bliss-fg);
-  }
 }

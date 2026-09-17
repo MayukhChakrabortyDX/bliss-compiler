@@ -9,7 +9,7 @@
 withDefaults(
   defineProps<{
     text?: string
-    variant?: 'violet' | 'blue' | 'emerald' | 'amber' | 'neutral'
+    variant?: 'violet' | 'blue' | 'emerald' | 'amber' | 'rose' | 'neutral'
     pill?: boolean
     dot?: boolean
   }>(),

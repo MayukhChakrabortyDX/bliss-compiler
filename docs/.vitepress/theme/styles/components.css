@@ -94,6 +94,14 @@
   background: var(--bliss-amber-soft);
 }
 
+.bliss-eyebrow--rose {
+  color: var(--bliss-rose-dark);
+}
+
+.bliss-eyebrow--rose.bliss-eyebrow--pill {
+  background: var(--bliss-rose-soft);
+}
+
 .bliss-eyebrow__dot {
   width: 7px;
   height: 7px;
@@ -180,4 +188,71 @@
 
 .bliss-dark .bliss-label {
   color: var(--bliss-inverse-muted);
+}
+
+/* Global Route Transition Progress Indicator */
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  height: 3px;
+  pointer-events: none;
+  background: var(--bliss-violet);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.42);
+  opacity: 0;
+  transition: width 180ms ease, opacity 120ms ease;
+}
+
+.route-progress.is-visible {
+  opacity: 1;
+}
+
+/* Custom Floating Overlay Scrollbar (VS Code style) */
+.bliss-scrollbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.bliss-scrollbar.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bliss-scrollbar__track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bliss-scrollbar__thumb {
+  position: absolute;
+  right: 3px;
+  width: 6px;
+  border-radius: 9999px;
+  background: rgba(9, 9, 11, 0.22);
+  cursor: pointer;
+  touch-action: none;
+  transition: width 140ms ease, background 160ms ease;
+}
+
+.bliss-scrollbar__thumb:hover,
+.bliss-scrollbar__thumb.is-dragging {
+  width: 9px;
+  right: 2px;
+  background: rgba(9, 9, 11, 0.48);
+}
+
+@media (max-width: 768px) {
+  .bliss-scrollbar {
+    display: none !important;
+  }
 }

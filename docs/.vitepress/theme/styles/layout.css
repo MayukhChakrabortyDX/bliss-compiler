@@ -35,3 +35,13 @@
 .site-header {
   height: 64px;
 }
+
+.site-header--with-subnav {
+  height: 108px;
+}
+
+@media (max-width: 768px) {
+  .site-header--with-subnav {
+    height: 64px;
+  }
+}

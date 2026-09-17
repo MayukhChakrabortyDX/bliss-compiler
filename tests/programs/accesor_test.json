@@ -1,0 +1,106 @@
+[
+  {
+    "is": "data",
+    "kind": "struct-like",
+    "name": "LinkedList",
+    "fields": [
+      {
+        "is": "data-field",
+        "type": {
+          "is": "pointer-type",
+          "type": "LinkedList"
+        },
+        "name": "left"
+      },
+      {
+        "is": "data-field",
+        "type": {
+          "is": "pointer-type",
+          "type": "LinkedList"
+        },
+        "name": "right"
+      },
+      {
+        "is": "data-field",
+        "type": {
+          "is": "built-in-type",
+          "type": {
+            "tokenType": 40,
+            "span": {
+              "startIndex": 113,
+              "endIndex": 115,
+              "str": "<str.ctr>"
+            },
+            "row": 0,
+            "column": 0
+          },
+          "name": "K_i32"
+        },
+        "name": "value"
+      }
+    ]
+  },
+  {
+    "is": "function",
+    "head": {
+      "is": "function-head",
+      "name": "main",
+      "argList": [],
+      "returnType": "void"
+    },
+    "body": [
+      {
+        "is": "transform",
+        "from": {
+          "callee": "malloc",
+          "arguments": [
+            {
+              "is": "size_of",
+              "of": "LinkedList"
+            }
+          ]
+        },
+        "name": "LinkedList",
+        "type": {
+          "is": "pointer-type",
+          "type": "LLType"
+        }
+      },
+      {
+        "is": "transform",
+        "from": {
+          "callee": "malloc",
+          "arguments": [
+            {
+              "is": "size_of",
+              "of": "LinkedList"
+            }
+          ]
+        },
+        "name": "LinkedList",
+        "type": {
+          "is": "pointer-type",
+          "type": "LLType"
+        }
+      },
+      {
+        "operator": "=",
+        "left": {
+          "operator": "Dot",
+          "left": {
+            "is": "pointer-access",
+            "of": "root"
+          },
+          "right": {
+            "is": "pointer-access",
+            "of": "left"
+          }
+        },
+        "right": {
+          "is": "pointer-access",
+          "of": "root_left"
+        }
+      }
+    ]
+  }
+]
