@@ -1,0 +1,76 @@
+/*
+ * Bliss UI Language - Ambient Glows & Background Effects
+ */
+
+.bliss-ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: var(--bliss-z-base);
+}
+
+.bliss-ambient__blob {
+  position: absolute;
+  width: 24rem;
+  height: 24rem;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.12;
+}
+
+.bliss-ambient__blob--violet {
+  background: var(--bliss-violet);
+}
+
+.bliss-ambient__blob--blue {
+  background: var(--bliss-blue);
+}
+
+.bliss-ambient__blob--amber {
+  background: var(--bliss-amber);
+}
+
+.bliss-site-ambient {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 760px;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.bliss-site-ambient__violet,
+.bliss-site-ambient__blue,
+.bliss-site-ambient__amber {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+}
+
+.bliss-site-ambient__violet {
+  left: 50%;
+  top: -300px;
+  width: 900px;
+  height: 620px;
+  transform: translateX(-50%);
+  background: rgb(221 214 254 / 50%);
+}
+
+.bliss-site-ambient__blue {
+  left: 10%;
+  top: 310px;
+  width: 256px;
+  height: 256px;
+  background: rgb(219 234 254 / 50%);
+}
+
+.bliss-site-ambient__amber {
+  right: 6%;
+  top: 250px;
+  width: 224px;
+  height: 224px;
+  background: rgb(254 243 199 / 40%);
+}

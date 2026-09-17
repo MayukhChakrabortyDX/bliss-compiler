@@ -1,0 +1,37 @@
+/*
+ * Bliss UI Language - Layout Primitives & Shell
+ */
+
+.bliss-container {
+  width: min(
+    calc(100% - (var(--bliss-page-padding) * 2)),
+    var(--bliss-content-width)
+  );
+  margin-inline: auto;
+}
+
+.bliss-container--wide {
+  max-width: var(--bliss-content-width-wide);
+}
+
+.bliss-container--narrow {
+  max-width: var(--bliss-content-width-narrow);
+}
+
+.bliss-site {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background: var(--bliss-bg);
+  color: var(--bliss-fg);
+}
+
+.bliss-site > *:not(.bliss-site-ambient) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Reserved height counterpart for fixed top navigation */
+.site-header {
+  height: 64px;
+}

@@ -1,0 +1,101 @@
+/*
+ * Bliss UI Language - Primitive UI Components
+ */
+
+/* Surfaces */
+.bliss-surface {
+  background: var(--bliss-bg-elevated);
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  border-radius: var(--bliss-radius-xl);
+}
+
+.bliss-card {
+  background: var(--bliss-bg-elevated);
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  border-radius: var(--bliss-radius-xl);
+  box-shadow: var(--bliss-shadow-sm);
+
+  transition:
+    border-color var(--bliss-duration-normal) var(--bliss-ease),
+    box-shadow var(--bliss-duration-normal) var(--bliss-ease),
+    transform var(--bliss-duration-normal) var(--bliss-ease);
+}
+
+.bliss-card:hover {
+  border-color: #d4d4d8;
+  box-shadow: var(--bliss-shadow-md);
+}
+
+/* Pills & Badges */
+.bliss-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bliss-space-2);
+  padding: 0.4rem 0.75rem;
+
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  border-radius: var(--bliss-radius-pill);
+  background: rgba(255, 255, 255, 0.7);
+
+  font-family: var(--bliss-font-mono);
+  font-size: var(--bliss-text-xs);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Buttons */
+.bliss-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bliss-space-2);
+
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+
+  border-radius: var(--bliss-radius-pill);
+  font-size: var(--bliss-text-sm);
+  font-weight: var(--bliss-weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    background var(--bliss-duration-fast) var(--bliss-ease),
+    color var(--bliss-duration-fast) var(--bliss-ease),
+    border-color var(--bliss-duration-fast) var(--bliss-ease),
+    transform var(--bliss-duration-fast) var(--bliss-ease);
+}
+
+.bliss-button:active {
+  transform: translateY(1px);
+}
+
+.bliss-button--primary {
+  background: var(--bliss-fg);
+  color: var(--bliss-bg);
+}
+
+.bliss-button--primary:hover {
+  background: #27272a;
+}
+
+.bliss-button--secondary {
+  border: var(--bliss-border-width) solid var(--bliss-border);
+  background: var(--bliss-bg-elevated);
+  color: var(--bliss-fg);
+}
+
+.bliss-button--secondary:hover {
+  border-color: #d4d4d8;
+  background: var(--bliss-bg-subtle);
+}
+
+/* Dark Theme Surface Container */
+.bliss-dark {
+  background: var(--bliss-inverse-bg);
+  color: var(--bliss-inverse-fg);
+}
+
+.bliss-dark .bliss-label {
+  color: var(--bliss-inverse-muted);
+}

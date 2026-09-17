@@ -1,0 +1,39 @@
+/*
+ * Bliss UI Language - Typography Classes
+ */
+
+.bliss-text {
+  font-family: var(--bliss-font-sans);
+}
+
+.bliss-mono {
+  font-family: var(--bliss-font-mono);
+}
+
+.bliss-label {
+  font-family: var(--bliss-font-mono);
+  font-size: var(--bliss-text-xs);
+  font-weight: var(--bliss-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bliss-display {
+  font-family: var(--bliss-font-sans);
+  font-weight: var(--bliss-weight-semibold);
+  letter-spacing: -0.055em;
+  line-height: var(--bliss-leading-tight);
+}
+
+.bliss-heading {
+  font-family: var(--bliss-font-sans);
+  font-weight: var(--bliss-weight-semibold);
+  letter-spacing: -0.04em;
+  line-height: var(--bliss-leading-snug);
+}
+
+.bliss-body {
+  font-size: var(--bliss-text-lg);
+  line-height: var(--bliss-leading-relaxed);
+  color: var(--bliss-fg-secondary);
+}

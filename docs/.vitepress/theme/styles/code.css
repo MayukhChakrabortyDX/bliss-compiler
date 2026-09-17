@@ -1,0 +1,207 @@
+/*
+ * Bliss UI Language - Code & Content Formatting
+ */
+
+.bliss-code {
+  font-family: var(--bliss-font-mono);
+  font-size: var(--bliss-text-sm);
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.bliss-code--panel {
+  overflow: auto;
+  padding: var(--bliss-space-6);
+  border-radius: var(--bliss-radius-lg);
+  background: #111113;
+  color: #e4e4e7;
+}
+
+/* Inline Code */
+.docs-content :not(pre) > code,
+.blog-post__content :not(pre) > code {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--bliss-border);
+  border-radius: 6px;
+  background: var(--bliss-bg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 0.86em;
+}
+
+/* Syntax Highlighting Containers */
+.docs-content div[class*='language-'],
+.blog-post__content div[class*='language-'] {
+  position: relative;
+  margin: 28px 0;
+  overflow: hidden;
+  padding-top: 42px;
+  border: 1px solid #27272a;
+  border-radius: 14px;
+  background: #0d0d0f;
+  color: #e4e4e7;
+  box-shadow: var(--bliss-shadow-lg);
+}
+
+.docs-content div[class*='language-']::before,
+.blog-post__content div[class*='language-']::before {
+  position: absolute;
+  top: 17px;
+  left: 16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f87171;
+  box-shadow: 12px 0 #fbbf24, 24px 0 #34d399;
+  content: '';
+}
+
+.docs-content div[class*='language-'] .lang,
+.blog-post__content div[class*='language-'] .lang {
+  position: absolute;
+  top: 12px;
+  left: 58px;
+  color: #a1a1aa;
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  line-height: 18px;
+  text-transform: lowercase;
+}
+
+.docs-content div[class*='language-'] .copy,
+.blog-post__content div[class*='language-'] .copy {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  z-index: 1;
+  min-width: 52px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid #3f3f46;
+  border-radius: 5px;
+  background: #18181b;
+  color: #a1a1aa;
+  font-family: var(--bliss-font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.docs-content div[class*='language-']:hover .copy,
+.blog-post__content div[class*='language-']:hover .copy,
+.docs-content div[class*='language-'] .copy:focus-visible,
+.blog-post__content div[class*='language-'] .copy:focus-visible {
+  opacity: 1;
+}
+
+.docs-content div[class*='language-'] .copy::before,
+.blog-post__content div[class*='language-'] .copy::before {
+  content: 'Copy';
+}
+
+.docs-content div[class*='language-'] .copy.copied,
+.blog-post__content div[class*='language-'] .copy.copied {
+  border-color: #34d399;
+  color: #6ee7b7;
+}
+
+.docs-content div[class*='language-'] .copy.copied::before,
+.blog-post__content div[class*='language-'] .copy.copied::before {
+  content: 'Copied';
+}
+
+.docs-content div[class*='language-'] pre,
+.blog-post__content div[class*='language-'] pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 0 24px 24px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.docs-content pre code,
+.blog-post__content pre code {
+  display: block;
+  min-width: max-content;
+  font-family: var(--bliss-font-mono);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* Blockquotes */
+.docs-content blockquote,
+.blog-post__content blockquote {
+  margin: 28px 0;
+  padding: 16px 20px;
+  border: 1px solid var(--bliss-border);
+  border-left: 3px solid var(--bliss-violet);
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(90deg, var(--bliss-violet-soft), transparent 72%);
+  color: var(--bliss-fg-muted);
+}
+
+.docs-content blockquote p,
+.blog-post__content blockquote p {
+  margin: 0;
+  color: inherit;
+}
+
+.docs-content hr,
+.blog-post__content hr {
+  margin: 48px 0;
+  border: 0;
+  border-top: 1px solid var(--bliss-border);
+}
+
+/* Tables */
+.docs-content table,
+.blog-post__content table {
+  display: block;
+  width: 100%;
+  margin: 28px 0;
+  overflow-x: auto;
+  border-spacing: 0;
+  border: 1px solid var(--bliss-border);
+  border-radius: 12px;
+  background: var(--bliss-bg-elevated);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.docs-content th,
+.docs-content td,
+.blog-post__content th,
+.blog-post__content td {
+  min-width: 140px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--bliss-border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+
+.docs-content th,
+.blog-post__content th {
+  background: var(--bliss-bg-subtle);
+  color: var(--bliss-fg);
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.docs-content tr:last-child td,
+.blog-post__content tr:last-child td {
+  border-bottom: 0;
+}
+
+.docs-content img,
+.blog-post__content img {
+  height: auto;
+  margin: 28px 0;
+  border: 1px solid var(--bliss-border);
+  border-radius: 14px;
+  box-shadow: var(--bliss-shadow-sm);
+}

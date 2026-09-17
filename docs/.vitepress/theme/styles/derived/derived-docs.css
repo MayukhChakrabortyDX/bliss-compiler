@@ -1,0 +1,8 @@
+/*
+ * Bliss UI Language - Derived Documentation Layout Styles (.derived-docs-*)
+ */
+
+.derived-docs-shell {
+  width: min(100% - 3rem, 1280px);
+  margin: 0 auto;
+}

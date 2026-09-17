@@ -9,23 +9,28 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vitepress'
+import { useRoute, useRouter } from 'vitepress'
 
 const route = useRoute()
+const router = useRouter()
+
 const isVisible = ref(false)
 const progress = ref(0)
 let progressTimer: number | undefined
 let finishTimer: number | undefined
 let hideTimer: number | undefined
+let maxTimer: number | undefined
 let startedAt = 0
 
 const clearTimers = () => {
   if (progressTimer !== undefined) window.clearInterval(progressTimer)
   if (finishTimer !== undefined) window.clearTimeout(finishTimer)
   if (hideTimer !== undefined) window.clearTimeout(hideTimer)
+  if (maxTimer !== undefined) window.clearTimeout(maxTimer)
   progressTimer = undefined
   finishTimer = undefined
   hideTimer = undefined
+  maxTimer = undefined
 }
 
 const start = () => {
@@ -36,12 +41,18 @@ const start = () => {
   progressTimer = window.setInterval(() => {
     progress.value = Math.min(progress.value + (84 - progress.value) * 0.08, 84)
   }, 120)
+  // Safety timeout to auto-finish if navigation stalls or is cancelled
+  maxTimer = window.setTimeout(() => {
+    finish()
+  }, 8000)
 }
 
 const finish = () => {
   if (!isVisible.value) return
   if (progressTimer !== undefined) window.clearInterval(progressTimer)
+  if (maxTimer !== undefined) window.clearTimeout(maxTimer)
   progressTimer = undefined
+  maxTimer = undefined
   const remainingTime = Math.max(0, 320 - (performance.now() - startedAt))
   finishTimer = window.setTimeout(() => {
     progress.value = 100
@@ -54,30 +65,42 @@ const finish = () => {
   }, remainingTime)
 }
 
-const isInternalNavigation = (event: MouseEvent) => {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false
-
-  const target = event.target instanceof Element ? event.target.closest('a') : null
-  if (!target || target.target === '_blank' || target.hasAttribute('download')) return false
-
-  const url = new URL(target.href, window.location.href)
-  return url.origin === window.location.origin && url.pathname !== window.location.pathname
-}
-
-const handleClick = (event: MouseEvent) => {
-  if (isInternalNavigation(event)) start()
-}
+let origOnBefore: typeof router.onBeforeRouteChange
+let origOnAfter: typeof router.onAfterRouteChange
 
 onMounted(() => {
-  document.addEventListener('pointerdown', handleClick, true)
-  document.addEventListener('click', handleClick, true)
+  origOnBefore = router.onBeforeRouteChange
+  origOnAfter = router.onAfterRouteChange
+
+  router.onBeforeRouteChange = async (to) => {
+    if (origOnBefore) {
+      const res = await origOnBefore(to)
+      if (res === false) return false
+    }
+    const currentPath = router.route.path.split('#')[0].split('?')[0]
+    const targetPath = to.split('#')[0].split('?')[0]
+    if (targetPath !== currentPath) {
+      start()
+    }
+  }
+
+  router.onAfterRouteChange = async (to) => {
+    if (origOnAfter) {
+      await origOnAfter(to)
+    }
+    finish()
+  }
 })
 
-watch(() => route.path, finish)
+watch(() => route.path, () => {
+  finish()
+})
 
 onBeforeUnmount(() => {
-  document.removeEventListener('pointerdown', handleClick, true)
-  document.removeEventListener('click', handleClick, true)
+  if (router) {
+    router.onBeforeRouteChange = origOnBefore
+    router.onAfterRouteChange = origOnAfter
+  }
   clearTimers()
 })
 </script>

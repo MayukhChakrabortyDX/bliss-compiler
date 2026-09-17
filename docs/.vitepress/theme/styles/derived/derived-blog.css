@@ -1,0 +1,8 @@
+/*
+ * Bliss UI Language - Derived Blog / Journal Layout Styles (.derived-blog-*)
+ */
+
+.derived-blog-shell {
+  width: min(100% - 3rem, 960px);
+  margin: 0 auto;
+}
