@@ -11,7 +11,8 @@
     "test": "bun tests/suite-runner.test.ts",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "build:pre-alpha": "bun build --compile --minify --target=bun --outfile=dist/builds/bliss builds/pre_alpha.ts"
   },
   "peerDependencies": {
     "typescript": "^5"

@@ -1,0 +1,48 @@
+name: Build Bliss
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - name: Linux x64
+            os: ubuntu-latest
+            artifact: bliss-pre-alpha-linux-x64
+            binary: dist/builds/bliss
+
+          - name: Windows x64
+            os: windows-latest
+            artifact: bliss-pre-alpha-windows-x64
+            binary: dist/builds/bliss.exe
+
+          - name: macOS ARM64
+            os: macos-latest
+            artifact: bliss-pre-alpha-macos-arm64
+            binary: dist/builds/bliss
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build:pre-alpha
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.binary }}
