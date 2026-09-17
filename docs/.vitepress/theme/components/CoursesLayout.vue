@@ -1,7 +1,7 @@
 <template>
   <main class="courses-shell">
     <header class="courses-hero">
-      <div class="courses-eyebrow"><span></span> Bliss learning library</div>
+      <BlissEyebrow text="Bliss learning library" dot />
       <h1>Learn the ideas<br /><em>behind the language.</em></h1>
       <p>Focused video courses for people who want to follow Bliss from its first principles to its compiler implementation.</p>
     </header>
@@ -13,22 +13,37 @@
       </div>
 
       <div class="courses-grid">
-        <article v-for="course in courses" :key="course.title" class="course-card">
-          <div :class="['course-card__art', `course-card__art--${course.art}`]">
-            <span class="course-card__number">{{ course.number }}</span>
-            <span class="course-card__play" aria-hidden="true">▶</span>
-            <span class="course-card__art-label">{{ course.artLabel }}</span>
-          </div>
-          <div class="course-card__body">
-            <div class="course-card__meta"><span>YouTube course</span><span>{{ course.level }}</span></div>
+        <BlissCard v-for="course in courses" :key="course.title" card-class="course-card">
+          <template #art>
+            <div :class="['course-card__art', `course-card__art--${course.art}`]">
+              <span class="course-card__number">{{ course.number }}</span>
+              <span class="course-card__play" aria-hidden="true">▶</span>
+              <span class="course-card__art-label">{{ course.artLabel }}</span>
+            </div>
+          </template>
+
+          <template #meta>
+            <div class="course-card__meta">
+              <span>YouTube course</span>
+              <span>{{ course.level }}</span>
+            </div>
+          </template>
+
+          <template #title>
             <h3>{{ course.title }}</h3>
+          </template>
+
+          <template #description>
             <p>{{ course.description }}</p>
+          </template>
+
+          <template #footer>
             <div class="course-card__footer">
               <span>{{ course.lessons }} lessons · {{ course.duration }}</span>
               <span class="course-card__status">Coming soon</span>
             </div>
-          </div>
-        </article>
+          </template>
+        </BlissCard>
       </div>
     </section>
 
@@ -41,7 +56,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import BlissEyebrow from './primitives/BlissEyebrow.vue'
+import BlissCard from './primitives/BlissCard.vue'
 
 const courses = [
   { number: '01', art: 'violet', artLabel: 'First principles', level: 'Beginner', title: 'Rethinking systems programming', description: 'A guided introduction to the questions that led to Bliss.', lessons: 6, duration: '48 min' },
@@ -50,20 +67,8 @@ const courses = [
 ]
 
 const storageKey = 'bliss-courses:compiler-design-complete'
-const activeLessonIndex = ref(0)
 const completed = ref<string[]>([])
 const isComplete = (lessonId: string) => completed.value.includes(lessonId)
-
-const saveProgress = () => {
-  localStorage.setItem(storageKey, JSON.stringify(completed.value))
-}
-
-const toggleComplete = (lessonId: string) => {
-  completed.value = isComplete(lessonId)
-    ? completed.value.filter((id) => id !== lessonId)
-    : [...completed.value, lessonId]
-  saveProgress()
-}
 
 onMounted(() => {
   try {
@@ -73,6 +78,4 @@ onMounted(() => {
     completed.value = []
   }
 })
-
 </script>
-

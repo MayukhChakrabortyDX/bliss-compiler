@@ -344,9 +344,32 @@
 }
 
 /* Mobile Breakpoints for All Navbars */
+/* Mobile Menu Vue Transition */
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition:
+    opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
+}
+
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.92);
+}
+
+/* Mobile Breakpoints & Floating Nav Button for All Navbars */
 @media (max-width: 768px) {
+  .bliss-nav__inner,
+  .section-nav__inner,
+  .blog-nav__inner,
+  .courses-nav__inner,
+  .papers-nav__inner {
+    width: min(100% - 2rem, 1280px);
+  }
+
   .bliss-nav__inner {
-    width: min(100% - 2rem, 1152px);
     padding: 16px 0;
   }
 
@@ -360,89 +383,7 @@
     font-size: 17px;
   }
 
-  .bliss-nav__menu-button {
-    position: fixed;
-    top: auto;
-    bottom: calc(1.25rem + env(safe-area-inset-bottom));
-    right: 1rem;
-    z-index: 30;
-    width: 52px;
-    height: 52px;
-    display: grid;
-    place-content: center;
-    gap: 4px;
-    border: 1px solid #27272a;
-    border-radius: 50%;
-    background: #09090b;
-    color: #fafafa;
-    box-shadow: 0 12px 28px rgb(9 9 11 / 24%), 0 0 0 4px rgb(255 255 255 / 80%);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-appearance: none;
-    transition: transform 160ms ease, box-shadow 160ms ease;
-  }
-
-  .bliss-nav__menu-button span {
-    width: 17px;
-    height: 1.5px;
-    background: currentColor;
-    transition: transform 160ms ease, opacity 160ms ease;
-  }
-
-  .bliss-nav__menu-button:active { transform: scale(0.92); }
-  .bliss-nav__menu-button.is-open { box-shadow: 0 8px 20px rgb(9 9 11 / 20%), 0 0 0 4px rgb(255 255 255 / 80%); }
-  .bliss-nav__menu-button.is-open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
-  .bliss-nav__menu-button.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .bliss-nav__menu-button.is-open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
-
-  .bliss-nav__mobile-menu {
-    position: fixed;
-    top: auto;
-    bottom: calc(1.25rem + env(safe-area-inset-bottom) + 64px);
-    right: 1rem;
-    z-index: 29;
-    width: min(calc(100% - 2rem), 300px);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
-    padding: 10px;
-    border: 1px solid var(--bliss-border);
-    border-radius: 16px;
-    background: rgb(255 255 255 / 96%);
-    box-shadow: 0 16px 36px rgb(9 9 11 / 14%);
-    backdrop-filter: blur(16px);
-  }
-
-  .bliss-nav__mobile-menu a {
-    padding: 12px;
-    border-radius: 999px;
-    color: var(--bliss-fg-secondary);
-    font-size: 15px;
-    font-weight: 500;
-    text-decoration: none;
-  }
-
-  .bliss-nav.is-menu-open {
-    background: transparent;
-  }
-
-  .bliss-nav__mobile-menu a:hover {
-    background: var(--bliss-bg-subtle);
-  }
-
-  .bliss-nav__links {
-    display: none;
-  }
-}
-
-@media (max-width: 760px) {
-  .section-nav__inner,
-  .blog-nav__inner,
-  .courses-nav__inner,
-  .papers-nav__inner {
-    width: min(100% - 2rem, 1280px);
-  }
-
+  .bliss-nav__links,
   .section-nav__links,
   .blog-nav__links,
   .courses-nav__links,
@@ -450,41 +391,48 @@
     display: none;
   }
 
+  /* Frosted Glass Floating Navigation Button across all site segments */
+  .bliss-nav__menu-button,
   .section-nav__menu-button,
   .blog-nav__menu-button,
   .courses-nav__menu-button,
   .papers-nav__menu-button {
     position: fixed;
     top: auto;
-    right: 1rem;
     bottom: calc(1.25rem + env(safe-area-inset-bottom));
-    z-index: 30;
-    width: 52px;
-    height: 52px;
-    display: grid;
+    right: 1.25rem;
+    z-index: 300;
+    width: 50px;
+    height: 50px;
+    display: grid !important;
     place-content: center;
-    gap: 4px;
-    border: 1px solid #27272a;
-    border-radius: 50%;
-    background: #09090b;
-    color: #fafafa;
-    box-shadow: 0 12px 28px rgb(9 9 11 / 24%), 0 0 0 4px rgb(255 255 255 / 80%);
+    gap: 4.5px;
+    border: 1px solid var(--bliss-border);
+    border-radius: var(--bliss-radius-pill);
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--bliss-fg);
+    box-shadow: 0 12px 32px rgba(9, 9, 11, 0.12), 0 0 0 4px rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(180%);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     -webkit-appearance: none;
-    transition: transform 160ms ease, box-shadow 160ms ease;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
   }
 
+  .bliss-nav__menu-button span,
   .section-nav__menu-button span,
   .blog-nav__menu-button span,
   .courses-nav__menu-button span,
   .papers-nav__menu-button span {
-    width: 17px;
-    height: 1.5px;
-    background: currentColor;
-    transition: transform 160ms ease, opacity 160ms ease;
+    width: 18px;
+    height: 1.75px;
+    border-radius: 2px;
+    background: var(--bliss-fg);
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms ease;
   }
 
+  .bliss-nav__menu-button:active,
   .section-nav__menu-button:active,
   .blog-nav__menu-button:active,
   .courses-nav__menu-button:active,
@@ -492,20 +440,35 @@
     transform: scale(0.92);
   }
 
+  .bliss-nav__menu-button:hover,
+  .section-nav__menu-button:hover,
+  .blog-nav__menu-button:hover,
+  .courses-nav__menu-button:hover,
+  .papers-nav__menu-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(9, 9, 11, 0.16), 0 0 0 4px rgba(255, 255, 255, 0.95);
+    border-color: #d4d4d8;
+  }
+
+  .bliss-nav__menu-button.is-open,
   .section-nav__menu-button.is-open,
   .blog-nav__menu-button.is-open,
   .courses-nav__menu-button.is-open,
   .papers-nav__menu-button.is-open {
-    box-shadow: 0 8px 20px rgb(9 9 11 / 20%), 0 0 0 4px rgb(255 255 255 / 80%);
+    border-color: rgba(139, 92, 246, 0.4);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.18), 0 0 0 4px rgba(255, 255, 255, 0.95);
   }
 
+  .bliss-nav__menu-button.is-open span:nth-child(1),
   .section-nav__menu-button.is-open span:nth-child(1),
   .blog-nav__menu-button.is-open span:nth-child(1),
   .courses-nav__menu-button.is-open span:nth-child(1),
   .papers-nav__menu-button.is-open span:nth-child(1) {
-    transform: translateY(5.5px) rotate(45deg);
+    transform: translateY(6.25px) rotate(45deg);
   }
 
+  .bliss-nav__menu-button.is-open span:nth-child(2),
   .section-nav__menu-button.is-open span:nth-child(2),
   .blog-nav__menu-button.is-open span:nth-child(2),
   .courses-nav__menu-button.is-open span:nth-child(2),
@@ -514,58 +477,69 @@
     transform: scaleX(0);
   }
 
+  .bliss-nav__menu-button.is-open span:nth-child(3),
   .section-nav__menu-button.is-open span:nth-child(3),
   .blog-nav__menu-button.is-open span:nth-child(3),
   .courses-nav__menu-button.is-open span:nth-child(3),
   .papers-nav__menu-button.is-open span:nth-child(3) {
-    transform: translateY(-5.5px) rotate(-45deg);
+    transform: translateY(-6.25px) rotate(-45deg);
   }
 
+  /* Frosted Glass Mobile Floating Navigation Popup Menu */
+  .bliss-nav__mobile-menu,
   .section-nav__mobile-menu,
   .blog-nav__mobile-menu,
   .courses-nav__mobile-menu,
   .papers-nav__mobile-menu {
     position: fixed;
     top: auto;
-    right: 1rem;
     bottom: calc(1.25rem + env(safe-area-inset-bottom) + 64px);
-    z-index: 29;
-    width: min(calc(100% - 2rem), 300px);
+    right: 1.25rem;
+    left: auto;
+    z-index: 299;
+    width: min(calc(100vw - 2.5rem), 320px);
+    max-width: calc(100vw - 2.5rem);
+    box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
-    padding: 10px;
+    gap: 6px;
+    padding: 12px;
     border: 1px solid var(--bliss-border);
-    border-radius: 16px;
-    background: rgb(255 255 255 / 96%);
-    box-shadow: 0 16px 36px rgb(9 9 11 / 14%);
-    backdrop-filter: blur(16px);
+    border-radius: var(--bliss-radius-xl);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 20px 48px rgba(9, 9, 11, 0.16);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    overflow: hidden;
   }
 
-  .section-nav.is-menu-open,
-  .blog-nav.is-menu-open,
-  .courses-nav.is-menu-open,
-  .papers-nav.is-menu-open {
-    background: transparent;
-  }
-
+  .bliss-nav__mobile-menu a,
   .section-nav__mobile-menu a,
   .blog-nav__mobile-menu a,
   .courses-nav__mobile-menu a,
   .papers-nav__mobile-menu a {
-    padding: 12px;
-    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 11px 14px;
+    border-radius: var(--bliss-radius-md);
     color: var(--bliss-fg-secondary);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     text-decoration: none;
+    transition: background 160ms ease, color 160ms ease;
     -webkit-tap-highlight-color: transparent;
   }
 
+  .bliss-nav__mobile-menu a:hover,
   .section-nav__mobile-menu a:hover,
   .blog-nav__mobile-menu a:hover,
   .courses-nav__mobile-menu a:hover,
   .papers-nav__mobile-menu a:hover {
     background: var(--bliss-bg-subtle);
+    color: var(--bliss-fg);
   }
 }

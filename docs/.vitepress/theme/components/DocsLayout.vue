@@ -1,113 +1,5 @@
 <template>
   <div class="docs-page">
-    <!-- Sticky on phones: the panels are anchored to this wrapper so they open
-         under the bar wherever the reader has scrolled to, never off-screen. -->
-    <div class="docs-mobile-nav">
-      <div class="docs-mobile-tools">
-        <button
-          type="button"
-          :class="[
-            'docs-mobile-tools__button',
-            'docs-mobile-tools__button--menu',
-            { 'is-active': mobilePanel === 'menu' },
-          ]"
-          :aria-expanded="mobilePanel === 'menu'"
-          aria-controls="docs-sidebar-panel"
-          @click="toggleMobilePanel('menu')"
-        >
-          <svg class="docs-mobile-tools__icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path
-              d="M2.75 4h10.5M2.75 8h6.5M2.75 12h8.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-          <span class="docs-mobile-tools__text">Menu</span>
-          <span class="docs-mobile-tools__chevron" aria-hidden="true"></span>
-        </button>
-        <button
-          type="button"
-          :class="[
-            'docs-mobile-tools__button',
-            'docs-mobile-tools__button--outline',
-            { 'is-active': mobilePanel === 'outline' },
-          ]"
-          :aria-expanded="mobilePanel === 'outline'"
-          aria-controls="docs-outline-panel"
-          @click="toggleMobilePanel('outline')"
-        >
-          <svg class="docs-mobile-tools__icon" viewBox="0 0 16 16" aria-hidden="true">
-            <circle cx="3.25" cy="4" r="1.1" fill="currentColor" />
-            <circle cx="3.25" cy="8" r="1.1" fill="currentColor" />
-            <circle cx="3.25" cy="12" r="1.1" fill="currentColor" />
-            <path
-              d="M6.75 4h6.5M6.75 8h6.5M6.75 12h4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-          <span class="docs-mobile-tools__text">On this page</span>
-          <span class="docs-mobile-tools__chevron" aria-hidden="true"></span>
-        </button>
-      </div>
-
-      <div
-        v-if="mobilePanel"
-        class="docs-mobile-scrim"
-        aria-hidden="true"
-        @click="mobilePanel = null"
-      />
-
-      <Transition name="docs-panel">
-        <div
-          v-if="mobilePanel === 'menu'"
-          id="docs-sidebar-panel"
-          class="docs-mobile-panel"
-        >
-          <nav class="docs-mobile-panel__scroll" aria-label="Documentation">
-            <div v-for="group in docsNavigation" :key="group.label" class="docs-mobile-panel__group">
-              <div class="docs-mobile-panel__label">{{ group.label }}</div>
-              <a
-                v-for="item in group.items"
-                :key="item.text"
-                :href="item.link"
-                :class="{ 'is-active': item.link && isActive(item.link) }"
-                @click="mobilePanel = null"
-              >
-                {{ item.text }}
-              </a>
-            </div>
-          </nav>
-        </div>
-      </Transition>
-
-      <Transition name="docs-panel">
-        <div
-          v-if="mobilePanel === 'outline'"
-          id="docs-outline-panel"
-          class="docs-mobile-panel"
-        >
-          <nav class="docs-mobile-panel__scroll" aria-label="On this page">
-            <a
-              v-for="header in headers"
-              :key="header.slug"
-              :href="`#${header.slug}`"
-              :class="[`level-${header.level}`, { 'is-active': header.slug === activeSlug }]"
-              @click="mobilePanel = null"
-            >
-              {{ header.title }}
-            </a>
-            <span v-if="!headers.length" class="docs-mobile-panel__empty">
-              No sections on this page.
-            </span>
-          </nav>
-        </div>
-      </Transition>
-    </div>
 
     <aside class="docs-sidebar">
       <div v-for="group in groups" :key="group.label" class="docs-sidebar__group">
@@ -171,11 +63,137 @@
             `level-${header.level}`,
             { 'is-active': header.slug === activeSlug },
           ]"
+          @click="onOutlineClick(header.slug)"
         >
           {{ header.title }}
         </a>
       </nav>
     </aside>
+
+    <Teleport to="body">
+      <!-- Merged Mobile Pill Capsule (Docs Reader Tools + Site Navigation) -->
+      <div class="docs-mobile-capsule">
+        <!-- Top Half: Reader Tools (Docs Menu & On this page TOC) -->
+        <button
+          type="button"
+          :class="['docs-mobile-capsule__btn', { 'is-active': !!mobilePanel }]"
+          :aria-expanded="!!mobilePanel"
+          aria-controls="docs-reader-popover"
+          aria-label="Toggle reader tools"
+          @click="toggleReaderTools"
+        >
+          <!-- Open Book / Reader Icon when closed, X when open -->
+          <svg v-if="!mobilePanel" class="docs-mobile-capsule__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2.5 4.5A2.5 2.5 0 0 1 5 2h4.5v13.5H5a2.5 2.5 0 0 0-2.5 2.5V4.5z" />
+            <path d="M17.5 4.5A2.5 2.5 0 0 0 15 2h-4.5v13.5H15a2.5 2.5 0 0 1 2.5 2.5V4.5z" />
+          </svg>
+          <svg v-else class="docs-mobile-capsule__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 5l10 10M15 5L5 15" />
+          </svg>
+        </button>
+
+        <div class="docs-mobile-capsule__divider" aria-hidden="true" />
+
+        <!-- Bottom Half: Primary Site Navigation Menu -->
+        <button
+          type="button"
+          :class="['docs-mobile-capsule__btn', { 'is-active': isSiteNavOpen }]"
+          :aria-expanded="isSiteNavOpen"
+          aria-controls="docs-site-popover"
+          aria-label="Toggle site navigation menu"
+          @click="toggleSiteNav"
+        >
+          <!-- Hamburger Menu Icon when closed, X when open -->
+          <svg v-if="!isSiteNavOpen" class="docs-mobile-capsule__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 5h14M3 10h14M3 15h14" />
+          </svg>
+          <svg v-else class="docs-mobile-capsule__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 5l10 10M15 5L5 15" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Reader Tools Popover (Menu | On this page) -->
+      <Transition name="mobile-menu">
+        <div
+          v-if="mobilePanel"
+          id="docs-reader-popover"
+          class="docs-reader-popover"
+          role="dialog"
+          aria-label="Reader tools"
+        >
+          <div class="docs-reader-popover__tabs">
+            <button
+              type="button"
+              :class="['docs-reader-popover__tab', { 'is-active': mobilePanel === 'menu' }]"
+              @click="mobilePanel = 'menu'"
+            >
+              Menu
+            </button>
+            <button
+              type="button"
+              :class="['docs-reader-popover__tab', { 'is-active': mobilePanel === 'outline' }]"
+              @click="mobilePanel = 'outline'"
+            >
+              On this page
+            </button>
+          </div>
+
+          <div class="docs-reader-popover__content">
+            <!-- Menu Panel (Docs navigation) -->
+            <nav v-if="mobilePanel === 'menu'" class="docs-reader-popover__scroll" aria-label="Documentation">
+              <div v-for="groupItem in docsNavigation" :key="groupItem.label" class="docs-reader-popover__group">
+                <div class="docs-reader-popover__label">{{ groupItem.label }}</div>
+                <a
+                  v-for="item in groupItem.items"
+                  :key="item.text"
+                  :href="item.link"
+                  :class="{ 'is-active': item.link && isActive(item.link) }"
+                  @click="mobilePanel = null"
+                >
+                  {{ item.text }}
+                </a>
+              </div>
+            </nav>
+
+            <!-- Outline Panel (On this page) -->
+            <nav v-else class="docs-reader-popover__scroll" aria-label="On this page">
+              <a
+                v-for="header in headers"
+                :key="header.slug"
+                :href="`#${header.slug}`"
+                :class="[`level-${header.level}`, { 'is-active': header.slug === activeSlug }]"
+                @click="onOutlineClick(header.slug)"
+              >
+                {{ header.title }}
+              </a>
+              <span v-if="!headers.length" class="docs-reader-popover__empty">
+                No sections on this page.
+              </span>
+            </nav>
+          </div>
+        </div>
+      </Transition>
+
+      <!-- Site Navigation Popover -->
+      <Transition name="mobile-menu">
+        <nav
+          v-if="isSiteNavOpen"
+          id="docs-site-popover"
+          class="section-nav__mobile-menu docs-site-popover"
+          aria-label="Primary navigation"
+        >
+          <a
+            v-for="item in siteNavLinks"
+            :key="item.href"
+            :href="item.href"
+            @click="isSiteNavOpen = false"
+          >
+            {{ item.label }}
+          </a>
+        </nav>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -188,14 +206,46 @@ const route = useRoute()
 const { page } = useData()
 const outlineProgress = ref({ top: 0, height: 0 })
 const mobilePanel = ref<'menu' | 'outline' | null>(null)
+const isSiteNavOpen = ref(false)
 const activeSlug = ref('')
+
+const siteNavLinks = [
+  { label: 'Docs', href: '/docs/' },
+  { label: 'Language', href: '/docs/language' },
+  { label: 'Compiler', href: '/docs/compiler' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Courses', href: '/courses/' },
+  { label: 'Papers', href: '/papers/' },
+  { label: 'GitHub ↗', href: 'https://github.com/MayukhChakrabortyDX/bliss-compiler' },
+]
 
 /* Matches the fixed nav (64px) plus the sticky tools bar (44px) so a heading
    is considered current once it clears both. */
 const HEADING_OFFSET = 116
 
-const toggleMobilePanel = (panel: 'menu' | 'outline') => {
-  mobilePanel.value = mobilePanel.value === panel ? null : panel
+const toggleReaderTools = () => {
+  isSiteNavOpen.value = false
+  mobilePanel.value = mobilePanel.value ? null : (headers.value.length ? 'outline' : 'menu')
+}
+
+const toggleSiteNav = () => {
+  mobilePanel.value = null
+  isSiteNavOpen.value = !isSiteNavOpen.value
+}
+
+let isClickScrolling = false
+let clickScrollTimer: ReturnType<typeof setTimeout> | null = null
+
+const onOutlineClick = (slug: string) => {
+  activeSlug.value = slug
+  mobilePanel.value = null
+  isClickScrolling = true
+
+  if (clickScrollTimer) clearTimeout(clickScrollTimer)
+  clickScrollTimer = setTimeout(() => {
+    isClickScrolling = false
+    updateActiveHeading()
+  }, 800)
 }
 
 const currentPath = computed(() => {
@@ -233,15 +283,16 @@ const next = computed(() =>
 
 const sectionLabel = computed(() => activeGroup.value?.label ?? 'Documentation')
 
-const headers = computed(() =>
-  page.value.headers
-    .filter((header) => header.level === 2 || header.level === 3)
+const headers = computed(() => {
+  const pageHeaders = page.value?.headers || []
+  return pageHeaders
+    .filter((header) => header.level >= 2 && header.level <= 4)
     .map((header) => ({
       level: header.level,
       title: header.title,
       slug: header.slug,
-    })),
-)
+    }))
+})
 
 const updateOutlineProgress = () => {
   const content = document.querySelector<HTMLElement>('.docs-content')
@@ -265,18 +316,55 @@ const updateOutlineProgress = () => {
 }
 
 const updateActiveHeading = () => {
+  if (isClickScrolling) return
   if (!headers.value.length) {
     activeSlug.value = ''
     return
   }
 
-  let current = headers.value[0].slug
+  const scrollY = window.scrollY
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1100
+  const topThreshold = isMobile ? 100 : 96
 
+  // Collect bounding positions of all headings currently in DOM
+  const headingList: { slug: string; top: number }[] = []
   for (const header of headers.value) {
-    const element = document.getElementById(header.slug)
-    if (!element) continue
-    if (element.getBoundingClientRect().top - HEADING_OFFSET > 0) break
-    current = header.slug
+    const el = document.getElementById(header.slug)
+    if (el) {
+      headingList.push({
+        slug: header.slug,
+        top: el.getBoundingClientRect().top,
+      })
+    }
+  }
+
+  if (!headingList.length) return
+
+  // Near top of document
+  if (scrollY < 60) {
+    activeSlug.value = headingList[0].slug
+    return
+  }
+
+  // Find the last heading that has crossed or reached topThreshold
+  let current = headingList[0].slug
+  for (let i = 0; i < headingList.length; i++) {
+    const item = headingList[i]
+    if (item.top <= topThreshold) {
+      current = item.slug
+    } else {
+      break
+    }
+  }
+
+  // Edge case: Activate the last heading only if at the absolute bottom 15px of document
+  const windowHeight = window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
+  if (scrollY + windowHeight >= documentHeight - 15) {
+    const lastItem = headingList[headingList.length - 1]
+    if (lastItem.top < windowHeight) {
+      current = lastItem.slug
+    }
   }
 
   activeSlug.value = current
@@ -293,24 +381,51 @@ const refreshOutline = async () => {
 }
 
 const onKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape') mobilePanel.value = null
+  if (event.key === 'Escape') {
+    mobilePanel.value = null
+    isSiteNavOpen.value = false
+  }
+}
+
+const onDocumentClick = (event: MouseEvent | TouchEvent) => {
+  if (!mobilePanel.value && !isSiteNavOpen.value) return
+  const target = event.target as Node | null
+  if (!target) return
+
+  const capsule = document.querySelector('.docs-mobile-capsule')
+  const readerPopover = document.getElementById('docs-reader-popover')
+  const sitePopover = document.getElementById('docs-site-popover')
+
+  const isInsideCapsule = capsule?.contains(target)
+  const isInsideReader = readerPopover?.contains(target)
+  const isInsideSite = sitePopover?.contains(target)
+
+  if (!isInsideCapsule && !isInsideReader && !isInsideSite) {
+    mobilePanel.value = null
+    isSiteNavOpen.value = false
+  }
 }
 
 onMounted(() => {
+  document.body.classList.add('has-docs-capsule')
   refreshOutline()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', onScroll)
   window.addEventListener('keydown', onKeydown)
+  window.addEventListener('pointerdown', onDocumentClick)
 })
 
 onBeforeUnmount(() => {
+  document.body.classList.remove('has-docs-capsule')
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', onScroll)
   window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('pointerdown', onDocumentClick)
 })
 
 watch(() => route.path, () => {
   mobilePanel.value = null
+  isSiteNavOpen.value = false
   refreshOutline()
 })
 </script>

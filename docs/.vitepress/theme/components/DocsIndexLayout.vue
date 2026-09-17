@@ -1,10 +1,11 @@
 <template>
   <div class="docs-index-shell">
-    <header class="docs-index__header">
-      <div class="docs-index__eyebrow">Bliss / Documentation</div>
-      <h1>Build from first principles.</h1>
-      <p>Explore the evolving Bliss language and the compiler work behind it.</p>
-    </header>
+    <BlissPageHeader
+      eyebrow="Bliss / Documentation"
+      title="Build from first principles."
+      description="Explore the evolving Bliss language and the compiler work behind it."
+      variant="violet"
+    />
 
     <section v-for="group in groups" :key="group.label" class="docs-index__group">
       <div class="docs-index__group-header">
@@ -13,11 +14,19 @@
       </div>
 
       <div class="docs-index__grid">
-        <a v-for="item in group.items" :key="item.link" :href="item.link" class="docs-index__card">
-          <span class="docs-index__card-label">{{ group.label }}</span>
-          <h3>{{ item.text }}</h3>
-          <span class="docs-index__card-link">Open page →</span>
-        </a>
+        <BlissCard
+          v-for="item in group.items"
+          :key="item.link"
+          :href="item.link"
+          :title="item.text"
+          :description="item.description"
+          action-text="Open section →"
+          card-class="docs-index__card"
+        >
+          <template #art>
+            <DocsThumbnail :topic="item.topic" :variant="item.variant" />
+          </template>
+        </BlissCard>
       </div>
     </section>
   </div>
@@ -25,6 +34,9 @@
 
 <script setup lang="ts">
 import { docsNavigation } from '../navigation'
+import BlissPageHeader from './primitives/BlissPageHeader.vue'
+import BlissCard from './primitives/BlissCard.vue'
+import DocsThumbnail from '../assets/DocsThumbnail.vue'
 
 const groups = docsNavigation
 </script>

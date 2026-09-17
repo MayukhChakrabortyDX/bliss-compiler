@@ -2,7 +2,32 @@
  * Bliss UI Language - Derived Blog / Journal Layout Styles (.derived-blog-*)
  */
 
-.derived-blog-shell {
+.derived-blog-shell,
+.blog-shell {
+  position: relative;
   width: min(100% - 3rem, 960px);
   margin: 0 auto;
+}
+
+/* Blog Segment Personality: Subtle Sapphire Blue Editorial Ambient Glow */
+.blog-shell::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -5%;
+  width: min(130vw, 1100px);
+  height: 600px;
+  background: radial-gradient(
+    circle at 70% 0%,
+    rgba(59, 130, 246, 0.065) 0%,
+    rgba(96, 165, 250, 0.015) 50%,
+    transparent 75%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blog-shell > * {
+  position: relative;
+  z-index: 1;
 }

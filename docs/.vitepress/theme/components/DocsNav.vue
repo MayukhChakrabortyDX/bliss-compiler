@@ -29,8 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vitepress'
 
+const route = useRoute()
 const isMenuOpen = ref(false)
 const mobileLinks = [
   { label: 'Docs', href: '/docs/' },
@@ -41,5 +43,34 @@ const mobileLinks = [
   { label: 'Papers', href: '/papers/' },
   { label: 'GitHub ↗', href: 'https://github.com/MayukhChakrabortyDX/bliss-compiler' },
 ]
+
+const onDocumentClick = (event: MouseEvent | TouchEvent) => {
+  if (!isMenuOpen.value) return
+  const target = event.target as Node | null
+  if (!target) return
+  const menuEl = document.getElementById('docs-mobile-menu')
+  const buttonEl = document.querySelector('.section-nav__menu-button')
+  if (menuEl && !menuEl.contains(target) && buttonEl && !buttonEl.contains(target)) {
+    isMenuOpen.value = false
+  }
+}
+
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') isMenuOpen.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('pointerdown', onDocumentClick)
+  window.addEventListener('keydown', onKeydown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pointerdown', onDocumentClick)
+  window.removeEventListener('keydown', onKeydown)
+})
+
+watch(() => route?.path, () => {
+  isMenuOpen.value = false
+})
 </script>
 

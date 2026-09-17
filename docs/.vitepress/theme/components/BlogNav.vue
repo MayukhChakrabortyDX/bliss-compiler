@@ -28,8 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vitepress'
 
+const route = useRoute()
 const isMenuOpen = ref(false)
 const mobileLinks = [
   { label: 'Blog', href: '/blog/' },
@@ -39,5 +41,34 @@ const mobileLinks = [
   { label: 'Papers', href: '/papers/' },
   { label: 'Subscribe', href: '#subscribe' },
 ]
+
+const onDocumentClick = (event: MouseEvent | TouchEvent) => {
+  if (!isMenuOpen.value) return
+  const target = event.target as Node | null
+  if (!target) return
+  const menuEl = document.getElementById('blog-mobile-menu')
+  const buttonEl = document.querySelector('.blog-nav__menu-button')
+  if (menuEl && !menuEl.contains(target) && buttonEl && !buttonEl.contains(target)) {
+    isMenuOpen.value = false
+  }
+}
+
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') isMenuOpen.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('pointerdown', onDocumentClick)
+  window.addEventListener('keydown', onKeydown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pointerdown', onDocumentClick)
+  window.removeEventListener('keydown', onKeydown)
+})
+
+watch(() => route?.path, () => {
+  isMenuOpen.value = false
+})
 </script>
 

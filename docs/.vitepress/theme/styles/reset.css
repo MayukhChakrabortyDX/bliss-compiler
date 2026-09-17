@@ -11,6 +11,8 @@
 html {
   margin: 0;
   padding: 0;
+  max-width: 100vw;
+  overflow-x: clip;
   background: var(--bliss-bg);
   color: var(--bliss-fg);
   font-family: var(--bliss-font-sans);
@@ -28,6 +30,8 @@ body {
   margin: 0;
   padding: 0;
   min-width: 320px;
+  max-width: 100vw;
+  overflow-x: clip;
   background: var(--bliss-bg);
   color: var(--bliss-fg);
 }

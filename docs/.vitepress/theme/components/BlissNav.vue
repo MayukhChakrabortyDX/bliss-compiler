@@ -5,21 +5,9 @@
       <a href="/" class="bliss-nav__brand">
         <span
           class="bliss-nav__logo"
-          aria-label="Bliss logo placeholder"
+          aria-label="Bliss logo"
         >
-          <!-- Replace this placeholder SVG with the final Bliss logo when ready -->
-          <svg
-            viewBox="0 0 32 32"
-            aria-hidden="true"
-          >
-            <path
-              d="M7 20.5c2.2 0 3.2-8 6.2-8s4 7 6.5 7 3.1-4.5 5.3-4.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-            />
-          </svg>
+          <BlissLogoSvg />
         </span>
 
         <span class="bliss-nav__name">bliss</span>
@@ -73,8 +61,11 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vitepress'
+import BlissLogoSvg from '../assets/BlissLogoSvg.vue'
 
+const route = useRoute()
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
 
@@ -82,13 +73,36 @@ const updateScrollState = () => {
   isScrolled.value = window.scrollY > 8
 }
 
+const onDocumentClick = (event: MouseEvent | TouchEvent) => {
+  if (!isMenuOpen.value) return
+  const target = event.target as Node | null
+  if (!target) return
+  const menuEl = document.getElementById('bliss-mobile-menu')
+  const buttonEl = document.querySelector('.bliss-nav__menu-button')
+  if (menuEl && !menuEl.contains(target) && buttonEl && !buttonEl.contains(target)) {
+    isMenuOpen.value = false
+  }
+}
+
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') isMenuOpen.value = false
+}
+
 onMounted(() => {
   updateScrollState()
   window.addEventListener('scroll', updateScrollState, { passive: true })
+  window.addEventListener('pointerdown', onDocumentClick)
+  window.addEventListener('keydown', onKeydown)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', updateScrollState)
+  window.removeEventListener('pointerdown', onDocumentClick)
+  window.removeEventListener('keydown', onKeydown)
+})
+
+watch(() => route?.path, () => {
+  isMenuOpen.value = false
 })
 </script>
 

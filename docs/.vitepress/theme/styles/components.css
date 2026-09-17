@@ -43,6 +43,88 @@
   white-space: nowrap;
 }
 
+/* Eyebrows & Badges */
+.bliss-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bliss-space-2);
+  color: var(--bliss-fg-subtle);
+  font-family: var(--bliss-font-mono);
+  font-size: 11px;
+  font-weight: var(--bliss-weight-semibold);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.bliss-eyebrow--pill {
+  padding: 4px 10px;
+  border-radius: var(--bliss-radius-pill);
+}
+
+.bliss-eyebrow--violet {
+  color: var(--bliss-violet-dark);
+}
+
+.bliss-eyebrow--violet.bliss-eyebrow--pill {
+  background: var(--bliss-violet-soft);
+}
+
+.bliss-eyebrow--blue {
+  color: var(--bliss-blue-dark);
+}
+
+.bliss-eyebrow--blue.bliss-eyebrow--pill {
+  background: var(--bliss-blue-soft);
+}
+
+.bliss-eyebrow--emerald {
+  color: #047857;
+}
+
+.bliss-eyebrow--emerald.bliss-eyebrow--pill {
+  background: var(--bliss-emerald-soft);
+}
+
+.bliss-eyebrow--amber {
+  color: #b45309;
+}
+
+.bliss-eyebrow--amber.bliss-eyebrow--pill {
+  background: var(--bliss-amber-soft);
+}
+
+.bliss-eyebrow__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+  animation: bliss-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Page & Section Headers */
+.bliss-header {
+  max-width: 700px;
+  margin-bottom: 56px;
+}
+
+.bliss-header h1 {
+  margin: 14px 0 18px;
+  color: var(--bliss-fg);
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  font-weight: var(--bliss-weight-semibold);
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.bliss-header p {
+  margin: 0;
+  color: var(--bliss-fg-muted);
+  font-size: var(--bliss-text-lg);
+  line-height: var(--bliss-leading-relaxed);
+}
+
 /* Buttons */
 .bliss-button {
   display: inline-flex;

@@ -1,25 +1,35 @@
 <template>
   <div class="papers-shell">
     <div v-if="isIndex" class="papers-index">
-      <header class="papers-index__header">
-        <div class="papers-eyebrow">Bliss / Papers</div>
-        <h1>Research in progress.</h1>
-        <p>White papers and research notes on language design, compiler construction, and systems programming.</p>
-      </header>
+      <BlissPageHeader
+        eyebrow="Bliss / Papers"
+        title="Research in progress."
+        description="White papers and research notes on language design, compiler construction, and systems programming."
+        variant="amber"
+        pill
+      />
 
       <div v-if="papers.length" class="papers-list">
-        <article v-for="paper in papers" :key="paper.link" class="paper-card">
-          <div class="paper-card__meta">
-            <span>{{ paper.type }}</span>
-            <span>{{ paper.date }}</span>
-          </div>
-          <h2>{{ paper.title }}</h2>
-          <p>{{ paper.description }}</p>
-          <div class="paper-card__actions">
-            <button type="button" class="paper-card__preview" @click="selectedPaper = paper">Preview PDF</button>
-            <a :href="paper.link" target="_blank" rel="noreferrer" class="paper-card__read">Open PDF ↗</a>
-          </div>
-        </article>
+        <BlissCard
+          v-for="paper in papers"
+          :key="paper.link"
+          :title="paper.title"
+          :description="paper.description"
+          card-class="paper-card"
+        >
+          <template #meta>
+            <div class="paper-card__meta">
+              <span>{{ paper.type }}</span>
+              <span>{{ paper.date }}</span>
+            </div>
+          </template>
+          <template #actions>
+            <div class="paper-card__actions">
+              <button type="button" class="paper-card__preview" @click="selectedPaper = paper">Preview PDF</button>
+              <a :href="paper.link" target="_blank" rel="noreferrer" class="paper-card__read">Open PDF ↗</a>
+            </div>
+          </template>
+        </BlissCard>
       </div>
 
       <div v-else class="papers-empty">
@@ -32,15 +42,20 @@
     </div>
 
     <article v-else class="paper-post">
-      <header class="paper-post__header">
-        <div class="papers-eyebrow">{{ frontmatter.category || 'Bliss / Paper' }}</div>
-        <h1>{{ page.title }}</h1>
-        <p v-if="frontmatter.description" class="paper-post__description">{{ frontmatter.description }}</p>
-        <div class="paper-post__meta">
-          <span>{{ frontmatter.date }}</span>
-          <span v-if="frontmatter.author">{{ frontmatter.author }}</span>
-        </div>
-      </header>
+      <BlissPageHeader
+        :eyebrow="frontmatter.category || 'Bliss / Paper'"
+        :title="page.title"
+        :description="frontmatter.description"
+        variant="amber"
+        pill
+      >
+        <template #meta>
+          <div class="paper-post__meta">
+            <span>{{ frontmatter.date }}</span>
+            <span v-if="frontmatter.author">{{ frontmatter.author }}</span>
+          </div>
+        </template>
+      </BlissPageHeader>
 
       <div class="paper-post__content">
         <Content />
@@ -54,6 +69,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useData, useRoute } from 'vitepress'
+import BlissPageHeader from './primitives/BlissPageHeader.vue'
+import BlissCard from './primitives/BlissCard.vue'
 import PaperPdfModal from './PaperPdfModal.vue'
 
 const route = useRoute()
@@ -71,4 +88,4 @@ const papers = [
   },
 ]
 const selectedPaper = ref<(typeof papers)[number] | null>(null)
-</script>
+</script>

@@ -1,39 +1,49 @@
 <template>
   <div class="blog-shell">
     <div v-if="isIndex" class="blog-index">
-      <header class="blog-index__header">
-        <div>
-          <div class="blog-eyebrow">Bliss / Blog</div>
-          <h1>Notes from the build.</h1>
-          <p>Language experiments, compiler work, systems thinking, and things worth writing down.</p>
-        </div>
-      </header>
+      <BlissPageHeader
+        eyebrow="Bliss / Blog"
+        title="Notes from the build."
+        description="Language experiments, compiler work, systems thinking, and things worth writing down."
+        variant="blue"
+        pill
+      />
 
       <div class="blog-list">
-        <a v-for="post in posts" :key="post.link" :href="post.link" class="blog-card">
-          <div class="blog-card__meta">
-            <span>{{ post.date }}</span>
-            <span>{{ post.reading }}</span>
-          </div>
-          <h2>{{ post.title }}</h2>
-          <p>{{ post.description }}</p>
-          <span class="blog-card__read">Read article ↗</span>
-        </a>
+        <BlissCard
+          v-for="post in posts"
+          :key="post.link"
+          :href="post.link"
+          :title="post.title"
+          :description="post.description"
+          action-text="Read article ↗"
+          card-class="blog-card"
+        >
+          <template #meta>
+            <div class="blog-card__meta">
+              <span>{{ post.date }}</span>
+              <span>{{ post.reading }}</span>
+            </div>
+          </template>
+        </BlissCard>
       </div>
     </div>
 
     <article v-else class="blog-post">
-      <header class="blog-post__header">
-        <div class="blog-eyebrow">{{ frontmatter.category || 'Bliss / Notes' }}</div>
-        <h1>{{ page.title }}</h1>
-        <p v-if="frontmatter.description" class="blog-post__description">
-          {{ frontmatter.description }}
-        </p>
-        <div class="blog-post__meta">
-          <span>{{ frontmatter.date }}</span>
-          <span v-if="frontmatter.author">{{ frontmatter.author }}</span>
-        </div>
-      </header>
+      <BlissPageHeader
+        :eyebrow="frontmatter.category || 'Bliss / Notes'"
+        :title="page.title"
+        :description="frontmatter.description"
+        variant="blue"
+        pill
+      >
+        <template #meta>
+          <div class="blog-post__meta">
+            <span>{{ frontmatter.date }}</span>
+            <span v-if="frontmatter.author">{{ frontmatter.author }}</span>
+          </div>
+        </template>
+      </BlissPageHeader>
 
       <div class="blog-post__content">
         <Content />
@@ -45,6 +55,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
+import BlissPageHeader from './primitives/BlissPageHeader.vue'
+import BlissCard from './primitives/BlissCard.vue'
 
 const route = useRoute()
 const { page, frontmatter } = useData()

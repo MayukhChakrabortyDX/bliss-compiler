@@ -1,6 +1,9 @@
 export type NavItem = {
   text: string
   link?: string
+  description?: string
+  topic?: string
+  variant?: 'violet' | 'blue' | 'emerald' | 'amber' | 'rose' | 'indigo' | 'zinc'
   items?: NavItem[]
 }
 
@@ -13,22 +16,22 @@ export const docsNavigation: NavGroup[] = [
   {
     label: 'Language',
     items: [
-      { text: 'Overview', link: '/docs/language' },
-      { text: 'Syntax', link: '/docs/language/syntax' },
-      { text: 'Types', link: '/docs/language/types' },
-      { text: 'Expressions', link: '/docs/language/expressions' },
-      { text: 'Statements and control flow', link: '/docs/language/statements' },
-      { text: 'Modules and declarations', link: '/docs/language/modules' },
-      { text: 'Language status', link: '/docs/language/status' },
+      { text: 'Overview', link: '/docs/language', topic: 'overview-lang', variant: 'violet', description: 'Core concepts, design goals, and memory safety model of the Bliss language.' },
+      { text: 'Syntax', link: '/docs/language/syntax', topic: 'syntax', variant: 'blue', description: 'Lexical structure, identifiers, keywords, comments, and code formatting rules.' },
+      { text: 'Types', link: '/docs/language/types', topic: 'types', variant: 'emerald', description: 'Primitive types, structs, enums, type inference, and memory layouts.' },
+      { text: 'Expressions', link: '/docs/language/expressions', topic: 'expressions', variant: 'amber', description: 'Values, mathematical & logical operators, blocks, and pattern evaluation.' },
+      { text: 'Statements and control flow', link: '/docs/language/statements', topic: 'statements', variant: 'rose', description: 'Conditional branching, loops, pattern matching, and control jumps.' },
+      { text: 'Modules and declarations', link: '/docs/language/modules', topic: 'modules', variant: 'indigo', description: 'Code organization, namespaces, imports, visibility rules, and packages.' },
+      { text: 'Language status', link: '/docs/language/status', topic: 'status', variant: 'zinc', description: 'Current feature completeness, stable guarantees, and active language proposals.' },
     ],
   },
   {
     label: 'Compiler',
     items: [
-      { text: 'Overview', link: '/docs/compiler' },
-      { text: 'Architecture', link: '/docs/architecture' },
-      { text: 'Parsing', link: '/docs/parsing' },
-      { text: 'Pipeline walkthrough', link: '/docs/pipeline-walkthrough' },
+      { text: 'Overview', link: '/docs/compiler', topic: 'overview-compiler', variant: 'violet', description: 'The Bliss compiler toolchain, design philosophy, and performance goals.' },
+      { text: 'Architecture', link: '/docs/architecture', topic: 'architecture', variant: 'emerald', description: 'Layered subsystem breakdown from lexical scanning to code generation.' },
+      { text: 'Parsing', link: '/docs/parsing', topic: 'parsing', variant: 'blue', description: 'Lexical analysis, precedence parsing, error recovery, and AST node creation.' },
+      { text: 'Pipeline walkthrough', link: '/docs/pipeline-walkthrough', topic: 'pipeline-walkthrough', variant: 'amber', description: 'Step-by-step traversal of source code transformation through compiler stages.' },
     ],
   },
 ]
