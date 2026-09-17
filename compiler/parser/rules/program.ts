@@ -30,7 +30,7 @@ export function parseProgramProduction(parser: Parser) {
             titles: {
                 closing: "",
                 invalidToken: "Invalid program body token"
-            }
+            },
         })
 
     } else {

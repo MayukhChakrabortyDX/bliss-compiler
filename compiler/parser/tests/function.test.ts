@@ -2,42 +2,13 @@ import { Tokenizer } from "../../lexer/tokenizer"
 import { Parser } from "../parser";
 
 const tokenizer = new Tokenizer(
-`
-allocator item {
-    fx alloc(): Type {
-    
-    }
-}
+`fx print(str with L): void {
 
-data x
-data x(u8); 
-data x[u8, 10]
+    naivePrint( str.toString() );
 
-data user {
-    String name;
-    age;
-};
-
-fx main(): i32 {
-
-    loop {
-        break;
-    }
-
-    if (true) {
-
-    }
-    elif (expected) 
-    
-    }
-    else {
-    
-    }
-
-    break;
-}
-`.replaceAll('\n', "\t")
+}`
 )
+
 tokenizer.tokenize()
 const tokens = tokenizer.tokens; //stream of tokens
 

@@ -28,7 +28,8 @@ type loopType<T> = {
         closing: string,
         separator: string,
         separatorMissing: string
-    }
+    },
+    debug?: string
 }
 
 type loopWithoutSeparator<T> = {
@@ -40,7 +41,8 @@ type loopWithoutSeparator<T> = {
     titles: {
         closing: string,
         invalidToken: string
-    }
+    },
+    debug?: string
 }
 
 export class Parser extends ParserLogger {
@@ -56,10 +58,11 @@ export class Parser extends ParserLogger {
     //what happens without a separator?
 
     useLoopWithoutSeparator<T>({
-        callback, production, deliminator, first, sync, titles
+        callback, production, deliminator, first, sync, titles, debug
     }: loopWithoutSeparator<T>) {
 
         const productionSync = union(sync, deliminator, first)
+
 
         callback(
             production(
@@ -69,6 +72,10 @@ export class Parser extends ParserLogger {
         )
 
         while (true) {
+
+            if (debug != undefined) {
+                console.log(debug)
+            }
 
             const token = this.peek()
 
@@ -109,7 +116,7 @@ export class Parser extends ParserLogger {
     }
 
     useLoop<T>({
-        callback, production, deliminator, separator, first, sync, titles
+        callback, production, deliminator, separator, first, sync, titles, debug
     }: loopType<T>) {
 
         const productionSync = union(sync, separator, deliminator, first)
@@ -122,6 +129,10 @@ export class Parser extends ParserLogger {
         )
 
         while (true) {
+
+            if (debug != undefined) {
+                console.log(debug)
+            }
 
             const token = this.peek()
 

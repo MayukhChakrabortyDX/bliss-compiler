@@ -62,8 +62,7 @@ export function parseBody(parser: Parser, sync: Set<TokenType>, belongs: string)
             titles: {
                 closing: "Expected a '}' as a closing bracket",
                 invalidToken: `Unexpected token inside ${belongs} body`
-            }
-
+            },
         })
     } else {
         parser.advance()

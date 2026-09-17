@@ -5,6 +5,8 @@ import { Parser } from "../parser";
 import { branchGroup, createBranch, } from "../utility/branch";
 import { createExtension } from "../utility/extension";
 import { union } from "../utility/union";
+
+
 namespace BuiltinType {
 
     export const first: Set<TokenType> = union(

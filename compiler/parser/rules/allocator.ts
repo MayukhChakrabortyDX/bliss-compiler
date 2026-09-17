@@ -35,7 +35,7 @@ export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
         titles: {
             closing: "Expected a '}' bracket to close allocator",
             invalidToken: "Expected start of a function here"
-        }
+        },
     })
 
     return {

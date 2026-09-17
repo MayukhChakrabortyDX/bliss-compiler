@@ -50,7 +50,7 @@ namespace Action {
             titles: {
                 closing: "Expected a closing '}' bracket here",
                 invalidToken: "Should have been a function head 'fx'"
-            }
+            },
         })
 
         return {

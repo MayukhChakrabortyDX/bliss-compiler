@@ -35,7 +35,7 @@ namespace Action {
                 separator: "Expected a comma separator before the action",
                 separatorMissing: "Give a separator."
             },
-            sync
+            sync: union(sync, TokenType.RBrace)
         })
 
         return {
@@ -137,6 +137,7 @@ namespace Args {
             actionExtension,
             sync
         )
+
     }
 }
 
@@ -145,19 +146,19 @@ export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
 
     parser.match({
         expected: TokenType.K_Fx,
-        sync: union(sync, Args.first, TokenType.RBrace, Args.first, TokenType.LBrace, TokenType.Identifier),
+        sync: union(sync, Args.first, TokenType.RBrace, TokenType.Colon, First.Type, TokenType.LBrace, TokenType.Identifier),
         title: "Expected keyword 'fx'"
     })
 
     const name = parser.digest({
         expected: TokenType.Identifier,
-        sync: union(sync, Args.first, TokenType.RBrace, Args.first, TokenType.LBrace),
+        sync: union(sync, Args.first, TokenType.RBrace, TokenType.Colon, First.Type, TokenType.LBrace),
         title: "Name of the function expected, found something else"
     })
 
     parser.match({
         expected: TokenType.LBrace,
-        sync: union(sync, Args.first, TokenType.RBrace, Args.first),
+        sync: union(sync, Args.first, TokenType.RBrace, TokenType.Colon, First.Type),
         title: "Arguments must start with '('"
     })
 
@@ -171,7 +172,7 @@ export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
             production: Args.parse,
             separator: TokenType.Comma,
             deliminator: TokenType.RBrace,
-            sync: union(sync, First.Type, TokenType.RBrace),
+            sync: union(sync, First.Type, TokenType.RBrace, TokenType.Colon),
             first: Args.first,
             titles: {
                 separator: "Expected a comma before next argument",
