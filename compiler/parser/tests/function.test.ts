@@ -2,9 +2,9 @@ import { Tokenizer } from "../../lexer/tokenizer"
 import { Parser } from "../parser";
 
 const tokenizer = new Tokenizer(
-`fx print(str with L): void {
+`fx print([NotBuiltIn] pointer): void {
 
-    naivePrint( str.toString() );
+    let var: SomeRandomType = 10;
 
 }`
 )

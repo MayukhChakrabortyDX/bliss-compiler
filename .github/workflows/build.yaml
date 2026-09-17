@@ -1,12 +1,17 @@
 name: Build Bliss
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      build:
+        description: "Build Bliss?"
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   build:
+    if: inputs.build
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 

@@ -1,11 +1,11 @@
 //composition mode - there are multiple builtins as you can see how they originate
 BUILTIN -> `${u, i}${8, 16, 32, 64}` | `f${32, 64}`;
 
-//refer language/node
-COMPOSITE -> node.ATOM ('::'
+//avoid grammar pollution by not taking the external information as types
+COMPOSITE -> @IDENTIFIER ('::'
     '(' ( @IDENTIFIER (',' @IDENTIFIER)* ) ')'
     | @IDENTIFIER
-);
+)?;
 
 TYPE_ATOM -> BUILTIN | COMPOSITE | '#' TYPE | '[' TYPE ']' | '`' TYPE ;
 TYPE -> TYPE_ATOM ('[' @INTEGER ']')*;

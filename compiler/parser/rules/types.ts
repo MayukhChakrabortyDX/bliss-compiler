@@ -40,7 +40,7 @@ namespace BuiltinType {
 
 namespace CompositeType {
 
-    export const first = First.Atom
+    export const first = union(TokenType.Identifier)
 
     const identifierSequenceExtension = createBranch((parser, sync) => {
 
@@ -139,7 +139,11 @@ namespace CompositeType {
         return parser.useExtension(
             () => {
 
-                const node = parser.parseAtom(union(sync, TokenType.DoubleColon, TokenType.LBrace, TokenType.Identifier, TokenType.RBrace, TokenType.Comma))
+                const node = parser.digest({
+                    expected: TokenType.Identifier,
+                    sync: union(sync, TokenType.DoubleColon, TokenType.LBrace, TokenType.Identifier, TokenType.RBrace, TokenType.Comma),
+                    title: "Expected an identifier"
+                })
                 return node
 
             },
