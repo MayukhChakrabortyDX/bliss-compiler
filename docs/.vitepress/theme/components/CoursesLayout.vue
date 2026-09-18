@@ -1,10 +1,12 @@
 <template>
   <main class="courses-shell">
-    <header class="courses-hero">
-      <BlissEyebrow text="Bliss learning library" dot />
-      <h1>Learn the ideas<br /><em>behind the language.</em></h1>
-      <p>Focused video courses for people who want to follow Bliss from its first principles to its compiler implementation.</p>
-    </header>
+    <BlissPageHeader
+      eyebrow="Bliss / Courses"
+      title="Learn the ideas behind the language."
+      description="Focused video courses for people who want to follow Bliss from its first principles to its compiler implementation."
+      variant="emerald"
+      pill
+    />
 
     <section class="courses-featured" aria-labelledby="featured-heading">
       <div class="courses-section-heading">
@@ -57,7 +59,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import BlissEyebrow from './primitives/BlissEyebrow.vue'
+import BlissPageHeader from './primitives/BlissPageHeader.vue'
 import BlissCard from './primitives/BlissCard.vue'
 
 const courses = [

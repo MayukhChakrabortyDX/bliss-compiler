@@ -6,12 +6,9 @@
 .docs-index-shell,
 .docs-page {
   position: relative;
-  width: min(100% - 3rem, 1280px);
+  width: min(100% - 3rem, 1152px);
   margin: 0 auto;
-}
-
-.docs-index-shell {
-  max-width: 960px;
+  padding: 72px 0 112px;
 }
 
 /* Docs Segment Personality: Subtle Violet Technical Ambient Glow */

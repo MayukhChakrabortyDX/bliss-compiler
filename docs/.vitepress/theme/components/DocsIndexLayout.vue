@@ -1,7 +1,7 @@
 <template>
   <div class="docs-index-shell">
     <BlissPageHeader
-      eyebrow="Bliss / Documentation"
+      eyebrow="Bliss / Docs"
       title="Build from first principles."
       description="Explore the evolving Bliss language, compiler architecture, and formal specifications."
       variant="violet"

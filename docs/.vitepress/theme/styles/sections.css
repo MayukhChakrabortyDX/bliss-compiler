@@ -4,7 +4,7 @@
 
 /* Documentation Index Landing Page */
 .docs-index-shell {
-  width: min(100% - 3rem, 960px);
+  width: min(100% - 3rem, 1152px);
   margin: 0 auto;
   padding: 72px 0 112px;
 }
@@ -217,13 +217,13 @@
 
 /* Documentation Shell Layout */
 .docs-page {
-  width: min(100% - 3rem, 1280px);
+  width: min(100% - 3rem, 1152px);
   margin: 0 auto;
-  padding: 48px 0 96px;
+  padding: 72px 0 112px;
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 180px;
+  grid-template-columns: 220px minmax(0, 1fr) 200px;
   align-items: start;
-  gap: 56px;
+  gap: 40px;
 }
 
 .docs-mobile-nav {
@@ -465,7 +465,7 @@
 
 /* Blog Shell Layout */
 .blog-shell {
-  width: min(100% - 3rem, 960px);
+  width: min(100% - 3rem, 1152px);
   margin: 0 auto;
   padding: 72px 0 112px;
 }
@@ -750,7 +750,7 @@
 
   .docs-page {
     display: block;
-    padding-top: 32px;
+    padding-top: 48px;
   }
 
   .docs-mobile-panel {

@@ -2,7 +2,7 @@
   <main class="timeline-shell">
     <!-- Header -->
     <BlissPageHeader
-      eyebrow="Public Build Log · Compiler Development"
+      eyebrow="Bliss / Timeline"
       title="What we're building."
       description="A transparent, real-time log of what we are actively engineering right now, what is planned next, and our track record of shipped compiler milestones."
       variant="rose"

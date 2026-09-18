@@ -3,7 +3,7 @@
  */
 
 .not-found {
-  width: min(100% - 3rem, 960px);
+  width: min(100% - 3rem, 1152px);
   min-height: calc(100vh - 145px);
   margin: 0 auto;
   padding: 180px 0 112px;

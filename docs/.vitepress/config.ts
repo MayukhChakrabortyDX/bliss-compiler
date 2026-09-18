@@ -52,9 +52,7 @@ export default defineConfig({
           label: 'Specifications',
           items: [
             { text: 'Overview', link: '/docs/specifications/' },
-            { text: 'Grammar', link: '/docs/specifications/grammar' },
-            { text: 'Memory model', link: '/docs/specifications/memory' },
-            { text: 'Type system', link: '/docs/specifications/types' },
+            { text: 'Allocator', link: '/docs/specifications/allocator' },
           ],
         },
       ],

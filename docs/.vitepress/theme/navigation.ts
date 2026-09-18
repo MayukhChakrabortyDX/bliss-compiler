@@ -64,18 +64,16 @@ export const docsNavigation: NavGroup[] = [
   {
     id: 'specifications',
     label: 'Specifications',
-    title: 'Formal Specifications',
-    description: 'Authoritative grammar productions, memory safety invariants, and static type system guarantees.',
+    title: 'AST Specifications',
+    description: 'Authoritative AST node contracts, parse tree definitions, and stabilized grammar productions.',
     link: '/docs/specifications/',
     badge: 'Section 03',
     topic: 'section-specifications',
     variant: 'amber',
-    highlights: ['Formal Grammar', 'Pointer Capabilities', 'Point of Failure (POF)', 'Type Invariants'],
+    highlights: ['AST Stabilization', 'ParseTree & ParseNode', 'Allocator AST', 'Grammar Productions'],
     items: [
-      { text: 'Overview', link: '/docs/specifications/', topic: 'overview-spec', variant: 'amber', description: 'Formal specification scope, conformance standards, and stability tiers.' },
-      { text: 'Grammar', link: '/docs/specifications/grammar', topic: 'grammar', variant: 'violet', description: 'Lexical structure, operator precedence, and EBNF production rules.' },
-      { text: 'Memory model', link: '/docs/specifications/memory', topic: 'spec-memory', variant: 'rose', description: 'Pointer capability tiers, stack confinement, and Point of Failure observability.' },
-      { text: 'Type system', link: '/docs/specifications/types', topic: 'spec-types', variant: 'emerald', description: 'Scalar primitives, algebraic sum types, structural records, and exhaustiveness.' },
+      { text: 'Overview', link: '/docs/specifications/', topic: 'overview-spec', variant: 'amber', description: 'AST stabilization design, ParseTree model, and base ParseNode contract.' },
+      { text: 'Allocator', link: '/docs/specifications/allocator', topic: 'grammar', variant: 'violet', description: 'Allocator AST node contract, formal EBNF production, and analyzer boundaries.' },
     ],
   },
 ]
@@ -89,4 +87,57 @@ function flattenItems(items: NavItem[]): NavItem[] {
     ...(item.link ? [item] : []),
     ...(item.items ? flattenItems(item.items) : []),
   ])
+}
+
+export interface SubNavLink {
+  label: string
+  href: string
+  external?: boolean
+}
+
+export interface SegmentConfig {
+  title: string
+  links: SubNavLink[]
+}
+
+export const segmentConfigs: Record<string, SegmentConfig> = {
+  docs: {
+    title: 'Docs',
+    links: [
+      { label: 'Overview', href: '/docs/' },
+      { label: 'Language', href: '/docs/language' },
+      { label: 'Compiler', href: '/docs/compiler' },
+      { label: 'Specifications', href: '/docs/specifications/' },
+    ],
+  },
+  timeline: {
+    title: 'Timeline',
+    links: [
+      { label: 'Overview', href: '/timeline/' },
+      { label: 'In Flight', href: '/timeline/#in-flight' },
+      { label: 'Up Next', href: '/timeline/#up-next' },
+      { label: 'Shipped', href: '/timeline/#shipped' },
+    ],
+  },
+  blog: {
+    title: 'Blog',
+    links: [
+      { label: 'All Articles', href: '/blog/' },
+      { label: 'Subscribe', href: '#subscribe' },
+    ],
+  },
+  courses: {
+    title: 'Courses',
+    links: [
+      { label: 'All Courses', href: '/courses/' },
+      { label: 'YouTube ↗', href: 'https://www.youtube.com/', external: true },
+    ],
+  },
+  papers: {
+    title: 'Papers',
+    links: [
+      { label: 'All Papers', href: '/papers/' },
+      { label: 'Archive', href: '/papers/#archive' },
+    ],
+  },
 }

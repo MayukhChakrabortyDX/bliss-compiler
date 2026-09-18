@@ -2,8 +2,17 @@ import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import type { Parser } from "../parser";
 import { union } from "../utility/union";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
+
+export class Allocator extends ParseNode<ParseNodeEnum.Allocator> {
+    constructor(public name: string, public functions: ParseNode<ParseNodeEnum.Function>[]) {
+        super(ParseNodeEnum.Allocator)
+    }
+}
 
 export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
+
+    const finish = parser.start()
 
     parser.match({
         expected: TokenType.K_Allocator,
@@ -38,11 +47,7 @@ export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
         },
     })
 
-    return {
-        is: "allocator",
-        name,
-        //@ts-ignore
-        body
-    }
+    //@ts-ignore
+    return finish(new Allocator(name, body))
 
 }

@@ -3,6 +3,7 @@
 import { StringContainer, Token, TokenType } from "../lexer/tokens";
 import type { Node } from "./ast";
 import { ParserDiagnostic } from "./errors";
+import type { ParseNode } from "./utility/parse_node";
 
 interface MatchProps {
     expected: TokenType, sync: Set<TokenType>, title: string
@@ -123,9 +124,9 @@ export class ParserBase {
     start() {
         const start = this.peek().span.startIndex;
 
-        return <T extends Node>(node: T, offset: number = 0): T => {
-            node.start = start;
-            node.end = this.peek(offset).span.endIndex;
+        return <T extends ParseNode>(node: T, offset: number = 0): T => {
+            node.span.start = start;
+            node.span.end = this.peek(offset).span.endIndex;
 
             //console.log( `[${this.source.str.substring( node.start, node.end + 1 )}]` )
 

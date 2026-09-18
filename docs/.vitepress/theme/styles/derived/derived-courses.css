@@ -6,7 +6,7 @@
   position: relative;
   width: min(100% - 3rem, 1152px);
   margin: 0 auto;
-  padding: 80px 0 112px;
+  padding: 72px 0 112px;
 }
 
 /* Courses Segment Personality: Subtle Emerald Learning Ambient Glow */
@@ -33,11 +33,6 @@
   z-index: 1;
 }
 
-.courses-hero {
-  max-width: 800px;
-}
-
-.courses-eyebrow,
 .course-card__meta {
   display: flex;
   align-items: center;
@@ -50,50 +45,8 @@
   text-transform: uppercase;
 }
 
-@keyframes bliss-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.3);
-  }
-}
-
-.courses-eyebrow span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ef4444;
-  box-shadow: 0 0 0 4px rgb(239 68 68 / 15%);
-  animation: bliss-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.courses-hero h1 {
-  margin: 20px 0;
-  color: var(--bliss-fg);
-  font-size: clamp(3.25rem, 7vw, 6.25rem);
-  font-weight: 600;
-  letter-spacing: -0.065em;
-  line-height: 0.94;
-}
-
-.courses-hero h1 em {
-  color: #a1a1aa;
-  font-style: normal;
-}
-
-.courses-hero p {
-  max-width: 620px;
-  margin: 0;
-  color: var(--bliss-fg-muted);
-  font-size: 18px;
-  line-height: 1.75;
-}
-
 .courses-featured {
-  margin-top: 80px;
+  margin-top: 0;
 }
 
 .courses-section-heading {
@@ -551,7 +504,7 @@
 @media (max-width: 640px) {
   .courses-shell {
     width: min(100% - 2rem, 1152px);
-    padding-top: 52px;
+    padding-top: 48px;
   }
 
   .courses-grid,

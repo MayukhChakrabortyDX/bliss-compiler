@@ -4,7 +4,7 @@
 
 .timeline-shell {
   position: relative;
-  width: min(100% - 3rem, 960px);
+  width: min(100% - 3rem, 1152px);
   margin: 0 auto;
   padding: 72px 0 112px;
 }

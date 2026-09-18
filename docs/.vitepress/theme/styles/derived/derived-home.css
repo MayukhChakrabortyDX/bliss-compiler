@@ -486,19 +486,20 @@
 }
 
 .home-platform-icon {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
-  background: #f4f4f5;
+  border-radius: 12px;
+  background: var(--bliss-bg-subtle);
+  border: 1px solid var(--bliss-border-subtle);
 }
 
 .home-platform-icon svg {
-  width: 36px;
-  height: 36px;
+  width: 22px;
+  height: 22px;
 }
 
 .home-platform-icon--linux {
@@ -506,7 +507,7 @@
 }
 
 .home-platform-icon--windows {
-  color: #0284c7;
+  color: #0078d4;
 }
 
 .home-download-card h3 {
@@ -598,6 +599,7 @@
   justify-content: center;
   border-radius: 12px;
   background: white;
+  border: 1px solid var(--bliss-border-subtle);
   box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
 }
 

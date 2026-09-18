@@ -27,65 +27,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vitepress'
+import { segmentConfigs, type SegmentConfig, type SubNavLink } from '../navigation'
 
-export interface SubNavLink {
-  label: string
-  href: string
-  external?: boolean
-}
-
-export interface SegmentConfig {
-  title: string
-  links: SubNavLink[]
-}
+export type { SubNavLink, SegmentConfig }
 
 const props = defineProps<{
   segment: 'docs' | 'blog' | 'courses' | 'papers' | 'timeline'
 }>()
 
 const route = useRoute()
-
-const segmentConfigs: Record<string, SegmentConfig> = {
-  docs: {
-    title: 'Docs',
-    links: [
-      { label: 'Overview', href: '/docs/' },
-      { label: 'Language', href: '/docs/language' },
-      { label: 'Compiler', href: '/docs/compiler' },
-      { label: 'Specifications', href: '/docs/specifications/' },
-    ],
-  },
-  timeline: {
-    title: 'Timeline',
-    links: [
-      { label: 'Overview', href: '/timeline/' },
-      { label: 'In Flight', href: '/timeline/#in-flight' },
-      { label: 'Up Next', href: '/timeline/#up-next' },
-      { label: 'Shipped', href: '/timeline/#shipped' },
-    ],
-  },
-  blog: {
-    title: 'Journal',
-    links: [
-      { label: 'All Articles', href: '/blog/' },
-      { label: 'Subscribe', href: '#subscribe' },
-    ],
-  },
-  courses: {
-    title: 'Courses',
-    links: [
-      { label: 'All Courses', href: '/courses/' },
-      { label: 'YouTube ↗', href: 'https://www.youtube.com/', external: true },
-    ],
-  },
-  papers: {
-    title: 'Research',
-    links: [
-      { label: 'All Papers', href: '/papers/' },
-      { label: 'Archive', href: '/papers/#archive' },
-    ],
-  },
-}
 
 const meta = computed<SegmentConfig>(() => segmentConfigs[props.segment] || segmentConfigs.docs)
 

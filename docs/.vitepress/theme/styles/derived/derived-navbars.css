@@ -35,7 +35,7 @@
 }
 
 .bliss-nav__inner {
-  width: min(100% - 3rem, 1280px);
+  width: min(100% - 3rem, 1152px);
   min-height: 64px;
   margin-inline: auto;
   display: flex;
@@ -119,7 +119,7 @@
 }
 
 .bliss-subnav__inner {
-  width: min(100% - 3rem, 1280px);
+  width: min(100% - 3rem, 1152px);
   height: 100%;
   margin-inline: auto;
   display: flex;
@@ -236,7 +236,7 @@
 @media (max-width: 768px) {
   .bliss-nav__inner,
   .bliss-subnav__inner {
-    width: min(100% - 2rem, 1280px);
+    width: min(100% - 2rem, 1152px);
   }
 
   .bliss-nav__links,

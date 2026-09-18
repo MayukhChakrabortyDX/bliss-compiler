@@ -105,6 +105,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vitepress'
+import { segmentConfigs } from '../navigation'
 
 const props = withDefaults(
   defineProps<{
@@ -127,48 +128,6 @@ const primaryLinks = [
   { label: 'Papers', href: '/papers/' },
   { label: 'GitHub ↗', href: 'https://github.com/MayukhChakrabortyDX/bliss-compiler', external: true },
 ]
-
-const segmentConfigs: Record<string, { title: string; links: { label: string; href: string; external?: boolean }[] }> = {
-  docs: {
-    title: 'Docs',
-    links: [
-      { label: 'Overview', href: '/docs/' },
-      { label: 'Language', href: '/docs/language' },
-      { label: 'Compiler', href: '/docs/compiler' },
-      { label: 'Specifications', href: '/docs/specifications/' },
-    ],
-  },
-  timeline: {
-    title: 'Timeline',
-    links: [
-      { label: 'Overview', href: '/timeline/' },
-      { label: 'In Flight', href: '/timeline/#in-flight' },
-      { label: 'Up Next', href: '/timeline/#up-next' },
-      { label: 'Shipped', href: '/timeline/#shipped' },
-    ],
-  },
-  blog: {
-    title: 'Journal',
-    links: [
-      { label: 'All Articles', href: '/blog/' },
-      { label: 'Subscribe', href: '#subscribe' },
-    ],
-  },
-  courses: {
-    title: 'Courses',
-    links: [
-      { label: 'All Courses', href: '/courses/' },
-      { label: 'YouTube ↗', href: 'https://www.youtube.com/', external: true },
-    ],
-  },
-  papers: {
-    title: 'Research',
-    links: [
-      { label: 'All Papers', href: '/papers/' },
-      { label: 'Archive', href: '/papers/#archive' },
-    ],
-  },
-}
 
 const segmentTitle = computed(() => segmentConfigs[props.segment]?.title ?? 'Segment')
 const segmentLinks = computed(() => segmentConfigs[props.segment]?.links ?? [])

@@ -1,5 +1,3 @@
-import type { StringSpan } from "../lexer/tokens";
-
 export enum NodeType {
     Program, Empty, Function, Using, Identifier,
     IncludeAllPath, IncludePath, BinaryOps, Import,

@@ -2,11 +2,17 @@ import { Tokenizer } from "../../lexer/tokenizer"
 import { Parser } from "../parser";
 
 const tokenizer = new Tokenizer(
-`fx print([NotBuiltIn] pointer): void {
+`
+allocator malloc {
 
-    let var: SomeRandomType = 10;
+    fx allocate(): [u8] {
+    }
 
-}`
+    fx deallocate(): void {
+    }
+
+}
+`
 )
 
 tokenizer.tokenize()
