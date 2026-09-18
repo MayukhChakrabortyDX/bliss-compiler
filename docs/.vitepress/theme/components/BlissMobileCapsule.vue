@@ -135,6 +135,7 @@ const segmentConfigs: Record<string, { title: string; links: { label: string; hr
       { label: 'Overview', href: '/docs/' },
       { label: 'Language', href: '/docs/language' },
       { label: 'Compiler', href: '/docs/compiler' },
+      { label: 'Specifications', href: '/docs/specifications/' },
     ],
   },
   timeline: {

@@ -1,3 +1,14 @@
+<script setup lang="ts">
+const scrollToDownloads = (e: MouseEvent) => {
+  e.preventDefault()
+  const target = document.getElementById('downloads')
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    history.pushState(null, '', '#downloads')
+  }
+}
+</script>
+
 <template>
   <div class="home">
 
@@ -15,7 +26,7 @@
       </p>
 
       <div class="home-hero__actions">
-        <a href="#downloads" class="home-button home-button--primary">
+        <a href="#downloads" class="home-button home-button--primary" @click="scrollToDownloads">
           Get Bliss
           <span aria-hidden="true">↓</span>
         </a>

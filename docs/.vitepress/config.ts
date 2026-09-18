@@ -48,6 +48,15 @@ export default defineConfig({
             { text: 'Pipeline walkthrough', link: '/docs/pipeline-walkthrough' },
           ],
         },
+        {
+          label: 'Specifications',
+          items: [
+            { text: 'Overview', link: '/docs/specifications/' },
+            { text: 'Grammar', link: '/docs/specifications/grammar' },
+            { text: 'Memory model', link: '/docs/specifications/memory' },
+            { text: 'Type system', link: '/docs/specifications/types' },
+          ],
+        },
       ],
     },
 

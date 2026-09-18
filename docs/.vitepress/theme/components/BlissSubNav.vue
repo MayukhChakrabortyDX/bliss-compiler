@@ -52,6 +52,7 @@ const segmentConfigs: Record<string, SegmentConfig> = {
       { label: 'Overview', href: '/docs/' },
       { label: 'Language', href: '/docs/language' },
       { label: 'Compiler', href: '/docs/compiler' },
+      { label: 'Specifications', href: '/docs/specifications/' },
     ],
   },
   timeline: {

@@ -125,9 +125,12 @@
 }
 
 .paper-card__preview {
-  padding: 9px 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--bliss-radius-pill);
   background: var(--bliss-fg);
   color: var(--bliss-bg);
   font-size: 13px;
@@ -288,13 +291,17 @@
   width: 36px;
   height: 36px;
   flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #52525b;
-  border-radius: 8px;
+  border-radius: var(--bliss-radius-pill);
   background: transparent;
   color: #d4d4d8;
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 
 .paper-modal__close:hover {

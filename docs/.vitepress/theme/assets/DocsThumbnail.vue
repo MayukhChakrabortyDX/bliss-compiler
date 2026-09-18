@@ -2,8 +2,39 @@
   <div :class="['docs-card__art', `docs-card__art--${variant || 'violet'}`]" aria-hidden="true">
     <div class="docs-card__art-glow" />
 
+    <!-- Section 01: Language -->
+    <svg v-if="topic === 'section-language'" class="docs-card__art-svg docs-card__art-svg--section" viewBox="0 0 160 90" fill="none">
+      <rect x="20" y="14" width="120" height="62" rx="12" stroke="rgba(139, 92, 246, 0.4)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <path d="M36 32h28M36 45h52M36 58h38" stroke-width="2.5" stroke-linecap="round" stroke="var(--bliss-violet-dark)" />
+      <rect x="94" y="26" width="34" height="20" rx="6" fill="var(--bliss-violet-soft)" stroke="rgba(139, 92, 246, 0.5)" stroke-width="1.2" />
+      <text x="111" y="40" font-family="monospace" font-size="10" font-weight="700" fill="var(--bliss-violet-dark)" text-anchor="middle">fx</text>
+      <circle cx="100" cy="58" r="4" fill="#10b981" />
+      <circle cx="116" cy="58" r="4" fill="#3b82f6" />
+    </svg>
+
+    <!-- Section 02: Compiler -->
+    <svg v-else-if="topic === 'section-compiler'" class="docs-card__art-svg docs-card__art-svg--section" viewBox="0 0 160 90" fill="none">
+      <rect x="18" y="18" width="34" height="54" rx="8" stroke="rgba(59, 130, 246, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <rect x="63" y="18" width="34" height="54" rx="8" stroke="rgba(59, 130, 246, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <rect x="108" y="18" width="34" height="54" rx="8" stroke="rgba(59, 130, 246, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <text x="35" y="48" font-family="monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">AST</text>
+      <text x="80" y="48" font-family="monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">BIR</text>
+      <text x="125" y="48" font-family="monospace" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">LLVM</text>
+      <path d="M52 45h11m34 0h11" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" />
+      <path d="M59 41l4 4-4 4m45-8l4 4-4 4" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+
+    <!-- Section 03: Specifications -->
+    <svg v-else-if="topic === 'section-specifications'" class="docs-card__art-svg docs-card__art-svg--section" viewBox="0 0 160 90" fill="none">
+      <rect x="22" y="14" width="116" height="62" rx="12" stroke="rgba(245, 158, 11, 0.5)" stroke-width="1.5" fill="rgba(255, 255, 255, 0.7)" />
+      <path d="M38 34h40M38 46h30M38 58h50" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" />
+      <rect x="94" y="26" width="32" height="22" rx="6" fill="var(--bliss-amber-soft)" stroke="rgba(245, 158, 11, 0.6)" stroke-width="1.2" />
+      <text x="110" y="41" font-family="monospace" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">::=</text>
+      <path d="M96 58h28" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2" />
+    </svg>
+
     <!-- Language Overview -->
-    <svg v-if="topic === 'overview-lang'" class="docs-card__art-svg" viewBox="0 0 140 90" fill="none" stroke="currentColor">
+    <svg v-else-if="topic === 'overview-lang'" class="docs-card__art-svg" viewBox="0 0 140 90" fill="none" stroke="currentColor">
       <rect x="25" y="15" width="90" height="60" rx="10" stroke-width="1.5" stroke="rgba(139, 92, 246, 0.4)" fill="rgba(255, 255, 255, 0.6)" />
       <path d="M40 32h35M40 45h60M40 58h42" stroke-width="2" stroke-linecap="round" stroke="var(--bliss-violet-dark)" />
       <circle cx="100" cy="32" r="5" fill="#8b5cf6" />

@@ -63,7 +63,7 @@
             `level-${header.level}`,
             { 'is-active': header.slug === activeSlug },
           ]"
-          @click="onOutlineClick(header.slug)"
+          @click="onOutlineClick($event, header.slug)"
         >
           {{ header.title }}
         </a>
@@ -163,7 +163,7 @@
                 :key="header.slug"
                 :href="`#${header.slug}`"
                 :class="[`level-${header.level}`, { 'is-active': header.slug === activeSlug }]"
-                @click="onOutlineClick(header.slug)"
+                @click="onOutlineClick($event, header.slug)"
               >
                 {{ header.title }}
               </a>
@@ -243,10 +243,17 @@ const toggleSiteNav = () => {
 let isClickScrolling = false
 let clickScrollTimer: ReturnType<typeof setTimeout> | null = null
 
-const onOutlineClick = (slug: string) => {
+const onOutlineClick = (e: MouseEvent, slug: string) => {
+  e.preventDefault()
   activeSlug.value = slug
   mobilePanel.value = null
   isClickScrolling = true
+
+  const target = document.getElementById(slug)
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    history.pushState(null, '', `#${slug}`)
+  }
 
   if (clickScrollTimer) clearTimeout(clickScrollTimer)
   clickScrollTimer = setTimeout(() => {
