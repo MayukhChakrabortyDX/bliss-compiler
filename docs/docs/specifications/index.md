@@ -7,7 +7,7 @@ description: Formal specifications, grammar standards, memory models, and type i
 
 This section documents the formal design specifications, grammar rules, memory guarantees, and type invariants that govern the Bliss programming language and its reference compiler.
 
-While the [Language Guide](/docs/language) introduces language syntax and programming patterns, the **Specifications** serve as the authoritative standard for compiler implementation, formal verification, and language evolution.
+While the [Language Guide](/docs/language/) introduces language syntax and programming patterns, the **Specifications** serve as the authoritative standard for compiler implementation, formal verification, and language evolution.
 
 ---
 
