@@ -1,7 +1,23 @@
 //to be used by all ASTs (adopted basically) to store general properties of them
 
 export enum ParseNodeEnum {
-    Allocator, Function
+    Program,
+    Allocator, Function, 
+    //condition nodes
+    IfBranch, ElifBranch, ElseBranch,
+    //operator nodes
+    BinaryOperator, UnaryOperator
+}
+
+export enum BinaryOperatorEnum {
+    Assignment, Equality, Inequality, Sum,
+    LessThan, GreaterThan, LessThanEqual, GreaterThanEqual, 
+    Product, Subtraction, Division, Access, 
+    Magnetic, Binding
+}
+
+export enum UnaryOperatorEnum {
+
 }
 
 export class ParseNode<T extends ParseNodeEnum> {

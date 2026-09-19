@@ -34,7 +34,7 @@ export function branchGroup(...branches: BranchMap[]): BranchMap {
 
 }
 
-export function useBranch(parser: Parser, branchTable: BranchMap, title: string, sync: Set<TokenType>): Node {
+export function useBranch(parser: Parser, branchTable: BranchMap, title: string, sync: Set<TokenType>) {
 
     const token = parser.peek()
     const production = branchTable.get(token.tokenType)

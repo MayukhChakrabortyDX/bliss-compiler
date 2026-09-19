@@ -2,6 +2,7 @@ import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import type { Parser } from "../parser";
 import { branchGroup, createBranch, useBranch } from "../utility/branch";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
 const importBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Import)
@@ -13,9 +14,15 @@ const daopBranch = createBranch((parser, sync) => parser.parseDaop(sync), ...Fir
 const programBranch = branchGroup(importBranch, usingBranch, functionBranch, allocatorBranch, daopBranch)
 const first = union(First.Module.Import, First.Module.Using, First.FunctionProduction, First.Allocator, First.DAOP)
 
+export class Program extends ParseNode<ParseNodeEnum.Program> {
+    constructor(public body: any, public filename: string) {
+        super(ParseNodeEnum.Program)
+    }
+}
 //* VERIFIED AND CACHED
-export function parseProgramProduction(parser: Parser) {
+export function parseProgramProduction(parser: Parser, filename: string) {
 
+    const finish = parser.start()
     //@ts-ignore
     const nodes = []
 
@@ -40,6 +47,8 @@ export function parseProgramProduction(parser: Parser) {
     }
 
     //@ts-ignore
-    return nodes
+    return finish(
+        new Program(nodes, filename)
+    )
 
 }

@@ -4,10 +4,20 @@ import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 import { createExtension, extensionGroup, useExtension } from "../utility/extension";
+import { BinaryOperatorEnum, ParseNode, ParseNodeEnum, UnaryOperatorEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
-//huge ammounts of 'first' is present here. and all of them are branches
-//oh my god lol.
+export class BinaryOperator<T extends BinaryOperatorEnum> extends ParseNode<ParseNodeEnum.BinaryOperator> {
+    constructor(public operator: T, public left: any, public right: any) {
+        super(ParseNodeEnum.BinaryOperator)
+    }
+}
+
+export class UnaryOperator<T extends UnaryOperatorEnum> extends ParseNode<ParseNodeEnum.UnaryOperator> {
+    constructor(public operator: T, public over: any) {
+        super(ParseNodeEnum.UnaryOperator)
+    }
+}
 
 namespace AtomDetails {
 
@@ -236,14 +246,6 @@ export function parseAtom(parser: Parser, sync: Set<TokenType>) {
     )
 }
 
-// BINDING -> DecideArrayOrCall ('::' DecideArrayOrCall)*;
-// MAGNETIC -> BINDING ('->' BINDING)*;
-// ACCESS -> MAGNETIC ('.' MAGNETIC)*;
-// PRODUCT -> ACCESS (('*' | '/') ACCESS)*;
-// SUM -> PRODUCT (('-' | '+') PRODUCT)*;
-// INEQUALITY -> SUM (('<' | '>' | '<=' | '>=') SUM)*;
-// EQUALITY -> INEQUALITY (('==' | '!=') INEQUALITY)*;
-// ASSIGNMENT -> EQUALITY ('=' EQUALITY)*;
 namespace DecideArrayOrCall {
 
     //we now finally get to use extensions
@@ -412,23 +414,23 @@ namespace Magnetic {
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         let left = Binding.parse(parser, sync.union(operators))
         let token = parser.peek()
 
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: Binding.parse(parser, sync)
-            }
+
+            left = new BinaryOperator(
+                BinaryOperatorEnum.Magnetic, 
+                left, Binding.parse(parser, sync)
+            )
 
             token = parser.peek()
         }
 
-        return left
+        return finish(left)
 
     }
 
@@ -439,6 +441,8 @@ namespace Access {
     const operators = new Set([TokenType.Dot])
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
+
+        const finish = parser.start()
         let left = Magnetic.parse(parser, sync.union(operators))
 
         let token = parser.peek()
@@ -446,17 +450,15 @@ namespace Access {
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: Magnetic.parse(parser, sync)
-            }
+            left = new BinaryOperator(
+                BinaryOperatorEnum.Access,
+                left, Magnetic.parse(parser, sync)
+            )
 
             token = parser.peek()
         }
 
-        return left
+        return finish(left)
 
     }
 
@@ -467,6 +469,8 @@ namespace Product {
     const operators = new Set([TokenType.Multiply, TokenType.Divide])
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
+
+        const finish = parser.start()
         let left = Access.parse(parser, sync.union(operators))
 
         let token = parser.peek()
@@ -474,17 +478,15 @@ namespace Product {
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: Access.parse(parser, sync)
-            }
+            left = new BinaryOperator(
+                token.tokenType == TokenType.Multiply ? BinaryOperatorEnum.Product : BinaryOperatorEnum.Division,
+                left, Access.parse(parser, sync)
+            )
 
             token = parser.peek()
         }
 
-        return left
+        return finish(left)
 
     }
 
@@ -495,6 +497,8 @@ namespace Sum {
     const operators = new Set([TokenType.Add, TokenType.Minus])
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
+
+        const finish = parser.start()
         let left = Product.parse(parser, sync.union(operators))
 
         let token = parser.peek()
@@ -502,17 +506,15 @@ namespace Sum {
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: Product.parse(parser, sync)
-            }
+            left = new BinaryOperator(
+                token.tokenType == TokenType.Add ? BinaryOperatorEnum.Sum : BinaryOperatorEnum.Subtraction,
+                left, Product.parse(parser, sync)
+            )
 
             token = parser.peek()
         }
 
-        return left
+        return finish(left)
 
     }
 
@@ -524,6 +526,7 @@ namespace Inequality {
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         let left = Sum.parse(parser, sync.union(operators))
 
         let token = parser.peek()
@@ -531,17 +534,19 @@ namespace Inequality {
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: Sum.parse(parser, sync)
-            }
+
+            left = new BinaryOperator(
+                token.tokenType == TokenType.LessThan ? BinaryOperatorEnum.LessThan :
+                token.tokenType == TokenType.GreaterThan ? BinaryOperatorEnum.GreaterThan :
+                token.tokenType == TokenType.LessThanEqual ? BinaryOperatorEnum.LessThanEqual :
+                BinaryOperatorEnum.GreaterThanEqual,
+                left, Sum.parse(parser, sync)
+            )
 
             token = parser.peek()
         }
 
-        return left
+        return finish(left)
 
     }
 
@@ -553,6 +558,8 @@ namespace Equality {
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
+
         let left = Inequality.parse(parser, sync.union(operators))
 
         let token = parser.peek()
@@ -560,17 +567,15 @@ namespace Equality {
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: Inequality.parse(parser, sync)
-            }
+            left = new BinaryOperator(
+                token.tokenType == TokenType.Compare ? BinaryOperatorEnum.Equality : BinaryOperatorEnum.Inequality,
+                left, Inequality.parse(parser, sync)
+            )
 
             token = parser.peek()
         }
 
-        return left
+        return finish(left)
 
     }
 
@@ -581,25 +586,25 @@ namespace Assignment {
     export const first = First.Atom //obviously
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
+
         let left = Equality.parse(parser, sync.union(new Set([TokenType.Assignment])))
 
         while (parser.peek().tokenType == TokenType.Assignment) {
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: "=",
-                left: left,
-                right: Equality.parse(parser, sync)
-            }
-
-
+            left = new BinaryOperator(
+                BinaryOperatorEnum.Assignment,
+                left, Equality.parse(parser,sync)
+            )
         }
 
-        return left
+        return finish(left)
 
     }
 
 }
+
+// STATEMENTS STARTS HERE
 
 namespace Return {
 
@@ -896,7 +901,6 @@ namespace NewAllocation {
     }
 
 }
-
 
 namespace FreeAllocation {
 

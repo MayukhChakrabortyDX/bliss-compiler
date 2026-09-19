@@ -1,6 +1,33 @@
+Pointers:
+  1. reference
+  2. normal pointers
+  3. hardware pointers //IOT/EM
 
-  [32m[1mvitepress[22m v1.6.4[39m
+1. reference pointers
 
-  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
-[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
-[2m[32m  ➜[39m[22m[2m  press [22m[1mh[22m[2m to show help[22m
+fx add(int `a, int `b, int `c) {
+
+  `c = `a + `b; //pointers, deferencing, *(x + 10) = 50
+  return `a; //not allowed
+
+}
+
+fx main() {
+
+  let a: int = 10;
+  let b: int = 20;
+  let c: int = 0;
+
+  add(`a, `b, `c);
+
+  print(c) //= 30
+
+}
+
+2. normal pointers
+
+fx add([int] a, [int] b, [int] c) {
+
+  [a | 5] = [b | -2] + [c];
+
+}
