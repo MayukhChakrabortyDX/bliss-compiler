@@ -501,12 +501,15 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .courses-shell {
     width: min(100% - 2rem, 1152px);
-    padding-top: 48px;
+    padding-top: 24px;
+    padding-bottom: 72px;
   }
+}
 
+@media (max-width: 640px) {
   .courses-grid,
   .courses-format {
     grid-template-columns: 1fr;

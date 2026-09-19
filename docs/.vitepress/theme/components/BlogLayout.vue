@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import BlissPageHeader from './primitives/BlissPageHeader.vue'
 import BlissCard from './primitives/BlissCard.vue'
@@ -61,7 +61,20 @@ import BlissCard from './primitives/BlissCard.vue'
 const route = useRoute()
 const { page, frontmatter } = useData()
 
-const isIndex = computed(() => route.path === '/blog/' || route.path === '/blog')
+const isIndex = computed(() => {
+  const rel = page.value.relativePath
+  if (rel === 'blog/index.md' || rel === 'blogs/index.md' || rel === 'blogs.md') {
+    return true
+  }
+  const cleanPath = (route.path || '').replace(/\/index(\.html)?$/, '').replace(/\/$/, '')
+  return cleanPath === '/blog' || cleanPath === '/blogs'
+})
+
+onMounted(() => {
+  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/blogs')) {
+    history.replaceState(null, '', '/blog/')
+  }
+})
 
 const posts = [
   {

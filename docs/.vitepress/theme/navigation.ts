@@ -70,10 +70,15 @@ export const docsNavigation: NavGroup[] = [
     badge: 'Section 03',
     topic: 'section-specifications',
     variant: 'amber',
-    highlights: ['AST Stabilization', 'ParseTree & ParseNode', 'Allocator AST', 'Grammar Productions'],
+    highlights: ['AST Stabilization', 'ParseNode Contract', 'DAOP & Control Flow', 'Grammar Productions'],
     items: [
       { text: 'Overview', link: '/docs/specifications/', topic: 'overview-spec', variant: 'amber', description: 'AST stabilization design, ParseTree model, and base ParseNode contract.' },
       { text: 'Allocator', link: '/docs/specifications/allocator', topic: 'grammar', variant: 'violet', description: 'Allocator AST node contract, formal EBNF production, and analyzer boundaries.' },
+      { text: 'Loops', link: '/docs/specifications/loops', topic: 'loops', variant: 'blue', description: 'Loop AST node definition, labeled jump targets, and formal EBNF grammar.' },
+      { text: 'Conditionals', link: '/docs/specifications/conditionals', topic: 'conditionals', variant: 'emerald', description: 'Branch AST nodes (IfBranch, ElifBranch, ElseBranch) and parsing recovery boundaries.' },
+      { text: 'DAOP', link: '/docs/specifications/daop', topic: 'daop', variant: 'amber', description: 'Data layouts, action contracts, data bindings, and type aliases.' },
+      { text: 'Program root', link: '/docs/specifications/program', topic: 'program', variant: 'rose', description: 'Program root AST node, compilation unit grammar, and declaration collections.' },
+      { text: 'Operator expressions', link: '/docs/specifications/expressions', topic: 'expressions', variant: 'indigo', description: 'BinaryOperator and UnaryOperator AST nodes and precedence climbing specifications.' },
     ],
   },
 ]

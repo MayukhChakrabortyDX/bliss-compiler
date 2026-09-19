@@ -3,15 +3,21 @@ import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 import { createExtension, extensionGroup } from "../utility/extension";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
-
+export class ActionNode extends ParseNode<ParseNodeEnum.Action> {
+    constructor(public name: string, public functions: ParseNode<ParseNodeEnum.Function>[]) {
+        super(ParseNodeEnum.Action)
+    }
+}
 //* VERIFIED
 namespace Action {
 
     export const first = union(TokenType.K_Action)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         parser.match({
             expected: TokenType.K_Action,
             sync: union(sync, First.FunctionHead, TokenType.Semicolon, TokenType.RBracket, TokenType.LBracket, TokenType.Identifier),
@@ -30,7 +36,6 @@ namespace Action {
             title: "Expected a '{' to start the action body"
         })
 
-        //@ts-ignore
         const body = []
 
         parser.useLoopWithoutSeparator({
@@ -54,22 +59,22 @@ namespace Action {
             },
         })
 
-        return {
-            is: "action-definition",
-            name,
-            //@ts-ignore
-            body
-        }
-
+        return finish(new ActionNode(name, body))
     }
 
 }
 
+export class DataField extends ParseNode<ParseNodeEnum.DataField> {
+    constructor(public name: string, public type: ParseNode<ParseNodeEnum.DataType>) {
+        super(ParseNodeEnum.DataField)
+    }
+}
 //* VERIFIED
 namespace Field {
     export const first = union(First.Type)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         const type = parser.parseType(union(sync, TokenType.Identifier, TokenType.Semicolon))
         const name = parser.digest({
             expected: TokenType.Identifier,
@@ -83,22 +88,37 @@ namespace Field {
             title: "Expected a semicolon here"
         })
 
-        return {
-            is: "data-field",
-            type,
-            name
-        }
+        return finish(new DataField(name, type))
 
     }
 }
 
+export enum DataLayoutEnum {
+    Linear, Array, Struct, Token //special - because this is basically saying this data does not takes up any memory space
+}
+
+export class DataLayout<T extends DataLayoutEnum> extends ParseNode<ParseNodeEnum.DataLayout> {
+    
+    constructor(
+        public name: string, 
+        public layoutType: T, 
+        public body: 
+            T extends DataLayoutEnum.Token ? null :
+            T extends DataLayoutEnum.Linear ? ParseNode<ParseNodeEnum.DataType> :
+            T extends DataLayoutEnum.Array ? { type: ParseNode<ParseNodeEnum.DataType>, size: number } :
+            ParseNode<ParseNodeEnum.DataField>[]
+    ) {
+        super(ParseNodeEnum.DataLayout)
+    }
+
+}
 //* VERIFIED 
 namespace Data {
 
     export const first = union(TokenType.K_Data)
 
     //this is basically extensions and nothing more
-    const linearType = createExtension((parser, from: { name: string }, sync) => {
+    const linearType = createExtension((parser, from: DataLayout<DataLayoutEnum.Token>, sync) => {
 
         parser.match({
             expected: TokenType.LBrace,
@@ -114,16 +134,11 @@ namespace Data {
             title: "Expected a closing ')' bracket"
         })
 
-        return {
-            is: "data",
-            kind: "linear",
-            name: from.name,
-            type
-        }
+        return new DataLayout(from.name, DataLayoutEnum.Linear, type)
 
     }, TokenType.LBrace)
 
-    const arrayType = createExtension((parser, from: { name: string }, sync) => {
+    const arrayType = createExtension((parser, from: DataLayout<DataLayoutEnum.Token>, sync) => {
 
         parser.match({
             expected: TokenType.LSquareBrace,
@@ -151,16 +166,13 @@ namespace Data {
             title: "Expected a closing ']' bracket here"
         })
 
-        return {
-            is: "data",
-            kind: "array",
-            name: from.name,
-            type, size
-        }
+        return new DataLayout(from.name, DataLayoutEnum.Array, {
+            type, size: parseInt(size)
+        })
 
     }, TokenType.LSquareBrace)
 
-    const structType = createExtension((parser, from: { name: string }, sync) => {
+    const structType = createExtension((parser, from: DataLayout<DataLayoutEnum.Token>, sync) => {
 
         parser.match({
             expected: TokenType.LBracket,
@@ -183,13 +195,7 @@ namespace Data {
             }
         })
 
-        return {
-            is: "data",
-            kind: "struct-like",
-            name: from.name,
-            //@ts-ignore
-            fields
-        }
+        return new DataLayout(from.name, DataLayoutEnum.Struct, fields)
 
     }, TokenType.LBracket)
 
@@ -198,6 +204,7 @@ namespace Data {
 
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         let output = parser.useExtension(
             () => {
 
@@ -213,11 +220,7 @@ namespace Data {
                     title: "Expected a name for the data"
                 })
 
-                return {
-                    is: "data",
-                    kind: "named-token",
-                    name
-                }
+                return new DataLayout(name, DataLayoutEnum.Token, null)
 
             },
 
@@ -231,18 +234,24 @@ namespace Data {
             title: "Expected a closing semicolon"
         })
 
-        return output
+        return finish(output)
 
     }
 
 }
 
+export class DataBinding extends ParseNode<ParseNodeEnum.Bind> {
+    constructor(public dataName: string, public actionList: string[], public bindingName: string, public functions: ParseNode<ParseNodeEnum.Function>) {
+        super(ParseNodeEnum.Bind)
+    }
+}
 //* VERIFIED
 namespace Bind {
 
     export const first = union(TokenType.K_Bind)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         parser.match({
             expected: TokenType.K_Bind,
             sync: union(sync, TokenType.RBracket, First.FunctionProduction, TokenType.LBracket, TokenType.Identifier, TokenType.K_As, TokenType.Identifier, TokenType.K_With),
@@ -321,7 +330,6 @@ namespace Bind {
             title: "Expected a starting '{' bracket here"
         })
 
-        //@ts-ignore
         const definitions = []
 
         parser.useLoopWithoutSeparator({
@@ -336,24 +344,23 @@ namespace Bind {
             }
         })
 
-        return {
-            is: "bind",
-            name,
-            actionList,
-            bindingName,
-            //@ts-ignore
-            definitions
-        }
+        return finish(new DataBinding(name, actionList, bindingName, definitions))
 
     }
 
 }
 
+export class TypeAlias extends ParseNode<ParseNodeEnum.Alias> {
+    constructor(public name: string, public type: ParseNode<ParseNodeEnum.DataType>) {
+        super(ParseNodeEnum.Alias)
+    }
+}
 //* VERIFIED
 namespace Alias {
     export const first = union(TokenType.K_Alias)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+        const finish = parser.start()
         parser.match({
             expected: TokenType.K_Alias,
             sync: union(sync, First.Type, TokenType.K_As, TokenType.Identifier, TokenType.Semicolon),
@@ -382,11 +389,7 @@ namespace Alias {
             title: "Expected a semicolon"
         })
 
-        return {
-            is: 'alias',
-            type,
-            name
-        }
+        return finish(new TypeAlias(name, type))
 
     }
 }

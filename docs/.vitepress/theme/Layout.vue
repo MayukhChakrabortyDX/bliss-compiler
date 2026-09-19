@@ -56,9 +56,17 @@ const { page } = useData()
 const isMarketing = computed(() => page.value.relativePath === 'index.md')
 const isNotFound = computed(() => page.value.isNotFound || page.value.relativePath === '404.md')
 const isTimeline = computed(() => page.value.relativePath.startsWith('timeline/'))
-const isBlog = computed(() => page.value.relativePath.startsWith('blog/'))
+const isBlog = computed(() =>
+  page.value.relativePath.startsWith('blog/') ||
+  page.value.relativePath.startsWith('blogs/') ||
+  page.value.relativePath === 'blogs.md'
+)
 const isCourses = computed(() => page.value.relativePath.startsWith('courses/'))
-const isPapers = computed(() => page.value.relativePath.startsWith('papers/'))
+const isPapers = computed(() =>
+  page.value.relativePath.startsWith('papers/') ||
+  page.value.relativePath.startsWith('paper/') ||
+  page.value.relativePath === 'papers.md'
+)
 const isDocsIndex = computed(() => page.value.relativePath === 'docs/index.md')
 
 const currentSegment = computed<'home' | 'docs' | 'blog' | 'courses' | 'papers' | 'timeline'>(() => {

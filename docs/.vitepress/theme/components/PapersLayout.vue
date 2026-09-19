@@ -76,7 +76,14 @@ import PaperPdfModal from './PaperPdfModal.vue'
 const route = useRoute()
 const { page, frontmatter } = useData()
 
-const isIndex = computed(() => route.path === '/papers/' || route.path === '/papers')
+const isIndex = computed(() => {
+  const rel = page.value.relativePath
+  if (rel === 'papers/index.md' || rel === 'paper/index.md' || rel === 'papers.md' || rel === 'paper.md') {
+    return true
+  }
+  const cleanPath = (route.path || '').replace(/\/index(\.html)?$/, '').replace(/\/$/, '')
+  return cleanPath === '/papers' || cleanPath === '/paper'
+})
 
 const papers = [
   {

@@ -544,6 +544,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
   padding: 14px 16px;
   border-radius: 16px;
   background: #fafafa;
@@ -565,6 +567,8 @@
   color: #a1a1aa;
   font-family: var(--bliss-font-mono);
   font-size: 11px;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .home-download-options a > span:last-child {
@@ -702,7 +706,7 @@
   }
 
   .home-hero__title {
-    font-size: 54px;
+    font-size: clamp(2.25rem, 9.5vw, 3.375rem);
   }
 
   .home-hero__description {

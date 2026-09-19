@@ -47,7 +47,6 @@ export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
         },
     })
 
-    //@ts-ignore
     return finish(new Allocator(name, body))
 
 }

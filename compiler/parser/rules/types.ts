@@ -259,7 +259,10 @@ export function parseType(parser: Parser, sync: Set<TokenType>) {
 
     return parser.useExtension(
         () => {
-            return TypeAtom.parse(parser, sync.union(new Set([TokenType.LSquareBrace, TokenType.Integer, TokenType.RSquareBrace])))
+            return TypeAtom.parse(
+                parser, 
+                union(sync, TokenType.LSquareBrace, TokenType.Integer, TokenType.RSquareBrace)
+            )
         },
         TypeCache.arrayExtension,
         sync

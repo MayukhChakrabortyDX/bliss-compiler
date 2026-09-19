@@ -6,7 +6,15 @@ export enum ParseNodeEnum {
     //condition nodes
     IfBranch, ElifBranch, ElseBranch,
     //operator nodes
-    BinaryOperator, UnaryOperator
+    BinaryOperator, UnaryOperator,
+    //daop
+    Action, DataField, DataLayout, Alias, Bind,
+    //type system
+    DataType,
+    //loops
+    Loop,
+    //structure
+    BlockBody,
 }
 
 export enum BinaryOperatorEnum {

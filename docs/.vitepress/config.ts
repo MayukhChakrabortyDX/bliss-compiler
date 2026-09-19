@@ -53,6 +53,11 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/docs/specifications/' },
             { text: 'Allocator', link: '/docs/specifications/allocator' },
+            { text: 'Loops', link: '/docs/specifications/loops' },
+            { text: 'Conditionals', link: '/docs/specifications/conditionals' },
+            { text: 'DAOP', link: '/docs/specifications/daop' },
+            { text: 'Program root', link: '/docs/specifications/program' },
+            { text: 'Operator expressions', link: '/docs/specifications/expressions' },
           ],
         },
       ],

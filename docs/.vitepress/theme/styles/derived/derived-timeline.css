@@ -315,7 +315,8 @@
 @media (max-width: 768px) {
   .timeline-shell {
     width: min(100% - 2rem, 760px);
-    padding-top: 48px;
+    padding-top: 24px;
+    padding-bottom: 72px;
   }
 
   .timeline-stream {

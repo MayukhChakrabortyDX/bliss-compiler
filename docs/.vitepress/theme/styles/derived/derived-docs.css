@@ -474,3 +474,12 @@
     padding: 24px;
   }
 }
+
+@media (max-width: 768px) {
+  .derived-docs-shell,
+  .docs-index-shell,
+  .docs-page {
+    width: min(100% - 2rem, 760px);
+    padding: 24px 0 72px;
+  }
+}

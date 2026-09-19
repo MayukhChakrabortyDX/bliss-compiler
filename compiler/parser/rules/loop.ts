@@ -1,11 +1,18 @@
 import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import type { Parser } from "../parser";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
+export class Loop extends ParseNode<ParseNodeEnum.Loop> {
+    constructor(public name: string, public body: ParseNode<ParseNodeEnum.BlockBody>) {
+        super(ParseNodeEnum.Loop)
+    }
+}
 //* VERIFIED AND CACHED
 export function parseLoop(parser: Parser, sync: Set<TokenType>) {
 
+    const finish = parser.start()
     parser.match({
         expected: TokenType.K_Loop,
         sync: union(sync, TokenType.Identifier, First.Structure.Body),
@@ -26,10 +33,6 @@ export function parseLoop(parser: Parser, sync: Set<TokenType>) {
 
     const body = parser.parseBody(sync, "loop")
 
-    return {
-        is: "loop",
-        name,
-        body
-    }
+    return finish(new Loop(name, body))
 
 }

@@ -334,10 +334,11 @@
 }
 
 /* Responsive Media Queries */
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .papers-shell {
     width: min(100% - 2rem, 760px);
-    padding-top: 48px;
+    padding-top: 24px;
+    padding-bottom: 72px;
   }
 
   .papers-empty {

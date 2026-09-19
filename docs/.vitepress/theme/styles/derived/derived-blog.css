@@ -32,3 +32,11 @@
   position: relative;
   z-index: 1;
 }
+
+@media (max-width: 768px) {
+  .derived-blog-shell,
+  .blog-shell {
+    width: min(100% - 2rem, 760px);
+    padding: 24px 0 72px;
+  }
+}
