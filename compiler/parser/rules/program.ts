@@ -1,7 +1,9 @@
+//* AST VALIDATED
+
 import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import type { Parser } from "../parser";
-import { branchGroup, createBranch, useBranch } from "../utility/branch";
+import { branchGroup, createBranch } from "../utility/branch";
 import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
@@ -14,8 +16,21 @@ const daopBranch = createBranch((parser, sync) => parser.parseDaop(sync), ...Fir
 const programBranch = branchGroup(importBranch, usingBranch, functionBranch, allocatorBranch, daopBranch)
 const first = union(First.Module.Import, First.Module.Using, First.FunctionProduction, First.Allocator, First.DAOP)
 
+type BodyType =
+    ParseNode<
+        ParseNodeEnum.Import |
+        ParseNodeEnum.Using |
+        ParseNodeEnum.Function |
+        ParseNodeEnum.Allocator |
+        //daop specific types
+        ParseNodeEnum.Alias |
+        ParseNodeEnum.Action |
+        ParseNodeEnum.DataLayout |
+        ParseNodeEnum.Bind
+    >
+
 export class Program extends ParseNode<ParseNodeEnum.Program> {
-    constructor(public body: any, public filename: string) {
+    constructor(public body: BodyType[], public filename: string) {
         super(ParseNodeEnum.Program)
     }
 }
@@ -23,13 +38,13 @@ export class Program extends ParseNode<ParseNodeEnum.Program> {
 export function parseProgramProduction(parser: Parser, filename: string) {
 
     const finish = parser.start()
-    //@ts-ignore
-    const nodes = []
+
+    const nodes: BodyType[] = []
 
     if (parser.peek().tokenType != TokenType.EOF) {
 
         parser.useLoopWithoutSeparator({
-            callback: (item) => nodes.push(item),
+            callback: (item: BodyType) => nodes.push(item),
             production: (parser, sync) => parser.useBranch(programBranch, "Expected a valid token", sync),
             deliminator: TokenType.EOF,
             sync: union(TokenType.EOF),
@@ -46,7 +61,6 @@ export function parseProgramProduction(parser: Parser, filename: string) {
 
     }
 
-    //@ts-ignore
     return finish(
         new Program(nodes, filename)
     )

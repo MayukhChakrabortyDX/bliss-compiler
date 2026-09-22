@@ -19,6 +19,31 @@ export class UnaryOperator<T extends UnaryOperatorEnum> extends ParseNode<ParseN
     }
 }
 
+export enum AtomEnum {
+    Identifier, Integer, Real, String, Pointer, Handle, Reference, AddressOf, SizeOf
+}
+
+export class NodeAtom<T extends AtomEnum> extends ParseNode<ParseNodeEnum.Atom> {
+    constructor(
+        public atomKind: T,
+        public body:
+            T extends AtomEnum.Identifier ? string :
+            T extends AtomEnum.Integer ? number :
+            T extends AtomEnum.Real ? number :
+            T extends AtomEnum.String ? string :
+            T extends AtomEnum.Pointer ? {
+                accesor: ParseNode<ParseNodeEnum.Node>,
+                size?: ParseNode<ParseNodeEnum.Node>
+            } :
+            T extends AtomEnum.Handle ? {
+                accesor: ParseNode<ParseNodeEnum.Node>,
+                size?: ParseNode<ParseNodeEnum.Node>
+            } : ParseNode<ParseNodeEnum.Atom> //because the remaining one already expects this
+    ) {
+        super(ParseNodeEnum.Atom)
+    }
+}
+
 namespace AtomDetails {
 
     const identifierBranch = createBranch((parser, sync) => {
@@ -29,7 +54,10 @@ namespace AtomDetails {
             title: "Expected an identifier"
         })
 
-        return identifier
+        return new NodeAtom(
+            AtomEnum.Identifier,
+            identifier
+        )
 
     }, TokenType.Identifier)
 
@@ -41,7 +69,10 @@ namespace AtomDetails {
             title: "Expected an integer"
         })
 
-        return number
+        return new NodeAtom(
+            AtomEnum.Integer,
+            parseInt(number)
+        )
 
     }, TokenType.Integer)
 
@@ -53,7 +84,10 @@ namespace AtomDetails {
             title: "Expected a real number"
         })
 
-        return number
+        return new NodeAtom(
+            AtomEnum.Real,
+            parseFloat(number)
+        )
 
     }, TokenType.RealNumber)
 
@@ -65,7 +99,10 @@ namespace AtomDetails {
             title: "Expected a string"
         })
 
-        return str
+        return new NodeAtom(
+            AtomEnum.String,
+            str
+        )
 
     }, TokenType.String)
 
@@ -99,13 +136,12 @@ namespace AtomDetails {
 
         const atom = parser.parseAtom(sync)
 
-        return {
-            is: "reference",
-            of: atom
-        }
+        return new NodeAtom(
+            AtomEnum.Reference,
+            atom
+        )
 
     }, TokenType.Backtick)
-
 
     const addressAtomBranch = createBranch((parser, sync) => {
 
@@ -117,10 +153,10 @@ namespace AtomDetails {
 
         const atom = parser.parseAtom(sync)
 
-        return {
-            is: "address_of",
-            of: atom
-        }
+        return new NodeAtom(
+            AtomEnum.AddressOf,
+            atom
+        )
 
     }, TokenType.K_Adrs)
 
@@ -134,10 +170,10 @@ namespace AtomDetails {
 
         const atom = parser.parseAtom(sync)
 
-        return {
-            is: "size_of",
-            of: atom
-        }
+        return new NodeAtom(
+            AtomEnum.SizeOf,
+            atom
+        )
 
     }, TokenType.K_Sizeof)
 
@@ -151,19 +187,20 @@ namespace AtomDetails {
 
         const center = useExtension(
             parser,
-            () => parser.parseNode(union(sync, TokenType.RSquareBrace)),
+            () => new NodeAtom(
+                AtomEnum.Pointer,
+                {
+                    accesor: parser.parseNode(union(sync, TokenType.RSquareBrace))
+                }
+            ),
             createExtension((parser, from, sync) => {
 
                 parser.advance() //straight bar is known, no need to repeat.
                 const node = parser.parseNode(union(sync, TokenType.RSquareBrace))
 
-                return {
+                from.body.size = node
 
-                    is: "pointer-access",
-                    left: from,
-                    right: node
-
-                }
+                return from
 
             }, TokenType.StraightBar),
             sync
@@ -175,10 +212,7 @@ namespace AtomDetails {
             title: "Expected an ending ']' bracket"
         })
 
-        return {
-            is: "pointer-access",
-            of: center
-        }
+        return center
 
     }, TokenType.LSquareBrace)
 
@@ -198,19 +232,20 @@ namespace AtomDetails {
 
         const center = useExtension(
             parser,
-            () => parser.parseNode(sync),
+            () => new NodeAtom(
+                AtomEnum.Handle,
+                {
+                    accesor: parser.parseNode(union(sync, TokenType.RSquareBrace))
+                }
+            ),
             createExtension((parser, from, sync) => {
 
                 parser.advance() //straight bar is known, no need to repeat.
                 const node = parser.parseNode(sync.union(new Set([TokenType.RBrace])))
 
-                return {
+                from.body.size = node
 
-                    is: "handle-pointer-access",
-                    left: from,
-                    right: node
-
-                }
+                return from
 
             }, TokenType.StraightBar),
             sync
@@ -222,13 +257,7 @@ namespace AtomDetails {
             title: "Expected an ending ']' bracket"
         })
 
-        return {
-
-            is: "handle-pointer-access",
-            of: center
-
-        }
-
+        return center
 
     }, TokenType.HashSymbol)
 
@@ -237,13 +266,19 @@ namespace AtomDetails {
 }
 
 //* VERIFIED AND CACHED
-export function parseAtom(parser: Parser, sync: Set<TokenType>) {
+export function parseAtom(parser: Parser, sync: Set<TokenType>): NodeAtom<AtomEnum> {
 
     return parser.useBranch(
         AtomDetails.branch,
         "Invalid expression start token",
         sync
     )
+}
+
+export class Array extends ParseNode<ParseNodeEnum.Array> {
+    constructor() {
+        super(ParseNodeEnum.Array)
+    }
 }
 
 namespace DecideArrayOrCall {
@@ -382,7 +417,7 @@ namespace Binding {
 
     const operators = new Set([TokenType.DoubleColon])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>): Node {
+    export function parse(parser: Parser, sync: Set<TokenType>) {
 
         let left = DecideArrayOrCall.parse(parser, sync.union(operators))
         let token = parser.peek()
@@ -390,18 +425,16 @@ namespace Binding {
         while (operators.has(token.tokenType)) {
 
             parser.advance()
-            left = {
-                //@ts-ignore FOR NOW
-                operator: TokenType[token.tokenType],
-                left: left,
-                right: DecideArrayOrCall.parse(parser, sync)
-            }
+
+            left = new BinaryOperator(
+                BinaryOperatorEnum.Binding,
+                left, DecideArrayOrCall.parse(parser, sync)
+            )
 
             token = parser.peek()
 
         }
 
-        //@ts-ignore
         return left
 
     }
@@ -423,7 +456,7 @@ namespace Magnetic {
             parser.advance()
 
             left = new BinaryOperator(
-                BinaryOperatorEnum.Magnetic, 
+                BinaryOperatorEnum.Magnetic,
                 left, Binding.parse(parser, sync)
             )
 
@@ -537,9 +570,9 @@ namespace Inequality {
 
             left = new BinaryOperator(
                 token.tokenType == TokenType.LessThan ? BinaryOperatorEnum.LessThan :
-                token.tokenType == TokenType.GreaterThan ? BinaryOperatorEnum.GreaterThan :
-                token.tokenType == TokenType.LessThanEqual ? BinaryOperatorEnum.LessThanEqual :
-                BinaryOperatorEnum.GreaterThanEqual,
+                    token.tokenType == TokenType.GreaterThan ? BinaryOperatorEnum.GreaterThan :
+                        token.tokenType == TokenType.LessThanEqual ? BinaryOperatorEnum.LessThanEqual :
+                            BinaryOperatorEnum.GreaterThanEqual,
                 left, Sum.parse(parser, sync)
             )
 
@@ -584,7 +617,7 @@ namespace Equality {
 namespace Assignment {
 
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): BinaryOperator<BinaryOperatorEnum.Assignment> | NodeAtom<AtomEnum> {
 
         const finish = parser.start()
 
@@ -594,7 +627,7 @@ namespace Assignment {
             parser.advance()
             left = new BinaryOperator(
                 BinaryOperatorEnum.Assignment,
-                left, Equality.parse(parser,sync)
+                left, Equality.parse(parser, sync)
             )
         }
 
@@ -861,6 +894,16 @@ namespace Statement {
 
 }
 
+export enum AllocationKind {
+    New, Free
+}
+
+export class AllocationStatement<T extends AllocationKind> extends ParseNode<ParseNodeEnum.Allocation> {
+    constructor(public allocationKind: T, public name: string, public body: BinaryOperator<BinaryOperatorEnum.Assignment> | ParseNode<ParseNodeEnum.Atom>) {
+        super(ParseNodeEnum.Allocation)
+    }
+}
+
 namespace NewAllocation {
 
     export const first: Set<TokenType> = new Set([TokenType.K_New])
@@ -892,11 +935,7 @@ namespace NewAllocation {
 
         const assignment = Assignment.parse(parser, sync)
 
-        return {
-            is: "new-allocation",
-            name,
-            expr: assignment
-        }
+        return new AllocationStatement(AllocationKind.New, name, assignment)
 
     }
 
@@ -933,11 +972,7 @@ namespace FreeAllocation {
 
         const assignment = Assignment.parse(parser, sync)
 
-        return {
-            is: "free-allocation",
-            name,
-            expr: assignment
-        }
+        return new AllocationStatement(AllocationKind.Free, name, assignment)
 
     }
 

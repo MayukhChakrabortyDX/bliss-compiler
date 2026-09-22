@@ -2,6 +2,7 @@ import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch, useBranch } from "../utility/branch";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
 namespace StructureCache {
@@ -39,6 +40,11 @@ namespace BodyCache {
     export const branch = branchGroup(structure, node)
 }
 
+export class Block extends ParseNode<ParseNodeEnum.BlockBody> {
+    constructor() {
+        super(ParseNodeEnum.BlockBody)
+    }
+}
 //* VERIFIED AND CACHED
 export function parseBody(parser: Parser, sync: Set<TokenType>, belongs: string) {
 
@@ -49,7 +55,6 @@ export function parseBody(parser: Parser, sync: Set<TokenType>, belongs: string)
     })
 
     //now is the test
-    //@ts-ignore
     const body = []
 
     if (parser.peek().tokenType != TokenType.RBracket) {
@@ -68,7 +73,6 @@ export function parseBody(parser: Parser, sync: Set<TokenType>, belongs: string)
         parser.advance()
     }
 
-    //@ts-ignore
-    return body
+    return new Block(body)
 
 }

@@ -8,7 +8,7 @@ TYPED -> type.TYPE @IDENTIFIER;
 
 COMPOSITE -> TYPED ACTION;
 
-ARGS -> TYPED | COMPOSITE; //here args is an extension
+ARGS -> TYPED | COMPOSITE; //here args can also extend composite types
 
 //refer language/type
 HEAD -> "fx" @IDENTIFIER "(" ARGS*[separated_by ','] ")" ':' type.TYPE;

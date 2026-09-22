@@ -32,7 +32,6 @@ export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
         title: "Expected a starting '{' here"
     })
 
-    //@ts-ignore
     const body = []
 
     parser.useLoopWithoutSeparator({

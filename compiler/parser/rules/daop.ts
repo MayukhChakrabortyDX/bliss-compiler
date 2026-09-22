@@ -7,7 +7,7 @@ import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
 export class ActionNode extends ParseNode<ParseNodeEnum.Action> {
-    constructor(public name: string, public functions: ParseNode<ParseNodeEnum.Function>[]) {
+    constructor(public name: string, public functions: ParseNode<ParseNodeEnum.FunctionHead>[]) {
         super(ParseNodeEnum.Action)
     }
 }
@@ -36,10 +36,10 @@ namespace Action {
             title: "Expected a '{' to start the action body"
         })
 
-        const body = []
+        const body: ParseNode<ParseNodeEnum.FunctionHead>[] = []
 
         parser.useLoopWithoutSeparator({
-            callback: (item) => body.push(item),
+            callback: (item: ParseNode<ParseNodeEnum.FunctionHead>) => body.push(item),
             production: ((parser, sync) => {
 
                 const head = parser.parseFunctionHead(sync)
@@ -48,6 +48,8 @@ namespace Action {
                     sync,
                     title: "Expected a semicolon here"
                 })
+
+                return head
 
             }),
             deliminator: TokenType.RBracket,
@@ -98,11 +100,11 @@ export enum DataLayoutEnum {
 }
 
 export class DataLayout<T extends DataLayoutEnum> extends ParseNode<ParseNodeEnum.DataLayout> {
-    
+
     constructor(
-        public name: string, 
-        public layoutType: T, 
-        public body: 
+        public name: string,
+        public layoutType: T,
+        public body:
             T extends DataLayoutEnum.Token ? null :
             T extends DataLayoutEnum.Linear ? ParseNode<ParseNodeEnum.DataType> :
             T extends DataLayoutEnum.Array ? { type: ParseNode<ParseNodeEnum.DataType>, size: number } :
@@ -180,11 +182,10 @@ namespace Data {
             title: "Expected a starting '{' bracket here"
         })
 
-        //@ts-ignore
-        const fields = []
+        const fields: ParseNode<ParseNodeEnum.DataField>[] = []
 
         parser.useLoopWithoutSeparator({
-            callback: (field) => fields.push(field),
+            callback: (field: ParseNode<ParseNodeEnum.DataField>) => fields.push(field),
             production: (parser, sync) => Field.parse(parser, sync),
             deliminator: TokenType.RBracket,
             sync: union(sync, TokenType.RBracket),
@@ -199,8 +200,10 @@ namespace Data {
 
     }, TokenType.LBracket)
 
-    //@ts-ignore
-    const extension = extensionGroup(linearType, arrayType, structType)
+    const extension = extensionGroup<
+        DataLayout<DataLayoutEnum.Token>,
+        DataLayout<DataLayoutEnum.Linear | DataLayoutEnum.Array | DataLayoutEnum.Struct>
+    >(linearType, arrayType, structType)
 
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
@@ -241,7 +244,7 @@ namespace Data {
 }
 
 export class DataBinding extends ParseNode<ParseNodeEnum.Bind> {
-    constructor(public dataName: string, public actionList: string[], public bindingName: string, public functions: ParseNode<ParseNodeEnum.Function>) {
+    constructor(public dataName: string, public actionList: string[], public bindingName: string, public functions: ParseNode<ParseNodeEnum.Function>[]) {
         super(ParseNodeEnum.Bind)
     }
 }
@@ -330,10 +333,10 @@ namespace Bind {
             title: "Expected a starting '{' bracket here"
         })
 
-        const definitions = []
+        const definitions: ParseNode<ParseNodeEnum.Function>[] = []
 
         parser.useLoopWithoutSeparator({
-            callback: (def) => definitions.push(def),
+            callback: (def: ParseNode<ParseNodeEnum.Function>) => definitions.push(def),
             production: (parser, sync) => parser.parseFunction(sync),
             deliminator: TokenType.RBracket,
             sync: union(sync, TokenType.RBracket),

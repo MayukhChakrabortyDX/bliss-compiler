@@ -2,7 +2,9 @@
 
 export enum ParseNodeEnum {
     Program,
-    Allocator, Function, 
+    Allocator, 
+    //functions
+    Function, FunctionHead, ArgList,
     //condition nodes
     IfBranch, ElifBranch, ElseBranch,
     //operator nodes
@@ -15,6 +17,12 @@ export enum ParseNodeEnum {
     Loop,
     //structure
     BlockBody,
+    //nodes
+    Atom, Node, Array, Allocation,
+    //modifiers
+    Modifier,
+    //modules
+    Import, Using
 }
 
 export enum BinaryOperatorEnum {

@@ -124,26 +124,21 @@ namespace ModuleAtom {
 }
 
 namespace ModulePath {
-    export class ModulePathNode extends Node {
-        constructor(public node: Node, public next: Node) {
-            super(NodeType.IncludePath)
-        }
-    }
 
     export const first: Set<TokenType> = ModuleAtom.first;
-    export function parse(parser: Parser, sync: Set<TokenType>): Node {
+    export function parse(parser: Parser, sync: Set<TokenType>) {
 
-        let left = ModuleAtom.parse(
-            parser,
-            sync.union(new Set([TokenType.Dot])) //locally reachable only
-        )
+        let left = [
+            ModuleAtom.parse(
+                parser,
+                sync.union(new Set([TokenType.Dot])) //locally reachable only
+            )
+        ]
 
         if (parser.peek().tokenType == TokenType.Dot) {
 
             parser.advance()
-            left = new ModulePathNode(
-                left, ModulePath.parse(parser, sync)
-            )
+            left.push(ModulePath.parse(parser, sync))
 
         }
 
@@ -152,7 +147,6 @@ namespace ModulePath {
     }
 
 }
-
 
 export class ImportNode extends Node {
     constructor(public node: Node) {
@@ -181,7 +175,6 @@ export function parseImport(parser: Parser, sync: Set<TokenType>) {
 
     return new ImportNode(body)
 }
-
 
 export class UsingNode extends Node {
     constructor(public node: Node) {

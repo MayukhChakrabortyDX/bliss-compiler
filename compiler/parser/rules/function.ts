@@ -1,9 +1,32 @@
+//! NEEDS AST AND GRAMMAR VERIFICATION
+
 import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch, useBranch } from "../utility/branch";
 import { createExtension } from "../utility/extension";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
+
+export enum ArgType {
+    Typed, Composite
+}
+
+export class Argument<T extends ArgType> extends ParseNode<ParseNodeEnum.ArgList> {
+    constructor(
+        public argKind: T,
+        public body:
+            T extends ArgType.Typed ?
+            {
+                name: string, type: ParseNode<ParseNodeEnum.DataType>
+            } :
+            {
+                name: string, type: ParseNode<ParseNodeEnum.DataType>, actions: string[]
+            }
+    ) {
+        super(ParseNodeEnum.ArgList)
+    }
+}
 
 namespace Action {
 
@@ -71,10 +94,7 @@ namespace Action {
 
         const output = parser.useBranch(branchTable, "Expected a valid action token", sync)
 
-        return {
-            is: "action-type",
-            ...output
-        }
+        return output
 
     }
 
@@ -91,11 +111,9 @@ namespace Typed {
             title: "Expected an identifier"
         })
 
-        return {
-            is: "typed",
-            type,
-            name
-        }
+        return new Argument(ArgType.Typed, {
+            name, type
+        })
 
     }
 }
@@ -104,14 +122,14 @@ namespace Composite {
     export const first = Typed.first
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
-        const typed = Typed.parse(parser, union(sync, Action.first))
+        const typed: Argument<ArgType.Typed> = Typed.parse(parser, union(sync, Action.first))
         const action = Action.parse(parser, sync)
 
-        return {
-            is: "composite",
-            typed,
-            action
-        }
+        return new Argument(ArgType.Composite, {
+            name: typed.body.name,
+            type: typed.body.type,
+            actions: action
+        })
 
     }
 }
@@ -130,7 +148,7 @@ namespace Args {
 
     }, ...Action.first)
 
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): Argument<ArgType> {
 
         return parser.useExtension(
             () => Typed.parse(parser, sync),
@@ -141,6 +159,11 @@ namespace Args {
     }
 }
 
+export class FunctionHead extends ParseNode<ParseNodeEnum.FunctionHead> {
+    constructor(public name: string, public returnType: ParseNode<ParseNodeEnum.DataType>) {
+        super(ParseNodeEnum.FunctionHead)
+    }
+}
 //* VERIFIED AND CACHED
 export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
 
@@ -193,25 +216,29 @@ export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
 
     const type = parser.parseType(sync)
 
-    return {
-        is: "function-head",
-        name,
-        //@ts-ignore
-        argList,
-        returnType: type
-    }
+    //! arglist is missing
+    return new FunctionHead(name, argList, type)
+
+    // return {
+    //     is: "function-head",
+    //     name,
+    //     argList,
+    //     returnType: type
+    // }
 
 }
 
+export class Function extends ParseNode<ParseNodeEnum.Function> {
+    constructor(public head: ParseNode<ParseNodeEnum.FunctionHead>, public body: ParseNode<ParseNodeEnum.BlockBody>) {
+        super(ParseNodeEnum.Function)
+    }
+}
 //* VERIFIED AND CACHED
 export function parseFunction(parser: Parser, sync: Set<TokenType>) {
 
     const head = parser.parseFunctionHead(union(sync, First.Structure.Body))
     const body = parser.parseBody(sync, "function")
 
-    return {
-        is: "function",
-        head, body
-    }
+    return new Function(head, body)
 
 }
