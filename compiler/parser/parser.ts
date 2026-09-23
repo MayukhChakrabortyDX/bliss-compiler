@@ -197,8 +197,8 @@ export class Parser extends ParserLogger {
 
     }
 
-    parseProgramProduction() {
-        return parseProgramProduction(this)
+    parseProgramProduction(filename: string) {
+        return parseProgramProduction(this, filename)
     }
 
     parseFunction(sync: Set<TokenType>) {

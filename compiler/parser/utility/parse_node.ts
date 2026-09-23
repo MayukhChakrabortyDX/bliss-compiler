@@ -22,7 +22,7 @@ export enum ParseNodeEnum {
     //modifiers
     Modifier,
     //modules
-    Import, Using
+    Module, ModulePath
 }
 
 export enum BinaryOperatorEnum {
@@ -45,7 +45,7 @@ export class ParseNode<T extends ParseNodeEnum> {
 
     constructor(public kind: T) {}
 
-    toString() {
+    toJSON() {
         
         return {
             ...this,

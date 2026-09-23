@@ -29,7 +29,7 @@ const dim = (text: string) => color(DIM, text);
 /* ------------------------------------------------------------------ */
 
 const VERSION = "Pre-Alpha";
-const BUILD_DATE = "17.9.26";
+const BUILD_DATE = "27.9.26";
 const AUTHOR = "Mayukh Chakraborty";
 const WEBSITE = "https://bliss-compiler.vercel.app/";
 
@@ -218,7 +218,7 @@ async function main(): Promise<void> {
 
     let output: unknown;
     try {
-        output = parser.parseProgramProduction();
+        output = parser.parseProgramProduction(inputPath);
     } catch (err) {
         failure("Parser crashed", String(err));
         process.exit(1);

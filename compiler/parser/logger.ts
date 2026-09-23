@@ -16,36 +16,38 @@ export function log(
     const RESET = "\x1b[0m";
     const BOLD = "\x1b[1m";
     const DIM = "\x1b[2m";
+    const ITALIC = "\x1b[3m";
 
-    const BG_ERROR = "\x1b[41m\x1b[37m";
-    const BG_WARN = "\x1b[43m\x1b[30m";
-    const BG_INFO = "\x1b[44m\x1b[37m";
+    // Softer, more modern palette (256-color) instead of harsh basic ANSI.
+    const FG_ERROR = "\x1b[38;5;203m";
+    const FG_WARN = "\x1b[38;5;215m";
+    const FG_INFO = "\x1b[38;5;110m";
 
-    const TEXT_ERROR = "\x1b[31m";
-    const TEXT_WARN = "\x1b[33m";
-    const TEXT_INFO = "\x1b[36m";
+    const CHIP_ERROR = "\x1b[48;5;203m\x1b[38;5;236m";
+    const CHIP_WARN = "\x1b[48;5;215m\x1b[38;5;236m";
+    const CHIP_INFO = "\x1b[48;5;110m\x1b[38;5;236m";
 
-    let label = "";
+    let chip = "";
     let accentColor = "";
     let icon = "";
 
     switch (type) {
         case Log.Error:
-            label = `${BG_ERROR} ✕ ERROR ${RESET}`;
-            accentColor = TEXT_ERROR;
             icon = "✕";
+            chip = `${CHIP_ERROR} ${BOLD} ${icon} ERROR ${RESET}`;
+            accentColor = FG_ERROR;
             break;
 
         case Log.Warning:
-            label = `${BG_WARN} ⚠ WARN  ${RESET}`;
-            accentColor = TEXT_WARN;
             icon = "⚠";
+            chip = `${CHIP_WARN} ${BOLD} ${icon} WARN  ${RESET}`;
+            accentColor = FG_WARN;
             break;
 
         case Log.Info:
-            label = `${BG_INFO} ℹ INFO  ${RESET}`;
-            accentColor = TEXT_INFO;
             icon = "ℹ";
+            chip = `${CHIP_INFO} ${BOLD} ${icon} INFO  ${RESET}`;
+            accentColor = FG_INFO;
             break;
     }
 
@@ -54,15 +56,15 @@ export function log(
         .split(" ")[0];
 
     console.log(
-        `${DIM}[${timestamp}]${RESET} ` +
-        `${label} ` +
-        `${accentColor}${BOLD}[${stage.toUpperCase()}]${RESET} ` +
+        `${DIM}${timestamp}${RESET} ` +
+        `${chip} ` +
+        `${accentColor}${ITALIC}${stage.toUpperCase()}${RESET} ` +
         `${BOLD}${message}${RESET}`
     );
 
     if (description) {
         console.log(
-            `${DIM}  └─${RESET} ${description}\n`
+            `${DIM}   ╰─ ${description}${RESET}\n`
         );
     }
 }
@@ -174,10 +176,14 @@ export class ParserLogger extends ParserBase {
         const RESET = "\x1b[0m";
         const BOLD = "\x1b[1m";
         const DIM = "\x1b[2m";
+        const ITALIC = "\x1b[3m";
 
-        const TEXT_ERROR = "\x1b[31m";
-        const TEXT_BLUE = "\x1b[34m";
-        const TEXT_WHITE = "\x1b[37m";
+        // Softened, cohesive 256-color palette.
+        const FG_ERROR = "\x1b[38;5;203m";
+        const FG_BORDER = "\x1b[38;5;103m";
+        const FG_TEXT = "\x1b[38;5;253m";
+        const FG_MUTED = "\x1b[38;5;244m";
+        const FG_SUGGEST = "\x1b[38;5;222m";
 
         /*
          * ANSI underline for the offending token.
@@ -390,7 +396,7 @@ export class ParserLogger extends ParserBase {
 
             highlightedLine =
                 before +
-                `${TEXT_ERROR}${UNDERLINE}${BOLD}` +
+                `${FG_ERROR}${UNDERLINE}${BOLD}` +
                 tokenPart +
                 `${RESET}` +
                 after;
@@ -407,11 +413,12 @@ export class ParserLogger extends ParserBase {
 
         /*
          * The caret row drawn under the offending line,
-         * e.g. "      ^^^^ unexpected token".
+         * using a small upward tick instead of a plain caret,
+         * e.g. "      ‾‾‾‾ unexpected token".
          */
         const caretRow =
             " ".repeat(displayTokenStart) +
-            "^".repeat(tokenLength);
+            "─".repeat(tokenLength);
 
         /*
          * Calculate source width.
@@ -438,26 +445,24 @@ export class ParserLogger extends ParserBase {
             );
 
         /*
-         * Header.
-         */
-        log(
-            Log.Error,
-            "PARSER",
-            message,
-            `line ${lineNum + 1}, column ${caretPad.length + 1}`
-        );
-
-        /*
-         * Rounded top border.
+         * Header — rustc/eslint style: bold message up top,
+         * then a "-->" location line pointing at file position.
          */
         console.log(
-            `${TEXT_BLUE}${BOLD}` +
-            `  ╭${"─".repeat(sourceWidth + 2)}╮` +
-            `${RESET}`
+            `${FG_ERROR}${BOLD}error${RESET}${BOLD}: ${message}${RESET}`
+        );
+        console.log(
+            `${" ".repeat(lineLabelWidth)} ${FG_BORDER}╭─▶ ${RESET}` +
+            `${FG_MUTED}line ${lineNum + 1}, column ${caretPad.length + 1}${RESET}`
+        );
+        console.log(
+            `${" ".repeat(lineLabelWidth)} ${FG_BORDER}│${RESET}`
         );
 
         /*
-         * Source lines.
+         * Source lines — open gutter (no right border), a single
+         * vertical rule on the left, numbers dimmed except the
+         * offending line.
          */
         for (const {
             index,
@@ -472,89 +477,54 @@ export class ParserLogger extends ParserBase {
                     ? highlightedLine
                     : line;
 
-            const visibleContent =
-                `${lineLabel} │ ${line}`;
-
-            const padding =
-                " ".repeat(
-                    Math.max(
-                        sourceWidth -
-                        visibleContent.length,
-                        0
-                    )
-                );
-
-            const gutterMarker =
-                isOffending
-                    ? `${TEXT_ERROR}${BOLD}▶${RESET}`
-                    : `${TEXT_BLUE}${BOLD}│${RESET}`;
-
             console.log(
-                `  ${gutterMarker} ` +
-                `${isOffending
-                    ? TEXT_ERROR + BOLD
-                    : DIM
-                }` +
-                `${lineLabel}${RESET} ` +
-                `${TEXT_BLUE}│${RESET} ` +
                 `${
                     isOffending
-                        ? TEXT_WHITE
-                        : DIM
-                }${renderedLine}${RESET}` +
-                `${padding} ` +
-                `${TEXT_BLUE}${BOLD}│${RESET}`
+                        ? FG_ERROR + BOLD
+                        : FG_MUTED
+                }${lineLabel}${RESET} ` +
+                `${FG_BORDER}│${RESET} ` +
+                `${
+                    isOffending
+                        ? FG_TEXT
+                        : FG_MUTED
+                }${renderedLine}${RESET}`
             );
 
             /*
-             * Caret + diagnostic message, drawn directly
-             * under the offending token — rustc/eslint style.
+             * Underline the offending token directly beneath it.
+             * The closing "help:" line is deferred until every
+             * context line (including ones below the error) has
+             * been printed, so it isn't followed by an orphaned
+             * source line once the rule closes.
              */
             if (isOffending) {
-                const caretText =
-                    `${caretRow} ${suggestion}`;
-
-                const messagePadding =
-                    " ".repeat(
-                        Math.max(
-                            sourceWidth -
-                            lineLabelWidth -
-                            3 -
-                            caretText.length,
-                            0
-                        )
-                    );
-
                 console.log(
-                    `  ${TEXT_BLUE}${BOLD}│${RESET} ` +
                     `${" ".repeat(lineLabelWidth)} ` +
-                    `${TEXT_BLUE}│${RESET} ` +
-                    `${TEXT_ERROR}${BOLD}` +
-                    `${caretRow}${RESET} ` +
-                    `${TEXT_ERROR}${suggestion}${RESET}` +
-                    `${messagePadding} ` +
-                    `${TEXT_BLUE}${BOLD}│${RESET}`
+                    `${FG_BORDER}│${RESET} ` +
+                    `${FG_ERROR}${BOLD}${caretRow}${RESET}`
                 );
             }
         }
 
-        /*
-         * Rounded bottom border.
-         */
         console.log(
-            `${TEXT_BLUE}${BOLD}` +
-            `  ╰${"─".repeat(sourceWidth + 2)}╯` +
-            `${RESET}`
+            `${" ".repeat(lineLabelWidth)} ${FG_BORDER}│${RESET}`
         );
 
+        console.log(
+            `${" ".repeat(lineLabelWidth)} ` +
+            `${FG_BORDER}╰─${RESET} ` +
+            `${FG_SUGGEST}${BOLD}help:${RESET}${FG_SUGGEST}${ITALIC} ${suggestion}${RESET}`
+        );
+
+        console.log();
+
         /*
-         * Token information.
+         * Token information, as a small trailing footnote rather
+         * than a separate boxed section.
          */
         console.log(
-            `     ${DIM}token${RESET} ` +
-            `${TEXT_BLUE}›${RESET} ` +
-            `${BOLD}${tokenName}${RESET} ` +
-            `${DIM}(${JSON.stringify(tokenText)})${RESET}`
+            `${DIM}   ${tokenName} ${FG_BORDER}·${RESET}${DIM} ${JSON.stringify(tokenText)}${RESET}`
         );
 
         console.log();

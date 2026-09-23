@@ -18,8 +18,7 @@ const first = union(First.Module.Import, First.Module.Using, First.FunctionProdu
 
 type BodyType =
     ParseNode<
-        ParseNodeEnum.Import |
-        ParseNodeEnum.Using |
+        ParseNodeEnum.Module |
         ParseNodeEnum.Function |
         ParseNodeEnum.Allocator |
         //daop specific types
@@ -55,9 +54,8 @@ export function parseProgramProduction(parser: Parser, filename: string) {
             },
         })
 
-    } else {
-
-        parser.advance()
+        //because the loop advances one step, so consume a virtual "out of bounds" token to revert to the original.
+        parser.consume(-1)
 
     }
 

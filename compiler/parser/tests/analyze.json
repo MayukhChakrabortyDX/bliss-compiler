@@ -1,0 +1,111 @@
+{
+	"kind": "Module",
+	"span": {
+		"start": 1,
+		"end": 45
+	},
+	"moduleKind": 0,
+	"body": {
+		"kind": "ModulePath",
+		"span": {
+			"start": 0,
+			"end": 0
+		},
+		"pathKind": 1,
+		"body": [
+			{
+				"kind": "ModulePath",
+				"span": {
+					"start": 0,
+					"end": 0
+				},
+				"pathKind": 0,
+				"body": "std"
+			},
+			{
+				"kind": "ModulePath",
+				"span": {
+					"start": 0,
+					"end": 0
+				},
+				"pathKind": 0,
+				"body": "io"
+			},
+			{
+				"kind": "ModulePath",
+				"span": {
+					"start": 0,
+					"end": 0
+				},
+				"pathKind": 0,
+				"body": "println"
+			},
+			{
+				"kind": "ModulePath",
+				"span": {
+					"start": 0,
+					"end": 0
+				},
+				"pathKind": 2,
+				"body": [
+					{
+						"kind": "ModulePath",
+						"span": {
+							"start": 0,
+							"end": 0
+						},
+						"pathKind": 1,
+						"body": [
+							{
+								"kind": "ModulePath",
+								"span": {
+									"start": 0,
+									"end": 0
+								},
+								"pathKind": 0,
+								"body": "item"
+							}
+						]
+					},
+					{
+						"kind": "ModulePath",
+						"span": {
+							"start": 0,
+							"end": 0
+						},
+						"pathKind": 1,
+						"body": [
+							{
+								"kind": "ModulePath",
+								"span": {
+									"start": 0,
+									"end": 0
+								},
+								"pathKind": 0,
+								"body": "x"
+							},
+							{
+								"kind": "ModulePath",
+								"span": {
+									"start": 0,
+									"end": 0
+								},
+								"pathKind": 0,
+								"body": "software"
+							}
+						]
+					}
+				]
+			},
+			{
+				"kind": "ModulePath",
+				"span": {
+					"start": 0,
+					"end": 0
+				},
+				"pathKind": 3,
+				"body": null
+			}
+		]
+	}
+}

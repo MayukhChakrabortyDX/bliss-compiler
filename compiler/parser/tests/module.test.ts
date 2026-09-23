@@ -1,22 +1,11 @@
 import { Tokenizer } from "../../lexer/tokenizer"
 import { TokenType } from "../../lexer/tokens";
 import { Parser } from "../parser";
-import { ImportProduction } from "../rules/module";
-import { ProgramProduction } from "../rules/program";
+import { union } from "../utility/union";
 
 const code =
 `
-import a.b.c;
-using a.(b).c.x;
-fx
-fx
-import a..b.c.()..
-using left ()
-fx
-using;;;;;;fx fx garbage code lets see how parser handles this bull
-fx () => { println(js is hell!) }
-;using import x;
-fx fx data fx
+import std.io.println.(item, x.software.*
 `
 const tokenizer = new Tokenizer(code)
 tokenizer.tokenize()
@@ -24,7 +13,7 @@ const tokens = tokenizer.tokens; //stream of tokens
 
 const parser = new Parser(tokens, tokenizer.sourceContainer)
 
-const output = ProgramProduction.parse(parser)
+const output = parser.parseImport(union(TokenType.EOF))
 parser.print()
 
 //console.log(JSON.stringify(output, null, 2))
