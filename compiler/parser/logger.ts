@@ -185,17 +185,15 @@ export class ParserLogger extends ParserBase {
         const FG_MUTED = "\x1b[38;5;244m";
         const FG_SUGGEST = "\x1b[38;5;222m";
 
-        /*
-         * ANSI underline for the offending token.
-         */
-        const UNDERLINE =
-            "\x1b[4m";
-
         const tokenName =
             TokenType[token.tokenType] ?? "Unknown";
 
-        const tokenText =
-            token.span.resolve();
+        let tokenDisplay = "";
+        if (tokenName.startsWith("K_")) {
+            tokenDisplay = `Got keyword ${tokenName.substring(2).toLowerCase()}`;
+        } else {
+            tokenDisplay = `Got ${tokenName}`;
+        }
 
         const sourceLines =
             this.source.str.split("\n");
@@ -396,7 +394,7 @@ export class ParserLogger extends ParserBase {
 
             highlightedLine =
                 before +
-                `${FG_ERROR}${UNDERLINE}${BOLD}` +
+                `${FG_ERROR}${BOLD}` +
                 tokenPart +
                 `${RESET}` +
                 after;
@@ -413,12 +411,13 @@ export class ParserLogger extends ParserBase {
 
         /*
          * The caret row drawn under the offending line,
-         * using a small upward tick instead of a plain caret,
-         * e.g. "      ‾‾‾‾ unexpected token".
+         * using carets to point at the token and appending the formatted token type,
+         * e.g. "    ^^^^ Got keyword let".
          */
         const caretRow =
             " ".repeat(displayTokenStart) +
-            "─".repeat(tokenLength);
+            "^".repeat(tokenLength) +
+            ` ${tokenDisplay}`;
 
         /*
          * Calculate source width.
@@ -515,16 +514,6 @@ export class ParserLogger extends ParserBase {
             `${" ".repeat(lineLabelWidth)} ` +
             `${FG_BORDER}╰─${RESET} ` +
             `${FG_SUGGEST}${BOLD}help:${RESET}${FG_SUGGEST}${ITALIC} ${suggestion}${RESET}`
-        );
-
-        console.log();
-
-        /*
-         * Token information, as a small trailing footnote rather
-         * than a separate boxed section.
-         */
-        console.log(
-            `${DIM}   ${tokenName} ${FG_BORDER}·${RESET}${DIM} ${JSON.stringify(tokenText)}${RESET}`
         );
 
         console.log();

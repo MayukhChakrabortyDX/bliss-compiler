@@ -3,8 +3,9 @@
 import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import { Parser } from "../parser";
-import { branchGroup, createBranch, useBranch } from "../utility/branch";
-import { createExtension } from "../utility/extension";
+import { branchGroup, createBranch } from "../utility/branch";
+import { createExtension, extensionGroup } from "../utility/extension";
+import { digest, token } from "../utility/linear";
 import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
@@ -228,17 +229,69 @@ export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
 
 }
 
-export class Function extends ParseNode<ParseNodeEnum.Function> {
-    constructor(public head: ParseNode<ParseNodeEnum.FunctionHead>, public body: ParseNode<ParseNodeEnum.BlockBody>) {
+export enum FunctionKindEnum {
+    Normal, Linked, ManualLink
+}
+
+export class Function<T extends FunctionKindEnum> extends ParseNode<ParseNodeEnum.Function> {
+    constructor(
+        public functionKind: T,
+        public head: ParseNode<ParseNodeEnum.FunctionHead>,
+        public body:
+            T extends FunctionKindEnum.Normal ? ParseNode<ParseNodeEnum.BlockBody> :
+            T extends FunctionKindEnum.Linked ? string :
+            null
+    ) {
         super(ParseNodeEnum.Function)
     }
+}
+
+namespace FunctionCache {
+
+    export const first = union(First.Structure.Body, TokenType.K_Mlink, TokenType.K_Link)
+    const bodyExtension = createExtension((parser, head: ParseNode<ParseNodeEnum.FunctionHead>, sync) => {
+
+        const body = parser.parseBody(sync, "function")
+        return new Function(FunctionKindEnum.Normal, head, body)
+
+    }, ...First.Structure.Body)
+
+    const linkExtension = createExtension((parser, head: ParseNode<ParseNodeEnum.FunctionHead>, sync) => {
+        
+        const output = parser.terminal<{ "pathname": string }>(
+            sync,
+            "function-link-extension",
+            token(TokenType.K_Link, "Expected the keyword link"),
+            token(TokenType.LBrace, "Expected starting '('"),
+            digest(TokenType.String, "Expected a linker path", "pathname"),
+            token(TokenType.RBrace, "Expected a closing ')' bracket"),
+            token(TokenType.Semicolon, "Expected a semicolon")
+        )
+
+        return new Function(FunctionKindEnum.Linked, head, output["pathname"])
+
+    }, TokenType.K_Link)
+
+    const manualLinkExtension = createExtension((parser, head: ParseNode<ParseNodeEnum.FunctionHead>, sync) => {
+
+        parser.terminal(
+            sync,
+            "function-manual-link-extension",
+            token(TokenType.K_Mlink, "Expected the keword mlink"),
+            token(TokenType.Semicolon, "Expected a semicolon token here")
+        )
+
+        return new Function(FunctionKindEnum.ManualLink, head, null)
+
+    }, TokenType.K_Mlink)
+
+    export const functionExtension = extensionGroup<ParseNode<ParseNodeEnum.FunctionHead>, Function<FunctionKindEnum>>
+    (bodyExtension, manualLinkExtension, linkExtension)
 }
 //* VERIFIED AND CACHED
 export function parseFunction(parser: Parser, sync: Set<TokenType>) {
 
-    const head = parser.parseFunctionHead(union(sync, First.Structure.Body))
-    const body = parser.parseBody(sync, "function")
-
-    return new Function(head, body)
+    const head = parser.parseFunctionHead(union(sync, FunctionCache.first))
+    return parser.useExtension(() => head, FunctionCache.functionExtension, sync)
 
 }

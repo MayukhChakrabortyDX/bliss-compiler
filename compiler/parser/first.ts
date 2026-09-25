@@ -6,10 +6,17 @@ export class First {
     static FunctionHead = union(TokenType.K_Fx)
     static FunctionProduction = union(First.FunctionHead)
     static LoopProduction = union(TokenType.K_Loop)
-    static Modifier = union(TokenType.K_Unsafe, TokenType.K_Trans, TokenType.K_Volatile)
+    static Modifier = union(
+        TokenType.K_Unsafe, 
+        TokenType.K_Trans, 
+        TokenType.K_Volatile, 
+        TokenType.K_Const
+    )
+
     static Module = {
         Import: union(TokenType.K_Import),
-        Using: union(TokenType.K_Using)
+        Using: union(TokenType.K_Using),
+        Export: union(TokenType.K_Export)
     }
 
     static Atom = union(
@@ -23,7 +30,9 @@ export class First {
     static Node = union(
         First.Atom,
         TokenType.K_New, TokenType.K_Free,
-        TokenType.K_Return, TokenType.K_Break, TokenType.K_Let, TokenType.K_Transform, TokenType.K_Sub
+        TokenType.K_Return, TokenType.K_Break, 
+        TokenType.K_Let, TokenType.K_Transform, 
+        TokenType.K_Sub
     )
 
     static ProgramProduction = union(

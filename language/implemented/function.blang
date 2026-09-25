@@ -16,4 +16,7 @@ HEAD -> "fx" @IDENTIFIER "(" ARGS*[separated_by ','] ")" ':' type.TYPE;
 //refer language/node, language/structures
 BODY -> "{" (structures.STRUCTURE | node.NODE ';')* "}";
 
+//we can use extension here again!
+LINK -> HEAD "link" "(" @STRING ")" ";";
+MLINK -> HEAD "mlink" ";";
 FUNCTION -> HEAD BODY;

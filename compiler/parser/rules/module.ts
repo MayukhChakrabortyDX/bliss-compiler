@@ -1,4 +1,5 @@
 import { TokenType } from "../../lexer/tokens";
+import { First } from "../first";
 import type { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
@@ -178,11 +179,17 @@ namespace ModulePath {
 }
 
 export enum ModuleKind {
-    Import, Using
+    Import, Using, Export, GlobalExport
 }
 
 export class Module<T extends ModuleKind> extends ParseNode<ParseNodeEnum.Module> {
-    constructor(public moduleKind: T, public body: ParseNode<ParseNodeEnum.ModulePath>) {
+    constructor(
+        public moduleKind: T, 
+        public body: 
+            T extends ModuleKind.Import ? ParseNode<ParseNodeEnum.ModulePath> :
+            T extends ModuleKind.Using ? ParseNode<ParseNodeEnum.ModulePath> :
+            ParseNode<ParseNodeEnum.Node>
+    ) {
         super(ParseNodeEnum.Module)
     }
 }
@@ -232,4 +239,33 @@ export function parseUsing(parser: Parser, sync: Set<TokenType>) {
     })
 
     return finish(new Module(ModuleKind.Using, body))
+}
+
+export function parseExport(parser: Parser, sync: Set<TokenType>) {
+
+    const finish = parser.start()
+
+    parser.match({
+        expected: TokenType.K_Export,
+        sync: union(sync, First.Node, TokenType.K_Global, TokenType.Semicolon),
+        title: "Expected the keyword export"
+    })
+
+    let output;
+
+    if ( parser.peek().tokenType == TokenType.K_Global ) {
+        parser.advance()
+        output = new Module(ModuleKind.Export, parser.parseNode(union(sync, TokenType.Semicolon)))
+    } else {
+        output = new Module(ModuleKind.GlobalExport, parser.parseNode(union(sync, TokenType.Semicolon)))
+    }
+
+    parser.match({
+        expected: TokenType.Semicolon,
+        sync,
+        title: "Expected a semicolon here"
+    })
+
+    return finish(output)
+
 }

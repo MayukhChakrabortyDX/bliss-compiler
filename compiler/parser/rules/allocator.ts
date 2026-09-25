@@ -32,10 +32,10 @@ export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
         title: "Expected a starting '{' here"
     })
 
-    const body = []
+    const body: ParseNode<ParseNodeEnum.Function>[] = []
 
     parser.useLoopWithoutSeparator({
-        callback: (fx) => body.push(fx),
+        callback: (fx: ParseNode<ParseNodeEnum.Function>) => body.push(fx),
         production: (parser, sync) => parser.parseFunction(sync),
         deliminator: TokenType.RBracket,
         first: First.FunctionProduction,

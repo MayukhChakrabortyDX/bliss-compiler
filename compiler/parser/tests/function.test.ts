@@ -3,16 +3,10 @@ import { Parser } from "../parser";
 
 const tokenizer = new Tokenizer(
 `
-allocator malloc {
+fx add(): void link("poath")
+;
 
-    fx allocate(): [u8] 
-    }
-
-    fx deallocate(): void {
-    }
-
-}
-`
+fx md(): ld mlink;`
 )
 
 tokenizer.tokenize()

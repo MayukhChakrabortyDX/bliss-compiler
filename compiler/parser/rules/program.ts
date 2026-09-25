@@ -9,12 +9,13 @@ import { union } from "../utility/union";
 
 const importBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Import)
 const usingBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Using)
+const exportBranch = createBranch((parser, sync) => parser.parseExport(sync), ...First.Module.Export)
 const functionBranch = createBranch((parser, sync) => parser.parseFunction(sync), ...First.FunctionProduction)
 const allocatorBranch = createBranch((parser, sync) => parser.parseAllocator(sync), ...First.Allocator)
 const daopBranch = createBranch((parser, sync) => parser.parseDaop(sync), ...First.DAOP)
 
-const programBranch = branchGroup(importBranch, usingBranch, functionBranch, allocatorBranch, daopBranch)
-const first = union(First.Module.Import, First.Module.Using, First.FunctionProduction, First.Allocator, First.DAOP)
+const programBranch = branchGroup(importBranch, usingBranch, exportBranch, functionBranch, allocatorBranch, daopBranch)
+const first = union(First.Module.Import, First.Module.Using, First.Module.Export, First.FunctionProduction, First.Allocator, First.DAOP)
 
 type BodyType =
     ParseNode<

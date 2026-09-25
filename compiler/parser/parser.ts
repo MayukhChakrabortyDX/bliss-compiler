@@ -8,13 +8,14 @@ import { parseDaop } from "./rules/daop";
 import { parseFunction, parseFunctionHead } from "./rules/function";
 import { parseLoop } from "./rules/loop";
 import { parseModifier } from "./rules/modifiers";
-import { parseImport, parseUsing } from "./rules/module";
+import { parseExport, parseImport, parseUsing } from "./rules/module";
 import { parseAtom, parseNode } from "./rules/node";
 import { parseProgramProduction } from "./rules/program";
 import { parseBody, parseStructure } from "./rules/structure";
 import { parseType } from "./rules/types";
 import { useBranch, type BranchMap } from "./utility/branch";
 import { useExtension, type ExtensionMap } from "./utility/extension";
+import { terminal, type TerminalAPI } from "./utility/linear";
 import { union } from "./utility/union";
 
 type loopType<T> = {
@@ -46,6 +47,12 @@ type loopWithoutSeparator<T> = {
 }
 
 export class Parser extends ParserLogger {
+
+    //universal cache to be used by the linear operators.
+    cache = new Map<string, any>()
+    terminal<T>(sync: Set<TokenType>, cache: string, ...items: TerminalAPI[]) {
+        return terminal<T>(cache, this, sync, ...items)
+    }
 
     useBranch(branchTable: BranchMap, title: string, sync: Set<TokenType>) {
         return useBranch(this, branchTable, title, sync)
@@ -219,6 +226,10 @@ export class Parser extends ParserLogger {
 
     parseUsing(sync: Set<TokenType>) {
         return parseUsing(this, sync)
+    }
+
+    parseExport(sync: Set<TokenType>) {
+        return parseExport(this, sync)
     }
 
     parseAtom(sync: Set<TokenType>) {

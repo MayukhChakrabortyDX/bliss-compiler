@@ -6,3 +6,6 @@ IMPORT -> "import" MODULE_PATH ';' ;
 USING -> "using" MODULE_PATH ';' ;
 
 //start(MODULE_PATH) = start(MODULE_ATOM)
+EXPORT -> "export" "global"? node.Node ';';
+//step 1 - add the export and local tokens
+//step 2 - create parsers for them
