@@ -41,8 +41,7 @@ namespace Action {
             title: "Expected a starting '(' bracket"
         })
 
-        //@ts-ignore
-        const actions = []
+        const actions: string[] = []
 
         parser.useLoop({
             callback: (item: string) => actions.push(item),
@@ -63,7 +62,6 @@ namespace Action {
         })
 
         return {
-            //@ts-ignore
             actions
         }
 
@@ -138,14 +136,14 @@ namespace Composite {
 namespace Args {
     export const first = union(Typed.first, Composite.first, TokenType.Identifier)
 
-    const actionExtension = createExtension((parser, from, sync) => {
+    const actionExtension = createExtension((parser, from: Argument<ArgType.Typed>, sync) => {
 
         const action = Action.parse(parser, sync)
-        return {
-            is: "typed_action",
-            from,
-            action
-        }
+        return new Argument(ArgType.Composite, {
+            name: from.body.name,
+            type: from.body.type,
+            actions: action
+        })
 
     }, ...Action.first)
 
@@ -161,7 +159,7 @@ namespace Args {
 }
 
 export class FunctionHead extends ParseNode<ParseNodeEnum.FunctionHead> {
-    constructor(public name: string, public returnType: ParseNode<ParseNodeEnum.DataType>) {
+    constructor(public name: string, public args: Argument<ArgType>[], public returnType: ParseNode<ParseNodeEnum.DataType>) {
         super(ParseNodeEnum.FunctionHead)
     }
 }
@@ -186,13 +184,12 @@ export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
         title: "Arguments must start with '('"
     })
 
-    //@ts-ignore
-    const argList = []
+    const argList: Argument<ArgType>[] = []
 
     if (parser.peek().tokenType != TokenType.RBrace) {
 
         parser.useLoop({
-            callback: (args) => argList.push(args),
+            callback: (args: Argument<ArgType>) => argList.push(args),
             production: Args.parse,
             separator: TokenType.Comma,
             deliminator: TokenType.RBrace,
@@ -216,17 +213,7 @@ export function parseFunctionHead(parser: Parser, sync: Set<TokenType>) {
     })
 
     const type = parser.parseType(sync)
-
-    //! arglist is missing
     return new FunctionHead(name, argList, type)
-
-    // return {
-    //     is: "function-head",
-    //     name,
-    //     argList,
-    //     returnType: type
-    // }
-
 }
 
 export enum FunctionKindEnum {
@@ -249,14 +236,14 @@ export class Function<T extends FunctionKindEnum> extends ParseNode<ParseNodeEnu
 namespace FunctionCache {
 
     export const first = union(First.Structure.Body, TokenType.K_Mlink, TokenType.K_Link)
-    const bodyExtension = createExtension((parser, head: ParseNode<ParseNodeEnum.FunctionHead>, sync) => {
+    const bodyExtension = createBranch((parser, sync) => {
 
         const body = parser.parseBody(sync, "function")
-        return new Function(FunctionKindEnum.Normal, head, body)
+        return { is: "normal", body }
 
     }, ...First.Structure.Body)
 
-    const linkExtension = createExtension((parser, head: ParseNode<ParseNodeEnum.FunctionHead>, sync) => {
+    const linkExtension = createBranch((parser, sync) => {
         
         const output = parser.terminal<{ "pathname": string }>(
             sync,
@@ -268,11 +255,11 @@ namespace FunctionCache {
             token(TokenType.Semicolon, "Expected a semicolon")
         )
 
-        return new Function(FunctionKindEnum.Linked, head, output["pathname"])
+        return { is: "link", path: output.pathname }
 
     }, TokenType.K_Link)
 
-    const manualLinkExtension = createExtension((parser, head: ParseNode<ParseNodeEnum.FunctionHead>, sync) => {
+    const manualLinkExtension = createBranch((parser, sync) => {
 
         parser.terminal(
             sync,
@@ -281,17 +268,29 @@ namespace FunctionCache {
             token(TokenType.Semicolon, "Expected a semicolon token here")
         )
 
-        return new Function(FunctionKindEnum.ManualLink, head, null)
+        return { is: "mlink" }
 
     }, TokenType.K_Mlink)
 
-    export const functionExtension = extensionGroup<ParseNode<ParseNodeEnum.FunctionHead>, Function<FunctionKindEnum>>
-    (bodyExtension, manualLinkExtension, linkExtension)
+    export const functionBranchTable = branchGroup(bodyExtension, manualLinkExtension, linkExtension)
 }
 //* VERIFIED AND CACHED
 export function parseFunction(parser: Parser, sync: Set<TokenType>) {
 
     const head = parser.parseFunctionHead(union(sync, FunctionCache.first))
-    return parser.useExtension(() => head, FunctionCache.functionExtension, sync)
+    const then = parser.useBranch(
+        FunctionCache.functionBranchTable,
+        "Expected a valid start to function definition",
+        sync
+    )
+
+    switch (then.is) {
+        case "normal":
+            return new Function(FunctionKindEnum.Normal, head, then.body)
+        case "link":
+            return new Function(FunctionKindEnum.Linked, head, then.path)
+        default:
+            return new Function(FunctionKindEnum.ManualLink, head, null)
+    }
 
 }

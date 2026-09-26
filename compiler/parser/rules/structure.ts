@@ -41,7 +41,14 @@ namespace BodyCache {
 }
 
 export class Block extends ParseNode<ParseNodeEnum.BlockBody> {
-    constructor() {
+    constructor(
+        public body:
+            ParseNode<
+                ParseNodeEnum.Function | ParseNodeEnum.Loop |
+                ParseNodeEnum.Node | ParseNodeEnum.IfBranch |
+                ParseNodeEnum.ElifBranch | ParseNodeEnum.ElseBranch
+            >[]
+    ) {
         super(ParseNodeEnum.BlockBody)
     }
 }
@@ -54,12 +61,19 @@ export function parseBody(parser: Parser, sync: Set<TokenType>, belongs: string)
         title: `${belongs} body must start with '{'`
     })
 
-    //now is the test
-    const body = []
+    const body: ParseNode<
+        ParseNodeEnum.Function | ParseNodeEnum.Loop |
+        ParseNodeEnum.Node | ParseNodeEnum.IfBranch |
+        ParseNodeEnum.ElifBranch | ParseNodeEnum.ElseBranch
+    >[] = []
 
     if (parser.peek().tokenType != TokenType.RBracket) {
         parser.useLoopWithoutSeparator({
-            callback: (item) => body.push(item),
+            callback: (item: ParseNode<
+                ParseNodeEnum.Function | ParseNodeEnum.Loop |
+                ParseNodeEnum.Node | ParseNodeEnum.IfBranch |
+                ParseNodeEnum.ElifBranch | ParseNodeEnum.ElseBranch
+            >) => body.push(item),
             production: (parser, sync) => useBranch(parser, BodyCache.branch, "Expected a valid structure token", sync),
             deliminator: TokenType.RBracket,
             first: union(First.Node, First.Structure.Structure),
