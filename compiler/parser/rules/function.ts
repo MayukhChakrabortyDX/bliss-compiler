@@ -260,7 +260,7 @@ namespace FunctionCache {
         
         const output = parser.terminal<{ "pathname": string }>(
             sync,
-            "function-link-extension",
+            "fxLE",
             token(TokenType.K_Link, "Expected the keyword link"),
             token(TokenType.LBrace, "Expected starting '('"),
             digest(TokenType.String, "Expected a linker path", "pathname"),
@@ -276,7 +276,7 @@ namespace FunctionCache {
 
         parser.terminal(
             sync,
-            "function-manual-link-extension",
+            "fxMLE",
             token(TokenType.K_Mlink, "Expected the keword mlink"),
             token(TokenType.Semicolon, "Expected a semicolon token here")
         )
