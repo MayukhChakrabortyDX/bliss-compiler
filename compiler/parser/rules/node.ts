@@ -4,6 +4,7 @@ import { First } from "../first";
 import { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
 import { createExtension, extensionGroup, useExtension } from "../utility/extension";
+import { digest, nterm, token } from "../utility/linear";
 import { BinaryOperatorEnum, ParseNode, ParseNodeEnum, UnaryOperatorEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
@@ -401,7 +402,7 @@ namespace DecideArrayOrCall {
     const extension = extensionGroup(arrayAccessExtension, callExtension)
 
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): ParseNode<ParseNodeEnum.Atom | ParseNodeEnum.UnaryOperator> {
 
         return parser.useExtension(
             () => parser.parseAtom(
@@ -413,11 +414,14 @@ namespace DecideArrayOrCall {
     }
 }
 
+//propagate the return type
+type PRT = ParseNode<ParseNodeEnum.Atom | ParseNodeEnum.BinaryOperator | ParseNodeEnum.UnaryOperator>;
+
 namespace Binding {
 
     const operators = new Set([TokenType.DoubleColon])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         let left = DecideArrayOrCall.parse(parser, sync.union(operators))
         let token = parser.peek()
@@ -426,6 +430,7 @@ namespace Binding {
 
             parser.advance()
 
+            //@ts-ignore overwrite
             left = new BinaryOperator(
                 BinaryOperatorEnum.Binding,
                 left, DecideArrayOrCall.parse(parser, sync)
@@ -445,7 +450,7 @@ namespace Magnetic {
 
     const operators = new Set([TokenType.ArrowRight])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
         let left = Binding.parse(parser, sync.union(operators))
@@ -473,7 +478,7 @@ namespace Access {
 
     const operators = new Set([TokenType.Dot])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
         let left = Magnetic.parse(parser, sync.union(operators))
@@ -501,7 +506,7 @@ namespace Product {
 
     const operators = new Set([TokenType.Multiply, TokenType.Divide])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
         let left = Access.parse(parser, sync.union(operators))
@@ -529,7 +534,7 @@ namespace Sum {
 
     const operators = new Set([TokenType.Add, TokenType.Minus])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
         let left = Product.parse(parser, sync.union(operators))
@@ -557,7 +562,7 @@ namespace Inequality {
 
     const operators = new Set([TokenType.LessThan, TokenType.GreaterThan, TokenType.LessThanEqual, TokenType.GreaterThanEqual])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
         let left = Sum.parse(parser, sync.union(operators))
@@ -589,7 +594,7 @@ namespace Equality {
 
     const operators = new Set([TokenType.Compare, TokenType.NotEqual])
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>) {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
 
@@ -617,7 +622,7 @@ namespace Equality {
 namespace Assignment {
 
     export const first = First.Atom //obviously
-    export function parse(parser: Parser, sync: Set<TokenType>): BinaryOperator<BinaryOperatorEnum.Assignment> | NodeAtom<AtomEnum> {
+    export function parse(parser: Parser, sync: Set<TokenType>): PRT {
 
         const finish = parser.start()
 
@@ -831,6 +836,8 @@ namespace Transformer {
     export const first = union(TokenType.K_Transform)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
+
+
         parser.match({
             expected: TokenType.K_Transform,
             sync: union(sync, First.Type, TokenType.Colon, TokenType.Identifier, TokenType.K_To, Assignment.first),
@@ -899,7 +906,7 @@ export enum AllocationKind {
 }
 
 export class AllocationStatement<T extends AllocationKind> extends ParseNode<ParseNodeEnum.Allocation> {
-    constructor(public allocationKind: T, public name: string, public body: BinaryOperator<BinaryOperatorEnum.Assignment> | ParseNode<ParseNodeEnum.Atom>) {
+    constructor(public allocationKind: T, public name: string, public body: PRT) {
         super(ParseNodeEnum.Allocation)
     }
 }
@@ -942,40 +949,22 @@ namespace NewAllocation {
 }
 
 namespace FreeAllocation {
-
     export const first: Set<TokenType> = union(TokenType.K_Free)
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
-        parser.match({
-            expected: TokenType.K_Free,
-            sync: union(sync, Assignment.first, TokenType.GreaterThan, TokenType.Identifier, TokenType.LessThan),
-            title: "Expected the keyword 'new'"
-        })
+        const output = parser.terminal<{ "assignment": PRT, "name": string }>(
+            sync,
+            "NsFa",
+            token(TokenType.K_Free, "Expected the keyword 'free'"),
+            token(TokenType.LessThan, "Expected a starting angle bracket '<'"),
+            digest(TokenType.Identifier, "Expected the allocation identifier", "name"),
+            token(TokenType.GreaterThan, "Expected a closing angle bracket '>'"),
+            nterm(Assignment.parse, Assignment.first, "assignment")
+        )
 
-        parser.match({
-            expected: TokenType.LessThan,
-            sync: union(sync, Assignment.first, TokenType.GreaterThan, TokenType.Identifier),
-            title: "Expected a starting angle bracket '<'"
-        })
-
-        const name = parser.digest({
-            expected: TokenType.Identifier,
-            sync: union(sync, Assignment.first, TokenType.GreaterThan),
-            title: "Expected the allocator itself"
-        })
-
-        parser.match({
-            expected: TokenType.GreaterThan,
-            sync: union(sync, Assignment.first),
-            title: "Expected a closing angle bracket '>'"
-        })
-
-        const assignment = Assignment.parse(parser, sync)
-
-        return new AllocationStatement(AllocationKind.Free, name, assignment)
+        return new AllocationStatement(AllocationKind.Free, output.name, output.assignment)
 
     }
-
 }
 
 namespace Allocator {

@@ -24,22 +24,23 @@ export function terminal<T>(cache: string, parser: Parser, sync: Set<TokenType>,
 
     if (parser.cache.has(cache)) {
         items = parser.cache.get(cache)
-    }
+    } else {
 
-    for (let index = items.length - 1; index >= 0; index--) {
+        for (let index = items.length - 1; index >= 0; index--) {
 
-        if (index != items.length - 1) {
+            if (index != items.length - 1) {
+                (items[index] as TerminalAPI).first = union(
+                    (items[index + 1] as TerminalAPI).first,
+                    (items[index] as TerminalAPI).first
+                );
+            }
+
             (items[index] as TerminalAPI).first = union(
-                (items[index + 1] as TerminalAPI).first,
+                sync,
                 (items[index] as TerminalAPI).first
             );
+
         }
-
-        (items[index] as TerminalAPI).first = union(
-            sync,
-            (items[index] as TerminalAPI).first
-        );
-
     }
 
     //set the cache!
@@ -84,5 +85,11 @@ export function digest(tok: TokenType, message: string, as: string) {
             })
         },
         as
+    }
+}
+
+export function nterm(parse: (parser: Parser, sync: Set<TokenType>) => any, first: Set<TokenType>, as: string) {
+    return {
+        first, parse, as
     }
 }
