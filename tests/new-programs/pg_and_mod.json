@@ -1,0 +1,62 @@
+{
+  "kind": "Program",
+  "span": {
+    "start": 0,
+    "end": 32
+  },
+  "body": [
+    {
+      "kind": "Module",
+      "span": {
+        "start": 0,
+        "end": 16
+      },
+      "moduleKind": 0,
+      "body": {
+        "kind": "ModulePath",
+        "span": {
+          "start": 0,
+          "end": 0
+        },
+        "pathKind": 1,
+        "body": [
+          {
+            "kind": "ModulePath",
+            "span": {
+              "start": 0,
+              "end": 0
+            },
+            "pathKind": 0,
+            "body": "stdio"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "Function",
+      "span": {
+        "start": 0,
+        "end": 0
+      },
+      "functionKind": 0,
+      "head": {
+        "kind": "FunctionHead",
+        "span": {
+          "start": 0,
+          "end": 0
+        },
+        "name": "main",
+        "args": []
+      },
+      "body": {
+        "kind": "BlockBody",
+        "span": {
+          "start": 0,
+          "end": 0
+        },
+        "body": []
+      }
+    }
+  ],
+  "filename": "tests/new-programs/pg_and_mod.bx"
+}

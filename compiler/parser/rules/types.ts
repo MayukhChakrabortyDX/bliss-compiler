@@ -34,6 +34,7 @@ namespace BuiltinType {
 
         parser.useBranch(
             createBranch(() => {
+                parser.advance()
                 return new Type(TypeKind.BuiltIn, parser.peek().tokenType)
             }, ...first),
             "Expected a valid built-in type",

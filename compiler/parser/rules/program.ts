@@ -8,7 +8,7 @@ import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
 const importBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Import)
-const usingBranch = createBranch((parser, sync) => parser.parseImport(sync), ...First.Module.Using)
+const usingBranch = createBranch((parser, sync) => parser.parseUsing(sync), ...First.Module.Using)
 const exportBranch = createBranch((parser, sync) => parser.parseExport(sync), ...First.Module.Export)
 const functionBranch = createBranch((parser, sync) => parser.parseFunction(sync), ...First.FunctionProduction)
 const allocatorBranch = createBranch((parser, sync) => parser.parseAllocator(sync), ...First.Allocator)
