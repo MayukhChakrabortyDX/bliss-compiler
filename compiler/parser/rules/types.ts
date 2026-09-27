@@ -3,7 +3,24 @@ import { EmptyNode } from "../ast";
 import { Parser } from "../parser";
 import { branchGroup, createBranch, } from "../utility/branch";
 import { createExtension } from "../utility/extension";
+import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
+
+export enum TypeKind {
+    BuiltIn, Composite, Named, Reference, Handle, Pointer, Array
+}
+
+export class Type<K extends TypeKind> extends ParseNode<ParseNodeEnum.DataType> {
+    constructor(
+        public typeKind: K,
+        public body:
+            K extends TypeKind.BuiltIn ? TokenType :
+            K extends TypeKind.Composite ? { typename: string, actions: string[] } :
+            string
+    ) {
+        super(ParseNodeEnum.DataType)
+    }
+}
 
 namespace BuiltinType {
 
@@ -15,22 +32,13 @@ namespace BuiltinType {
 
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
-        const type = parser.peek()
-        if (first.has(type.tokenType)) {
-
-            //well and good
-            parser.advance()
-            return {
-                is: "built-in-type",
-                type,
-                name: TokenType[type.tokenType]
-            }
-
-        }
-
-        //otherwise
-        parser.report("Expected a built-in type keyword", type)
-        return new EmptyNode("From built-in type")
+        parser.useBranch(
+            createBranch(() => {
+                return new Type(TypeKind.BuiltIn, parser.peek().tokenType)
+            }, ...first),
+            "Expected a valid built-in type",
+            sync
+        )
 
     }
 
@@ -122,11 +130,13 @@ namespace CompositeType {
 
     const identifierExtension = createBranch((parser, sync) => {
 
-        return parser.digest({
-            expected: TokenType.Identifier,
-            sync,
-            title: "Expected an identifier for the composite type"
-        })
+        return [
+            parser.digest({
+                expected: TokenType.Identifier,
+                sync,
+                title: "Expected an identifier for the composite type"
+            })
+        ]
 
     }, TokenType.Identifier)
 
@@ -142,20 +152,20 @@ namespace CompositeType {
                     sync: union(sync, TokenType.DoubleColon, TokenType.LBrace, TokenType.Identifier, TokenType.RBrace, TokenType.Comma),
                     title: "Expected an identifier"
                 })
-                return node
+
+                return new Type(TypeKind.Named, node)
 
             },
 
-            createExtension((parser, from, sync) => {
+            createExtension((parser, from: Type<TypeKind.Named>, sync) => {
 
                 parser.advance()
                 const branch = parser.useBranch(btable, "Expected identifier or a sequence of identifiers", sync)
 
-                return {
-                    is: "composite-type",
-                    from,
-                    over: branch
-                }
+                return new Type(TypeKind.Composite, {
+                    typename: from.body,
+                    actions: branch
+                })
 
             }, TokenType.DoubleColon),
 
@@ -258,7 +268,7 @@ export function parseType(parser: Parser, sync: Set<TokenType>) {
     return parser.useExtension(
         () => {
             return TypeAtom.parse(
-                parser, 
+                parser,
                 union(sync, TokenType.LSquareBrace, TokenType.Integer, TokenType.RSquareBrace)
             )
         },
