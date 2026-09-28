@@ -3,6 +3,7 @@
 import { StringContainer, Token, TokenType } from "../lexer/tokens";
 import type { Node } from "./ast";
 import { ParserDiagnostic } from "./errors";
+import { fatal } from "./fatal";
 import type { ParseNode, ParseNodeEnum } from "./utility/parse_node";
 
 interface MatchProps {
@@ -28,6 +29,14 @@ export class ParserBase {
             //@ts-ignore
             return this.tokenStream[amount + this.tokenIndex]
         }
+
+        //otherwise
+        fatal(
+            "parser", 
+            "Peeking out of bounds", 
+            `at ParserBase.peek(), requested to access token out of bounds\nBounding error: ${this.tokenStream.length - 1 - (amount + this.tokenIndex) }`
+        )
+
     }
 
     consume(tokens: number) {
@@ -125,6 +134,11 @@ export class ParserBase {
         const start = this.peek().span.startIndex;
 
         return <K extends ParseNodeEnum, T extends ParseNode<K>>(node: T, offset: number = 0): T => {
+
+            if ( node.span == undefined ) {
+                console.log(node)
+            }
+
             node.span.start = start;
             node.span.end = this.peek(offset).span.endIndex;
 

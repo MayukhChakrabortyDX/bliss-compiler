@@ -17,9 +17,7 @@ namespace StructureCache {
 
 //* VERIFIED AND CACHED
 export function parseStructure(parser: Parser, sync: Set<TokenType>) {
-
     return useBranch(parser, StructureCache.branch, "Expected a valid start to a structural token", sync)
-
 }
 
 namespace BodyCache {

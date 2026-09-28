@@ -309,6 +309,11 @@ namespace DecideArrayOrCall {
         const output = {
             is: "array-access",
             from,
+            //! TEMPORARY FIX
+            span: {
+                start: 0,
+                end: 0
+            },
             at: number
         }
 
@@ -335,7 +340,11 @@ namespace DecideArrayOrCall {
             parser.advance()
             return {
                 callee: from,
-                arguments: nodes
+                arguments: nodes,
+                span: {
+                    start: 0,
+                    end: 0
+                }
             } //early exit
         }
 
@@ -390,6 +399,10 @@ namespace DecideArrayOrCall {
         }
 
         let output = {
+            span: {
+                start: 0,
+                end: 0
+            },
             callee: from,
             arguments: nodes
         }

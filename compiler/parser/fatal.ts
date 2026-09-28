@@ -60,5 +60,3 @@ export function fatal(
 
     process.exit(1);
 }
-
-fatal("parser", "message", `Some strong description`)
