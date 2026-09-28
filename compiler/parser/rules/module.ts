@@ -2,6 +2,7 @@ import { TokenType } from "../../lexer/tokens";
 import { First } from "../first";
 import type { Parser } from "../parser";
 import { branchGroup, createBranch } from "../utility/branch";
+import { nterm, token } from "../utility/linear";
 import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
@@ -160,7 +161,6 @@ namespace ModulePath {
         );
 
         while (parser.peek().tokenType === TokenType.Dot) {
-
             parser.advance();
 
             paths.push(
@@ -197,22 +197,14 @@ export class Module<T extends ModuleKind> extends ParseNode<ParseNodeEnum.Module
 export function parseImport(parser: Parser, sync: Set<TokenType>) {
 
     const finish = parser.start()
-    parser.match({
-        expected: TokenType.K_Import,
-        sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
-        title: "Expected the keyword 'import'"
-    })
 
-    const body = ModulePath.parse(
-        parser,
-        sync.union(new Set([TokenType.Semicolon])),
+    const { body } = parser.terminal<{ "body": ParseNode<ParseNodeEnum.ModulePath> }>(
+        sync,
+        "Pimp",
+        token(TokenType.K_Import, "Expected the keyword import"),
+        nterm(ModulePath.parse, ModulePath.first, "body"),
+        token(TokenType.Semicolon, "Expected a semicolon token")
     )
-
-    parser.match({
-        expected: TokenType.Semicolon,
-        sync: sync,
-        title: "Expected a semicolon token" //because this is the end token
-    })
 
     return finish(new Module(ModuleKind.Import, body))
 }

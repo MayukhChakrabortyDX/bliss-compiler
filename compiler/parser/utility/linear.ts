@@ -25,9 +25,7 @@ export function terminal<T>(cache: string, parser: Parser, sync: Set<TokenType>,
     if (parser.cache.has(cache)) {
         items = parser.cache.get(cache)
     } else {
-
         for (let index = items.length - 1; index >= 0; index--) {
-
             if (index != items.length - 1) {
                 (items[index] as TerminalAPI).first = union(
                     (items[index + 1] as TerminalAPI).first,
@@ -41,14 +39,13 @@ export function terminal<T>(cache: string, parser: Parser, sync: Set<TokenType>,
             );
 
         }
+        parser.cache.set(cache, items)
     }
-
-    //set the cache!
-    parser.cache.set(cache, items)
 
     //@ts-ignore
     let accumulator: T = {};
     for (let item of items) {
+        
         if (item.as != undefined) {
             //@ts-ignore
             accumulator[item.as] = item.parse(parser, item.first)

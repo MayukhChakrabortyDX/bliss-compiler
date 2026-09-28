@@ -2,7 +2,8 @@ import { Tokenizer } from "../../lexer/tokenizer"
 import { Parser } from "../parser";
 
 const tokenizer = new Tokenizer(
-`import std.io
+`fx main(): i31 {
+
 
 fx main() {
     let x = 10;
