@@ -2,11 +2,11 @@ import { Tokenizer } from "../../lexer/tokenizer"
 import { Parser } from "../parser";
 
 const tokenizer = new Tokenizer(
-`
-fx add(): void link("poath")
-;
+`import std.io
 
-fx md(): ld mlink;`
+fx main() {
+    let x = 10;
+}`
 )
 
 tokenizer.tokenize()
@@ -16,5 +16,5 @@ const parser = new Parser(tokens, tokenizer.sourceContainer)
 
 const output = parser.parseProgramProduction("DemoFile")
 
-console.log(JSON.stringify(output, null, 2))
+//console.log(JSON.stringify(output, null, 2))
 parser.print()

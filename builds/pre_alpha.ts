@@ -221,7 +221,6 @@ async function main(): Promise<void> {
         output = parser.parseProgramProduction(inputPath);
     } catch (err) {
         failure("Parser crashed", String(err));
-        console.log(err.stack);
         process.exit(1);
         return;
     }
