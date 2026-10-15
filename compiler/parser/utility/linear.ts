@@ -2,7 +2,7 @@
 //instead of us having to manage them manually, and with
 //caching support!
 
-import type { TokenType } from "../../lexer/tokens";
+import type { Token, TokenType } from "../../lexer/tokens";
 import type { Parser } from "../parser";
 import { union } from "./union";
 
@@ -17,35 +17,38 @@ import { union } from "./union";
 export type TerminalAPI = {
     first: Set<TokenType>,
     parse: (parser: Parser, sync: Set<TokenType>) => any,
-    as?: string
+    as?: string,
 }
 
 export function terminal<T>(cache: string, parser: Parser, sync: Set<TokenType>, ...items: TerminalAPI[]) {
 
     if (parser.cache.has(cache)) {
+
         items = parser.cache.get(cache)
+    
     } else {
+
+        let prev = new Set<TokenType>()
         for (let index = items.length - 1; index >= 0; index--) {
-            if (index != items.length - 1) {
-                (items[index] as TerminalAPI).first = union(
-                    (items[index + 1] as TerminalAPI).first,
-                    (items[index] as TerminalAPI).first
-                );
-            }
+
+            let first = union((items[index] as TerminalAPI).first);
 
             (items[index] as TerminalAPI).first = union(
-                sync,
-                (items[index] as TerminalAPI).first
+                prev, sync
             );
 
-        }
-        parser.cache.set(cache, items)
-    }
+            prev = union(prev, first)
 
+        }
+
+        parser.cache.set(cache, items)
+        
+    }
     //@ts-ignore
     let accumulator: T = {};
     for (let item of items) {
-        
+
+        console.log(item.first.size)
         if (item.as != undefined) {
             //@ts-ignore
             accumulator[item.as] = item.parse(parser, item.first)

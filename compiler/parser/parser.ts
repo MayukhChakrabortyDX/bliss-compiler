@@ -15,7 +15,7 @@ import { parseBody, parseStructure } from "./rules/structure";
 import { parseType } from "./rules/types";
 import { useBranch, type BranchMap } from "./utility/branch";
 import { useExtension, type ExtensionMap } from "./utility/extension";
-import { terminal, type TerminalAPI } from "./utility/linear";
+import { terminal, token, type TerminalAPI } from "./utility/linear";
 import { union } from "./utility/union";
 
 type loopType<T> = {
@@ -70,7 +70,6 @@ export class Parser extends ParserLogger {
 
         const productionSync = union(sync, deliminator, first)
 
-
         callback(
             production(
                 this,
@@ -80,11 +79,12 @@ export class Parser extends ParserLogger {
 
         while (true) {
 
+            const token = this.peek()
+
             if (debug != undefined) {
+                console.log("Token: " + TokenType[token.tokenType])
                 console.log(debug)
             }
-
-            const token = this.peek()
 
             if (
                 sync.has(token.tokenType) &&

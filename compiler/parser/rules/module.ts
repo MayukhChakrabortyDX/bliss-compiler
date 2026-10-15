@@ -57,69 +57,6 @@ namespace ModuleAtom {
             }
         })
 
-        // paths.push(
-        //     ModulePath.parse(parser, sync.union(new Set([TokenType.Comma, TokenType.RBrace]).union(ModulePath.first)))
-        // )
-
-        // while (true) {
-
-        //     //what token we encounter determines what happens
-        //     const tokenRoot = parser.peek()
-        //     const token = tokenRoot.tokenType
-
-        //     if (sync.has(token) && token != TokenType.RBrace && token != TokenType.Comma && !ModulePath.first.has(token)) {
-
-        //         //we have completed the sync and we have also crossed the delim
-        //         parser.syncToken(false, sync, "Expected a closing ')' bracket", tokenRoot)
-        //         break
-
-        //     }
-
-        //     if (token == TokenType.RBrace) {
-        //         //so this is our deliminator
-        //         parser.advance()
-        //         break
-        //     }
-
-        //     if (ModulePath.first.has(token)) {
-
-        //         //we encounted a new production without using the separator
-
-        //         //why? because if any previous error occurs, most likely due to separator, we do not report.
-        //         parser.report("Provide a separator, '.' (DOT) or ',' (COMMA) before a path", tokenRoot)
-
-        //         paths.push(
-        //             ModulePath.parse(
-        //                 parser, sync.union(ModulePath.first).union(new Set([TokenType.RBrace, TokenType.Comma])) //the end sync ofc.
-        //             )
-        //         )
-
-        //         continue;
-        //     }
-
-        //     if (token == TokenType.Comma) {
-
-        //         //if it's our separator
-        //         parser.advance()
-        //         paths.push(
-        //             ModulePath.parse(
-        //                 parser, sync.union(ModulePath.first).union(new Set([TokenType.RBrace, TokenType.Comma])) //the end sync ofc.
-        //             )
-        //         )
-
-        //         continue;
-
-        //     }
-
-        //     //otherwise we try to sync and continue. Eventually reaching EOF ofc.
-        //     parser.match({
-        //         expected: TokenType.Comma,
-        //         sync: sync.union(new Set([TokenType.RBrace])).union(ModulePath.first),
-        //         title: "Expected a comma separator, got something else"
-        //     })
-
-        // }
-
         return new ModPath(ModPathKind.BracketGroup, paths)
 
     }, TokenType.LBrace)
@@ -162,7 +99,6 @@ namespace ModulePath {
 
         while (parser.peek().tokenType === TokenType.Dot) {
             parser.advance();
-
             paths.push(
                 ModuleAtom.parse(
                     parser,
@@ -200,12 +136,12 @@ export function parseImport(parser: Parser, sync: Set<TokenType>) {
 
     const { body } = parser.terminal<{ "body": ParseNode<ParseNodeEnum.ModulePath> }>(
         sync,
-        "Pimp",
+        "prod_imp",
         token(TokenType.K_Import, "Expected the keyword import"),
         nterm(ModulePath.parse, ModulePath.first, "body"),
         token(TokenType.Semicolon, "Expected a semicolon token")
     )
-
+    
     return finish(new Module(ModuleKind.Import, body))
 }
 
@@ -215,7 +151,7 @@ export function parseUsing(parser: Parser, sync: Set<TokenType>) {
     const finish = parser.start()
     parser.match({
         expected: TokenType.K_Using,
-        sync: sync.union(new Set([TokenType.Semicolon])).union(ModulePath.first),
+        sync: union(TokenType.Semicolon, sync, ModulePath.first),
         title: "Expected the keyword 'import'"
     })
 

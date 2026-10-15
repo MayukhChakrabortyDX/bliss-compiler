@@ -1,4 +1,4 @@
-import std.io
+using std.io
 
 fx main() {
     let x = 10;

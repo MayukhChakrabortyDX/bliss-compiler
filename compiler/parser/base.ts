@@ -107,9 +107,10 @@ export class ParserBase {
             )
             this.isRecovery = true
             this.recoveryCausedBy = token.tokenType
-            if (this.peek().tokenType != TokenType.EOF) {
-                this.advance()
-            }
+
+            // if (this.peek().tokenType != TokenType.EOF) {
+            //     this.advance()
+            // }
 
             while (!sync.has(this.peek().tokenType)) {
                 this.advance() //advance till the token type is matched
