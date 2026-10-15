@@ -262,7 +262,18 @@ namespace AtomDetails {
 
     }, TokenType.HashSymbol)
 
-    export const branch = branchGroup(handleAccessBranch, pointerAccessBranch, sizeAtomBranch, addressAtomBranch, referenceAtomBranch, identifierBranch, realNumBranch, integerBranch, stringBranch, bracketNodeBranch)
+    export const branch = branchGroup(
+        handleAccessBranch, 
+        pointerAccessBranch, 
+        sizeAtomBranch, 
+        addressAtomBranch, 
+        referenceAtomBranch, 
+        identifierBranch, 
+        realNumBranch, 
+        integerBranch, 
+        stringBranch, 
+        bracketNodeBranch
+    )
 
 }
 
@@ -348,55 +359,19 @@ namespace DecideArrayOrCall {
             } //early exit
         }
 
-        while (true) {
-
-            nodes.push(
-                //@ts-ignore
-                parser.parseNode(sync.union(new Set([TokenType.LBrace, TokenType.Comma, TokenType.RBrace])))
-            )
-
-            //we now follow the algorithm of a loop.
-            const token = parser.peek()
-
-            //! REMEMBER THIS CASE.
-            //! SINCE EXTERNAL SYNC TOKEN CAN CONTAIN THE TOKENS WE ARE SUPPOSE TO HANDLE
-            //? sync.has(token) cannot guarantee a token exist outside our production's internal sync set.
-            //? which means, we must guarantee that ourselves
-            if (sync.has(token.tokenType) && token.tokenType != TokenType.Comma && token.tokenType != TokenType.RBrace && !First.Node.has(token.tokenType)) {
-
-                parser.syncToken(false, sync, "Expected a ')' to end call signature", token)
-                break
-
+        parser.useLoop({
+            callback: (node: Node) => nodes.push(node),
+            production: (parser, sync) => parser.parseNode(sync),
+            first: First.Node,
+            sync: union(sync),
+            deliminator: TokenType.RBrace,
+            separator: TokenType.Comma,
+            titles: {
+                closing: "This is closing title",
+                separator: "This is separator title",
+                separatorMissing: "This is separator missing title"
             }
-
-            if (token.tokenType == TokenType.RBrace) {
-
-                parser.advance()
-                break
-
-            }
-
-            if (First.Node.has(token.tokenType)) {
-
-                parser.report("Make sure to have arguments separated by comma", token)
-                continue;
-
-            }
-
-            if (token.tokenType == TokenType.Comma) {
-
-                parser.advance()
-                continue;
-
-            }
-
-            parser.match({
-                expected: TokenType.Comma,
-                sync: sync.union(new Set([TokenType.RBrace])).union(First.Node),
-                title: "Expected a comma separator, got something else"
-            })
-
-        }
+        })
 
         let output = {
             span: {
@@ -848,8 +823,6 @@ namespace Let {
 namespace Transformer {
     export const first = union(TokenType.K_Transform)
     export function parse(parser: Parser, sync: Set<TokenType>) {
-
-
 
         parser.match({
             expected: TokenType.K_Transform,

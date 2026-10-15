@@ -1,9 +1,5 @@
 import std.mem.malloc;
 
-fx main(): void {
-
-    transform A: i64 = malloc((sizeof u8) * 8); //case a where we are transforming this to a 64 bit data
-    transform malloc(sizeof u32) to byteArray: u8; //this is basically transformation of the pointer types.
-    let x: text = User::(Macro, Itemize).hello::X()->(itemize)();
-
+fx main(): i32 {
+    transform malloc(10, 20, 30 + 40, sizeof i32) to byteArray: u8; //this is basically transformation of the pointer types.
 }

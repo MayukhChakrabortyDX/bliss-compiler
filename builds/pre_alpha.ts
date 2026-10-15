@@ -35,6 +35,7 @@ const BUILD_DATE = "15.10.26";
 const AUTHOR = "Mayukh Chakraborty";
 const WEBSITE = "https://bliss-compiler.vercel.app/";
 const SOURCE_EXT = ".bx";
+const DEFAULT_BULK_OUT = "build";
 
 /* ------------------------------------------------------------------ */
 /*  Banner                                                             */
@@ -76,8 +77,8 @@ function printBanner(): void {
         );
     };
 
-    flagRow("-o, --output", "<path>", "Write AST JSON to a specific file (or folder with --bulk)");
-    flagRow("-b, --bulk", undefined, `Compile every ${SOURCE_EXT} file in a folder (recursive)`);
+    flagRow("-o, --output", "<path>", "Output file (or output folder with --bulk)");
+    flagRow("-b, --bulk", undefined, `Compile every ${SOURCE_EXT} file in a folder (default output: <folder>/${DEFAULT_BULK_OUT})`);
     flagRow("-h, --help", undefined, "Show this message");
     console.log();
 }
@@ -100,7 +101,20 @@ function success(label: string, detail?: string): void {
     );
 }
 
+const IS_TTY = Boolean(process.stdout.isTTY);
+
+/** Clears an in-progress "› file" line (TTY only). */
+function clearLine(): void {
+    if (IS_TTY) process.stdout.write("\x1b[2K\r");
+}
+
+/** Shows which file is currently compiling, so a hang is easy to spot. */
+function showProgress(label: string): void {
+    if (IS_TTY) process.stdout.write(`  ${color(BLUE, "›")} ${label}`);
+}
+
 function failure(label: string, detail?: string): void {
+    clearLine();
     console.log(
         `  ${color(RED, "✕")} ${label}` +
         (detail ? ` ${dim(detail)}` : "")
@@ -108,6 +122,7 @@ function failure(label: string, detail?: string): void {
 }
 
 function warn(label: string, detail?: string): void {
+    clearLine();
     console.log(
         `  ${color(YELLOW, "⚠")} ${label}` +
         (detail ? ` ${dim(detail)}` : "")
@@ -252,6 +267,7 @@ async function compileFile(
     result.errorCount = errorCount;
 
     if (errorCount > 0) {
+        clearLine();
         if (verbose) sectionRule("DIAGNOSTICS");
         parser.print();
 
@@ -325,7 +341,9 @@ async function isDirectory(path: string): Promise<boolean> {
 
 async function runBulk(args: CliArgs): Promise<void> {
     const inputDir = args.inputFile!;
-    const outputDir = args.outputFile; // optional: mirrors input structure
+    // Bulk output is always a folder (mirrors the input structure).
+    // Defaults to <input_folder>/build when -o is not given.
+    const outputDir = args.outputFile ?? join(inputDir, DEFAULT_BULK_OUT);
 
     if (!(await isDirectory(inputDir))) {
         console.log();
@@ -338,6 +356,7 @@ async function runBulk(args: CliArgs): Promise<void> {
     const glob = new Bun.Glob(`**/*${SOURCE_EXT}`);
     const relPaths: string[] = [];
     for await (const rel of glob.scan({ cwd: inputDir, onlyFiles: true })) {
+        if (rel.split(/[\\/]/).includes("node_modules")) continue;
         relPaths.push(rel);
     }
     relPaths.sort();
@@ -354,7 +373,7 @@ async function runBulk(args: CliArgs): Promise<void> {
         `Found ${relPaths.length} ${SOURCE_EXT} ${relPaths.length === 1 ? "file" : "files"}`,
         inputDir
     );
-    if (outputDir) step("Output folder", outputDir);
+    step("Output folder", outputDir);
     console.log();
 
     const startedAt = performance.now();
@@ -364,17 +383,15 @@ async function runBulk(args: CliArgs): Promise<void> {
     for (const rel of relPaths) {
         const inputPath = join(inputDir, rel);
 
-        // With -o: mirror the relative structure inside the output folder.
-        // Without -o: write the .json next to each source file.
         const base = basename(rel, extname(rel));
-        const outputPath = outputDir
-            ? join(outputDir, dirname(rel), `${base}.json`)
-            : deriveOutputPath(inputPath);
+        const outputPath = join(outputDir, dirname(rel), `${base}.json`);
+
+        const label = relative(inputDir, inputPath) || rel;
+        showProgress(label);
 
         const result = await compileFile(inputPath, outputPath, false);
         totalTokens += result.tokenCount;
-
-        const label = relative(inputDir, inputPath) || rel;
+        clearLine();
         if (result.ok) {
             success(
                 label,

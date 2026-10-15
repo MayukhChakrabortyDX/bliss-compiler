@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test-partial": "bun tests/all.test.ts > out.json",
-    "test": "bun tests/suite-runner.test.ts",
+    "test": "bun builds/pre_alpha.ts tests -b",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",

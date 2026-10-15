@@ -63,7 +63,7 @@ namespace CompositeType {
         )
 
         while (true) {
-
+            
             //what token we encounter determines what happens
             const tokenRoot = parser.peek()
             const token = tokenRoot.tokenType

@@ -1,4 +1,4 @@
-import { TokenType, type Token } from "../../lexer/tokens";
+import { Token, TokenType } from "../../lexer/tokens";
 import { EmptyNode, Node } from "../ast";
 import type { Parser } from "../parser";
 
@@ -44,6 +44,7 @@ export function useBranch(parser: Parser, branchTable: BranchMap, title: string,
     }
 
     parser.syncToken(false, sync, title, token)
+    parser.advance()
     return new EmptyNode("From Branching")
     
 }
