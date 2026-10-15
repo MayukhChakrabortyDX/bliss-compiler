@@ -5,10 +5,10 @@ ACTION -> 'with' (
 
 //refer language/type
 TYPED -> type.TYPE @IDENTIFIER;
-
 COMPOSITE -> TYPED ACTION;
+PURE_ACTION -> @IDENTIFIER ACTION;
 
-ARGS -> TYPED | COMPOSITE; //here args can also extend composite types
+ARGS -> TYPED | COMPOSITE | PURE_ACTION; //here args can also extend composite types
 
 //refer language/type
 HEAD -> "fx" @IDENTIFIER "(" ARGS*[separated_by ','] ")" ':' type.TYPE;

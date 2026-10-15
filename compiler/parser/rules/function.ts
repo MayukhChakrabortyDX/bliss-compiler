@@ -10,7 +10,7 @@ import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
 import { union } from "../utility/union";
 
 export enum ArgType {
-    Typed, Composite
+    Typed, Composite, Action
 }
 
 export class Argument<T extends ArgType> extends ParseNode<ParseNodeEnum.ArgList> {
@@ -21,8 +21,13 @@ export class Argument<T extends ArgType> extends ParseNode<ParseNodeEnum.ArgList
             {
                 name: string, type: ParseNode<ParseNodeEnum.DataType>
             } :
+            T extends ArgType.Composite ?
+
             {
                 name: string, type: ParseNode<ParseNodeEnum.DataType>, actions: string[]
+            } :
+            {
+                name: string, actions: []
             }
     ) {
         super(ParseNodeEnum.ArgList)
@@ -58,7 +63,8 @@ namespace Action {
                 separator: "Expected a comma separator before the action",
                 separatorMissing: "Give a separator."
             },
-            sync: union(sync, TokenType.RBrace)
+            sync: union(sync, TokenType.RBrace),
+            debug: "This is a debug loop"
         })
 
         return {
@@ -148,6 +154,23 @@ namespace Args {
     }, ...Action.first)
 
     export function parse(parser: Parser, sync: Set<TokenType>): Argument<ArgType> {
+
+        //priority branching will be introduced, but for now, ad-hoc
+        if (parser.peek().tokenType == TokenType.Identifier) {
+            if (parser.peek(1).tokenType == TokenType.K_With) {
+
+                //we know it's a pure action
+                const name = parser.digest({
+                    expected: TokenType.Identifier,
+                    sync: union(sync, Action.first),
+                    title: "If you are seeing this, something went wrong"
+                })
+
+                const actions = Action.parse(parser, sync)
+                return new Argument(ArgType.Action, { name, actions })
+
+            }
+        }
 
         return parser.useExtension(
             () => Typed.parse(parser, sync),
@@ -244,7 +267,7 @@ namespace FunctionCache {
     }, ...First.Structure.Body)
 
     const linkExtension = createBranch((parser, sync) => {
-        
+
         const output = parser.terminal<{ "pathname": string }>(
             sync,
             "fxLE",

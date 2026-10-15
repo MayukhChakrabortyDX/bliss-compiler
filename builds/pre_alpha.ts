@@ -1,5 +1,7 @@
 #!/usr/bin/env bun
 
+import { stat } from "node:fs/promises";
+import { join, relative, dirname, basename, extname } from "node:path";
 import { Tokenizer } from "../compiler/lexer/tokenizer";
 import { Parser } from "../compiler/parser/parser";
 
@@ -29,9 +31,10 @@ const dim = (text: string) => color(DIM, text);
 /* ------------------------------------------------------------------ */
 
 const VERSION = "Pre-Alpha";
-const BUILD_DATE = "27.9.26";
+const BUILD_DATE = "15.10.26";
 const AUTHOR = "Mayukh Chakraborty";
 const WEBSITE = "https://bliss-compiler.vercel.app/";
+const SOURCE_EXT = ".bx";
 
 /* ------------------------------------------------------------------ */
 /*  Banner                                                             */
@@ -51,16 +54,31 @@ function printBanner(): void {
 
     console.log(`  ${bold(color(WHITE, "Usage"))}`);
     console.log(`    ${color(GREEN, "bliss")} ${dim("<file.bx>")} ${dim("[-o <output.json>]")}`);
+    console.log(`    ${color(GREEN, "bliss")} ${dim("<input_folder>")} ${color(YELLOW, "--bulk")} ${dim("[-o <output_folder>]")}`);
     console.log();
 
     console.log(`  ${bold(color(WHITE, "Examples"))}`);
     console.log(`    ${color(GREEN, "bliss")} main.bx`);
     console.log(`    ${color(GREEN, "bliss")} main.bx -o build/main.json`);
+    console.log(`    ${color(GREEN, "bliss")} tests ${color(YELLOW, "--bulk")}`);
+    console.log(`    ${color(GREEN, "bliss")} tests ${color(YELLOW, "--bulk")} -o build/tests`);
     console.log();
 
     console.log(`  ${bold(color(WHITE, "Flags"))}`);
-    console.log(`    ${color(YELLOW, "-o, --output")}  ${dim("<path>")}   Write AST JSON to a specific file`);
-    console.log(`    ${color(YELLOW, "-h, --help")}              Show this message`);
+    const FLAG_COL_WIDTH = 24;
+    const flagRow = (flag: string, arg: string | undefined, desc: string): void => {
+        const plainLen = flag.length + (arg ? arg.length + 1 : 0);
+        const pad = " ".repeat(Math.max(FLAG_COL_WIDTH - plainLen, 2));
+        console.log(
+            `    ${color(YELLOW, flag)}` +
+            `${arg ? " " + dim(arg) : ""}` +
+            `${pad}${desc}`
+        );
+    };
+
+    flagRow("-o, --output", "<path>", "Write AST JSON to a specific file (or folder with --bulk)");
+    flagRow("-b, --bulk", undefined, `Compile every ${SOURCE_EXT} file in a folder (recursive)`);
+    flagRow("-h, --help", undefined, "Show this message");
     console.log();
 }
 
@@ -111,17 +129,23 @@ function sectionRule(title: string): void {
 interface CliArgs {
     inputFile?: string;
     outputFile?: string;
+    bulk: boolean;
     help: boolean;
 }
 
 function parseArgs(argv: string[]): CliArgs {
-    const args: CliArgs = { help: false };
+    const args: CliArgs = { help: false, bulk: false };
 
     for (let i = 0; i < argv.length; i++) {
         const arg = argv[i];
 
         if (arg === "-h" || arg === "--help") {
             args.help = true;
+            continue;
+        }
+
+        if (arg === "-b" || arg === "--bulk") {
+            args.bulk = true;
             continue;
         }
 
@@ -160,6 +184,245 @@ function deriveOutputPath(inputPath: string, explicitOutput?: string): string {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Core: compile a single file                                        */
+/* ------------------------------------------------------------------ */
+
+interface CompileResult {
+    ok: boolean;
+    tokenCount: number;
+    errorCount: number;
+    elapsedMs: number;
+}
+
+/**
+ * Compiles one file. Never calls process.exit, so it can be reused for
+ * single-file and bulk modes. When `verbose` is true, prints step-by-step
+ * progress; errors and diagnostics are always printed.
+ */
+async function compileFile(
+    inputPath: string,
+    outputPath: string,
+    verbose: boolean
+): Promise<CompileResult> {
+    const startedAt = performance.now();
+    const result: CompileResult = { ok: false, tokenCount: 0, errorCount: 0, elapsedMs: 0 };
+    const finish = (): CompileResult => {
+        result.elapsedMs = performance.now() - startedAt;
+        return result;
+    };
+
+    const file = Bun.file(inputPath);
+
+    let source: string;
+    try {
+        source = await file.text();
+        if (verbose) success("Read source file", inputPath);
+    } catch (err) {
+        failure("Failed to read source file", String(err));
+        return finish();
+    }
+
+    if (verbose) step("Tokenizing", inputPath);
+    const tokenizer = new Tokenizer(source);
+
+    try {
+        tokenizer.tokenize();
+    } catch (err) {
+        failure("Tokenizer crashed", String(err));
+        return finish();
+    }
+
+    const tokens = tokenizer.tokens;
+    result.tokenCount = tokens.length;
+    if (verbose) success("Tokenized", `${tokens.length} tokens`);
+
+    if (verbose) step("Parsing");
+    const parser = new Parser(tokens, tokenizer.sourceContainer);
+
+    let output: unknown;
+    try {
+        output = parser.parseProgramProduction(inputPath);
+    } catch (err) {
+        failure("Parser crashed", String(err));
+        return finish();
+    }
+
+    const diagnostics = parser.diagnostics ?? [];
+    const errorCount = diagnostics.length;
+    result.errorCount = errorCount;
+
+    if (errorCount > 0) {
+        if (verbose) sectionRule("DIAGNOSTICS");
+        parser.print();
+
+        warn(
+            `${errorCount} ${errorCount === 1 ? "error" : "errors"} found`,
+            "compilation halted"
+        );
+        console.log();
+        return finish();
+    }
+
+    if (verbose) success("Parsed", "0 errors");
+
+    try {
+        if (verbose) step("Writing AST", outputPath);
+        await Bun.write(outputPath, JSON.stringify(output, null, 2)); // creates parent dirs
+        if (verbose) success("Wrote AST", outputPath);
+    } catch (err) {
+        failure("Failed to write AST", String(err));
+        return finish();
+    }
+
+    result.ok = true;
+    return finish();
+}
+
+/* ------------------------------------------------------------------ */
+/*  Single-file mode                                                   */
+/* ------------------------------------------------------------------ */
+
+async function runSingle(args: CliArgs): Promise<void> {
+    const inputPath = args.inputFile!;
+    const outputPath = deriveOutputPath(inputPath, args.outputFile);
+
+    const exists = await Bun.file(inputPath).exists();
+
+    if (!exists) {
+        console.log();
+        failure(`Cannot find file`, inputPath);
+        console.log();
+        process.exit(1);
+    }
+
+    sectionRule("BLISS COMPILER");
+
+    const result = await compileFile(inputPath, outputPath, true);
+
+    if (!result.ok) {
+        process.exit(1);
+    }
+
+    console.log();
+    console.log(
+        `  ${bold(color(GREEN, "No errors."))} ` +
+        `${dim(`Compiled in ${result.elapsedMs.toFixed(1)}ms`)}`
+    );
+    console.log();
+}
+
+/* ------------------------------------------------------------------ */
+/*  Bulk mode                                                          */
+/* ------------------------------------------------------------------ */
+
+async function isDirectory(path: string): Promise<boolean> {
+    try {
+        return (await stat(path)).isDirectory();
+    } catch {
+        return false;
+    }
+}
+
+async function runBulk(args: CliArgs): Promise<void> {
+    const inputDir = args.inputFile!;
+    const outputDir = args.outputFile; // optional: mirrors input structure
+
+    if (!(await isDirectory(inputDir))) {
+        console.log();
+        failure("Cannot find folder", inputDir);
+        console.log();
+        process.exit(1);
+    }
+
+    // Collect all .bx files (recursive), sorted for stable output.
+    const glob = new Bun.Glob(`**/*${SOURCE_EXT}`);
+    const relPaths: string[] = [];
+    for await (const rel of glob.scan({ cwd: inputDir, onlyFiles: true })) {
+        relPaths.push(rel);
+    }
+    relPaths.sort();
+
+    sectionRule("BLISS COMPILER · BULK");
+
+    if (relPaths.length === 0) {
+        warn(`No ${SOURCE_EXT} files found`, inputDir);
+        console.log();
+        process.exit(1);
+    }
+
+    step(
+        `Found ${relPaths.length} ${SOURCE_EXT} ${relPaths.length === 1 ? "file" : "files"}`,
+        inputDir
+    );
+    if (outputDir) step("Output folder", outputDir);
+    console.log();
+
+    const startedAt = performance.now();
+    const failed: string[] = [];
+    let totalTokens = 0;
+
+    for (const rel of relPaths) {
+        const inputPath = join(inputDir, rel);
+
+        // With -o: mirror the relative structure inside the output folder.
+        // Without -o: write the .json next to each source file.
+        const base = basename(rel, extname(rel));
+        const outputPath = outputDir
+            ? join(outputDir, dirname(rel), `${base}.json`)
+            : deriveOutputPath(inputPath);
+
+        const result = await compileFile(inputPath, outputPath, false);
+        totalTokens += result.tokenCount;
+
+        const label = relative(inputDir, inputPath) || rel;
+        if (result.ok) {
+            success(
+                label,
+                `${result.tokenCount} tokens · ${result.elapsedMs.toFixed(1)}ms`
+            );
+        } else {
+            failure(
+                label,
+                result.errorCount > 0
+                    ? `${result.errorCount} ${result.errorCount === 1 ? "error" : "errors"}`
+                    : "failed"
+            );
+            failed.push(label);
+        }
+    }
+
+    const elapsed = (performance.now() - startedAt).toFixed(1);
+    const passed = relPaths.length - failed.length;
+
+    sectionRule("SUMMARY");
+
+    console.log(
+        `  ${color(GREEN, `${passed} passed`)}` +
+        `${dim(" · ")}` +
+        `${failed.length > 0 ? color(RED, `${failed.length} failed`) : dim("0 failed")}` +
+        `${dim(" · ")}` +
+        `${dim(`${relPaths.length} total`)}`
+    );
+
+    if (failed.length > 0) {
+        console.log();
+        console.log(`  ${bold(color(WHITE, "Failed files"))}`);
+        for (const f of failed) {
+            console.log(`    ${color(RED, "✕")} ${f}`);
+        }
+    }
+
+    console.log();
+    console.log(
+        `  ${failed.length === 0 ? bold(color(GREEN, "No errors.")) : bold(color(RED, "Completed with errors."))} ` +
+        `${dim(`${totalTokens} tokens, compiled in ${elapsed}ms`)}`
+    );
+    console.log();
+
+    process.exit(failed.length > 0 ? 1 : 0);
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main                                                                */
 /* ------------------------------------------------------------------ */
 
@@ -172,88 +435,11 @@ async function main(): Promise<void> {
         process.exit(args.help ? 0 : 1);
     }
 
-    const inputPath = args.inputFile;
-    const outputPath = deriveOutputPath(inputPath, args.outputFile);
-
-    const file = Bun.file(inputPath);
-    const exists = await file.exists();
-
-    if (!exists) {
-        console.log();
-        failure(`Cannot find file`, inputPath);
-        console.log();
-        process.exit(1);
+    if (args.bulk) {
+        await runBulk(args);
+    } else {
+        await runSingle(args);
     }
-
-    sectionRule("BLISS COMPILER");
-
-    const startedAt = performance.now();
-
-    let source: string;
-    try {
-        source = await file.text();
-        success("Read source file", inputPath);
-    } catch (err) {
-        failure("Failed to read source file", String(err));
-        process.exit(1);
-        return;
-    }
-
-    step("Tokenizing", inputPath);
-    const tokenizer = new Tokenizer(source);
-
-    try {
-        tokenizer.tokenize();
-    } catch (err) {
-        failure("Tokenizer crashed", String(err));
-        process.exit(1);
-        return;
-    }
-
-    const tokens = tokenizer.tokens;
-    success("Tokenized", `${tokens.length} tokens`);
-
-    step("Parsing");
-    const parser = new Parser(tokens, tokenizer.sourceContainer);
-
-    let output: unknown;
-    try {
-        output = parser.parseProgramProduction(inputPath);
-    } catch (err) {
-        failure("Parser crashed", String(err));
-        process.exit(1);
-        return;
-    }
-
-    const diagnostics = parser.diagnostics ?? [];
-    const errorCount = diagnostics.length;
-
-    if (errorCount > 0) {
-        sectionRule("DIAGNOSTICS");
-        parser.print();
-
-        warn(
-            `${errorCount} ${errorCount === 1 ? "error" : "errors"} found`,
-            "compilation halted"
-        );
-        console.log();
-        process.exit(1);
-    }
-
-    success("Parsed", "0 errors");
-
-    step("Writing AST", outputPath);
-    await Bun.write(outputPath, JSON.stringify(output, null, 2));
-    success("Wrote AST", outputPath);
-
-    const elapsed = (performance.now() - startedAt).toFixed(1);
-
-    console.log();
-    console.log(
-        `  ${bold(color(GREEN, "No errors."))} ` +
-        `${dim(`Compiled in ${elapsed}ms`)}`
-    );
-    console.log();
 }
 
 main();

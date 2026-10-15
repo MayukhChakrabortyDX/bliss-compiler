@@ -14,10 +14,9 @@ action Printable {
     fx toString(): String;
 }
 
+//This one is halting the parser.
 fx print(str with (a)): void {
-
     naivePrint( str.toString() );
-
 }
 
 data User {

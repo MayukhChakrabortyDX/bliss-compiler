@@ -48,7 +48,6 @@ export function terminal<T>(cache: string, parser: Parser, sync: Set<TokenType>,
     let accumulator: T = {};
     for (let item of items) {
 
-        console.log(item.first.size)
         if (item.as != undefined) {
             //@ts-ignore
             accumulator[item.as] = item.parse(parser, item.first)
