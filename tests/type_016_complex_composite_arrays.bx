@@ -1,0 +1,3 @@
+fx main(): void {
+    let list: Container::(Item, Key)[32] = 0;
+}

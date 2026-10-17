@@ -1,0 +1,3 @@
+fx sin(f64 x): f64 link("libm.so");
+fx cos(f64 x): f64 link("libm.so");
+fx sqrt(f64 x): f64 link("libm.so");

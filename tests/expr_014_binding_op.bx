@@ -1,0 +1,4 @@
+fx main(): void {
+    item::Action;
+    a::b::c;
+}

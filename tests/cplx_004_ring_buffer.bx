@@ -1,0 +1,23 @@
+data RingBuffer {
+    u8[256] storage;
+    u32 head;
+    u32 tail;
+    u32 count;
+};
+
+fx isFull(RingBuffer rb): u8 {
+    if (rb.count == 256) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+fx push(RingBuffer rb, u8 item): u8 {
+    if (isFull(rb) == 1) {
+        return 0;
+    }
+    rb.head = (rb.head + 1);
+    rb.count = rb.count + 1;
+    return 1;
+}

@@ -1,0 +1,4 @@
+fx main(): void {
+    let pp: [[u8]] = 0;
+    let ppp: [[[i32]]] = 0;
+}

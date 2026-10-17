@@ -1,0 +1,3 @@
+bind User with Printable UserPrintable {
+    fx print(User u): void {}
+}

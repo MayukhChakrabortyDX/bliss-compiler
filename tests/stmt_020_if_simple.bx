@@ -1,0 +1,5 @@
+fx test(i32 x): void {
+    if (x > 0) {
+        return;
+    }
+}

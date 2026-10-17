@@ -1,0 +1,4 @@
+allocator DebugAlloc {
+    fx alloc(u64 bytes, String file, u32 line): [u8] { return 0; }
+    fx dumpStats(): void { return; }
+}

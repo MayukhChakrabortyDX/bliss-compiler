@@ -1,0 +1,3 @@
+fx main(): void {
+    let (const) MAX_ITEMS: u32 = 1000;
+}

@@ -1,0 +1,5 @@
+fx main(): void {
+    elif (1 == 1) {
+        return;
+    }
+}

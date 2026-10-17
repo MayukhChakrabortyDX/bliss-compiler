@@ -1,0 +1,3 @@
+bind User with () as P {
+    fx print(User u): void {}
+}

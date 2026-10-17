@@ -1,0 +1,6 @@
+action Stream {
+    fx read(): u8;
+    fx write(u8 byte): void;
+    fx flush(): void;
+    fx close(): void;
+}

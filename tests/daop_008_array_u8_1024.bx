@@ -1,0 +1,1 @@
+data NetworkPacket[u8, 1024];

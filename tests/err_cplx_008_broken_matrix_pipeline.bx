@@ -1,0 +1,26 @@
+data Mat4 { f32[16] d; };
+
+fx id(): Mat4 {
+    let m: Mat4 = 0;
+    return m;
+}
+
+fx mul(Mat4 a, Mat4 b): Mat4 {
+    let res: Mat4 = 0;
+    let i: i32 = 0;
+    loop outer {
+        if (i == 4) {
+            break outer;
+        }
+        let j: i32 = 0;
+        loop inner {
+            if (j == 4) {
+                break inner;
+            }
+            res.d[0] = a.d[0] * * b.d[0]; // Error: double multiplication operator
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    return res;
+}

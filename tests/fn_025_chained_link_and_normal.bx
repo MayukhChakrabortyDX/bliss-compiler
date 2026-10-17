@@ -1,0 +1,6 @@
+fx raw_write(i32 fd, [u8] buf, u64 len): i64 link("libc.so.6");
+fx raw_read(i32 fd, [u8] buf, u64 len): i64 link("libc.so.6");
+
+fx printMessage(String msg): void {
+    raw_write(1, msg.bytes, msg.len);
+}

@@ -1,0 +1,6 @@
+fx fib(u32 n): u32 {
+    if (n <= 1) {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
+}

@@ -1,0 +1,3 @@
+fx zeroVector(): f32[4] {
+    return vec;
+}

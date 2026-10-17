@@ -1,0 +1,8 @@
+allocator FastTemp {
+    fx alloc(u32 n): [u8] { return 0; }
+}
+
+allocator LongLived {
+    fx alloc(u32 n): [u8] { return 0; }
+    fx dealloc([u8] p): void { return; }
+}

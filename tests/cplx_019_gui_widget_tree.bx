@@ -1,0 +1,17 @@
+data Bounds {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+};
+
+data Widget {
+    Bounds bounds;
+    u8 isVisible;
+};
+
+fx render(Widget w): void {
+    if (w.isVisible == 1) {
+        return;
+    }
+}

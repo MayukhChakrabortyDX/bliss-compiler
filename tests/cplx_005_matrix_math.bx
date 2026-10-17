@@ -1,0 +1,11 @@
+alias f32[4][4] as Mat4;
+
+fx identity(): Mat4 {
+    let m: Mat4 = 0;
+    return m;
+}
+
+fx multiply(Mat4 a, Mat4 b): Mat4 {
+    let result: Mat4 = 0;
+    return result;
+}

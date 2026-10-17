@@ -1,0 +1,3 @@
+fx main(): void {
+    transform oldVal to newVal: u64;
+}

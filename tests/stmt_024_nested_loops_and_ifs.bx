@@ -1,0 +1,12 @@
+fx search(i32 target): u8 {
+    loop outer {
+        if (target == 0) {
+            break outer;
+        } else {
+            loop inner {
+                break outer;
+            }
+        }
+    }
+    return 1;
+}

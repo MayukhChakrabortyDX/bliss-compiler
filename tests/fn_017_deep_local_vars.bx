@@ -1,0 +1,8 @@
+fx compute(): i32 {
+    let a: i32 = 1;
+    let b: i32 = 2;
+    let c: i32 = 3;
+    let d: i32 = a + b * c;
+    let e: i32 = d - a;
+    return e;
+}

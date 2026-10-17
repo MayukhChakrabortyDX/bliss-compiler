@@ -63,8 +63,7 @@ namespace Action {
                 separator: "Expected a comma separator before the action",
                 separatorMissing: "Give a separator."
             },
-            sync: union(sync, TokenType.RBrace),
-            debug: "This is a debug loop"
+            sync: union(sync, TokenType.RBrace)
         })
 
         return {

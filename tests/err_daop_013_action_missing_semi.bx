@@ -1,0 +1,3 @@
+action Droppable {
+    fx drop(): void
+}

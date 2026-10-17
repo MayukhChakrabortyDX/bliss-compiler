@@ -1,0 +1,11 @@
+allocator PageAlloc {
+    fx allocPage(): [u8] { return 0; }
+}
+
+allocator SlabAlloc {
+    fx allocSlab(u32 slabId): [u8] { return 0; }
+}
+
+allocator LargeAlloc {
+    fx allocLarge(u64 size): [u8] { return 0; }
+}

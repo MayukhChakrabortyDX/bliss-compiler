@@ -1,0 +1,4 @@
+allocator SystemAlloc {
+    fx malloc(u64 size): [u8] link("libc.so.6");
+    fx free([u8] ptr): void link("libc.so.6");
+}

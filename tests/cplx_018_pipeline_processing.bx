@@ -1,0 +1,17 @@
+data Packet {
+    u32 id;
+    u8[128] payload;
+};
+
+fx filter(Packet p): u8 {
+    if (p.id == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+fx process(Packet p): void {
+    if (filter(p) == 1) {
+        p.id = p.id + 1;
+    }
+}

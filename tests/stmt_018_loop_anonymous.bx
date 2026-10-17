@@ -1,0 +1,6 @@
+fx main(): void {
+    loop {
+        let x: i32 = 1;
+        break;
+    }
+}

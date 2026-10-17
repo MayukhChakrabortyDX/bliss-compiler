@@ -1,0 +1,17 @@
+data BSTNode {
+    i32 key;
+    [BSTNode] left;
+    [BSTNode] right;
+};
+
+fx search([BSTNode] root, i32 target): u8 {
+    if (root == 0) {
+        return 0;
+    } elif (root.key == target) {
+        return 1;
+    } elif (target < root.key) {
+        return search(root.left, target);
+    } else {
+        return search(root.right, target);
+    }
+}

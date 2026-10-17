@@ -1,0 +1,12 @@
+fx main(): void {
+    let t1: u8 = 0;
+    let t2: u16 = 0;
+    let t3: u32 = 0;
+    let t4: u64 = 0;
+    let t5: i8 = 0;
+    let t6: i16 = 0;
+    let t7: i32 = 0;
+    let t8: i64 = 0;
+    let t9: f32 = 0.0;
+    let t10: f64 = 0.0;
+}

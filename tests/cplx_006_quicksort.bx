@@ -1,0 +1,13 @@
+fx partition([i32] arr, i32 low, i32 high): i32 {
+    let pivot: i32 = arr[high];
+    let i: i32 = low - 1;
+    return i + 1;
+}
+
+fx quicksort([i32] arr, i32 low, i32 high): void {
+    if (low < high) {
+        let p: i32 = partition(arr, low, high);
+        quicksort(arr, low, p - 1);
+        quicksort(arr, p + 1, high);
+    }
+}

@@ -1,0 +1,1 @@
+alias u8[32] as Hash256;

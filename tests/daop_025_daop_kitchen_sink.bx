@@ -1,0 +1,19 @@
+data Status;
+data Handle(#Status);
+alias u32 as ResourceId;
+
+data Resource {
+    ResourceId id;
+    u8[64] name;
+    [u8] payload;
+};
+
+action Inspectable {
+    fx inspect(Resource r): void;
+}
+
+bind Resource with Inspectable as ResourceInspector {
+    fx inspect(Resource r): void {
+        return;
+    }
+}

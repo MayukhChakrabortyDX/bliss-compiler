@@ -1,0 +1,8 @@
+import ;
+data Corrupted {
+    i32
+};
+fx broken(: void {}
+allocator BadAlloc {
+    let invalid: u32 = 1;
+}

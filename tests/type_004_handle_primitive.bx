@@ -1,0 +1,4 @@
+fx main(): void {
+    let h1: #u32 = 0;
+    let h2: #f64 = 0;
+}

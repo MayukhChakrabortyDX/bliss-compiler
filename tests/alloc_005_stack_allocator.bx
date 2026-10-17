@@ -1,0 +1,4 @@
+allocator StackAlloc {
+    fx push(u32 bytes): [u8] { return 0; }
+    fx pop(u32 bytes): void { return; }
+}

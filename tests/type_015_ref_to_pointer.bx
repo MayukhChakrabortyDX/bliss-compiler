@@ -1,0 +1,3 @@
+fx main(): void {
+    let r: `[u32] = 0;
+}

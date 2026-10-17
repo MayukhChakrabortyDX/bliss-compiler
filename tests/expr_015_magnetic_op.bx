@@ -1,0 +1,4 @@
+fx main(): void {
+    source->destination;
+    a->b->c;
+}

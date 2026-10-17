@@ -1,0 +1,10 @@
+fx r_u8(): u8 { return 8; }
+fx r_u16(): u16 { return 16; }
+fx r_u32(): u32 { return 32; }
+fx r_u64(): u64 { return 64; }
+fx r_i8(): i8 { return 1; }
+fx r_i16(): i16 { return 2; }
+fx r_i32(): i32 { return 3; }
+fx r_i64(): i64 { return 4; }
+fx r_f32(): f32 { return 3.14; }
+fx r_f64(): f64 { return 2.71828; }

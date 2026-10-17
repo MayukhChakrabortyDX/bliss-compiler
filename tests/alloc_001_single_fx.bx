@@ -1,0 +1,5 @@
+allocator BumpAlloc {
+    fx allocate(u64 size): [u8] {
+        return ptr;
+    }
+}

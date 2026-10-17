@@ -1,0 +1,26 @@
+import std.io;
+
+allocator FastHeap {
+    fx allocate(u64 sz): [u8] { return 0; }
+    fx deallocate([u8] ptr): void { return; }
+}
+
+data Buffer {
+    [u8] dataPtr;
+    u64 size;
+};
+
+action Resizable {
+    fx resize(Buffer b, u64 newSize): void;
+}
+
+bind Buffer with Resizable as DynamicBuffer {
+    fx resize(Buffer b, u64 newSize): void {
+        b.size = newSize;
+    }
+}
+
+fx main(): i32 {
+    new<FastHeap> 1024;
+    return 0;
+}

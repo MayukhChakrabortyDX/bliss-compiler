@@ -1,0 +1,3 @@
+fx main(): void {
+    sub table[0] with replacement;
+}

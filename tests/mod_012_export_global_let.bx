@@ -1,0 +1,1 @@
+export global let g_counter: u64 = 0;

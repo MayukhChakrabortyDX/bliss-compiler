@@ -1,0 +1,12 @@
+action Handler {
+    fx onEvent(u32 id, [u8] payload): void;
+}
+
+data Listener {
+    u32 eventType;
+    Handler handler;
+};
+
+fx emit(Listener l, u32 id, [u8] payload): void {
+    l.handler.onEvent(id, payload);
+}

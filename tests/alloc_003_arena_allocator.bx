@@ -1,0 +1,8 @@
+allocator Arena {
+    fx alloc(u32 size): [u8] {
+        return 0;
+    }
+    fx reset(): void {
+        return;
+    }
+}

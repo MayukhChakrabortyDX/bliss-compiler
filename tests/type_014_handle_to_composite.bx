@@ -1,0 +1,3 @@
+fx main(): void {
+    let h: #Node::(Child, Parent) = 0;
+}

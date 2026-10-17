@@ -1,0 +1,5 @@
+data Header {
+    u8[16] magic;
+    u32 version;
+    u8[64] checksum;
+};

@@ -1,0 +1,3 @@
+data S {
+    name;
+};

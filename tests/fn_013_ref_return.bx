@@ -1,0 +1,3 @@
+fx getRef(): `i32 {
+    return `globalValue;
+}

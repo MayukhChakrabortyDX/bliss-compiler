@@ -1,0 +1,4 @@
+fx main(): void {
+    a == b;
+    a != b;
+}

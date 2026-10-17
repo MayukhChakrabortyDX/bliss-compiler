@@ -1,0 +1,16 @@
+data GraphNode {
+    u32 id;
+    u8 visited;
+    [GraphNode] neighbor;
+};
+
+fx dfs([GraphNode] node): void {
+    if (node == 0) {
+        return;
+    }
+    if (node.visited == 1) {
+        return;
+    }
+    node.visited = 1;
+    dfs(node.neighbor);
+}

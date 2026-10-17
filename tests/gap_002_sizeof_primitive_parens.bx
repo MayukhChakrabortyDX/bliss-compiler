@@ -1,0 +1,3 @@
+fx main(): void {
+    let sz: u32 = sizeof(i32);
+}

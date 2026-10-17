@@ -1,0 +1,14 @@
+fx pipeline(): i32 {
+    let a: i32 = 10;
+    let (unsafe) buf: [u8] = malloc(128);
+    new<Arena> 512;
+    transform buf to fixedBuf: [u8[128]];
+    sub a with 20;
+    loop worker {
+        if (a > 15) {
+            break worker;
+        }
+    }
+    free<Arena> fixedBuf;
+    return a;
+}

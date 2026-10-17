@@ -1,0 +1,12 @@
+data Idle;
+data Running;
+data Terminated;
+
+data Machine {
+    u32 stateId;
+    u64 ticks;
+};
+
+fx transition(Machine m, u32 nextState): void {
+    m.stateId = nextState;
+}

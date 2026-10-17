@@ -1,0 +1,3 @@
+fx execute(worker with Runnable): void {
+    worker.run();
+}

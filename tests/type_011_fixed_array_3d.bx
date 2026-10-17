@@ -1,0 +1,3 @@
+fx main(): void {
+    let tensor: u8[2][4][8] = 0;
+}

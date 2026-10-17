@@ -1,0 +1,21 @@
+data Node {
+    i32 val;
+    [Node] next;
+    [Node] prev;
+};
+
+fx createNode(i32 val): [Node] {
+    let (unsafe) node: [Node] = malloc(sizeof Node);
+    node.val = val;
+    node.next = node;
+    node.prev = node;
+    return node;
+}
+
+fx insertAfter([Node] current, i32 val): [Node] {
+    let (unsafe) newNode: [Node] = createNode(val);
+    newNode.next = current.next;
+    newNode.prev = current;
+    current.next = newNode;
+    return newNode;
+}

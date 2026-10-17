@@ -1,0 +1,4 @@
+data S {
+    i32 x;
+}
+fx main(): void {}

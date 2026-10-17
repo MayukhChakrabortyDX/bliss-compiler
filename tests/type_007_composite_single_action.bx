@@ -1,0 +1,3 @@
+fx main(): void {
+    let obj: MyStruct::Printable = 0;
+}

@@ -1,0 +1,3 @@
+fx main(): void {
+    let (unsafe, volatile, trans, const) special: u64 = 0xFFFFFFFF;
+}

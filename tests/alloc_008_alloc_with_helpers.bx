@@ -1,0 +1,5 @@
+allocator MonitoredAlloc {
+    fx allocate(u64 size): [u8] { return 0; }
+    fx getUsed(): u64 { return 0; }
+    fx getRemaining(): u64 { return 10000; }
+}

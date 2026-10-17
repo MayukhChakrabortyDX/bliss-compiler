@@ -1,0 +1,1 @@
+fx main(u8[CAPACITY] x): void {}

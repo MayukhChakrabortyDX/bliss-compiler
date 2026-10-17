@@ -1,0 +1,20 @@
+data Position {
+    f32 x;
+    f32 y;
+};
+
+data Velocity {
+    f32 vx;
+    f32 vy;
+};
+
+action Updatable {
+    fx update(Position p, Velocity v, f32 dt): void;
+}
+
+bind Position with Updatable as PhysicsMovement {
+    fx update(Position p, Velocity v, f32 dt): void {
+        p.x = p.x + v.vx * dt;
+        p.y = p.y + v.vy * dt;
+    }
+}

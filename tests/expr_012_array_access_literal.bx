@@ -1,0 +1,4 @@
+fx main(): void {
+    arr[0];
+    matrix[1][2];
+}

@@ -1,0 +1,4 @@
+data User { u32 id; };
+bind User with (A, , B) as UB {
+    fx (User u): void {}
+}

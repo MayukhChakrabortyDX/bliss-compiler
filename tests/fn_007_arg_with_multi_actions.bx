@@ -1,0 +1,4 @@
+fx transfer(Buffer buf with (Readable, Writable)): void {
+    buf.read();
+    buf.write();
+}

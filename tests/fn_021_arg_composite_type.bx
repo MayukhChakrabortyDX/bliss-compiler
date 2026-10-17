@@ -1,0 +1,3 @@
+fx processPlugin(PluginManager::(Loader, Validator) mgr): u8 {
+    return 1;
+}

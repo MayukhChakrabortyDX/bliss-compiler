@@ -1,0 +1,14 @@
+data User {
+    String name;
+    i32 age;
+};
+
+action Printable {
+    fx toString(User u): String;
+}
+
+bind User with Printable as UserPrintable {
+    fx toString(User u): String {
+        return u.name;
+    }
+}

@@ -1,0 +1,3 @@
+action Closable {
+    fx close(): void;
+}

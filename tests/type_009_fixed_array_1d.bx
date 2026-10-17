@@ -1,0 +1,4 @@
+fx main(): void {
+    let buffer: u8[1024] = 0;
+    let table: i32[64] = 0;
+}

@@ -34,7 +34,7 @@ export class ParserBase {
         fatal(
             "parser", 
             "Peeking out of bounds", 
-            `at ParserBase.peek(), requested to access token out of bounds\nBounding error: ${this.tokenStream.length - 1 - (amount + this.tokenIndex) }`
+            `at ParserBase.peek(), requested to access token out of bounds\nBounding error: ${this.tokenStream.length - 1 - (amount + this.tokenIndex) }\nPeek Amount: ${amount}`
         )
 
     }
@@ -112,7 +112,7 @@ export class ParserBase {
             //     this.advance()
             // }
 
-            while (!sync.has(this.peek().tokenType)) {
+            while (!sync.has(this.peek().tokenType) && (this.peek().tokenType != TokenType.EOF)) {
                 this.advance() //advance till the token type is matched
             }
         }

@@ -1,0 +1,3 @@
+action Sorter {
+    fx sort(Data d with (Comparable, Indexable)): void;
+}

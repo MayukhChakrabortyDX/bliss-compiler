@@ -1,0 +1,3 @@
+fx outer(): void {
+    fx inner(): void {}
+}

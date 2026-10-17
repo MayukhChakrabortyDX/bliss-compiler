@@ -1,0 +1,3 @@
+fx main(): void {
+    transform malloc(64) to buffer: [u8];
+}

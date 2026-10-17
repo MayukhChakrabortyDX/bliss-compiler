@@ -1,0 +1,10 @@
+data HttpRequest {
+    u16 method;
+    String uri;
+    [u8] body;
+    u64 bodyLen;
+};
+
+fx buildHeaders(HttpRequest req): u32 {
+    return 200;
+}

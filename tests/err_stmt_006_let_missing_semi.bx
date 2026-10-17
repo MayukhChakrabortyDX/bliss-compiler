@@ -1,0 +1,4 @@
+fx main(): void {
+    let x: i32 = 10
+    return;
+}

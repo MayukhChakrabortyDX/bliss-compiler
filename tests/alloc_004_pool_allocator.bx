@@ -1,0 +1,8 @@
+allocator BlockPool {
+    fx acquire(): [u8] {
+        return 0;
+    }
+    fx release([u8] block): void {
+        return;
+    }
+}

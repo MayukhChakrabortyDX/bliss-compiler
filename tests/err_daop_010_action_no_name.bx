@@ -1,0 +1,3 @@
+action {
+    fx run(): void;
+}

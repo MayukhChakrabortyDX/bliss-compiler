@@ -1,0 +1,9 @@
+allocator Heap {
+    fx alloc(u64 sz): [u8] { return 0; }
+    fx freeMem([u8] ptr): void { return; }
+}
+
+fx test(): void {
+    new<Heap> 256;
+    free<Heap> myBuf;
+}

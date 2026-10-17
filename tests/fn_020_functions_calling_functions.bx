@@ -1,0 +1,3 @@
+fx stepA(): i32 { return 1; }
+fx stepB(): i32 { return stepA() + 2; }
+fx stepC(): i32 { return stepB() * 3; }

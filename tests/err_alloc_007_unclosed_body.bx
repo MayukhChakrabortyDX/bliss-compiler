@@ -1,0 +1,2 @@
+allocator Arena {
+    fx alloc(): [u8] { return 0; }

@@ -1,0 +1,8 @@
+allocator StandardHeap {
+    fx allocate(u64 bytes): [u8] {
+        return malloc(bytes);
+    }
+    fx deallocate([u8] ptr): void {
+        free(ptr);
+    }
+}

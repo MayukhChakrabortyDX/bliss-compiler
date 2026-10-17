@@ -1,0 +1,12 @@
+allocator PartitionAlloc {
+    fx allocate(u32 size): [u8] {
+        if (size > 1024) {
+            return 0;
+        } else {
+            loop {
+                break;
+            }
+            return 1;
+        }
+    }
+}

@@ -1,0 +1,4 @@
+fx main(): void {
+    let r1: `u8 = 0;
+    let r2: `i64 = 0;
+}

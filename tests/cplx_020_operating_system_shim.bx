@@ -1,0 +1,14 @@
+import sys.kernel;
+
+alias u64 as PageTableEntry;
+
+data PageDirectory {
+    PageTableEntry[512] entries;
+};
+
+fx trap(u32 irqNumber): void mlink;
+
+fx mapPage(PageDirectory pd, u64 virt, u64 phys, u32 flags): u8 {
+    let (volatile) reg: u64 = virt;
+    return 1;
+}

@@ -1,0 +1,5 @@
+action KeyValueStore {
+    fx get([u8] key, u32 keyLen): [u8];
+    fx set([u8] key, [u8] val, u32 valLen): u8;
+    fx has([u8] key): u8;
+}

@@ -1,0 +1,4 @@
+allocator KernelMemory {
+    fx kmalloc(u64 size): [u8] mlink;
+    fx kfree([u8] ptr): void mlink;
+}

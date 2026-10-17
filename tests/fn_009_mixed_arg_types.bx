@@ -1,0 +1,3 @@
+fx dispatch(u32 eventId, Payload p with Serializable, handler with EventHandler): u32 {
+    return 0;
+}

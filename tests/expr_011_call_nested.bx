@@ -1,0 +1,3 @@
+fx main(): void {
+    outer(inner1(1), inner2(2, 3));
+}

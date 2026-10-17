@@ -1,0 +1,7 @@
+data ShaBlock {
+    u32[16] words;
+};
+
+fx roundSchedule(ShaBlock b): void {
+    let t: u32 = b.words[0] + b.words[1];
+}

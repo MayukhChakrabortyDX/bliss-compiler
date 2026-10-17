@@ -1,0 +1,10 @@
+data Token {
+    u32 kind;
+    u64 start;
+    u64 end;
+};
+
+fx nextToken([u8] source, u64 offset): Token {
+    let tok: Token = 0;
+    return tok;
+}

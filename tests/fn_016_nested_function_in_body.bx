@@ -1,0 +1,6 @@
+fx outer(i32 x): i32 {
+    fx helper(i32 y): i32 {
+        return y * 2;
+    }
+    return helper(x);
+}

@@ -1,0 +1,1 @@
+data MyArray[u8, "100"];

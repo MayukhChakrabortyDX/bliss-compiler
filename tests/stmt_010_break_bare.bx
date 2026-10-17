@@ -1,0 +1,5 @@
+fx main(): void {
+    loop {
+        break;
+    }
+}

@@ -1,0 +1,17 @@
+data Counter {
+    i64 value;
+};
+
+action Incrementable {
+    fx inc(Counter c): void;
+    fx reset(Counter c): void;
+}
+
+bind Counter with Incrementable as CounterOps {
+    fx inc(Counter c): void {
+        c.value = c.value + 1;
+    }
+    fx reset(Counter c): void {
+        c.value = 0;
+    }
+}

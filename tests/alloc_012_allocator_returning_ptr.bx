@@ -1,0 +1,5 @@
+allocator NodePool {
+    fx allocNode(): [ListNode] {
+        return 0;
+    }
+}

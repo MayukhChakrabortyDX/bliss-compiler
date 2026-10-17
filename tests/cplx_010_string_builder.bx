@@ -1,0 +1,11 @@
+data StringBuilder {
+    [u8] buffer;
+    u64 capacity;
+    u64 length;
+};
+
+fx appendChar(StringBuilder sb, u8 ch): void {
+    if (sb.length < sb.capacity) {
+        sb.length = sb.length + 1;
+    }
+}

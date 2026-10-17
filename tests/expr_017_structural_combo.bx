@@ -1,0 +1,4 @@
+fx main(): void {
+    a::b->c.d();
+    root->child::grandchild.field->method(1, 2);
+}

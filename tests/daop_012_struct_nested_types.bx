@@ -1,0 +1,5 @@
+data ListNode {
+    i32 val;
+    [ListNode] prev;
+    [ListNode] next;
+};

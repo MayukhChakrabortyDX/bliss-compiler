@@ -1,0 +1,15 @@
+allocator PoolAlloc {
+    fx alloc(u32 sz): [u8] { return 0; }
+    fx free([u8] p): void { return; }
+}
+
+data ChunkHeader {
+    u32 magic;
+    u32 size;
+    u8 inUse;
+};
+
+fx createChunk(u32 sz): [u8] {
+    new<PoolAlloc> sz;
+    return 0;
+}

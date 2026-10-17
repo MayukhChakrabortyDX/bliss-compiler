@@ -1,0 +1,21 @@
+data Buffer {
+    [u8] ptr;
+    u64 len;
+};
+
+action Reader {
+    fx read(Buffer b): u8;
+}
+
+action Writer {
+    fx write(Buffer b, u8 byte): void;
+}
+
+bind Buffer with (Reader, Writer) as ReadWriteBuffer {
+    fx read(Buffer b): u8 {
+        return 0;
+    }
+    fx write(Buffer b, u8 byte): void {
+        return;
+    }
+}

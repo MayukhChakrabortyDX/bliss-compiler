@@ -1,0 +1,5 @@
+fx main(): void {
+    let p1: [u8] = 0;
+    let p2: [i32] = 0;
+    let p3: [f64] = 0;
+}

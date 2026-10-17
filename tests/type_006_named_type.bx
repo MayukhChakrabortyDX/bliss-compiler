@@ -1,0 +1,4 @@
+fx main(): void {
+    let node: ListNode = 0;
+    let map: HashMap = 0;
+}

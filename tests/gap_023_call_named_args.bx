@@ -1,0 +1,3 @@
+fx main(): void {
+    fn(name="Mayukh", age=21);
+}

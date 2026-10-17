@@ -1,0 +1,16 @@
+data Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+};
+
+fx dot(Vec3 a, Vec3 b): f32 {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+fx scale(Vec3 v, f32 factor): Vec3 {
+    v.x = v.x * factor;
+    v.y = v.y * factor;
+    v.z = v.z * factor;
+    return v;
+}

@@ -1,0 +1,3 @@
+fx main(): void {
+    let ptrToBuf: [u8[256]] = 0;
+}

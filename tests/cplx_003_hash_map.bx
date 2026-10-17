@@ -1,0 +1,20 @@
+data Entry {
+    u32 hash;
+    u64 key;
+    u64 value;
+};
+
+data HashMap {
+    u32 capacity;
+    u32 size;
+    [Entry] entries;
+};
+
+fx hashKey(u64 k): u32 {
+    return k * 2654435761;
+}
+
+fx findBucket(HashMap m, u64 k): u32 {
+    let idx: u32 = hashKey(k);
+    return idx;
+}

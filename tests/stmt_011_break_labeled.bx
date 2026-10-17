@@ -1,0 +1,7 @@
+fx main(): void {
+    loop outer {
+        loop inner {
+            break outer;
+        }
+    }
+}

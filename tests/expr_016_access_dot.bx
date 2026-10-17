@@ -1,0 +1,4 @@
+fx main(): void {
+    user.name;
+    user.address.street;
+}

@@ -1,0 +1,5 @@
+allocator PolicyAlloc {
+    fx allocWithPolicy(Config::(Auditable, Enforceable) policy): [u8] {
+        return 0;
+    }
+}

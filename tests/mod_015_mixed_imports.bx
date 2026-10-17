@@ -1,0 +1,6 @@
+import std.io;
+import std.mem.(malloc, free);
+using std.types.*;
+using core.(arch, cpu);
+export let initialized: u8 = 1;
+export global let system_base: u64 = 0x100000;

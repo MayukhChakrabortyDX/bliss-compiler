@@ -1,0 +1,3 @@
+fx getFortyTwo(): i32 {
+    return 42;
+}
