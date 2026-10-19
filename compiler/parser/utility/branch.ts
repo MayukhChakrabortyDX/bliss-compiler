@@ -44,8 +44,8 @@ export function useBranch(parser: Parser, branchTable: BranchMap, title: string,
     }
 
     parser.syncToken(false, sync, title, token)
-    
-    if ( token.tokenType != TokenType.EOF ) {
+
+    if ( parser.peek().tokenType != TokenType.EOF ) {
         parser.advance()
     }
 

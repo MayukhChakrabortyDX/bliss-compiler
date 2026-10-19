@@ -3,6 +3,7 @@ import { First } from "../first";
 import type { Parser } from "../parser";
 import { union } from "../utility/union";
 import { ParseNode, ParseNodeEnum } from "../utility/parse_node";
+import { branchGroup, createBranch } from "../utility/branch";
 
 export class Allocator extends ParseNode<ParseNodeEnum.Allocator> {
     constructor(public name: string, public functions: ParseNode<ParseNodeEnum.Function>[]) {
