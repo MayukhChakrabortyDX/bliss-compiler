@@ -1,6 +1,9 @@
 //the base class where all the rules will be used.
+//! IN PRODUCTION BUILDS, REMOVE THE LIMIT OF THE LOOPs
 
 import { Token, TokenType } from "../lexer/tokens";
+import { ParserDiagnostic } from "./errors";
+import { fatal } from "./fatal";
 import { ParserLogger } from "./logger";
 import { parseAllocator } from "./rules/allocator";
 import { parseCondition } from "./rules/condition";
@@ -48,6 +51,7 @@ type loopWithoutSeparator<T> = {
 
 export class Parser extends ParserLogger {
 
+    maxTry = 1000
     //universal cache to be used by the linear operators.
     cache = new Map<string, any>()
     terminal<T>(sync: Set<TokenType>, cache: string, ...items: TerminalAPI[]) {
@@ -77,7 +81,7 @@ export class Parser extends ParserLogger {
             )
         )
 
-        while (true) {
+        for ( let _max = 0; _max < this.maxTry; _max++ ) {
 
             const token = this.peek()
 
@@ -92,13 +96,13 @@ export class Parser extends ParserLogger {
                 !first.has(token.tokenType)
             ) {
                 this.syncToken(false, sync, titles.closing, token)
-                break
+                return
             }
 
             if (token.tokenType == deliminator) {
 
                 this.advance()
-                break
+                return
 
             }
 
@@ -120,6 +124,9 @@ export class Parser extends ParserLogger {
 
         }
 
+        this.print()
+        fatal("Parser", "Max Loop Exceeded (useLoopWithoutSeparator)", "")
+
     }
 
     useLoop<T>({
@@ -137,8 +144,7 @@ export class Parser extends ParserLogger {
             )
         )
 
-        while (true) {
-
+        for ( let _max = 0; _max < this.maxTry; _max++ ) {
 
             if (debug != undefined) {
                 console.log(debug)
@@ -154,14 +160,14 @@ export class Parser extends ParserLogger {
             ) {
 
                 this.syncToken(false, sync, titles.closing, token)
-                break
+                return
 
             }
 
             if (token.tokenType == deliminator) {
 
                 this.advance()
-                break
+                return
 
             }
 
@@ -204,6 +210,8 @@ export class Parser extends ParserLogger {
 
         }
 
+        this.print()
+        fatal("Parser", "Max Loop Exceeded (useLoop)", "")
 
     }
 
