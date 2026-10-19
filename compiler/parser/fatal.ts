@@ -1,3 +1,10 @@
+Error.stackTraceLimit = Infinity;
+
+function dumpStackTrace() {
+    const stack = new Error("Stack trace dump").stack;
+    console.log(stack);
+}
+
 /*
  * Reports an unrecoverable internal error — a bug in the
  * product itself, not something caused by the user's input.
@@ -58,5 +65,6 @@ export function fatal(
     );
     console.log();
 
+    dumpStackTrace()
     process.exit(1);
 }

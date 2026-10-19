@@ -39,7 +39,7 @@ export function parseAllocator( parser: Parser, sync: Set<TokenType> ) {
         production: (parser, sync) => parser.parseFunction(sync),
         deliminator: TokenType.RBracket,
         first: First.FunctionProduction,
-        sync: union(sync, TokenType.RBracket),
+        sync,
         titles: {
             closing: "Expected a '}' bracket to close allocator",
             invalidToken: "Expected start of a function here"

@@ -43,8 +43,10 @@ export function useBranch(parser: Parser, branchTable: BranchMap, title: string,
         return production(parser, sync, title)
     }
 
-    parser.syncToken(false, sync, title, token)
-    parser.advance()
+    if (!parser.isRecovery) {
+        parser.syncToken(false, sync, title, token)
+        parser.advance()
+    }
     return new EmptyNode("From Branching")
-    
+
 }

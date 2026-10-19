@@ -266,7 +266,8 @@ namespace TypeCache {
 //* VERIFIED AND CACHED
 export function parseType(parser: Parser, sync: Set<TokenType>) {
 
-    return parser.useExtension(
+
+    let p = parser.useExtension(
         () => {
             return TypeAtom.parse(
                 parser,
@@ -276,5 +277,7 @@ export function parseType(parser: Parser, sync: Set<TokenType>) {
         TypeCache.arrayExtension,
         sync
     )
+
+    return p
 
 }

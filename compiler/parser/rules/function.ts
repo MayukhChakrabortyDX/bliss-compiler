@@ -109,11 +109,13 @@ namespace Typed {
     export function parse(parser: Parser, sync: Set<TokenType>) {
 
         const type = parser.parseType(union(sync, TokenType.Identifier))
+
         const name = parser.digest({
             expected: TokenType.Identifier,
             sync,
             title: "Expected an identifier"
         })
+
 
         return new Argument(ArgType.Typed, {
             name, type

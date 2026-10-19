@@ -1,6 +1,6 @@
 //the base class where all the rules will be used.
 
-import { TokenType } from "../lexer/tokens";
+import { Token, TokenType } from "../lexer/tokens";
 import { ParserLogger } from "./logger";
 import { parseAllocator } from "./rules/allocator";
 import { parseCondition } from "./rules/condition";
@@ -126,8 +126,10 @@ export class Parser extends ParserLogger {
         callback, production, deliminator, separator, first, sync, titles, debug
     }: loopType<T>) {
 
+
         const productionSync = union(sync, separator, deliminator, first)
         //we first call the production here and pass it off.
+
         callback(
             production(
                 this,
@@ -136,6 +138,7 @@ export class Parser extends ParserLogger {
         )
 
         while (true) {
+
 
             if (debug != undefined) {
                 console.log(debug)

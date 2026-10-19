@@ -29,14 +29,12 @@ export class ParserBase {
             //@ts-ignore
             return this.tokenStream[amount + this.tokenIndex]
         }
-
         //otherwise
         fatal(
             "parser", 
             "Peeking out of bounds", 
             `at ParserBase.peek(), requested to access token out of bounds\nBounding error: ${this.tokenStream.length - 1 - (amount + this.tokenIndex) }\nPeek Amount: ${amount}`
         )
-
     }
 
     consume(tokens: number) {

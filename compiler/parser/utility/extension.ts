@@ -1,4 +1,4 @@
-import type { Token, TokenType } from "../../lexer/tokens"
+import { TokenType, type Token } from "../../lexer/tokens"
 import type { Parser } from "../parser"
 
 export type ExtensionMap<T, V> = Map<TokenType, (parser: Parser, from: T, sync: Set<TokenType>) => V>
@@ -33,6 +33,7 @@ export function extensionGroup<T, V>(...extensions: ExtensionMap<T, V>[]): Exten
 export function useExtension<T, V>(parser: Parser, overlap: () => T, extensions: ExtensionMap<T, V>, sync: Set<TokenType>) {
 
     const output = overlap()
+
     let fx = extensions.get(parser.peek().tokenType)
 
     if ( fx != undefined ) {
