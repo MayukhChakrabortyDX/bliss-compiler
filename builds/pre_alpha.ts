@@ -31,7 +31,7 @@ const dim = (text: string) => color(DIM, text);
 /* ------------------------------------------------------------------ */
 
 const VERSION = "Pre-Alpha";
-const BUILD_DATE = "15.10.26";
+const BUILD_DATE = "23.10.26";
 const AUTHOR = "Mayukh Chakraborty";
 const WEBSITE = "https://bliss-compiler.vercel.app/";
 const SOURCE_EXT = ".bx";
