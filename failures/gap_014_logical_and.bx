@@ -1,3 +1,0 @@
-fx main(): void {
-    if (a && b) {}
-}

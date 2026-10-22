@@ -74,13 +74,6 @@ export class Parser extends ParserLogger {
 
         const productionSync = union(sync, deliminator, first)
 
-        callback(
-            production(
-                this,
-                productionSync
-            )
-        )
-
         for ( let _max = 0; _max < this.maxTry; _max++ ) {
 
             const token = this.peek()
@@ -121,6 +114,7 @@ export class Parser extends ParserLogger {
 
             //anything else is not entertained
             this.syncToken(false, productionSync, titles.invalidToken, token)
+            return;
 
         }
 
@@ -136,13 +130,6 @@ export class Parser extends ParserLogger {
 
         const productionSync = union(sync, separator, deliminator, first)
         //we first call the production here and pass it off.
-
-        callback(
-            production(
-                this,
-                productionSync
-            )
-        )
 
         for ( let _max = 0; _max < this.maxTry; _max++ ) {
 
@@ -200,13 +187,8 @@ export class Parser extends ParserLogger {
 
             }
 
-            //console.log(TokenType[token.tokenType])
-
-            this.match({
-                expected: separator,
-                sync: productionSync,
-                title: titles.separatorMissing
-            })
+            this.syncToken(false, productionSync, titles.closing, token)
+            return;
 
         }
 
