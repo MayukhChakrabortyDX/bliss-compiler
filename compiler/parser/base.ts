@@ -113,6 +113,10 @@ export class ParserBase {
             while (!sync.has(this.peek().tokenType) && (this.peek().tokenType != TokenType.EOF)) {
                 this.advance() //advance till the token type is matched
             }
+
+            //right now, the token is matched
+            //we say that this token was reached by the means of synchronization
+            this.peek().wasSyncedTo = true
         }
 
         // if (this.isRecovery && !result) {
