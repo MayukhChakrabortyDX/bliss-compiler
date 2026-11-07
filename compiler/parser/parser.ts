@@ -1,8 +1,7 @@
 //the base class where all the rules will be used.
 //! IN PRODUCTION BUILDS, REMOVE THE LIMIT OF THE LOOPs
 
-import { Token, TokenType } from "../lexer/tokens";
-import { ParserDiagnostic } from "./errors";
+import { TokenType } from "../lexer/tokens";
 import { fatal } from "./fatal";
 import { ParserLogger } from "./logger";
 import { parseAllocator } from "./rules/allocator";
