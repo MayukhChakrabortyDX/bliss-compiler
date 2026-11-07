@@ -99,6 +99,9 @@ export enum TokenType {
 
 export class Token {
 
+    //this field simply asks if the token was reached by synchronization means
+    wasSyncedTo: boolean = false
+
     constructor(
         public tokenType: TokenType, 
         public span: StringSpan, 
