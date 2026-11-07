@@ -1,7 +1,10 @@
 <template>
   <footer class="bliss-footer">
     <div class="bliss-footer__inner">
-      <div>
+      <div class="bliss-footer__brand">
+        <span class="bliss-footer__logo" aria-hidden="true">
+          <BlissLogo />
+        </span>
         <span>© 2026 Bliss</span>
 
         <span class="bliss-footer__separator">·</span>
@@ -20,4 +23,8 @@
       </span>
     </div>
   </footer>
-</template>
+</template>
+
+<script setup lang="ts">
+import BlissLogo from './primitives/BlissLogo.vue'
+</script>

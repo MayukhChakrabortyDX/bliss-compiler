@@ -18,6 +18,31 @@
   font-size: 14px;
 }
 
+.bliss-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bliss-footer__logo {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bliss-footer__logo img,
+.bliss-footer__logo svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .bliss-footer__separator {
   margin-inline: 8px;
   color: #d4d4d8;

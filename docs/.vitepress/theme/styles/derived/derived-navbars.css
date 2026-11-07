@@ -59,14 +59,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: #09090b;
-  color: white;
+  border-radius: 8px;
+  background: transparent;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.bliss-nav__logo svg {
-  width: 18px;
-  height: 18px;
+.bliss-nav__logo img,
+.bliss-nav__logo svg,
+.bliss-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .bliss-nav__name {

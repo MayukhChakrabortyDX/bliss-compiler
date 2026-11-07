@@ -9,11 +9,18 @@ export default defineConfig({
 
   cleanUrls: true,
 
+  head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
+    ['link', { rel: 'apple-touch-icon', href: '/logo.png' }],
+  ],
+
   markdown: {
     headers: true,
   },
 
   themeConfig: {
+    logo: '/logo.png',
+
     nav: [
       { text: 'Docs', link: '/docs/' },
       { text: 'Timeline', link: '/timeline/' },

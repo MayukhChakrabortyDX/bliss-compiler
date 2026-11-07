@@ -1,7 +1,12 @@
 <template>
   <nav :class="['courses-nav', { 'is-menu-open': isMenuOpen }]" aria-label="Courses navigation">
     <div class="courses-nav__inner">
-      <a href="/" class="courses-nav__brand" aria-label="Bliss home">bliss <span>/ courses</span></a>
+      <a href="/" class="courses-nav__brand" aria-label="Bliss home">
+        <span class="bliss-nav__logo" aria-hidden="true">
+          <BlissLogo />
+        </span>
+        bliss <span>/ courses</span>
+      </a>
       <div class="courses-nav__links">
         <a href="/courses/">Courses</a>
         <a href="/docs/">Docs</a>
@@ -28,6 +33,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vitepress'
+import BlissLogo from './primitives/BlissLogo.vue'
 
 const route = useRoute()
 const isMenuOpen = ref(false)
@@ -68,4 +74,3 @@ watch(() => route?.path, () => {
   isMenuOpen.value = false
 })
 </script>
-

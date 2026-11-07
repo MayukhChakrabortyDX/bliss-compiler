@@ -4,7 +4,7 @@
       <!-- Brand -->
       <a href="/" class="bliss-nav__brand" aria-label="Bliss home">
         <span class="bliss-nav__logo" aria-hidden="true">
-          <BlissLogoSvg />
+          <BlissLogo />
         </span>
         <span class="bliss-nav__name">bliss</span>
       </a>
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vitepress'
-import BlissLogoSvg from '../assets/BlissLogoSvg.vue'
+import BlissLogo from './primitives/BlissLogo.vue'
 
 defineProps<{
   isMarketing?: boolean
