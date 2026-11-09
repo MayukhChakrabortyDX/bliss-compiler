@@ -6,8 +6,9 @@ import { union } from "../utility/union";
 import { program, ProgramNode } from "../rules/build-4i/program";
 import { lowerProgram } from "../../lowering/build-4i/program";
 import { Analyzer } from "../../analyzer";
+import { typeSystem } from "../rules/build-4i/type";
 
-const sampleProgram = `fx main() {} fx add() {}`
+const sampleProgram = `fx main(data api: u64, data npi: i32) {}`
 
 const tokenizer = new Tokenizer(sampleProgram)
 tokenizer.tokenize()
@@ -16,7 +17,7 @@ const ast = (program.execute(parser, union(TokenType.EOF)) as ProgramNode)
 
 ast.span.end = tokenizer.tokens[tokenizer.tokens.length - 1]?.span.endIndex || 0
 
-//console.log(JSON.stringify(ast, null, 2))
+console.log(JSON.stringify(ast, null, 2))
 parser.print()
 
 //now analyze

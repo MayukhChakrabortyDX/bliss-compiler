@@ -9,6 +9,6 @@ export function lowerProgram(node: ProgramNode) {
         program = `${program}\n${lowerFunction(fx)}`
     }
 
-    return program
+    return `#include <stdint.h>\n${program}`
 
 }

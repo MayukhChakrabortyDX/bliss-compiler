@@ -12,7 +12,7 @@ export class ProductionEntity {
     syncs_with: Set<TokenType> = new Set() //to be populated by the production function itself
     
     constructor(
-        public token: TokenType,
+        public token: Set<TokenType>,
         public method: (parser: Parser, sync: Set<TokenType>) => any
     ) {}
 

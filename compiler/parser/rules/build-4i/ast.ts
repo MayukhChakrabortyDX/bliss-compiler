@@ -2,7 +2,10 @@
 
 export enum ASTEnum {
     PROGRAM,
-    FUNCTION
+    FUNCTION,
+    EMPTY_BRANCH,
+    TYPE_SYSTEM,
+    FUNCTION_ARGS
 }
 
 export class AST<T extends ASTEnum> {

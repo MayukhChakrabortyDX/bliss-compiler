@@ -109,6 +109,13 @@ export class Token {
         public column: number
     ) {}
 
+    toJSON() {
+        return {
+            ...this,
+            tokenType: TokenType[this.tokenType]
+        }
+    }
+
 }
 
 export function getTokenTypeName(tokenType: TokenType) {

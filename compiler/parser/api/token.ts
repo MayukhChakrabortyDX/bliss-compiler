@@ -1,18 +1,15 @@
 import { TokenType } from "../../lexer/tokens";
 import type { Parser } from "../parser";
-import type { AST, ASTEnum } from "../rules/build-4i/ast";
+import { AST, ASTEnum } from "../rules/build-4i/ast";
 import { union } from "../utility/union";
 import { EntityKind, ProductionEntity, TokenEntity } from "./entity";
-
-//! A Production can have many first-token value (as evident by branches)
-//! So we will later use sets for first-token initiation.
 
 type finishType = <K extends ASTEnum, T extends AST<K>>(node: T, offset?: number) => T;
 
 export class ProductionInstance {
 
     callback: (...args: any[]) => any = () => { }
-    constructor(public first: TokenType, public run: (parser: Parser, sync: Set<TokenType>) => { args: any[], finish: finishType }) { }
+    constructor(public first: Set<TokenType>, public run: (parser: Parser, sync: Set<TokenType>) => { args: any[], finish: finishType }) { }
 
     ast(callback: (finish: finishType, ...args: any[]) => any) {
         this.callback = callback
@@ -57,7 +54,7 @@ export function production(...tokens: (TokenEntity | ProductionEntity)[]) {
                 if (item.kind == EntityKind.TOKEN) {
 
                     parser.match({
-                        expected: item.token,
+                        expected: (item as TokenEntity).token,
                         sync: union(sync, item.syncs_with),
                         title: (item as TokenEntity).error
                     })
@@ -74,7 +71,7 @@ export function production(...tokens: (TokenEntity | ProductionEntity)[]) {
 
                 if (item.kind == EntityKind.TOKEN) {
                     parser.match({
-                        expected: item.token,
+                        expected: (item as TokenEntity).token,
                         sync: union(sync, item.syncs_with),
                         title: (item as TokenEntity).error
                     })
@@ -91,7 +88,7 @@ export function production(...tokens: (TokenEntity | ProductionEntity)[]) {
     }
 
     return new ProductionInstance(
-        (tokens[0] as TokenEntity).token,
+        union((tokens[0] as TokenEntity).token as TokenType),
         execute,
     )
 
@@ -162,7 +159,7 @@ export function loop(
 
                 if (separator != undefined) {
 
-                    if (token.tokenType != separator.token && token.tokenType != prod.token) {
+                    if (token.tokenType != separator.token && !prod.token.has(token.tokenType)) {
 
                         //if it's neither a separator or a production first token or even a delim
                         //that means we return. This is the end stage
@@ -172,7 +169,7 @@ export function loop(
 
                 }
 
-                if (token.tokenType != prod.token) {
+                if (!prod.token.has(token.tokenType)) {
                     return items
                 }
 
@@ -191,6 +188,77 @@ export function loop(
     return new ProductionEntity(
         prod.token,
         method
+    )
+
+}
+
+//! UNVERIFIED
+export class BranchEmpty extends AST<ASTEnum.EMPTY_BRANCH> {
+    constructor() {
+        super(ASTEnum.EMPTY_BRANCH)
+    }
+}
+
+export function branch(
+    ...branches: (ProductionEntity | TokenEntity)[]
+) {
+
+    //we compute the first tokens and map them basically.
+    const branchMap = new Map()
+    const first = new Set<TokenType>()
+
+    for (let branch of branches) {
+        if (branch.kind == EntityKind.PROD) {
+
+            for (let token of (branch as ProductionEntity).token) {
+                //this applies for everyone!
+                branchMap.set(token, (branch as ProductionEntity).method)
+                first.add(token)
+
+            }
+        } else {
+
+            branchMap.set((branch as TokenEntity).token,
+                (parser: Parser, sync: Set<TokenType>) => {
+                    
+                    const _tok = parser.peek()
+                    
+                    parser.match({
+                        expected: (branch as TokenEntity).token,
+                        sync,
+                        title: (branch as TokenEntity).error
+                    })
+
+                    return _tok
+                }
+            )
+            first.add((branch as TokenEntity).token)
+
+        }
+    }
+
+    //we computed the branch map, now we will resolve them
+    const method = (parser: Parser, sync: Set<TokenType>) => {
+
+        const token = parser.peek()
+        const production = branchMap.get(token.tokenType)
+
+        if (production != undefined) {
+            return production(parser, sync)
+        }
+
+        parser.syncToken(false, sync, "Branch does not exist", token)
+
+        if (parser.peek().tokenType != TokenType.EOF) {
+            parser.advance()
+        }
+
+        return new BranchEmpty()
+
+    }
+
+    return new ProductionEntity(
+        first, method
     )
 
 }

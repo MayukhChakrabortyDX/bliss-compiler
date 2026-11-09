@@ -30,7 +30,7 @@ fx addReferences(ptr a: `i32, ptr b: `i32, ptr c: `i32) {
     `c = `a + `b;
 }
 
-fx fixedUnions(union<Printable> num: i32) {
+fx fixedUnions(union(Printable) num: i32) {
 
 }
 
