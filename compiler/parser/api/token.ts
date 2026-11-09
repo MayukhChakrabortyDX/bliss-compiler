@@ -1,23 +1,28 @@
 import { TokenType } from "../../lexer/tokens";
 import type { Parser } from "../parser";
+import type { AST, ASTEnum } from "../rules/build-4i/ast";
 import { union } from "../utility/union";
 import { EntityKind, ProductionEntity, TokenEntity } from "./entity";
 
 //! A Production can have many first-token value (as evident by branches)
 //! So we will later use sets for first-token initiation.
 
+type finishType = <K extends ASTEnum, T extends AST<K>>(node: T, offset?: number) => T;
+
 export class ProductionInstance {
 
-    callback: (...args: any[]) => any = () => {}
-    constructor(public first: TokenType, public run: (parser: Parser, sync: Set<TokenType>) => any[]) { }
+    callback: (...args: any[]) => any = () => { }
+    constructor(public first: TokenType, public run: (parser: Parser, sync: Set<TokenType>) => { args: any[], finish: finishType }) { }
 
-    ast(callback: (...args: any[]) => any) {
+    ast(callback: (finish: finishType, ...args: any[]) => any) {
         this.callback = callback
         return this
     }
 
     execute(parser: Parser, sync: Set<TokenType>) {
-        return this.callback(...this.run(parser, sync))
+        let runner = this.run(parser, sync)
+        const val = this.callback(runner.finish, ...runner.args)
+        return val
     }
 
 }
@@ -42,18 +47,23 @@ export function production(...tokens: (TokenEntity | ProductionEntity)[]) {
 
         const args: any[] = []
 
+        const finish = parser.span_start()
         for (let item of tokens) {
+
+            const token = parser.peek()
 
             if (item.save_result) {
 
                 if (item.kind == EntityKind.TOKEN) {
-                    args.push(
-                        parser.digest({
-                            expected: item.token,
-                            sync: union(sync, item.syncs_with),
-                            title: (item as TokenEntity).error
-                        })
-                    )
+
+                    parser.match({
+                        expected: item.token,
+                        sync: union(sync, item.syncs_with),
+                        title: (item as TokenEntity).error
+                    })
+
+                    args.push(token)
+
                 } else {
                     args.push(
                         (item as ProductionEntity).method(parser, sync)
@@ -76,7 +86,7 @@ export function production(...tokens: (TokenEntity | ProductionEntity)[]) {
 
         }
 
-        return args
+        return { args, finish }
 
     }
 
@@ -94,12 +104,12 @@ export function token(token: TokenType) {
 export function nterm(production: ProductionInstance) {
     return new ProductionEntity(
         production.first,
-        (parser, sync) => production.execute(parser, sync)        
+        (parser, sync) => production.execute(parser, sync)
     )
 }
 
 export function loop(
-    { prod, separator, deliminator, allowEmpty=true }:
+    { prod, separator, deliminator, allowEmpty = true }:
         { prod: ProductionEntity, separator?: TokenEntity, deliminator: TokenEntity, allowEmpty?: boolean }
 ) {
 
@@ -108,16 +118,16 @@ export function loop(
         const items: any[] = []
         let loopSync;
 
-        if ( separator != undefined ) {
+        if (separator != undefined) {
             loopSync = union(sync, prod.token, deliminator.token, separator.token)
         } else {
             loopSync = union(sync, prod.token, deliminator.token)
         }
-        
-        if ( allowEmpty ) {
+
+        if (allowEmpty) {
 
             //this means we can have empty components
-            if ( parser.peek().tokenType == deliminator.token ) {
+            if (parser.peek().tokenType == deliminator.token) {
                 parser.advance()
                 return items
             }
@@ -125,34 +135,34 @@ export function loop(
         }
 
         //otherwise we will start with a single production match
-        const firstProduction = production(prod.save()).ast((item) => items.push(item))
+        const firstProduction = production(prod.save()).ast((_, item) => items.push(item))
         firstProduction.execute(parser, loopSync)
 
         let loopProduction;
 
-        if ( separator != undefined ) {
+        if (separator != undefined) {
             loopProduction = production(
                 separator,
-                prod.save()       
-            ).ast((item) => items.push(item))
+                prod.save()
+            ).ast((_, item) => items.push(item))
         }
 
-        while(true) {
+        while (true) {
 
             //now we are going to handle errors.
 
             const token = parser.peek()
 
-            if ( token.tokenType == deliminator.token ) {
+            if (token.tokenType == deliminator.token) {
                 parser.advance()
                 return items
-            }   
+            }
 
-            if ( token.wasSyncedTo ) {
+            if (token.wasSyncedTo) {
 
-                if ( separator != undefined ) {
+                if (separator != undefined) {
 
-                    if ( token.tokenType != separator.token && token.tokenType != prod.token ) {
+                    if (token.tokenType != separator.token && token.tokenType != prod.token) {
 
                         //if it's neither a separator or a production first token or even a delim
                         //that means we return. This is the end stage
@@ -162,13 +172,13 @@ export function loop(
 
                 }
 
-                if ( token.tokenType != prod.token ) {
+                if (token.tokenType != prod.token) {
                     return items
                 }
-                
+
             }
 
-            if ( separator != undefined ) {
+            if (separator != undefined) {
                 loopProduction?.execute(parser, loopSync)
             } else {
                 firstProduction.execute(parser, loopSync)

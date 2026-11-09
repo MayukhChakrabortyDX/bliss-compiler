@@ -1,10 +1,10 @@
-import { TokenType } from "../../../lexer/tokens"
+import { StringSpan, Token, TokenType } from "../../../lexer/tokens"
 import { production, token } from "../../api/token"
 import { AST, ASTEnum } from "./ast"
 
 export class FunctionNode extends AST<ASTEnum.FUNCTION> {
 
-    constructor( public name: string ) {
+    constructor( public name: string, public name_span: StringSpan ) {
         super(ASTEnum.FUNCTION)
     }
 
@@ -17,4 +17,10 @@ export const fx = production(
     token(TokenType.RBrace).err("Expected ')' to close the function parameter list"),
     token(TokenType.LBracket).err("Expected '{' to begin the function body"),
     token(TokenType.RBracket).err("Expected '}' to close the function body")
-).ast((name: string) => new FunctionNode(name))
+).ast((finish, name: Token) => 
+    finish(
+        new FunctionNode(
+            name.span.resolve(), name.span
+        )
+    )
+)

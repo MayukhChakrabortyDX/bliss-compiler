@@ -75,7 +75,7 @@ export function log(
  * with a leading/trailing ellipsis, keeping the box a
  * predictable, readable width.
  */
-const MAX_LINE_WIDTH = 50;
+export const MAX_LINE_WIDTH = 50;
 const ELLIPSIS = "...";
 
 /*
@@ -84,7 +84,7 @@ const ELLIPSIS = "...";
  * same horizontal window from any line so that everything
  * inside the box stays column-aligned.
  */
-function applyWindow(
+export function applyWindow(
     line: string,
     windowStart: number
 ): string {
@@ -113,7 +113,7 @@ function applyWindow(
  * offending line so that the highlighted token is centered
  * and visible, reserving room on both sides for ellipses.
  */
-function chooseWindowStart(
+export function chooseWindowStart(
     lineLength: number,
     focusStart: number,
     focusLen: number

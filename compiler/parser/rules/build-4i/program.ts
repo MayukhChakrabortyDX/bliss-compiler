@@ -15,4 +15,4 @@ export const program = production(
         deliminator: token(TokenType.EOF),       
     }).save()
 )
-.ast((functions: FunctionNode[]) => new ProgramNode(functions))
+.ast((_, functions: FunctionNode[]) => new ProgramNode(functions))

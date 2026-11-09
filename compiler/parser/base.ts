@@ -1,9 +1,9 @@
 //this code is an example of how branching works in bliss
 
 import { StringContainer, Token, TokenType } from "../lexer/tokens";
-import type { Node } from "./ast";
 import { ParserDiagnostic } from "./errors";
 import { fatal } from "./fatal";
+import type { AST, ASTEnum } from "./rules/build-4i/ast";
 import type { ParseNode, ParseNodeEnum } from "./utility/parse_node";
 
 interface MatchProps {
@@ -31,9 +31,9 @@ export class ParserBase {
         }
         //otherwise
         fatal(
-            "parser", 
-            "Peeking out of bounds", 
-            `at ParserBase.peek(), requested to access token out of bounds\nBounding error: ${this.tokenStream.length - 1 - (amount + this.tokenIndex) }\nPeek Amount: ${amount}`
+            "parser",
+            "Peeking out of bounds",
+            `at ParserBase.peek(), requested to access token out of bounds\nBounding error: ${this.tokenStream.length - 1 - (amount + this.tokenIndex)}\nPeek Amount: ${amount}`
         )
     }
 
@@ -133,22 +133,23 @@ export class ParserBase {
 
     }
 
-    start() {
+    span_start() {
         const start = this.peek().span.startIndex;
 
-        return <K extends ParseNodeEnum, T extends ParseNode<K>>(node: T, offset: number = 0): T => {
+        return <K extends ASTEnum, T extends AST<K>>(node: T): T => {
 
-            if ( node.span == undefined ) {
+            if (node.span == undefined) {
                 console.log(node)
             }
 
             node.span.start = start;
-            node.span.end = this.peek(offset).span.endIndex;
+            node.span.end = this.peek().span.endIndex;
 
             //console.log( `[${this.source.str.substring( node.start, node.end + 1 )}]` )
 
             return node;
-        };
+        }
+
     }
 
     print() {
