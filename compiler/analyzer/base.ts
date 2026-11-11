@@ -1,5 +1,5 @@
 import type { StringContainer } from "../lexer/tokens";
-import type { ProgramNode } from "../parser/rules/build-4i/program";
+import type { ProgramNode } from "../parser/rules/program";
 import type { AnalyzerDiagnostic } from "./diagnostic";
 
 export class AnalyzerBase {

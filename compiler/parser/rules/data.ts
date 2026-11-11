@@ -1,7 +1,7 @@
 //we are now implementing data structures!
 
-import { StringSpan, Token, TokenType } from "../../../lexer/tokens";
-import { loop, nterm, production, token } from "../../api/token";
+import { StringSpan, Token, TokenType } from "../../lexer/tokens";
+import { loop, nterm, production, token } from "../api/token";
 import { AST, ASTEnum } from "./ast";
 import { TypeSystem, typeSystem } from "./type";
 

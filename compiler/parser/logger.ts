@@ -130,7 +130,10 @@ export function chooseWindowStart(
     return start;
 }
 
-export class ParserLogger extends ParserBase {
+export class ParserLogger {
+
+    constructor( public base: ParserBase ) {}
+
     resolveSpan(
         start: number
     ): {
@@ -139,7 +142,7 @@ export class ParserLogger extends ParserBase {
         caretPad: string;
     } {
         const upToStart =
-            this.source.str.substring(0, start);
+            this.base.source.str.substring(0, start);
 
         const lineNum =
             upToStart.split("\n").length - 1;
@@ -151,7 +154,7 @@ export class ParserLogger extends ParserBase {
             start - (lastNL + 1);
 
         const line =
-            this.source.str.split("\n")[lineNum] ?? "";
+            this.base.source.str.split("\n")[lineNum] ?? "";
 
         const caretPad =
             " ".repeat(
@@ -196,7 +199,7 @@ export class ParserLogger extends ParserBase {
         }
 
         const sourceLines =
-            this.source.str.split("\n");
+            this.base.source.str.split("\n");
 
         const {
             lineNum,
@@ -477,16 +480,14 @@ export class ParserLogger extends ParserBase {
                     : line;
 
             console.log(
-                `${
-                    isOffending
-                        ? FG_ERROR + BOLD
-                        : FG_MUTED
+                `${isOffending
+                    ? FG_ERROR + BOLD
+                    : FG_MUTED
                 }${lineLabel}${RESET} ` +
                 `${FG_BORDER}│${RESET} ` +
-                `${
-                    isOffending
-                        ? FG_TEXT
-                        : FG_MUTED
+                `${isOffending
+                    ? FG_TEXT
+                    : FG_MUTED
                 }${renderedLine}${RESET}`
             );
 

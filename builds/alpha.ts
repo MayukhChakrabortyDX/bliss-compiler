@@ -5,8 +5,8 @@ import { Tokenizer } from "../compiler/lexer/tokenizer"
 import { TokenType } from "../compiler/lexer/tokens"
 import { lowerProgram } from "../compiler/lowering/build-4i/program"
 import { Parser } from "../compiler/parser/parser"
-import { program, ProgramNode } from "../compiler/parser/rules/build-4i/program"
-import { union } from "../compiler/parser/utility/union"
+import { program, ProgramNode } from "../compiler/parser/rules/program"
+import { union } from "../compiler/parser/api/union"
 
 import { stat } from "node:fs/promises";
 import { join, relative, dirname, basename, extname } from "node:path";

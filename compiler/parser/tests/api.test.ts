@@ -1,12 +1,10 @@
-import { token, production, loop } from "../api/token";
 import { Tokenizer } from "../../lexer/tokenizer";
 import { TokenType } from "../../lexer/tokens";
 import { Parser } from "../parser";
-import { union } from "../utility/union";
-import { program, ProgramNode } from "../rules/build-4i/program";
+import { union } from "../api/union";
+import { program, ProgramNode } from "../rules/program";
 import { lowerProgram } from "../../lowering/build-4i/program";
 import { Analyzer } from "../../analyzer";
-import { typeSystem } from "../rules/build-4i/type";
 
 const sampleProgram = 
 `

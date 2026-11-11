@@ -1,5 +1,5 @@
-import type { DataStructure } from "../../parser/rules/build-4i/data";
-import type { TypeSystem } from "../../parser/rules/build-4i/type";
+import type { DataStructure } from "../../parser/rules/data";
+import type { TypeSystem } from "../../parser/rules/type";
 import { lowerTypesForFunction } from "./function";
 
 export function lowerDataStructure(node: DataStructure) {

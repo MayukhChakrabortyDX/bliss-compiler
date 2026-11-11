@@ -1,5 +1,5 @@
-import { ASTEnum } from "../../parser/rules/build-4i/ast";
-import type { ProgramNode } from "../../parser/rules/build-4i/program";
+import { ASTEnum } from "../../parser/rules/ast";
+import type { ProgramNode } from "../../parser/rules/program";
 import type { Analyzer } from "../analyzer";   // type-only: no runtime cycle
 import { AnalyzerDiagnostic } from "../diagnostic";
 

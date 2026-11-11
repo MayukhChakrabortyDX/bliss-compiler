@@ -1,8 +1,8 @@
 //we are now going to implement the type system from the type paper.
 //the grammar is - dimension(...modifiers) name: TypeName
 
-import { StringSpan, Token, TokenType } from "../../../lexer/tokens";
-import { branch, production, token } from "../../api/token";
+import { StringSpan, Token, TokenType } from "../../lexer/tokens";
+import { branch, production, token } from "../api/token";
 import { AST, ASTEnum } from "./ast";
 
 export class TypeSystem extends AST<ASTEnum.TYPE_SYSTEM> {

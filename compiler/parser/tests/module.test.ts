@@ -1,7 +1,7 @@
 import { Tokenizer } from "../../lexer/tokenizer"
 import { TokenType } from "../../lexer/tokens";
 import { Parser } from "../parser";
-import { union } from "../utility/union";
+import { union } from "../api/union";
 
 const code =
 `

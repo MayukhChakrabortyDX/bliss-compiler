@@ -1,6 +1,6 @@
-import type { DataStructure } from "../parser/rules/build-4i/data";
-import type { FunctionNode } from "../parser/rules/build-4i/function";
-import type { ProgramNode } from "../parser/rules/build-4i/program";
+import type { DataStructure } from "../parser/rules/data";
+import type { FunctionNode } from "../parser/rules/function";
+import type { ProgramNode } from "../parser/rules/program";
 import { AnalyzerLogger } from "./logger";
 import { analyzeDataStructure } from "./rules/data";
 import { analyzeFunction } from "./rules/function";

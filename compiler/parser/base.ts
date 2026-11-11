@@ -3,8 +3,8 @@
 import { StringContainer, Token, TokenType } from "../lexer/tokens";
 import { ParserDiagnostic } from "./errors";
 import { fatal } from "./fatal";
-import type { AST, ASTEnum } from "./rules/build-4i/ast";
-import type { ParseNode, ParseNodeEnum } from "./utility/parse_node";
+import { ParserLogger } from "./logger";
+import type { AST, ASTEnum } from "./rules/ast";
 
 interface MatchProps {
     expected: TokenType, sync: Set<TokenType>, title: string
@@ -19,8 +19,9 @@ export class ParserBase {
     isRecovery: boolean = false; //this tells the parser is in token-sync-mode.
     recoveryCausedBy: TokenType = TokenType.UNDEFINED
     tokenIndex: number = 0;
+    loggerInstance: ParserLogger = new ParserLogger(this)
 
-    constructor(public tokenStream: Token[], public source: StringContainer) { }
+    constructor(public tokenStream: Token[], public source: StringContainer) {}
 
     //@ts-ignore
     peek(amount: number = 0): Token {
@@ -37,7 +38,7 @@ export class ParserBase {
         )
     }
 
-    consume(tokens: number) {
+    consume(tokens: number = 1) {
         //consume this many tokens
         // if (this.tokenIndex + tokens > this.tokenStream.length) {
         //     log(Log.Error, "PARSER", "Internal Error - Token Consumption Failed", "The parser tried to consume tokens from outside the token range")
@@ -45,46 +46,16 @@ export class ParserBase {
         this.tokenIndex += tokens; //increase this much
     }
 
-    //digests a token and gives out it's value
-    digest({ expected, sync, title }: MatchProps) {
-        let digestedString = ""
-        const _thisToken = this.peek()
-        const result = this.expect(_thisToken, expected, () => {
-            digestedString = this.source.str.substring(
-                _thisToken.span.startIndex,
-                _thisToken.span.endIndex + 1
-            )
-        })
-
-        this.syncToken(result, sync, title, _thisToken)
-        return digestedString
-    }
-
-    advance() {
-
-        //showCallStack()
-        this.consume(1)
-    }
-
-    expect(given: Token, expected: TokenType, callback?: () => any) {
-        if (given.tokenType == expected) {
-            if (callback != undefined) callback();
-            return true
-        }
-
-        return false
-    }
-
     report(title: string, token: Token) {
         this.diagnostics.push(
-            new ParserDiagnostic(title, this, token)
+            new ParserDiagnostic(title, token)
         )
     }
 
     syncToken(result: boolean, sync: Set<TokenType>, title: string, token: Token) {
 
         if (!this.isRecovery && result) {
-            this.advance() //simply advance.
+            this.consume() //simply advance.
         }
 
         if (this.isRecovery && result) {
@@ -93,7 +64,7 @@ export class ParserBase {
             //this means synchronization has been successful
             this.isRecovery = false
             this.recoveryCausedBy = TokenType.UNDEFINED
-            this.advance()
+            this.consume()
             return
 
         }
@@ -101,17 +72,17 @@ export class ParserBase {
         if (!this.isRecovery && !result) {
             //this means a mismatch has happend. We must sync now
             this.diagnostics.push(
-                new ParserDiagnostic(title, this, token)
+                new ParserDiagnostic(title, token)
             )
             this.isRecovery = true
             this.recoveryCausedBy = token.tokenType
 
             // if (this.peek().tokenType != TokenType.EOF) {
-            //     this.advance()
+            //     this.consume()
             // }
 
             while (!sync.has(this.peek().tokenType) && (this.peek().tokenType != TokenType.EOF)) {
-                this.advance() //advance till the token type is matched
+                this.consume() //advance till the token type is matched
             }
 
             //right now, the token is matched
@@ -128,8 +99,14 @@ export class ParserBase {
 
         //a smaller version that's used a LOT
         const token = this.peek()
-        const result = this.expect(token, expected)
-        this.syncToken(result, sync, title, token)
+
+        if ( token.tokenType == expected ) {
+            this.syncToken(true, sync, title, token)
+        } else {
+            this.syncToken(false, sync, title, token)
+        }
+
+        return token
 
     }
 
@@ -155,7 +132,7 @@ export class ParserBase {
     print() {
 
         for (let diag of this.diagnostics) {
-            diag.print()
+            diag.print(this.loggerInstance)
         }
 
     }

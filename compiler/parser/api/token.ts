@@ -1,7 +1,7 @@
 import { TokenType } from "../../lexer/tokens";
 import type { Parser } from "../parser";
-import { AST, ASTEnum } from "../rules/build-4i/ast";
-import { union } from "../utility/union";
+import { AST, ASTEnum } from "../rules/ast";
+import { union } from "./union";
 import { EntityKind, ProductionEntity, TokenEntity } from "./entity";
 
 type finishType = <K extends ASTEnum, T extends AST<K>>(node: T, offset?: number) => T;
@@ -125,7 +125,7 @@ export function loop(
 
             //this means we can have empty components
             if (parser.peek().tokenType == deliminator.token) {
-                parser.advance()
+                parser.consume()
                 return items
             }
 
@@ -151,7 +151,7 @@ export function loop(
             const token = parser.peek()
 
             if (token.tokenType == deliminator.token) {
-                parser.advance()
+                parser.consume()
                 return items
             }
 
@@ -250,7 +250,7 @@ export function branch(
         parser.syncToken(false, sync, "Branch does not exist", token)
 
         if (parser.peek().tokenType != TokenType.EOF) {
-            parser.advance()
+            parser.consume()
         }
 
         return new BranchEmpty()

@@ -1,4 +1,4 @@
-import type { FunctionNode } from "../../parser/rules/build-4i/function";
+import type { FunctionNode } from "../../parser/rules/function";
 import type { Analyzer } from "../analyzer";
 import { AnalyzerDiagnostic, type DiagnosticError } from "../diagnostic";
 

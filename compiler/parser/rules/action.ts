@@ -1,6 +1,6 @@
-import { StringSpan, Token, TokenType } from "../../../lexer/tokens";
-import { loop, nterm, production, token } from "../../api/token";
-import type { FunctionHead } from "../function";
+import { StringSpan, Token, TokenType } from "../../lexer/tokens";
+import { loop, nterm, production, token } from "../api/token";
+import type { FunctionHead } from "./function";
 import { AST, ASTEnum } from "./ast";
 import { fxHead } from "./function";
 

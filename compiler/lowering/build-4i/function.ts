@@ -1,8 +1,8 @@
 //lowers the function production
 
 import { TokenType } from "../../lexer/tokens";
-import type { FunctionNode } from "../../parser/rules/build-4i/function";
-import type { TypeSystem } from "../../parser/rules/build-4i/type";
+import type { FunctionNode } from "../../parser/rules/function";
+import type { TypeSystem } from "../../parser/rules/type";
 
 const correspondingTypeMap = new Map<TokenType, string>()
 

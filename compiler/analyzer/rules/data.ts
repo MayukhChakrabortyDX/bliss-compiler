@@ -1,4 +1,4 @@
-import type { DataStructure } from "../../parser/rules/build-4i/data";
+import type { DataStructure } from "../../parser/rules/data";
 import type { Analyzer } from "../analyzer";
 import { AnalyzerDiagnostic } from "../diagnostic";
 
