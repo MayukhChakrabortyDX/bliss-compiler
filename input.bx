@@ -1,9 +1,0 @@
-action viewl {
-    fx doesSomething(): p;
-
-fx main() {
-
-    println("Hello World")
-    let x = 10;
-
-}

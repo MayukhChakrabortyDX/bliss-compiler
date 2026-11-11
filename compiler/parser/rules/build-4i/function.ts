@@ -44,3 +44,26 @@ export const fx = production(
         )
     )
 )
+
+//----this is the head of a function used for actions and surfaces----//
+
+export class FunctionHead extends AST<ASTEnum.FUNCTION_HEAD> {
+
+    constructor(public name: string, public name_span: StringSpan, public args: FunctionArguments) {
+        super(ASTEnum.FUNCTION_HEAD)
+    }
+
+}
+
+export const fxHead = production(
+    token(TokenType.K_Fx).err("Expected 'fx' to begin a function declaration"),
+    token(TokenType.Identifier).save().err("Expected a function name after 'fx'"),
+    token(TokenType.LBrace).err("Expected '(' to begin the function parameter list"),
+    nterm(functionArguments).save()
+).ast((finish, name: Token, arg: FunctionArguments) =>
+    finish(
+        new FunctionHead(
+            name.span.resolve(), name.span, arg
+        )
+    )
+)

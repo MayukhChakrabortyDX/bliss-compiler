@@ -8,7 +8,22 @@ import { lowerProgram } from "../../lowering/build-4i/program";
 import { Analyzer } from "../../analyzer";
 import { typeSystem } from "../rules/build-4i/type";
 
-const sampleProgram = `fx main(data api: u64, data npi: i32) {}`
+const sampleProgram = 
+`
+fx main( data a: i32, data b: u64 ) {}
+fx add( data a: i32, data b: u64 ) {}
+
+data Hello {
+
+	data x: i32;
+	data y: i32;
+
+}
+
+action Hello {
+	fx add( data a: i32, data b: u64 );
+}
+`
 
 const tokenizer = new Tokenizer(sampleProgram)
 tokenizer.tokenize()
