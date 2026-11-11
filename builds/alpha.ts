@@ -3,7 +3,7 @@
 import { Analyzer } from "../compiler/analyzer"
 import { Tokenizer } from "../compiler/lexer/tokenizer"
 import { TokenType } from "../compiler/lexer/tokens"
-import { lowerProgram } from "../compiler/lowering/build-4i/program"
+import { lowerProgram } from "../compiler/lowering/program"
 import { Parser } from "../compiler/parser/parser"
 import { program, ProgramNode } from "../compiler/parser/rules/program"
 import { union } from "../compiler/parser/api/union"

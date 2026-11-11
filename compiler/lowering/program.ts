@@ -1,5 +1,5 @@
-import { ASTEnum } from "../../parser/rules/ast";
-import type { ProgramNode } from "../../parser/rules/program";
+import { ASTEnum } from "../parser/rules/ast";
+import type { ProgramNode } from "../parser/rules/program";
 import { lowerDataStructure } from "./data";
 import { lowerFunction } from "./function";
 

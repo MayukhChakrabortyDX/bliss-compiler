@@ -3,7 +3,7 @@ import { TokenType } from "../../lexer/tokens";
 import { Parser } from "../parser";
 import { union } from "../api/union";
 import { program, ProgramNode } from "../rules/program";
-import { lowerProgram } from "../../lowering/build-4i/program";
+import { lowerProgram } from "../../lowering/program";
 import { Analyzer } from "../../analyzer";
 
 const sampleProgram = 
