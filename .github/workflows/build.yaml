@@ -1,41 +1,239 @@
-name: Build Bliss
+
+name: Build and Release Bliss
+
+run-name: >-
+  Bliss Release ${{ inputs.version }} by @${{ github.actor }}
 
 on:
   workflow_dispatch:
     inputs:
       build:
-        description: "Build Bliss?"
-        required: true
+        description: "Build Bliss for all selected platforms?"
         type: boolean
+        required: true
         default: true
 
+      version:
+        description: "Version (e.g. 0.1.0-alpha.1)"
+        type: string
+        required: true
+
+      tag_name:
+        description: "Git tag (e.g. v0.1.0-alpha.1)"
+        type: string
+        required: true
+
+      release_name:
+        description: "Release title"
+        type: string
+        required: true
+        default: "The Bliss Platform"
+
+      release_type:
+        description: "Release channel"
+        type: choice
+        options:
+          - Alpha
+          - Beta
+          - Release Candidate
+          - Stable
+        required: true
+        default: Alpha
+
+      prerelease:
+        description: "Mark as a pre-release?"
+        type: boolean
+        required: true
+        default: true
+
+      draft:
+        description: "Create as a draft?"
+        type: boolean
+        required: true
+        default: false
+
+      target_branch:
+        description: "Branch to release"
+        type: string
+        required: true
+        default: main
+
+      release_notes:
+        description: "Release description (Markdown supported)"
+        type: string
+        required: false
+        default: ""
+
+      generate_notes:
+        description: "Automatically generate GitHub release notes?"
+        type: boolean
+        required: true
+        default: true
+
+      linux_x64:
+        description: "Build Linux x64"
+        type: boolean
+        required: true
+        default: true
+
+      linux_arm64:
+        description: "Build Linux ARM64"
+        type: boolean
+        required: true
+        default: true
+
+      windows_x64:
+        description: "Build Windows x64"
+        type: boolean
+        required: true
+        default: true
+
+      windows_arm64:
+        description: "Build Windows ARM64"
+        type: boolean
+        required: true
+        default: true
+
+      macos_arm64:
+        description: "Build macOS ARM64"
+        type: boolean
+        required: true
+        default: true
+
+permissions:
+  contents: read
+
 jobs:
+
+  validate:
+    name: Validate release configuration
+    runs-on: ubuntu-latest
+
+    outputs:
+      tag: ${{ steps.validate.outputs.tag }}
+
+    steps:
+      - name: Validate inputs
+        id: validate
+        env:
+          VERSION: ${{ inputs.version }}
+          TAG: ${{ inputs.tag_name }}
+          RELEASE_NAME: ${{ inputs.release_name }}
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          PRERELEASE: ${{ inputs.prerelease }}
+          DRAFT: ${{ inputs.draft }}
+          BUILD: ${{ inputs.build }}
+          LINUX_X64: ${{ inputs.linux_x64 }}
+          LINUX_ARM64: ${{ inputs.linux_arm64 }}
+          WINDOWS_X64: ${{ inputs.windows_x64 }}
+          WINDOWS_ARM64: ${{ inputs.windows_arm64 }}
+          MACOS_ARM64: ${{ inputs.macos_arm64 }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$VERSION" || -z "$TAG" || -z "$RELEASE_NAME" ]]; then
+            echo "Version, tag and release name are required."
+            exit 1
+          fi
+
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid semantic version: $VERSION"
+            exit 1
+          fi
+
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid tag format: $TAG"
+            exit 1
+          fi
+
+          if [[ "$TAG" != "v$VERSION" ]]; then
+            echo "Tag must match version with a v prefix."
+            exit 1
+          fi
+
+          if [[ ! "$TARGET_BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]]; then
+            echo "Invalid branch name."
+            exit 1
+          fi
+
+          if [[ "$TARGET_BRANCH" == *".."* ]]; then
+            echo "Invalid branch name."
+            exit 1
+          fi
+
+          if [[ "$BUILD" == "true" ]]; then
+            if [[ "$LINUX_X64" != "true" &&
+                  "$LINUX_ARM64" != "true" &&
+                  "$WINDOWS_X64" != "true" &&
+                  "$WINDOWS_ARM64" != "true" &&
+                  "$MACOS_ARM64" != "true" ]]; then
+              echo "Select at least one build target."
+              exit 1
+            fi
+          fi
+
+          if [[ "$PRERELEASE" == "true" &&
+                "$RELEASE_TYPE" == "Stable" ]]; then
+            echo "Stable releases cannot be marked as pre-releases."
+            exit 1
+          fi
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
   build:
-    if: inputs.build
     name: Build ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    needs: validate
+
+    if: >-
+      ${{
+        inputs.build &&
+        (
+          (matrix.target == 'linux-x64' && inputs.linux_x64) ||
+          (matrix.target == 'linux-arm64' && inputs.linux_arm64) ||
+          (matrix.target == 'windows-x64' && inputs.windows_x64) ||
+          (matrix.target == 'windows-arm64' && inputs.windows_arm64) ||
+          (matrix.target == 'macos-arm64' && inputs.macos_arm64)
+        )
+      }}
 
     strategy:
+      fail-fast: false
+
       matrix:
         include:
-          - name: Linux x64
+          - target: linux-x64
+            name: Linux x64
             os: ubuntu-latest
-            artifact: bliss-pre-alpha-linux-x64
-            binary: dist/builds/bliss
+            filename: bliss-linux-x64
 
-          - name: Windows x64
+          - target: linux-arm64
+            name: Linux ARM64
+            os: ubuntu-24.04-arm
+            filename: bliss-linux-arm64
+
+          - target: windows-x64
+            name: Windows x64
             os: windows-latest
-            artifact: bliss-pre-alpha-windows-x64
-            binary: dist/builds/bliss.exe
+            filename: bliss-windows-x64.exe
 
-          - name: macOS ARM64
+          - target: windows-arm64
+            name: Windows ARM64
+            os: windows-11-arm
+            filename: bliss-windows-arm64.exe
+
+          - target: macos-arm64
+            name: macOS ARM64
             os: macos-latest
-            artifact: bliss-pre-alpha-macos-arm64
-            binary: dist/builds/bliss
+            filename: bliss-macos-arm64
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -43,11 +241,173 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build
+      - name: Build Bliss
         run: bun run build:alpha
 
-      - name: Upload build
+      - name: Prepare binary
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p dist/release
+
+          case "${{ matrix.target }}" in
+            windows-*)
+              SOURCE="dist/builds/bliss.exe"
+              ;;
+            *)
+              SOURCE="dist/builds/bliss"
+              ;;
+          esac
+
+          if [[ ! -f "$SOURCE" ]]; then
+            echo "Build output not found: $SOURCE"
+            exit 1
+          fi
+
+          cp "$SOURCE" "dist/release/${{ matrix.filename }}"
+
+      - name: Package release
+        shell: bash
+        run: |
+          cd dist/release
+
+          if [[ "${{ matrix.target }}" == windows-* ]]; then
+            7z a "${{ matrix.filename }}.zip" "${{ matrix.filename }}"
+          else
+            tar -czf "${{ matrix.filename }}.tar.gz" "${{ matrix.filename }}"
+          fi
+
+          rm "${{ matrix.filename }}"
+
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact }}
-          path: ${{ matrix.binary }}
+          name: ${{ matrix.target }}
+          path: dist/release/*
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish GitHub Release
+
+    needs:
+      - validate
+      - build
+
+    if: ${{ !cancelled() && needs.validate.result == 'success' && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch }}
+          fetch-depth: 0
+
+      - name: Validate release does not exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag_name }}
+        run: |
+          set -euo pipefail
+
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag already exists: $TAG"
+            exit 1
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release already exists: $TAG"
+            exit 1
+          fi
+
+      - name: Create Git tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag_name }}
+          BRANCH: ${{ inputs.target_branch }}
+        run: |
+          set -euo pipefail
+
+          SHA=$(git rev-parse "origin/$BRANCH")
+
+          gh api \
+            --method POST \
+            "repos/${GITHUB_REPOSITORY}/git/refs" \
+            -f ref="refs/tags/$TAG" \
+            -f sha="$SHA"
+
+      - name: Download build artifacts
+        if: ${{ inputs.build }}
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+
+      - name: Prepare release description
+        env:
+          CUSTOM_NOTES: ${{ inputs.release_notes }}
+          GENERATE_NOTES: ${{ inputs.generate_notes }}
+        run: |
+          set -euo pipefail
+
+          {
+            echo "## The Bliss Platform"
+            echo
+            echo "**Version:** ${{ inputs.version }}"
+            echo "**Channel:** ${{ inputs.release_type }}"
+            echo
+            echo "$CUSTOM_NOTES"
+          } > release-body.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag_name }}
+          RELEASE_NAME: ${{ inputs.release_name }}
+          PRERELEASE: ${{ inputs.prerelease }}
+          DRAFT: ${{ inputs.draft }}
+          GENERATE_NOTES: ${{ inputs.generate_notes }}
+        run: |
+          set -euo pipefail
+
+          ARGS=(
+            "$TAG"
+            --title "$RELEASE_NAME"
+            --notes-file release-body.md
+          )
+
+          if [[ "$PRERELEASE" == "true" ]]; then
+            ARGS+=(--prerelease)
+          fi
+
+          if [[ "$DRAFT" == "true" ]]; then
+            ARGS+=(--draft)
+          fi
+
+          if [[ "$GENERATE_NOTES" == "true" ]]; then
+            ARGS+=(--generate-notes)
+          fi
+
+          if [[ "${{ inputs.build }}" == "true" ]]; then
+            while IFS= read -r -d '' asset; do
+              ARGS+=("$asset")
+            done < <(find release-assets -type f -print0)
+          fi
+
+          gh release create "${ARGS[@]}"
+
+      - name: Release summary
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag_name }}
+        run: |
+          echo "## Bliss Release Published" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Tag:** $TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://github.com/${GITHUB_REPOSITORY}/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"

@@ -2,11 +2,17 @@ import type { FunctionNode } from "../../parser/rules/function";
 import type { Analyzer } from "../analyzer";
 import { AnalyzerDiagnostic, type DiagnosticError } from "../diagnostic";
 
-export function analyzeFunction(analyzer: Analyzer, node: FunctionNode) {
+export function analyzeFunction(analyzer: Analyzer, node: FunctionNode, identifiers: Set<string>) {
 
     //analyze if the types are identical then that's an issue
     const types = new Set<string>()
     let errorSpans: DiagnosticError[] = []
+
+    if (identifiers.has(node.name)) {
+        errorSpans.push(
+            { span: node.name_span, message: "This identifier was already defined" }
+        )
+    }
 
     for (let type of node.args.args) {
         if (types.has(type.name)) {
@@ -20,8 +26,7 @@ export function analyzeFunction(analyzer: Analyzer, node: FunctionNode) {
 
     if (errorSpans.length != 0) {
         analyzer.diagnostics.push(
-            new AnalyzerDiagnostic("Duplicate Argument Names", errorSpans, analyzer)
+            new AnalyzerDiagnostic("Issues in function structure", errorSpans, analyzer)
         )
-
     }
 }

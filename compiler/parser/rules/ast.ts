@@ -6,7 +6,7 @@ export enum ASTEnum {
     EMPTY_BRANCH,
     TYPE_SYSTEM,
     FUNCTION_ARGS,
-    DATA_STRUCTURE, ACTION
+    DATA_STRUCTURE, ACTION, BIND
 }
 
 export class AST<T extends ASTEnum> {

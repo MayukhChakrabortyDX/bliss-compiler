@@ -2,7 +2,7 @@ import { TokenType } from "../../lexer/tokens";
 import type { Parser } from "../parser";
 import { AST, ASTEnum } from "../rules/ast";
 import { union } from "./union";
-import { EntityKind, ProductionEntity, TokenEntity } from "./entity";
+import { BranchEntity, EntityKind, ProductionEntity, TokenEntity } from "./entity";
 
 type finishType = <K extends ASTEnum, T extends AST<K>>(node: T, offset?: number) => T;
 
@@ -121,15 +121,24 @@ export function loop(
             loopSync = union(sync, prod.token, deliminator.token)
         }
 
-        if (allowEmpty) {
 
-            //this means we can have empty components
-            if (parser.peek().tokenType == deliminator.token) {
-                parser.consume()
-                return items
+
+        //this means we can have empty components
+        if (parser.peek().tokenType == deliminator.token) {
+            const token = parser.peek()
+            parser.consume()
+
+            if ( !allowEmpty ) {
+
+                //this is an error!
+                parser.report("This list must not be empty", token)
+
             }
 
+            return items
         }
+
+
 
         //otherwise we will start with a single production match
         const firstProduction = production(prod.save()).ast((_, item) => items.push(item))
@@ -220,9 +229,9 @@ export function branch(
 
             branchMap.set((branch as TokenEntity).token,
                 (parser: Parser, sync: Set<TokenType>) => {
-                    
+
                     const _tok = parser.peek()
-                    
+
                     parser.match({
                         expected: (branch as TokenEntity).token,
                         sync,
@@ -238,7 +247,7 @@ export function branch(
     }
 
     //we computed the branch map, now we will resolve them
-    const method = (parser: Parser, sync: Set<TokenType>) => {
+    const method = (parser: Parser, sync: Set<TokenType>, instance: BranchEntity) => {
 
         const token = parser.peek()
         const production = branchMap.get(token.tokenType)
@@ -247,18 +256,20 @@ export function branch(
             return production(parser, sync)
         }
 
-        parser.syncToken(false, sync, "Branch does not exist", token)
+        parser.syncToken(false, sync, instance.error, token)
 
         if (parser.peek().tokenType != TokenType.EOF) {
             parser.consume()
         }
 
-        return new BranchEmpty()
+        return instance.def
 
     }
 
-    return new ProductionEntity(
-        first, method
+    const branchEntity = new BranchEntity(
+        first, (parser, sync) => method(parser, sync, branchEntity)
     )
+
+    return branchEntity
 
 }

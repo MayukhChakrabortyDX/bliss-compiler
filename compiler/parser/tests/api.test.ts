@@ -3,8 +3,6 @@ import { TokenType } from "../../lexer/tokens";
 import { Parser } from "../parser";
 import { union } from "../api/union";
 import { program, ProgramNode } from "../rules/program";
-import { lowerProgram } from "../../lowering/program";
-import { Analyzer } from "../../analyzer";
 
 const sampleProgram = 
 `
@@ -21,6 +19,10 @@ data Hello {
 action Hello {
 	fx add( data a: i32, data b: u64 );
 }
+
+action Mello {}
+
+bind A with as C {}
 `
 
 const tokenizer = new Tokenizer(sampleProgram)
@@ -32,12 +34,3 @@ ast.span.end = tokenizer.tokens[tokenizer.tokens.length - 1]?.span.endIndex || 0
 
 console.log(JSON.stringify(ast, null, 2))
 parser.print()
-
-//now analyze
-const analyzer = new Analyzer(ast, tokenizer.sourceContainer)
-analyzer.analyzeProgram(ast)
-analyzer.print()
-
-//produce the output
-const output = lowerProgram(ast)
-console.log(output)

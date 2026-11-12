@@ -14,7 +14,8 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "build:pre-alpha": "bun build --compile --minify --target=bun --outfile=dist/builds/bliss builds/pre_alpha.ts",
-    "build:alpha": "bun build --compile --minify --target=bun --outfile=dist/builds/bliss builds/alpha.ts"
+    "build:alpha": "bun build --compile --minify --target=bun --outfile=dist/builds/bliss builds/alpha.ts",
+    "build:alpha-debug": "bun build --compile --target=bun --outfile=dist/builds/bliss builds/alpha.ts"
   },
   "peerDependencies": {
     "typescript": "^5"
