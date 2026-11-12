@@ -1,14 +1,13 @@
 
-name: Build and Release Bliss
+name: Build Bliss
 
-run-name: >-
-  Bliss Release ${{ inputs.version }} by @${{ github.actor }}
+run-name: Bliss ${{ inputs.version }} by @${{ github.actor }}
 
 on:
   workflow_dispatch:
     inputs:
       build:
-        description: "Build Bliss for all selected platforms?"
+        description: "Build Bliss?"
         type: boolean
         required: true
         default: true
@@ -59,43 +58,13 @@ on:
         default: main
 
       release_notes:
-        description: "Release description (Markdown supported)"
+        description: "Custom release notes (Markdown supported)"
         type: string
         required: false
         default: ""
 
       generate_notes:
-        description: "Automatically generate GitHub release notes?"
-        type: boolean
-        required: true
-        default: true
-
-      linux_x64:
-        description: "Build Linux x64"
-        type: boolean
-        required: true
-        default: true
-
-      linux_arm64:
-        description: "Build Linux ARM64"
-        type: boolean
-        required: true
-        default: true
-
-      windows_x64:
-        description: "Build Windows x64"
-        type: boolean
-        required: true
-        default: true
-
-      windows_arm64:
-        description: "Build Windows ARM64"
-        type: boolean
-        required: true
-        default: true
-
-      macos_arm64:
-        description: "Build macOS ARM64"
+        description: "Generate GitHub release notes?"
         type: boolean
         required: true
         default: true
@@ -122,13 +91,6 @@ jobs:
           TARGET_BRANCH: ${{ inputs.target_branch }}
           RELEASE_TYPE: ${{ inputs.release_type }}
           PRERELEASE: ${{ inputs.prerelease }}
-          DRAFT: ${{ inputs.draft }}
-          BUILD: ${{ inputs.build }}
-          LINUX_X64: ${{ inputs.linux_x64 }}
-          LINUX_ARM64: ${{ inputs.linux_arm64 }}
-          WINDOWS_X64: ${{ inputs.windows_x64 }}
-          WINDOWS_ARM64: ${{ inputs.windows_arm64 }}
-          MACOS_ARM64: ${{ inputs.macos_arm64 }}
         run: |
           set -euo pipefail
 
@@ -152,25 +114,10 @@ jobs:
             exit 1
           fi
 
-          if [[ ! "$TARGET_BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]]; then
+          if [[ ! "$TARGET_BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]] ||
+             [[ "$TARGET_BRANCH" == *".."* ]]; then
             echo "Invalid branch name."
             exit 1
-          fi
-
-          if [[ "$TARGET_BRANCH" == *".."* ]]; then
-            echo "Invalid branch name."
-            exit 1
-          fi
-
-          if [[ "$BUILD" == "true" ]]; then
-            if [[ "$LINUX_X64" != "true" &&
-                  "$LINUX_ARM64" != "true" &&
-                  "$WINDOWS_X64" != "true" &&
-                  "$WINDOWS_ARM64" != "true" &&
-                  "$MACOS_ARM64" != "true" ]]; then
-              echo "Select at least one build target."
-              exit 1
-            fi
           fi
 
           if [[ "$PRERELEASE" == "true" &&
@@ -182,24 +129,14 @@ jobs:
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
   build:
+    if: ${{ inputs.build }}
     name: Build ${{ matrix.name }}
-    needs: validate
+    runs-on: ${{ matrix.os }}
 
-    if: >-
-      ${{
-        inputs.build &&
-        (
-          (matrix.target == 'linux-x64' && inputs.linux_x64) ||
-          (matrix.target == 'linux-arm64' && inputs.linux_arm64) ||
-          (matrix.target == 'windows-x64' && inputs.windows_x64) ||
-          (matrix.target == 'windows-arm64' && inputs.windows_arm64) ||
-          (matrix.target == 'macos-arm64' && inputs.macos_arm64)
-        )
-      }}
+    needs: validate
 
     strategy:
       fail-fast: false
-
       matrix:
         include:
           - target: linux-x64
@@ -227,8 +164,6 @@ jobs:
             os: macos-latest
             filename: bliss-macos-arm64
 
-    runs-on: ${{ matrix.os }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -246,12 +181,15 @@ jobs:
 
       - name: Prepare binary
         shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+          FILENAME: ${{ matrix.filename }}
         run: |
           set -euo pipefail
 
           mkdir -p dist/release
 
-          case "${{ matrix.target }}" in
+          case "$TARGET" in
             windows-*)
               SOURCE="dist/builds/bliss.exe"
               ;;
@@ -265,20 +203,24 @@ jobs:
             exit 1
           fi
 
-          cp "$SOURCE" "dist/release/${{ matrix.filename }}"
+          cp "$SOURCE" "dist/release/$FILENAME"
 
       - name: Package release
         shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+          FILENAME: ${{ matrix.filename }}
         run: |
+          set -euo pipefail
           cd dist/release
 
-          if [[ "${{ matrix.target }}" == windows-* ]]; then
-            7z a "${{ matrix.filename }}.zip" "${{ matrix.filename }}"
+          if [[ "$TARGET" == windows-* ]]; then
+            7z a "$FILENAME.zip" "$FILENAME"
           else
-            tar -czf "${{ matrix.filename }}.tar.gz" "${{ matrix.filename }}"
+            tar -czf "$FILENAME.tar.gz" "$FILENAME"
           fi
 
-          rm "${{ matrix.filename }}"
+          rm "$FILENAME"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -290,12 +232,17 @@ jobs:
 
   release:
     name: Publish GitHub Release
-
     needs:
       - validate
       - build
 
-    if: ${{ !cancelled() && needs.validate.result == 'success' && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
+    if: >-
+      ${{
+        !cancelled() &&
+        needs.validate.result == 'success' &&
+        (needs.build.result == 'success' ||
+         needs.build.result == 'skipped')
+      }}
 
     runs-on: ubuntu-latest
 
@@ -309,7 +256,7 @@ jobs:
           ref: ${{ inputs.target_branch }}
           fetch-depth: 0
 
-      - name: Validate release does not exist
+      - name: Check existing tag and release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag_name }}
@@ -348,18 +295,17 @@ jobs:
         with:
           path: release-assets
 
-      - name: Prepare release description
+      - name: Prepare release notes
         env:
           CUSTOM_NOTES: ${{ inputs.release_notes }}
-          GENERATE_NOTES: ${{ inputs.generate_notes }}
+          VERSION: ${{ inputs.version }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
         run: |
-          set -euo pipefail
-
           {
             echo "## The Bliss Platform"
             echo
-            echo "**Version:** ${{ inputs.version }}"
-            echo "**Channel:** ${{ inputs.release_type }}"
+            echo "**Version:** $VERSION"
+            echo "**Channel:** $RELEASE_TYPE"
             echo
             echo "$CUSTOM_NOTES"
           } > release-body.md
@@ -372,6 +318,7 @@ jobs:
           PRERELEASE: ${{ inputs.prerelease }}
           DRAFT: ${{ inputs.draft }}
           GENERATE_NOTES: ${{ inputs.generate_notes }}
+          BUILD: ${{ inputs.build }}
         run: |
           set -euo pipefail
 
@@ -393,7 +340,7 @@ jobs:
             ARGS+=(--generate-notes)
           fi
 
-          if [[ "${{ inputs.build }}" == "true" ]]; then
+          if [[ "$BUILD" == "true" ]]; then
             while IFS= read -r -d '' asset; do
               ARGS+=("$asset")
             done < <(find release-assets -type f -print0)
@@ -403,11 +350,12 @@ jobs:
 
       - name: Release summary
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.tag_name }}
         run: |
-          echo "## Bliss Release Published" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Tag:** $TAG" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "https://github.com/${GITHUB_REPOSITORY}/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Bliss Release"
+            echo
+            echo "**Tag:** $TAG"
+            echo
+            echo "[View release](https://github.com/${GITHUB_REPOSITORY}/releases/tag/$TAG)"
+          } >> "$GITHUB_STEP_SUMMARY"
