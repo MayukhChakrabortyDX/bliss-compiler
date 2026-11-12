@@ -1,5 +1,0 @@
----
-layout: marketing
----
-
-# Bliss
