@@ -1,14 +1,40 @@
 {
   "name": "bliss-compiler",
+  "version": "0.1.0-alpha.1",
+  "description": "Official compiler for the Bliss programming language — rethinking systems programming with Data-Action Oriented Programming (DAOP) and zero-cost abstractions.",
   "private": true,
   "type": "module",
+  "homepage": "https://bliss-compiler.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MayukhChakrabortyDX/bliss-compiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MayukhChakrabortyDX/bliss-compiler/issues"
+  },
+  "license": "MIT",
+  "author": "Mayukh Chakraborty",
+  "keywords": [
+    "bliss",
+    "bliss-lang",
+    "compiler",
+    "programming-language",
+    "systems-programming",
+    "daop",
+    "memory-safety",
+    "c-transpiler",
+    "bun",
+    "typescript"
+  ],
   "devDependencies": {
     "@types/bun": "^1.3.14",
     "vitepress": "^1.6.4"
   },
   "scripts": {
-    "test-partial": "bun tests/all.test.ts > out.json",
-    "test": "bun builds/pre_alpha.ts tests -b",
+    "compile": "bun builds/alpha.ts",
+    "test": "bun builds/alpha.ts tests -b",
+    "test:pre-alpha": "bun builds/pre_alpha.ts tests -b",
+    "test:partial": "bun tests/all.test.ts > out.json",
     "test:prod": "bliss tests -b",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
