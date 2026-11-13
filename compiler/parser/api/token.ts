@@ -2,7 +2,7 @@ import { TokenType } from "../../lexer/tokens";
 import type { Parser } from "../parser";
 import { AST, ASTEnum } from "../rules/ast";
 import { union } from "./union";
-import { BranchEntity, EntityKind, ProductionEntity, TokenEntity } from "./entity";
+import { BranchEntity, EntityKind, MaybeEntity, ProductionEntity, TokenEntity } from "./entity";
 
 type finishType = <K extends ASTEnum, T extends AST<K>>(node: T, offset?: number) => T;
 
@@ -128,7 +128,7 @@ export function loop(
             const token = parser.peek()
             parser.consume()
 
-            if ( !allowEmpty ) {
+            if (!allowEmpty) {
 
                 //this is an error!
                 parser.report("This list must not be empty", token)
@@ -271,5 +271,47 @@ export function branch(
     )
 
     return branchEntity
+
+}
+
+
+export class MaybeEmpty extends AST<ASTEnum.MAYBE_EMPTY> {
+    constructor() {
+        super(ASTEnum.MAYBE_EMPTY)
+    }
+}
+
+export function maybe(root: TokenEntity | ProductionEntity) {
+
+    const method = (parser: Parser, sync: Set<TokenType>, instance: MaybeEntity) => {
+
+        const token = parser.peek()
+
+        if (root.kind == EntityKind.PROD) {
+            if ((root as ProductionEntity).token.has(token.tokenType)) {
+                return (root as ProductionEntity).method(parser, sync)
+            }
+        }
+
+        if (root.kind == EntityKind.TOKEN) {
+            if ((root as TokenEntity).token == token.tokenType) {
+                return parser.match({
+                    expected: token.tokenType,
+                    sync,
+                    title: (root as TokenEntity).error
+                })
+            }
+        }
+
+        //otherwise
+        return instance.def
+
+    }
+
+    const maybeEntity = new MaybeEntity(
+        union(root.token), (parser: Parser, sync: Set<TokenType>) => method(parser, sync, maybeEntity)
+    )
+
+    return maybeEntity
 
 }

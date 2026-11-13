@@ -1,6 +1,6 @@
 import { TokenType } from "../../lexer/tokens"
 import type { Parser } from "../parser"
-import { BranchEmpty } from "./token"
+import { BranchEmpty, MaybeEmpty } from "./token"
 
 export enum EntityKind {
     PROD, TOKEN
@@ -30,6 +30,17 @@ export class ProductionEntity {
 
         return this
 
+    }
+
+}
+
+export class MaybeEntity extends ProductionEntity {
+
+    def: any = new MaybeEmpty()
+
+    defaultReturn(item: any) {
+        this.def = item
+        return this
     }
 
 }

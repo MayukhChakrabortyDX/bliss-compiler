@@ -6,11 +6,9 @@ import { branch, production, token } from "../api/token";
 import { AST, ASTEnum } from "./ast";
 
 export class TypeSystem extends AST<ASTEnum.TYPE_SYSTEM> {
-
     constructor(public name: string, public name_span: StringSpan, public type: Token) {
         super(ASTEnum.TYPE_SYSTEM)
     }
-
 }
 
 export const typeSystem = production(
