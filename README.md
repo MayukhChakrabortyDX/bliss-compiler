@@ -17,6 +17,7 @@
   <a href="https://en.wikipedia.org/wiki/C99"><img src="https://img.shields.io/badge/target-ANSI%20C%20(C99%2FC11)-00599C?style=flat-square&logo=c&logoColor=white" alt="Target C" /></a>
   <a href="#"><img src="https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-3f3f46?style=flat-square" alt="Platforms" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-10b981?style=flat-square" alt="License: MIT" /></a>
+  <a href="https://github.com/sponsors/MayukhChakrabortyDX"><img src="https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ea4aaa?style=flat-square&logo=githubsponsors" alt="Sponsor" /></a>
 </p>
 
 <p align="center">
