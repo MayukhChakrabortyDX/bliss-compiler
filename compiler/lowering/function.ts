@@ -1,6 +1,6 @@
 //lowers the function production
 
-import { TokenType } from "../lexer/tokens";
+import { Token, TokenType } from "../lexer/tokens";
 import type { FunctionNode } from "../parser/rules/function";
 import type { TypeSystem } from "../parser/rules/type";
 
@@ -26,6 +26,10 @@ export function lowerTypesForFunction(node: TypeSystem) {
     return name
 }
 
+export function getReturnType(type: Token) {
+    return correspondingTypeMap.get(type.tokenType)
+}
+
 export function lowerFunction(node: FunctionNode) {
 
     let args = ``
@@ -42,7 +46,20 @@ export function lowerFunction(node: FunctionNode) {
     if (args == ``) {
         args = `void`
     }
+
+    let returnType = `void`
+    const rt = getReturnType(node.returnType)
+    if ( rt != undefined ) {
+        returnType = rt
+    }
+
+    let body = ``
+
+    for ( let item of node.body ) {
+        body = `${body} return ${item.body.integer.span.resolve()};`
+    }
+
     //returns a text
-    return `void ${node.name}(${args}) {}`;
+    return `${returnType} ${node.name}(${args}) {${body}}`;
 
 }

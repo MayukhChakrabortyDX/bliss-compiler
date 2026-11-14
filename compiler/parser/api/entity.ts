@@ -24,8 +24,9 @@ export class ProductionEntity {
 
     saveAs(callback: (modifier: any) => any) {
 
+        let method = this.method
         this.method = (parser: Parser, sync: Set<TokenType>) => {
-            return callback(this.method(parser, sync))
+            return callback(method(parser, sync))
         }
 
         return this

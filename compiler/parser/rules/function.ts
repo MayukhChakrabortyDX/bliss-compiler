@@ -1,7 +1,8 @@
 import { StringSpan, Token, TokenType } from "../../lexer/tokens"
 import { loop, nterm, production, token } from "../api/token"
 import { AST, ASTEnum } from "./ast"
-import { TypeSystem, typeSystem } from "./type"
+import { ReturnStatement, returnStatement } from "./statement"
+import { typeName, TypeSystem, typeSystem } from "./type"
 
 export class FunctionArguments extends AST<ASTEnum.FUNCTION_ARGS> {
     constructor(public args: TypeSystem[]) {
@@ -24,23 +25,44 @@ const functionArguments = production(
 
 export class FunctionNode extends AST<ASTEnum.FUNCTION> {
 
-    constructor(public name: string, public name_span: StringSpan, public args: FunctionArguments) {
+    constructor(public name: string, public name_span: StringSpan, public args: FunctionArguments, public returnType: Token, public body: ReturnStatement[]) {
         super(ASTEnum.FUNCTION)
     }
 
 }
+
+const functionBody = loop({
+    prod: nterm(production(
+        nterm(returnStatement).save(),
+        token(TokenType.Semicolon)
+    ).ast((_, ret) => ret)).save(),
+    allowEmpty: true,
+    deliminator: token(TokenType.RBracket)
+})
 
 export const fx = production(
     token(TokenType.K_Fx).err("Expected 'fx' to begin a function declaration"),
     token(TokenType.Identifier).save().err("Expected a function name after 'fx'"),
     token(TokenType.LBrace).err("Expected '(' to begin the function parameter list"),
     nterm(functionArguments).save(),
+
+    //add the return type
+    token(TokenType.Colon),
+
+    nterm(
+        production(
+            typeName.save()
+        ).ast((_, typename) => typename)
+    ).save(),
+
+
     token(TokenType.LBracket).err("Expected '{' to begin the function body"),
-    token(TokenType.RBracket).err("Expected '}' to close the function body")
-).ast((finish, name: Token, arg: FunctionArguments) =>
+    functionBody.save()
+
+).ast((finish, name: Token, arg: FunctionArguments, returnType: Token, body: ReturnStatement[]) =>
     finish(
         new FunctionNode(
-            name.span.resolve(), name.span, arg
+            name.span.resolve(), name.span, arg, returnType, body
         )
     )
 )

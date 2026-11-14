@@ -7,6 +7,7 @@ import { lowerProgram } from "../compiler/lowering/program"
 import { Parser } from "../compiler/parser/parser"
 import { program, ProgramNode } from "../compiler/parser/rules/program"
 import { union } from "../compiler/parser/api/union"
+import { build_project } from "../compiler/compiler" // adjust to wherever build_project lives
 
 import { stat } from "node:fs/promises";
 import { join, relative, dirname, basename, extname } from "node:path";
@@ -85,7 +86,7 @@ const dim = (text: string) => color(DIM, text);
 /* ------------------------------------------------------------------ */
 
 const VERSION = "Pre-Alpha";
-const BUILD_DATE = "9.11.26";
+const BUILD_DATE = "15.11.26";
 const AUTHOR = "Mayukh Chakraborty";
 const WEBSITE = "https://bliss-compiler.vercel.app/";
 const SOURCE_EXT = ".bx";
@@ -111,6 +112,8 @@ function printBanner(): void {
     console.log(`  ${bold(color(WHITE, "Usage"))}`);
     console.log(`    ${color(GREEN, "bliss")} ${dim(`<file${SOURCE_EXT}>`)} ${dim(`[-o <output${OUTPUT_EXT}>]`)}`);
     console.log(`    ${color(GREEN, "bliss")} ${dim("<input_folder>")} ${color(YELLOW, "--bulk")} ${dim("[-o <output_folder>]")}`);
+    console.log(`    ${color(GREEN, "bliss")} ${color(YELLOW, "new")} ${color(YELLOW, "--project")} ${dim("<name>")}`);
+    console.log(`    ${color(GREEN, "bliss")} ${color(YELLOW, "build")}`);
     console.log();
 
     console.log(`  ${bold(color(WHITE, "Examples"))}`);
@@ -118,6 +121,7 @@ function printBanner(): void {
     console.log(`    ${color(GREEN, "bliss")} main${SOURCE_EXT} -o build/main${OUTPUT_EXT}`);
     console.log(`    ${color(GREEN, "bliss")} tests ${color(YELLOW, "--bulk")}`);
     console.log(`    ${color(GREEN, "bliss")} tests ${color(YELLOW, "--bulk")} -o build/tests`);
+    console.log(`    ${color(GREEN, "bliss")} ${color(YELLOW, "new")} ${color(YELLOW, "--project")} my_app`);
     console.log();
 
     console.log(`  ${bold(color(WHITE, "Flags"))}`);
@@ -134,6 +138,7 @@ function printBanner(): void {
 
     flagRow("-o, --output", "<path>", "Output file (or output folder with --bulk)");
     flagRow("-b, --bulk", undefined, `Compile every ${SOURCE_EXT} file in a folder (default output: <folder>/${DEFAULT_BULK_OUT})`);
+    flagRow("-p, --project", "<name>", "Project name (used with `new`)");
     flagRow("-h, --help", undefined, "Show this message");
     console.log();
 }
@@ -467,10 +472,102 @@ async function runBulk(args: CliArgs): Promise<void> {
 }
 
 /* ------------------------------------------------------------------ */
+/*  New project scaffolding                                            */
+/* ------------------------------------------------------------------ */
+
+const TEMPLATE_MAIN_BX = `fx bliss_main(): u64 {
+	return 298665456456;
+}
+`;
+
+const TEMPLATE_ENTRY_C = `#include <stdio.h>
+#include <stdint.h>
+
+extern uint64_t bliss_main();
+
+int main() {
+	uint64_t data = bliss_main();
+	printf("The output from bliss function is: %llu", data);
+}
+`;
+
+async function pathExists(path: string): Promise<boolean> {
+    try {
+        await stat(path);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+/** bliss new --project <name> */
+async function runNew(argv: string[]): Promise<void> {
+    let name: string | undefined;
+
+    for (let i = 0; i < argv.length; i++) {
+        if (argv[i] === "--project" || argv[i] === "-p") {
+            name = argv[i + 1];
+            break;
+        }
+    }
+
+    if (!name || name.startsWith("-")) {
+        console.log();
+        failure("Missing project name", "usage: bliss new --project <name>");
+        console.log();
+        process.exit(1);
+    }
+
+    if (await pathExists(name)) {
+        console.log();
+        failure("Cannot create project", `"${name}" already exists`);
+        console.log();
+        process.exit(1);
+    }
+
+    sectionRule("BLISS COMPILER · NEW");
+
+    try {
+        // Bun.write creates parent directories automatically.
+        await Bun.write(join(name, "project.toml"), "");
+        success("Created", join(name, "project.toml"));
+
+        await Bun.write(join(name, "src", `main${SOURCE_EXT}`), TEMPLATE_MAIN_BX);
+        success("Created", join(name, "src", `main${SOURCE_EXT}`));
+
+        await Bun.write(join(name, ".dev", "entry.c"), TEMPLATE_ENTRY_C);
+        success("Created", join(name, ".dev", "entry.c"));
+    } catch (err) {
+        failure("Failed to create project", String(err));
+        console.log();
+        process.exit(1);
+    }
+
+    console.log();
+    console.log(
+        `  ${bold(color(GREEN, "Project created."))} ` +
+        `${dim(`cd ${name} && bliss build`)}`
+    );
+    console.log();
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main                                                               */
 /* ------------------------------------------------------------------ */
 
 async function main(): Promise<void> {
+    // `bliss new --project <name>` -> scaffold a new project
+    if (Bun.argv[2] === "new") {
+        await runNew(Bun.argv.slice(3));
+        return;
+    }
+
+    // `bliss build` -> build the project in the current directory
+    if (Bun.argv[2] === "build") {
+        await build_project(process.cwd());
+        return;
+    }
+
     const args = parseArgs(Bun.argv.slice(2));
 
     if (args.help || !args.inputFile) {

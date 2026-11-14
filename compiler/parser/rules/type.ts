@@ -11,20 +11,22 @@ export class TypeSystem extends AST<ASTEnum.TYPE_SYSTEM> {
     }
 }
 
+export const typeName = branch(
+    token(TokenType.K_i8),
+    token(TokenType.K_i16),
+    token(TokenType.K_i32),
+    token(TokenType.K_i64),
+    token(TokenType.K_u8),
+    token(TokenType.K_u16),
+    token(TokenType.K_u32),
+    token(TokenType.K_u64)
+)
+
 export const typeSystem = production(
     token(TokenType.K_Data).err("Expected the keyword data"),
     token(TokenType.Identifier).save().err("Expected a name for the type"),
     token(TokenType.Colon).err("Expected a colon"),
-    branch(
-        token(TokenType.K_i8),
-        token(TokenType.K_i16),
-        token(TokenType.K_i32),
-        token(TokenType.K_i64),
-        token(TokenType.K_u8),
-        token(TokenType.K_u16),
-        token(TokenType.K_u32),
-        token(TokenType.K_u64)
-    ).save()
+    typeName.save()
 ).ast((finish, name: Token, type: Token) => {
     return finish(new TypeSystem(name.span.resolve(), name.span, type))
 })

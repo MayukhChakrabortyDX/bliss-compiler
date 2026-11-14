@@ -12,7 +12,8 @@ const actionList = production(
     loop({
         prod: nterm(identifier).save(),
         separator: token(TokenType.Comma).err("Expected ',' between action names"),
-        deliminator: token(TokenType.RBrace).err("Expected ')' to close the action list")
+        deliminator: token(TokenType.RBrace).err("Expected ')' to close the action list"),
+        allowEmpty: false,
     }).save()
 ).ast((_, actions: Token[]) => actions)
 

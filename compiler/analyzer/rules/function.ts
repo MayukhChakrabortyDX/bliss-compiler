@@ -7,7 +7,7 @@ export function analyzeFunction(analyzer: Analyzer, node: FunctionNode, identifi
     //analyze if the types are identical then that's an issue
     const types = new Set<string>()
     let errorSpans: DiagnosticError[] = []
-
+    
     if (identifiers.has(node.name)) {
         errorSpans.push(
             { span: node.name_span, message: "This identifier was already defined" }
